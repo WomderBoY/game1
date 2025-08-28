@@ -29,8 +29,8 @@ _jsonCallback({
 		"event":{
 			"type":"changemap",
 			"way":"tunnal",
-			"x":46,
-			"y":723,
+			"x":256,
+			"y":583,
 			"target":"bg-map1.json"
 		},
 		"col":false

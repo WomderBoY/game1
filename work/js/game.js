@@ -15,14 +15,13 @@ class game {
         this.prevStatus = null;
         this.canmove = true;
         this.createStage();
-        this.hp = new hp(10);
 
         this.datamanager = new datamanager(this);
 
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
-        this.hp = new hp(10, this);
+        this.hp = new hp(10000, this);
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
@@ -170,6 +169,7 @@ class game {
                 break;
             case "over":
                 console.log("游戏结束");
+                
                 //this.savemanager()
                 //event
                 //load...
