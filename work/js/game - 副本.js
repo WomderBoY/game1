@@ -176,27 +176,33 @@ class game {
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":
-        console.log("游戏结束");
-        // 绘制背景和场景
-        this.mapmanager.draw();
-        this.enemymanager.draw(this.ctx);
-        this.hp.draw(this.ctx, this.width, this.height);
-    
-        // 绘制死亡状态的玩家（在地图和敌人之上）
-        this.entitymanager.drawDeadPlayer();
-        
-        // 绘制游戏结束遮罩和文字（在最上层）
-        this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
-        this.ctx.fillRect(0, 0, this.view.width, this.view.height);
-        
-        this.ctx.fillStyle = "white";
-        this.ctx.font = "bold 60px Arial";
-        this.ctx.textAlign = "center";
-        this.ctx.textBaseline = "middle";
-        this.ctx.fillText("游戏结束", this.view.width / 2, this.view.height / 2);
-        this.ctx.font = "30px Arial";
-        this.ctx.fillText("按 R 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
-        break;
+                console.log("游戏结束");
+                console.log("游戏结束");
+                // 绘制背景和场景保持显示
+                this.mapmanager.draw();
+                this.enemymanager.draw(this.ctx);
+                this.hp.draw(this.ctx, this.width, this.height);
+                // 绘制死亡状态的玩家
+                this.entitymanager.drawDeadPlayer();
+
+
+                this.mapmanager.draw();
+                this.enemymanager.draw(this.ctx);
+                // 绘制“游戏结束”文字
+                this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
+                this.ctx.fillRect(0, 0, this.view.width, this.view.height); // 半透明遮罩
+
+                this.ctx.fillStyle = "white";
+                this.ctx.font = "bold 60px Arial";
+                this.ctx.textAlign = "center";
+                this.ctx.textBaseline = "middle";
+                this.ctx.fillText("游戏结束", this.view.width / 2, this.view.height / 2);
+                this.ctx.font = "30px Arial";
+                this.ctx.fillText("按 R 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
+                break;
+                //this.savemanager()
+                //event
+                //load...
 
 
 
