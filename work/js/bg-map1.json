@@ -2,5 +2,6 @@ _jsonCallback({
 	"tileMap":[
 	
 	],
+	"enemy":[],
 	"background":"../images/map1.png"
 })
