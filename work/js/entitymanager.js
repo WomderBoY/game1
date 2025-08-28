@@ -155,7 +155,7 @@ class entitymanager {
 
     async chcevent() {
      //   console.log(this.game.player.position.x, this.game.player.position.y);
-     console.log(this.game.mapmanager.events);
+//     console.log(this.game.mapmanager.events);
         for (let e of this.game.mapmanager.events) {
             if (e.way == 'tunnal') console.log('check', e);
             if (this.game.player.containsRect(e)) {

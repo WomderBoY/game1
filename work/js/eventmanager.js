@@ -64,6 +64,8 @@ class eventmanager {
         // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
         this.game.player.position.x = e.x;
         this.game.player.position.y = e.y;
+        this.game.status = "running";
+        console.log('player pos', this.game.player.position.x, this.game.player.position.y);
 //        this.game.player.facing = e.facing;
     }
 

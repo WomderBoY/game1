@@ -18,11 +18,13 @@ class mapmanager {
         this.collidable = [];
         this.events = [];
 		this.app = [];
+        this.room = "";
 		this.background = "";
     }
 
 	empty() {
 		this.test = [];
+        this.room = "";
 		this.collidable = [];
 		this.events = [];
 		this.app = [];
@@ -30,21 +32,23 @@ class mapmanager {
 	}
 
     async loadMap(src) {
+        this.game.savemanager.save(src);
         // 使用传入的 game 实例
+        this.room = src;
         let data = await this.game.datamanager.loadJSON(src);
-
+        this.game.hp.reset();
         this.empty();
 
         for (let i of data.tileMap) {
             await this.addTile(i);
-			console.log('block', i)
+//			console.log('block', i)
         }
 
 		if (data.background) {
 			let bg = await this.game.datamanager.loadImg(data.background);
 			this.background = bg;
 		}
-		console.log('events', this.events);
+//		console.log('events', this.events);
     }
 
     async addTile(i) {
@@ -84,7 +88,7 @@ class mapmanager {
 
         // 检查是否为实体碰撞区域（根据你的实际属性名调整，比如i.collision或i.solid）
          // 明确判断为true的情况
-			console.log('进入染色');
+	//		console.log('进入染色');
             // 石板砖块效果
             ctx.save(); // 保存当前绘图状态
 

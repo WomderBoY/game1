@@ -14,7 +14,6 @@ class game {
         this.status = "running";
         this.canmove = true;
         this.createStage();
-        this.hp = new hp(10);
 
         this.datamanager = new datamanager(this);
 
@@ -25,6 +24,7 @@ class game {
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
+        this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
         let s1 = await this.datamanager.loadSpritesheet('ying-data.json');
@@ -95,12 +95,13 @@ class game {
                 this.lst = now;
             }
         }
-
+//        console.log(this.player.position.x, this.player.position.y);
         // 每一帧都重新计算缩放，保证窗口大小改变时画布自适应
         this.autoScale(this.view);
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
-
+    //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
+        await this.eventmanager.handle();
         switch (this.status) {
             case "running": // 游戏运行状态
 
@@ -111,7 +112,6 @@ class game {
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
                 this.enemymanager.draw(this.ctx);
-                await this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
                 // 绘制血条，放在最后，保证在最上层
@@ -119,11 +119,16 @@ class game {
                 break;
             case "over":
                 console.log("游戏结束");
+                if (this.inputmanager.takeEnter()) {
+                    await this.savemanager.load();
+                    this.hp = new hp(10, this);
+                }
                 //this.savemanager()
                 //event
                 //load...
         }
 
+        console.log("hp = ", this.hp.currentHP);
         // 帧数加 1
         this.gameFrame++;
 
