@@ -8,7 +8,7 @@ class game {
     static lst;
     static yingyang = true;
     async init() {
-        this.player = new Rect(0, 0, 40, 40);
+        this.player = new Rect(0, 0, 30, 40);
         this.gameFrame = 0;
         this.lst = 0;
         this.status = "running";
@@ -108,6 +108,7 @@ class game {
                 this.mapmanager.draw();
                 await this.enemymanager.update();
                 await this.entitymanager.update();
+                this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
                 this.enemymanager.draw(this.ctx);

@@ -13,7 +13,8 @@ class entitymanager {
     static bg;
     static lt;
     static re;
-        
+    static safe;    
+
     static onground = false;
 
     constructor(game) {
@@ -23,6 +24,7 @@ class entitymanager {
 //        this.bg = null;
         this.lt = 'stand';
         this.re = 0;
+        this.safe = 0;
         this.init();
     }
 
@@ -173,6 +175,42 @@ class entitymanager {
             }
         }
     }
+
+    checkCollision() {
+    const player = this.game.player;
+    const playerBottom = player.position.y + player.size.y;
+    const playerRight = player.position.x + player.size.x;
+
+        for (let enemy of this.game.enemymanager.enemies) {
+            const rect = enemy.rect;
+            const enemyBottom = rect.position.y + rect.size.y;
+            const enemyRight = rect.position.x + rect.size.x;
+
+            // 碰撞重叠
+            const overlapX = player.position.x < enemyRight && playerRight > rect.position.x;
+            const overlapY = player.position.y < enemyBottom && playerBottom > rect.position.y;
+
+            if (overlapX && overlapY) {
+                if (this.game.yingyang === enemy.type) {
+                // 阴阳相同，扣血
+                if (this.game.hp) this.game.hp.decrease();
+            } else {
+                // 阴阳不同
+                const verticalOverlap = playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10;
+                const horizontalOverlap = player.position.x + player.size.x > rect.position.x && player.position.x < enemyRight;
+
+                if (verticalOverlap && horizontalOverlap) {
+                    // 踩头成功
+                    enemy.dead = true;
+                    this.vy = -10;
+                } else {
+                    // 阴阳不同但不是踩头，也扣血
+                    if (this.game.hp) this.game.hp.decrease();
+                }
+            }
+        }
+    }
+}
 
     async drawPlayer() {
         
