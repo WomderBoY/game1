@@ -13,7 +13,7 @@ class entitymanager {
     static bg;
     static lt;
     static re;
-    static safe;    
+    static safeUntil = 0;
 
     static onground = false;
 
@@ -24,7 +24,6 @@ class entitymanager {
 //        this.bg = null;
         this.lt = 'stand';
         this.re = 0;
-        this.safe = 0;
         this.init();
     }
 
@@ -183,6 +182,8 @@ class entitymanager {
     const playerBottom = player.position.y + player.size.y;
     const playerRight = player.position.x + player.size.x;
 
+    const now = Date.now();
+
     for (let enemy of this.game.enemymanager.enemies) {
         const rect = enemy.rect;
         const enemyBottom = rect.position.y + rect.size.y;
@@ -193,11 +194,8 @@ class entitymanager {
 
         if (!overlapX || !overlapY) continue;
 
-        // 竖直方向优先
         const fromTop = playerPrevY + player.size.y <= rect.position.y;
         const fromBottom = playerPrevY >= enemyBottom;
-
-        // 踩头判定
         const isHead = fromTop && (playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10);
 
         if (this.game.yingyang !== enemy.type && isHead) {
@@ -205,14 +203,17 @@ class entitymanager {
             enemy.dead = true;
             entitymanager.vy = -10;
         } else {
-            // 扣血
-            if (this.game.hp) this.game.hp.decrease();
+            // 扣血条件：阴阳相同 或 阴阳不同非踩头
+            if (now >= entitymanager.safeUntil) {
+                if (this.game.hp) this.game.hp.decrease();
+                entitymanager.safeUntil = now + 3000; // 3秒无敌
+            }
 
             // 竖直碰撞修正
             if (fromTop) { player.position.y = rect.position.y - player.size.y; entitymanager.vy = 0; }
             else if (fromBottom) { player.position.y = enemyBottom; entitymanager.vy = 0; }
 
-            // 水平碰撞修正（X方向也处理，避免穿过）
+            // 水平碰撞修正
             if (playerPrevX + player.size.x <= rect.position.x) { // 从左撞
                 player.position.x = rect.position.x - player.size.x;
                 entitymanager.vx = 0;
@@ -223,6 +224,7 @@ class entitymanager {
         }
     }
 }
+
 
 
     async drawPlayer() {
