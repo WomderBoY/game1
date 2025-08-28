@@ -8,10 +8,11 @@ class game {
     static lst;
     static yingyang = true;
     async init() {
-        this.player = new Rect(0, 0, 40, 40);
+        this.player = new Rect(0, 0, 30, 40);
         this.gameFrame = 0;
         this.lst = 0;
         this.status = "running";
+        this.prevStatus = null;
         this.canmove = true;
         this.createStage();
 
@@ -20,7 +21,7 @@ class game {
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
-        this.hp = new hp(10, this);
+        this.hp = new hp(10000, this);
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
@@ -37,6 +38,48 @@ class game {
         this.mapmanager.draw();
         this.update();
         window.addEventListener('resize', () => this.autoScale(this.view));
+    }
+
+    pauseGame() {
+        if (this.status === 'over' || this.status === 'paused') return;
+        this.prevStatus = this.status;
+        this.status = 'paused';
+        this.canmove = false;
+        const menu = document.getElementById('pauseMenu');
+        if (menu) {
+            menu.style.display = 'flex';
+        }
+    }
+
+    resumeGame() {
+        if (this.status !== 'paused') return;
+        this.status = this.prevStatus || 'running';
+        this.canmove = true;
+        const menu = document.getElementById('pauseMenu');
+        if (menu) {
+            menu.style.display = 'none';
+        }
+    }
+
+    restartLevel() {
+        // 简单实现：刷新当前页面以重置关卡状态
+        // 如需更细粒度控制，可在此重置管理器与实体状态
+        const menu = document.getElementById('pauseMenu');
+        if (menu) menu.style.display = 'none';
+        location.reload();
+    }
+
+    returnToMainMenu() {
+        const menu = document.getElementById('pauseMenu');
+        if (menu) menu.style.display = 'none';
+        // 返回主菜单：从 work/js/game.html 回到项目根目录 index.html#menu
+        const maybe = '../../index.html#menu';
+        try {
+            window.location.href = maybe;
+        } catch (e) {
+            // 兜底：如果无法跳转，恢复游戏避免卡住
+            this.resumeGame();
+        }
     }
 
     createStage() {
@@ -109,12 +152,20 @@ class game {
                 this.mapmanager.draw();
                 await this.enemymanager.update();
                 await this.entitymanager.update();
+                this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
                 this.enemymanager.draw(this.ctx);
                 // console.log('游戏运行中...');
 
                 // 绘制血条，放在最后，保证在最上层
+                this.hp.draw(this.ctx, this.width, this.height);
+                break;
+            case "paused":
+                // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
+                // 仍然绘制当前画面（如需要也可不绘制）
+                this.mapmanager.draw();
+                this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":

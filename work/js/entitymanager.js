@@ -4,7 +4,7 @@ class entitymanager {
     static jump = -12;
     static yingjump = -5;
     static gravity = 0.5;
-    static maxSpeed = 7;
+    static maxSpeed = 5;
     static friction = 0.85;
     static a = 0.8;
     static yinga = 1.5;
@@ -13,7 +13,8 @@ class entitymanager {
     static bg;
     static lt;
     static re;
-        
+    static safeUntil = 0;
+
     static onground = false;
 
     constructor(game) {
@@ -24,6 +25,7 @@ class entitymanager {
         this.lt = 'stand';
         this.re = 0;
         this.init();
+        this.safeUntil = 0;
     }
 
         async init() {
@@ -174,6 +176,58 @@ class entitymanager {
         }
     }
 
+    checkCollision() {
+    const player = this.game.player;
+    const playerPrevX = player.position.x - entitymanager.vx;
+    const playerPrevY = player.position.y - entitymanager.vy;
+    const playerBottom = player.position.y + player.size.y;
+    const playerRight = player.position.x + player.size.x;
+
+    const now = Date.now();
+
+    for (let enemy of this.game.enemymanager.enemies) {
+        const rect = enemy.rect;
+        const enemyBottom = rect.position.y + rect.size.y;
+        const enemyRight = rect.position.x + rect.size.x;
+
+        const overlapX = player.position.x < enemyRight && playerRight > rect.position.x;
+        const overlapY = player.position.y < enemyBottom && playerBottom > rect.position.y;
+
+        if (!overlapX || !overlapY) continue;
+
+        const fromTop = playerPrevY + player.size.y <= rect.position.y;
+        const fromBottom = playerPrevY >= enemyBottom;
+        const isHead = fromTop && (playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10);
+
+        if (this.game.yingyang !== enemy.type && isHead) {
+            // 阴阳不同踩头 → 敌人死亡
+            enemy.dead = true;
+            entitymanager.vy = -10;
+        } else {
+            // 扣血条件：阴阳相同 或 阴阳不同非踩头
+            if (now >= entitymanager.safeUntil) {
+                if (this.game.hp) this.game.hp.decrease();
+                entitymanager.safeUntil = now + 3000; // 3秒无敌
+            }
+
+            // 竖直碰撞修正
+            if (fromTop) { player.position.y = rect.position.y - player.size.y; entitymanager.vy = 0; }
+            else if (fromBottom) { player.position.y = enemyBottom; entitymanager.vy = 0; }
+
+            // 水平碰撞修正
+            if (playerPrevX + player.size.x <= rect.position.x) { // 从左撞
+                player.position.x = rect.position.x - player.size.x;
+                entitymanager.vx = 0;
+            } else if (playerPrevX >= enemyRight) { // 从右撞
+                player.position.x = enemyRight;
+                entitymanager.vx = 0;
+            }
+        }
+    }
+}
+
+
+
     async drawPlayer() {
         
         let machine=this.game.animationmachine;
@@ -203,9 +257,12 @@ class entitymanager {
 		}
 		++machine.timer;
         this.lt = machine.current;
-        machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
-        
+        let now = Date.now();
+        console.log(now, entitymanager.safeUntil);
+        if (now > entitymanager.safeUntil) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
+        else if (this.game.gameFrame % 2 == 1) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
     
+    //    machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
         //	console.log(bg);
         let fl = false;
         for (let e of this.game.mapmanager.events) {

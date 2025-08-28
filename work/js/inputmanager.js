@@ -4,13 +4,15 @@ class inputmanager {
         this.lastEnterTime = 0; // 记录上次按下 Enter 的时间
         this.cooldown = 300;    // 冷却时间 300 毫秒
 
-        // 监听按键按下
+        // 监听按键按下（暂停时忽略输入）
         window.addEventListener('keydown', e => {
+            if (window.game && window.game.status === 'paused') return;
             this.keys.add(e.code);
         });
 
-        // 监听按键松开
+        // 监听按键松开（暂停时忽略输入）
         window.addEventListener('keyup', e => {
+            if (window.game && window.game.status === 'paused') return;
             this.keys.delete(e.code);
         });
     }

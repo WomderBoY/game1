@@ -168,6 +168,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.getElementById('options-btn').addEventListener('click', ()=>showPopup("游戏设置功能待开发"));
     document.getElementById('logout-btn').addEventListener('click', logout);
     document.querySelector('.modal-close-btn').addEventListener('click', hideAchievements);
+
+    // 如果 URL 带有 #menu，直接展示主菜单界面
+    if (window.location.hash === '#menu') {
+        const authScreen = document.getElementById('auth-screen');
+        const mainMenuScreen = document.getElementById('main-menu-screen');
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        if (sliderWrapper) {
+            sliderWrapper.style.display = 'none';
+        }
+        if (authScreen) {
+            authScreen.style.display = '';
+        }
+        if (mainMenuScreen) {
+            mainMenuScreen.classList.remove('hidden');
+            mainMenuScreen.style.opacity = '1';
+        }
+    }
 });
 window.addEventListener('resize',()=>{
     canvas.width = window.innerWidth;

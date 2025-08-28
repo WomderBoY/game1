@@ -54,10 +54,11 @@ class mapmanager {
     async addTile(i) {
 		const [x, y, w, h] = i.hitbox;
 		let img = null;
-		let tile = new Tile(x, y, w, h, img, i.event); // 去掉 this.game
-
+		let tile = new Tile(x, y, w, h, img, i.event); // 去掉 this.game   
+		
+		if (i.event && i.event.type === 'kill') this.app.push(tile);     //这是伤害的方块 不对这里
 		if (i.col != false) this.collidable.push(tile);
-		if (i.app) this.app.push(tile);
+		//if (i.app) this.app.push(tile);
 		this.test.push(tile);
 		if (i.event) {
 	//		console.log(i.event);
@@ -134,6 +135,59 @@ class mapmanager {
         //   // 非碰撞区域的绘制代码
         // }
     }
+
+	// 遍历所有元素
+    for (let i of this.app) {
+    const ctx = this.game.ctx;
+    const { x, y, w, h } = i;
+
+    console.log('进入岩浆绘制');
+
+    ctx.save();
+
+    // 1. 岩浆底色（深红）
+    const lavaGradient = ctx.createLinearGradient(x, y, x, y + h);
+    lavaGradient.addColorStop(0, "#8B0000"); // 深红
+    lavaGradient.addColorStop(0.5, "#FF4500"); // 橙红
+    lavaGradient.addColorStop(1, "#FF6347"); // 番茄红
+    ctx.fillStyle = lavaGradient;
+    ctx.fillRect(x, y, w, h);
+
+    // 2. 岩浆裂纹（亮橙/黄色）
+    ctx.strokeStyle = "#FFD700"; // 金黄
+    ctx.lineWidth = 2;
+
+    // 横向裂纹
+    for (let ly = y + 10; ly < y + h; ly += 20) {
+        ctx.beginPath();
+        ctx.moveTo(x, ly);
+        ctx.lineTo(x + w, ly + Math.sin(ly * 0.3) * 5); // 不规则波动
+        ctx.stroke();
+    }
+
+    // 纵向裂纹
+    for (let lx = x + 10; lx < x + w; lx += 20) {
+        ctx.beginPath();
+        ctx.moveTo(lx, y);
+        ctx.lineTo(lx + Math.sin(lx * 0.3) * 5, y + h);
+        ctx.stroke();
+    }
+
+    // 3. 熔岩高光（模拟发光边缘）
+    ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+    ctx.fillRect(x, y, w, 3); // 顶部高光
+    ctx.fillRect(x, y, 3, h); // 左侧高光
+
+    // 4. 发光外晕（危险感）
+    ctx.shadowColor = "rgba(255, 69, 0, 0.8)";
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = "rgba(255, 69, 0, 0.2)";
+    ctx.fillRect(x, y, w, h);
+
+    ctx.restore();
+}
+
+
 }
     
 
