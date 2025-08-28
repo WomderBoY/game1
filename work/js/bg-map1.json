@@ -1,6 +1,34 @@
 _jsonCallback({
 	"tileMap":[
-	
+	{
+        "hitbox":[155,600,155,40],
+		"col":true
+    },
+	{
+        "hitbox":[490,500,155,40],
+		"col":true
+    },
+	{
+        "hitbox":[200,370,155,40],
+		"col":true
+    },
+	{
+        "hitbox":[630,280,155,40],
+		"col":true
+    },
+	{
+        "hitbox":[1180,550,800,45],
+		"col":true
+    },
+	{
+        "hitbox":[750,675,700,75],
+		"col":true
+    },
+	{
+        "hitbox":[0,165,350,40],
+		"col":true
+    }
+
 	],
 	"enemy":[],
 	"background":"../images/map1.png"
