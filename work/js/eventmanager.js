@@ -67,6 +67,11 @@ class eventmanager {
 //        this.game.player.facing = e.facing;
     }
 
+
+    if (e.type === 'kill'){
+      this.game.hp.decrease(10);
+    }
+
     // 如果当前事件有链式 next 事件（数组），取出一个继续处理
     if (e.next && e.next.length > 0) {
       // 从 e.next 队列中取出下一个事件（shift 从数组前端取出）

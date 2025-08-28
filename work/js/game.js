@@ -119,6 +119,7 @@ class game {
                 break;
             case "over":
                 console.log("游戏结束");
+                
                 //this.savemanager()
                 //event
                 //load...
