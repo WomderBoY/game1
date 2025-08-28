@@ -25,6 +25,7 @@ class entitymanager {
         this.lt = 'stand';
         this.re = 0;
         this.init();
+        this.safeUntil = 0;
     }
 
         async init() {
@@ -256,9 +257,12 @@ class entitymanager {
 		}
 		++machine.timer;
         this.lt = machine.current;
-        machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
-        
+        let now = Date.now();
+        console.log(now, entitymanager.safeUntil);
+        if (now > entitymanager.safeUntil) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
+        else if (this.game.gameFrame % 2 == 1) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
     
+    //    machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
         //	console.log(bg);
         let fl = false;
         for (let e of this.game.mapmanager.events) {
