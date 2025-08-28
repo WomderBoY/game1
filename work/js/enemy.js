@@ -95,10 +95,10 @@ class Enemy {
                 entitymanager.vy = -10;
                 console.warn(this.game.entitymanager.vy);
             } else {
-                // // 阴阳相同，玩家掉血
-                // if (player.hp !== undefined) {
-                //     player.hp -= 1;
-                // }
+                // 阴阳相同，玩家掉血
+                if (game.hp !== undefined) {
+                    game.hp.decrease();
+                }
             }
         }
     }

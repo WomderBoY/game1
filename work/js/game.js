@@ -14,12 +14,14 @@ class game {
         this.status = "running";
         this.canmove = true;
         this.createStage();
+        this.hp = new hp(10);
 
         this.datamanager = new datamanager(this);
 
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
+        this.hp = new hp(10, this);
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
@@ -110,8 +112,16 @@ class game {
                 this.entitymanager.drawPlayer();
                 this.enemymanager.draw(this.ctx);
                 await this.eventmanager.handle();
-   //             console.log('游戏运行中...');
+                // console.log('游戏运行中...');
+
+                // 绘制血条，放在最后，保证在最上层
+                this.hp.draw(this.ctx, this.width, this.height);
                 break;
+            case "over":
+                console.log("游戏结束");
+                //this.savemanager()
+                //event
+                //load...
         }
 
         // 帧数加 1
