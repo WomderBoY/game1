@@ -6,6 +6,7 @@ class game {
 
 
     static lst;
+    static yingyang = true;
     async init() {
         this.player = new Rect(0, 0, 40, 40);
         this.gameFrame = 0;
@@ -24,10 +25,10 @@ class game {
         this.eventmanager = new eventmanager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
-        let s = await this.datamanager.loadSpritesheet('ying-data.json');
-        console.log(s);
-        this.animationmachine = new AnimationMachine(this, s);
-
+        let s1 = await this.datamanager.loadSpritesheet('ying-data.json');
+        let s2 = await this.datamanager.loadSpritesheet('yang-right-0.json');
+    //    console.log(s);
+        this.animationmachine = new AnimationMachine(this, s1, s2);
 
         await this.mapmanager.loadMap("bg.json");
         await this.enemymanager.LoadEnemy("bg.json");
