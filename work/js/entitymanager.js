@@ -145,14 +145,21 @@ class entitymanager {
 
     async chcevent() {
      //   console.log(this.game.player.position.x, this.game.player.position.y);
+     console.log(this.game.mapmanager.events);
         for (let e of this.game.mapmanager.events) {
-      //      console.log(e);
+            if (e.way == 'tunnal') console.log('check', e);
             if (this.game.player.containsRect(e)) {
-                const press = this.game.inputmanager.takeEnter();
-                if (e.event.way == "negative" && press) {
-                    console.log('事件触发', e.event);
+                if (e.event.way == "tunnal") {
+                    console.log('tunnal事件触发', e.event);
                     this.game.eventmanager.add(e.event);
-                }
+                }   
+                else{
+                    const press = this.game.inputmanager.takeEnter();
+                    if (press) {
+                        console.log('消极事件触发', e.event);
+                        this.game.eventmanager.add(e.event);
+                    }
+                }   
             }
         }
     }
@@ -191,11 +198,8 @@ class entitymanager {
         let fl = false;
         for (let e of this.game.mapmanager.events) {
       //      console.log(e);
-            if (this.game.player.containsRect(e)) {
-                if (e.event.way == "negative") {
-                    fl = true;
-                    break;
-                }
+            if (this.game.player.containsRect(e) && e.event.way == "negative") {
+                fl = true;
             }
         }
         if (fl) {

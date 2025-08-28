@@ -23,6 +23,17 @@ _jsonCallback({
 			"target":"bg.json"
 		},
 		"col":false
+
+	},{
+		"hitbox":[1225,377,80,278],
+		"event":{
+			"type":"changemap",
+			"way":"tunnal",
+			"x":100,
+			"y":350,
+			"target":"bg-map1.json"
+		},
+		"col":false
 	}],
 
 	"background":"../images/classroom.png"
