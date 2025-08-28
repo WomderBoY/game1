@@ -1,0 +1,29 @@
+_jsonCallback({
+    "tileMap":[
+	{
+        "hitbox":[0,450,300,150],
+		"col":true
+    },
+	{
+		"hitbox":[100,400,30,20],
+		"event":{
+			"type":"dialog",
+			"way":"negative",
+			"text":["【test】这是一条测试",
+                "【test】这是第二条测试"]
+		},
+		"col":false
+	},{
+		"hitbox":[150,400,30,20],
+		"event":{
+			"type":"changemap",
+			"way":"negative",
+			"x":100,
+			"y":350,
+			"target":"bg.json"
+		},
+		"col":false
+	}],
+
+	"background":"../images/classroom.png"
+})

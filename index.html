@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阴阳劫</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+
+    <!-- 场景1: 认证界面 (登录/注册) -->
+    <div id="auth-screen">
+        <canvas id="bg"></canvas>
+        <div class="switch-wave" id="switch-wave"></div>
+        <div class="slider-wrapper">
+            <div class="slider" id="slider">
+                <!-- 登录面板 -->
+                <div class="panel" id="login-panel">
+                    <h2>登录</h2>
+                    <input type="text" id="login-username" placeholder="账号">
+                    <div style="position:relative;">
+                        <input type="password" id="login-password" placeholder="密码">
+                        <div class="show-pass-btn" onclick="togglePassword('login-password')">
+                            <svg viewBox="0 0 64 64"><path d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>
+                        </div>
+                    </div>
+                    <button onclick="login(transitionToMainMenu)">登录</button>
+                    <span class="toggle-link" onclick="toggleForm()">没有账号？注册</span>
+                </div>
+                <!-- 注册面板 -->
+                <div class="panel" id="register-panel">
+                    <h2>注册</h2>
+                    <input type="text" id="register-username" placeholder="账号">
+                    <div style="position:relative;">
+                        <input type="password" id="register-password" placeholder="密码" oninput="checkPasswordStrength()">
+                        <div class="show-pass-btn" onclick="togglePassword('register-password')">
+                            <svg viewBox="0 0 64 64"><path d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>
+                        </div>
+                    </div>
+                    <div class="strength" id="password-strength"></div>
+                    <!-- 新增：确认密码栏 -->
+                    <div style="position:relative;">
+                        <input type="password" id="register-confirm-password" placeholder="确认密码">
+                        <div class="show-pass-btn" onclick="togglePassword('register-confirm-password')">
+                             <svg viewBox="0 0 64 64"><path d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>
+                        </div>
+                    </div>
+                    <button onclick="register()">注册</button>
+                    <span class="toggle-link" onclick="toggleForm()">已有账号？登录</span>
+                </div>
+            </div>
+        </div>
+        <div class="popup" id="popup"></div>
+    </div>
+
+    <!-- 场景2: 游戏主菜单 (默认隐藏) -->
+    <div id="main-menu-screen" class="hidden">
+        <svg class="taijitu-bg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- 第1步: 绘制一个完整的黑色背景圆，作为“阴”的基础 -->
+    <circle cx="50" cy="50" r="50" fill="#000"/>
+    
+    <!-- 第2步: 在黑色圆上方绘制白色的“阳”鱼 -->
+    <path d="M50,0 A50,50 0 0,0 50,100 A25,25 0 0,1 50,50 A25,25 0 0,0 50,0 Z" fill="#fff"/>
+    
+    <!-- 第3步: 绘制两个“鱼眼” -->
+    <circle cx="50" cy="25" r="3" fill="#000"/> <!-- 阳鱼中的阴眼 (黑) -->
+    <circle cx="50" cy="75" r="3" fill="#fff"/> <!-- 阴鱼中的阳眼 (白) -->
+</svg>
+        <div class="menu-panel">
+            <h1>阴阳劫</h1>
+            <button id="start-game-btn">开始游戏</button>
+            <button id="achievements-btn">成就系统</button>
+            <button id="options-btn">游戏设置</button>
+            <button id="logout-btn">退出登录</button>
+        </div>
+    </div>
+
+    
+
+    <!-- 成就系统弹窗 (默认隐藏) -->
+    <div id="achievement-modal" class="hidden">
+        <div class="modal-content">
+            <span class="modal-close-btn">&times;</span>
+            <h2>成就系统</h2>
+            <ul class="achievement-list">
+                <li class="achievement-item locked"><div class="icon">📜</div><div class="details"><h3>初窥门径</h3><p>完成第一章节</p></div></li>
+                <li class="achievement-item locked"><div class="icon">⚔️</div><div class="details"><h3>百人斩</h3><p>击败100个敌人</p></div></li>
+                <li class="achievement-item"><div class="icon">☯️</div><div class="details"><h3>阴阳调和</h3><p>首次切换形态</p></div></li>
+                <li class="achievement-item locked"><div class="icon">🗝️</div><div class="details"><h3>解密高手</h3><p>解开所有主要谜题</p></div></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="./src/auth/auth.js"></script>
+
+</body>
+</html>
