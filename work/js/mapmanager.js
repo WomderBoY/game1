@@ -36,6 +36,9 @@ class mapmanager {
         // 使用传入的 game 实例
         this.room = src;
         let data = await this.game.datamanager.loadJSON(src);
+		entitymanager.vx = 0;
+		entitymanager.vy = 0;
+		
         this.game.hp.reset();
         this.empty();
 

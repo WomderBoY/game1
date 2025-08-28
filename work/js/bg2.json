@@ -30,7 +30,7 @@ _jsonCallback({
 			"type":"changemap",
 			"way":"tunnal",
 			"x":256,
-			"y":583,
+			"y":500	,
 			"target":"bg-map1.json"
 		},
 		"col":false

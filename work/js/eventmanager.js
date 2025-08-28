@@ -59,11 +59,11 @@ class eventmanager {
     }
     if (e.type === 'changemap') {
         // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
+        this.game.player.position.x = e.x;
+        this.game.player.position.y = e.y;
         await this.game.mapmanager.loadMap(e.target);
         await this.game.enemymanager.LoadEnemy(e.target);
         // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
-        this.game.player.position.x = e.x;
-        this.game.player.position.y = e.y;
         this.game.status = "running";
         console.log('player pos', this.game.player.position.x, this.game.player.position.y);
 //        this.game.player.facing = e.facing;

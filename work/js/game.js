@@ -38,14 +38,6 @@ class game {
         this.mapmanager.draw();
         this.update();
         window.addEventListener('resize', () => this.autoScale(this.view));
-
-        window.addEventListener("keydown", (e) => {
-        if (this.status === "over" && e.key.toLowerCase() === "r") {
-            this.restartLevel(); // 重新开始
-        }
-    });
-
-        
     }
 
     pauseGame() {
@@ -201,7 +193,7 @@ class game {
         if (this.inputmanager.takeEnter()) {
                     await this.savemanager.load();
                     this.hp.reset()
-                }
+        }
         break;
                 //load...
         }
