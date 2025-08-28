@@ -24,6 +24,15 @@ _jsonCallback({
 		},
 		"col":false
 	}],
+	"enemy":[
+		{
+			"x":0,
+			"y":400,
+			"w":30,
+			"h":30,
+			"speed":2
+		}
+	],
 
 	"background":"../images/classroom.png"
 })

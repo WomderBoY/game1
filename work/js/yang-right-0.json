@@ -1,0 +1,60 @@
+{"frames": [
+
+{
+	"filename": "yang-1.png",
+	"frame": {"x":0,"y":0,"w":236,"h":414},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":236,"h":414},
+	"sourceSize": {"w":236,"h":414}
+},
+{
+	"filename": "yang-2.png",
+	"frame": {"x":316,"y":0,"w":259,"h":396},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":259,"h":396},
+	"sourceSize": {"w":259,"h":396}
+},
+{
+	"filename": "yang-3.png",
+	"frame": {"x":632,"y":0,"w":251,"h":396},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":251,"h":396},
+	"sourceSize": {"w":251,"h":396}
+},
+{
+	"filename": "yang-4.png",
+	"frame": {"x":948,"y":0,"w":316,"h":388},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":316,"h":388},
+	"sourceSize": {"w":316,"h":388}
+},
+{
+	"filename": "yang-5.png",
+	"frame": {"x":1264,"y":0,"w":238,"h":368},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":238,"h":368},
+	"sourceSize": {"w":238,"h":368}
+},
+{
+	"filename": "yang-6.png",
+	"frame": {"x":1580,"y":0,"w":299,"h":364},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":299,"h":364},
+	"sourceSize": {"w":299,"h":364}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "white-right2-0.png",
+	"format": "RGBA8888",
+	"size": {"w":1896,"h":414},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:162f82a040037946cf026e78412a958a:06514ccfe3e1f96516f373782774de4a:14d72eb73483ed6561ccfee3d9682ea4$"
+}
+}
