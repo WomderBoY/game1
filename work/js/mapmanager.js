@@ -51,7 +51,8 @@ class mapmanager {
 		const [x, y, w, h] = i.hitbox;
 		let img = null;
 		let tile = new Tile(x, y, w, h, img, i.event); // 去掉 this.game
-
+		
+		
 		if (i.col != false) this.collidable.push(tile);
 		if (i.app) this.app.push(tile);
 		this.test.push(tile);
@@ -130,6 +131,61 @@ class mapmanager {
         //   // 非碰撞区域的绘制代码
         // }
     }
+
+	// 遍历所有元素
+    for (let i of this.collidable) {
+        const ctx = this.game.ctx;
+        const { x, y, w, h } = i;
+
+        // 检查是否为实体碰撞区域（根据你的实际属性名调整，比如i.collision或i.solid）
+         // 明确判断为true的情况
+			console.log('进入染色');
+            // 石板砖块效果
+            ctx.save(); // 保存当前绘图状态
+
+            // 1. 砖块底色
+            ctx.fillStyle = "#8B8B7A";
+            ctx.fillRect(x, y, w, h);
+
+            // 2. 砖块边框
+            ctx.strokeStyle = "#6D6D5A";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x, y, w, h);
+
+            // 3. 纹理线条
+            ctx.strokeStyle = "#7D7D6A";
+            ctx.lineWidth = 1;
+            const lineSpacing = 25;
+
+            // 横向纹理
+            for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
+                ctx.beginPath();
+                ctx.moveTo(x + 2, ly);
+                ctx.lineTo(x + w - 2, ly);
+                ctx.stroke();
+            }
+
+            // 纵向纹理
+            for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
+                ctx.beginPath();
+                ctx.moveTo(lx, y + 2);
+                ctx.lineTo(lx, y + h - 2);
+                ctx.stroke();
+            }
+
+            // 4. 高光效果
+            ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+            ctx.fillRect(x, y, w, 2); // 顶部边缘
+            ctx.fillRect(x, y, 2, h); // 左侧边缘
+
+            ctx.restore(); // 恢复绘图状态
+        // 非碰撞区域不绘制石板效果，保持原样
+        // 如果你需要绘制非碰撞区域的其他样式，可以在这里添加
+        // else {
+        //   // 非碰撞区域的绘制代码
+        // }
+    }
+
 }
     
 

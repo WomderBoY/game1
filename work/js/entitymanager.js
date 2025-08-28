@@ -4,7 +4,7 @@ class entitymanager {
     static jump = -12;
     static yingjump = -5;
     static gravity = 0.5;
-    static maxSpeed = 7;
+    static maxSpeed = 5;
     static friction = 0.85;
     static a = 0.8;
     static yinga = 1.5;
