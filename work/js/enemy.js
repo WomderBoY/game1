@@ -1,5 +1,5 @@
 class Enemy {
-    constructor(x, y, width, height, speed = 2) {
+    constructor(x, y, width, height, speed = 2, type=true) {
         // 敌人矩形
         this.rect = new Rect(x, y, width, height);
 
@@ -14,6 +14,12 @@ class Enemy {
 
         // 是否在地面上
         this.onGround = false;
+
+        //true为阴
+        this.type = type;
+
+        //是否死亡
+        this.dead = false
     }
 
     update(colliders) {
@@ -70,11 +76,43 @@ class Enemy {
         }
     }
 
+    checkHeadCollision(game) {
+        // 踩头矩形：玩家底部与敌人顶部相交
+        this.game = game;
+        const player = game.player;
+        const playerBottom = player.position.y + player.size.y;
+        const enemyTop = this.rect.position.y;
+        const verticalOverlap = playerBottom >= enemyTop && playerBottom <= enemyTop + 10; // 允许误差10px
+        const horizontalOverlap = player.position.x + player.size.x > this.rect.position.x &&
+                                  player.position.x < this.rect.position.x + this.rect.size.x;
+
+        if (verticalOverlap && horizontalOverlap) {
+            // 阴阳判断
+            if (game.yingyang !== this.type) {
+                // 阴阳相反，敌人死亡
+                this.dead = true;
+                // 可选：让玩家反弹
+                entitymanager.vy = -10;
+                console.warn(this.game.entitymanager.vy);
+            } else {
+                // // 阴阳相同，玩家掉血
+                // if (player.hp !== undefined) {
+                //     player.hp -= 1;
+                // }
+            }
+        }
+    }
+
     /**
      * 绘制敌人
      */
     draw(ctx) {
-        ctx.fillStyle = "blue";
+        if(this.type){
+            ctx.fillStyle = "red";
+        }
+        else{
+            ctx.fillStyle = "blue";
+        }
         ctx.fillRect(
             this.rect.position.x,
             this.rect.position.y,
@@ -118,7 +156,14 @@ class EnemyManager {
     update() {
         const colliders = this.game.mapmanager.getCollidable();
         for (let enemy of this.enemies) {
+            enemy.checkHeadCollision(this.game);
             enemy.update(colliders);
+        }
+        // 过滤掉死亡的敌人
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+          if (this.enemies[i].dead) {
+               this.enemies.splice(i, 1); // 删除死亡敌人
+            }
         }
     }
 

@@ -51,7 +51,7 @@ class entitymanager {
             ga.yingyang = !ga.yingyang;
             this.re = this.game.gameFrame;
         }
-        console.log(this.game.gameFrame, this.re);
+  //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
         let vx = entitymanager.vx;
         let vy = entitymanager.vy;
