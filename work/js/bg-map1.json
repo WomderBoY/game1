@@ -21,8 +21,12 @@ _jsonCallback({
 		"col":true
     },
 	{
-        "hitbox":[750,675,700,75],
-		"col":true
+        "hitbox":[0,675,2000,75],
+		"event":{
+			"type":"kill", //
+			"way":"tunnal", //x和y不知道要不要保留
+		},
+		"col":false
     },
 	{
         "hitbox":[0,165,350,40],
