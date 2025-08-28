@@ -25,6 +25,7 @@ class game {
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
+        this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
         let s1 = await this.datamanager.loadSpritesheet('ying-data.json');
@@ -73,7 +74,8 @@ class game {
         // 如需更细粒度控制，可在此重置管理器与实体状态
         const menu = document.getElementById('pauseMenu');
         if (menu) menu.style.display = 'none';
-        location.reload();
+        this.savemanager.load();
+        this.canmove = true;
     }
 
     returnToMainMenu() {
@@ -145,12 +147,13 @@ class game {
                 this.lst = now;
             }
         }
-
+//        console.log(this.player.position.x, this.player.position.y);
         // 每一帧都重新计算缩放，保证窗口大小改变时画布自适应
         this.autoScale(this.view);
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
-
+    //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
+        console.log(this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
 
@@ -171,12 +174,11 @@ class game {
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制）
-                this.mapmanager.draw();
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":
-        console.log("游戏结束");
+                console.log("游戏结束");
         // 绘制背景和场景
         this.mapmanager.draw();
         this.enemymanager.draw(this.ctx);
@@ -195,11 +197,13 @@ class game {
         this.ctx.textBaseline = "middle";
         this.ctx.fillText("游戏结束", this.view.width / 2, this.view.height / 2);
         this.ctx.font = "30px Arial";
-        this.ctx.fillText("按 R 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
+        this.ctx.fillText("按 Enter 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
+        if (this.inputmanager.takeEnter()) {
+                    await this.savemanager.load();
+                    this.hp.reset()
+                }
         break;
-
-
-
+                //load...
         }
 
             // 帧数加 1

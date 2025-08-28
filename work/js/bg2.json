@@ -34,10 +34,14 @@ _jsonCallback({
 			"target":"bg-map1.json"
 		},
 		"col":false
+	},
+	{
+		"hitbox":[500, 500, 300, 10],
+		"col":true,
 	}],
 	"enemy":[
 		{
-			"x":0,
+			"x":500,
 			"y":400,
 			"w":30,
 			"h":30,
