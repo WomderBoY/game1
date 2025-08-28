@@ -32,6 +32,10 @@ class inputmanager {
         return this.isPressed('KeyW');
     }
 
+    askJ() {
+        return this.isPressed('KeyJ');
+    }
+
     /** 检查是否按下了 Enter 键 */
     takeEnter() {
         return this.isPressed('Enter');

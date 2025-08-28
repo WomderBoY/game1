@@ -2,22 +2,27 @@ class entitymanager {
     static vx = 0;
     static vy = 0;
     static jump = -12;
+    static yingjump = -5;
     static gravity = 0.5;
     static maxSpeed = 7;
     static friction = 0.85;
     static a = 0.8;
+    static yinga = 1.5;
+    static yingmaxSpeed = 12;
     static fw = 1;
     static bg;
     static lt;
+    static re;
         
     static onground = false;
 
     constructor(game) {
         this.game = game;
         this.entities = [];
-        this.keys = { left: false, right: false, up: false };
+        this.keys = { left: false, right: false, up: false, change : false };
 //        this.bg = null;
         this.lt = 'stand';
+        this.re = 0;
         this.init();
     }
 
@@ -33,24 +38,29 @@ class entitymanager {
         if (this.game.inputmanager.askA() == true) this.keys.left = true;
         if (this.game.inputmanager.askD() == true) this.keys.right = true;
         if (this.game.inputmanager.askW() == true) this.keys.up = true;
+        if (this.game.inputmanager.askJ() == true) this.keys.change = true;
         let machine = this.game.animationmachine;
 
-        
     //    console.log(this.keys);
 
         if (this.game.status !== 'running') return;
         if (this.game.canmove == false) return;
         const ky = this.keys;
         const ga = this.game;
+        if (ky.change && this.game.gameFrame - this.re >= 200) {
+            ga.yingyang = !ga.yingyang;
+            this.re = this.game.gameFrame;
+        }
+  //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
         let vx = entitymanager.vx;
         let vy = entitymanager.vy;
         const gravity = entitymanager.gravity;
-        const maxSpeed = entitymanager.maxSpeed;
+        const maxSpeed = this.game.yingyang ? entitymanager.maxSpeed : entitymanager.yingmaxSpeed;
         const friction = entitymanager.friction;
-        const a = entitymanager.a;
+        const a = this.game.yingyang ? entitymanager.a : entitymanager.yinga;
         let fw = entitymanager.fw;
-        const jp = entitymanager.jump;
+        const jp = this.game.yingyang ? entitymanager.jump : entitymanager.yingjump;
         let og = entitymanager.onground;
 
         // 水平移动
@@ -181,8 +191,10 @@ class entitymanager {
         }
 
 		if(machine.timer>10){
-			let animation=machine.spritesheet.animation[machine.current];
-			//当前动画播放结束时，判断应该循环播放还是切换动画
+			let animation;
+            if (this.game.yingyang) animation=machine.spritesheet1.animation[machine.current];
+			else animation=machine.spritesheet0.animation[machine.current];
+            //当前动画播放结束时，判断应该循环播放还是切换动画
 			machine.currentFrame++;
             if(machine.currentFrame>=animation.length){
                 machine.currentFrame=0;
@@ -191,7 +203,7 @@ class entitymanager {
 		}
 		++machine.timer;
         this.lt = machine.current;
-        machine.draw(this.game.player.position, entitymanager.fw == -1);
+        machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
         
     
         //	console.log(bg);
