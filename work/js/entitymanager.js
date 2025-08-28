@@ -178,39 +178,52 @@ class entitymanager {
 
     checkCollision() {
     const player = this.game.player;
+    const playerPrevX = player.position.x - entitymanager.vx;
+    const playerPrevY = player.position.y - entitymanager.vy;
     const playerBottom = player.position.y + player.size.y;
     const playerRight = player.position.x + player.size.x;
 
-        for (let enemy of this.game.enemymanager.enemies) {
-            const rect = enemy.rect;
-            const enemyBottom = rect.position.y + rect.size.y;
-            const enemyRight = rect.position.x + rect.size.x;
+    for (let enemy of this.game.enemymanager.enemies) {
+        const rect = enemy.rect;
+        const enemyBottom = rect.position.y + rect.size.y;
+        const enemyRight = rect.position.x + rect.size.x;
 
-            // 碰撞重叠
-            const overlapX = player.position.x < enemyRight && playerRight > rect.position.x;
-            const overlapY = player.position.y < enemyBottom && playerBottom > rect.position.y;
+        const overlapX = player.position.x < enemyRight && playerRight > rect.position.x;
+        const overlapY = player.position.y < enemyBottom && playerBottom > rect.position.y;
 
-            if (overlapX && overlapY) {
-                if (this.game.yingyang === enemy.type) {
-                // 阴阳相同，扣血
-                if (this.game.hp) this.game.hp.decrease();
-            } else {
-                // 阴阳不同
-                const verticalOverlap = playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10;
-                const horizontalOverlap = player.position.x + player.size.x > rect.position.x && player.position.x < enemyRight;
+        if (!overlapX || !overlapY) continue;
 
-                if (verticalOverlap && horizontalOverlap) {
-                    // 踩头成功
-                    enemy.dead = true;
-                    this.vy = -10;
-                } else {
-                    // 阴阳不同但不是踩头，也扣血
-                    if (this.game.hp) this.game.hp.decrease();
-                }
+        // 竖直方向优先
+        const fromTop = playerPrevY + player.size.y <= rect.position.y;
+        const fromBottom = playerPrevY >= enemyBottom;
+
+        // 踩头判定
+        const isHead = fromTop && (playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10);
+
+        if (this.game.yingyang !== enemy.type && isHead) {
+            // 阴阳不同踩头 → 敌人死亡
+            enemy.dead = true;
+            entitymanager.vy = -10;
+        } else {
+            // 扣血
+            if (this.game.hp) this.game.hp.decrease();
+
+            // 竖直碰撞修正
+            if (fromTop) { player.position.y = rect.position.y - player.size.y; entitymanager.vy = 0; }
+            else if (fromBottom) { player.position.y = enemyBottom; entitymanager.vy = 0; }
+
+            // 水平碰撞修正（X方向也处理，避免穿过）
+            if (playerPrevX + player.size.x <= rect.position.x) { // 从左撞
+                player.position.x = rect.position.x - player.size.x;
+                entitymanager.vx = 0;
+            } else if (playerPrevX >= enemyRight) { // 从右撞
+                player.position.x = enemyRight;
+                entitymanager.vx = 0;
             }
         }
     }
 }
+
 
     async drawPlayer() {
         
