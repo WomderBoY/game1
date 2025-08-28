@@ -21,7 +21,7 @@ class game {
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
-        this.hp = new hp(10000, this);
+        this.hp = new hp(1, this);
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
@@ -66,7 +66,8 @@ class game {
         // 如需更细粒度控制，可在此重置管理器与实体状态
         const menu = document.getElementById('pauseMenu');
         if (menu) menu.style.display = 'none';
-        location.reload();
+        this.savemanager.load();
+        this.canmove = true;
     }
 
     returnToMainMenu() {
@@ -144,7 +145,7 @@ class game {
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
-        await this.eventmanager.handle();
+        console.log(this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
 
@@ -156,6 +157,7 @@ class game {
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
                 this.enemymanager.draw(this.ctx);
+                await this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
                 // 绘制血条，放在最后，保证在最上层
@@ -164,7 +166,6 @@ class game {
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制）
-                this.mapmanager.draw();
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
@@ -172,7 +173,7 @@ class game {
                 console.log("游戏结束");
                 if (this.inputmanager.takeEnter()) {
                     await this.savemanager.load();
-                    this.hp = new hp(10, this);
+                    this.hp.reset()
                 }
                 //this.savemanager()
                 //event

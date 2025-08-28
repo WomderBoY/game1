@@ -36,7 +36,9 @@ class SaveManager{
             entitymanager.vx = 0;
             entitymanager.vy = 0;
             this.game.yingyang = this.data.player.yingyang;
-            this.game.eventmanager.add(e);
+            this.game.mapmanager.loadMap(this.data.room);
+            this.game.enemymanager.LoadEnemy(this.data.room);
+            this.game.status = "running";
         }
     }
 }

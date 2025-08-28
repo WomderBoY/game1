@@ -87,7 +87,7 @@ class eventmanager {
       this.event = null;
       this.progress = 'end';
    //     this.game.status = 'running'; // 恢复游戏运行态
-        this.game.canmove = true; // 允许玩家移动
+      this.game.canmove = true; // 允许玩家移动
     }
   }
 }
