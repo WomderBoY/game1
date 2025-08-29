@@ -26,6 +26,9 @@ class inputmanager {
     askA() {
         return this.isPressed('KeyA');
     }
+    askK() {
+        return this.isPressed('KeyK');
+    }
 
     /** 检查是否按下了 D 键 */
     askD() {

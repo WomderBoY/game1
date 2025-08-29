@@ -23,7 +23,7 @@ class entitymanager {
         this.keys = { left: false, right: false, up: false, change : false };
 //        this.bg = null;
         this.lt = 'stand';
-        this.re = 0;
+        this.re = this.rre = 0;
         this.init();
         this.safeUntil = 0;
     }
@@ -35,12 +35,13 @@ class entitymanager {
         }
     // 更新逻辑优化
     async update() {
-        this.keys = { left: false, right: false, up: false };
+        this.keys = { left: false, right: false, up: false, change : false , envchange:false};
         
         if (this.game.inputmanager.askA() == true) this.keys.left = true;
         if (this.game.inputmanager.askD() == true) this.keys.right = true;
         if (this.game.inputmanager.askW() == true) this.keys.up = true;
         if (this.game.inputmanager.askJ() == true) this.keys.change = true;
+        if (this.game.inputmanager.askK() == true) this.keys.envchange = true;
         let machine = this.game.animationmachine;
 
     //    console.log(this.keys);
@@ -52,6 +53,11 @@ class entitymanager {
         if (ky.change && this.game.gameFrame - this.re >= 200) {
             ga.yingyang = !ga.yingyang;
             this.re = this.game.gameFrame;
+        }
+
+        if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
+            ga.env = (ga.env === "yin") ? "yang" : "yin";
+            this.rre = this.game.gameFrame;
         }
   //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
@@ -109,7 +115,7 @@ class entitymanager {
      //   console.log(ga.player.position.y, ga.player.position.y);
 
         // 平台移动 & 碰撞逻辑
-        for (let p of ga.mapmanager.collidable) {
+        for (let p of ga.mapmanager.collidable[this.game.env]) {
             if (ga.player.containsRect(p)) {
                 const prevX = ga.player.position.x - vx;
                 const prevY = ga.player.position.y - vy;
@@ -158,7 +164,7 @@ class entitymanager {
     async chcevent() {
      //   console.log(this.game.player.position.x, this.game.player.position.y);
 //     console.log(this.game.mapmanager.events);
-        for (let e of this.game.mapmanager.events) {
+        for (let e of this.game.mapmanager.events[this.game.env]) {
             if (e.way == 'tunnal') console.log('check', e);
             if (this.game.player.containsRect(e)) {
                 if (e.event.way == "tunnal") {
@@ -265,7 +271,7 @@ class entitymanager {
     //    machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
         //	console.log(bg);
         let fl = false;
-        for (let e of this.game.mapmanager.events) {
+        for (let e of this.game.mapmanager.events[this.game.env]) {
       //      console.log(e);
             if (this.game.player.containsRect(e) && e.event.way == "negative") {
                 fl = true;

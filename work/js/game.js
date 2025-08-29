@@ -9,6 +9,7 @@ class game {
     static yingyang = true;
     async init() {
         this.player = new Rect(0, 0, 30, 40);
+        this.env = "yang";
         this.gameFrame = 0;
         this.lst = 0;
         this.status = "running";
@@ -35,7 +36,7 @@ class game {
 
         await this.mapmanager.loadMap("bg.json");
         await this.enemymanager.LoadEnemy("bg.json");
-        this.mapmanager.draw();
+        this.mapmanager.draw(this.env);
         this.update();
         window.addEventListener('resize', () => this.autoScale(this.view));
     }
@@ -150,7 +151,7 @@ class game {
             case "running": // 游戏运行状态
 
                 // 绘制地图（背景或场景元素）
-                this.mapmanager.draw();
+                this.mapmanager.draw(this.env);
                 await this.enemymanager.update();
                 await this.entitymanager.update();
                 this.entitymanager.checkCollision();
@@ -166,13 +167,14 @@ class game {
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制）
+                this.mapmanager.draw(this.env);
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":
                 console.log("游戏结束");
         // 绘制背景和场景
-        this.mapmanager.draw();
+        this.mapmanager.draw(this.env);
         this.enemymanager.draw(this.ctx);
         this.hp.draw(this.ctx, this.width, this.height);
     

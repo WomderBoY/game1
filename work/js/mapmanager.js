@@ -14,20 +14,15 @@ class Tile extends Rect {
 class mapmanager {
     constructor(game) {
         this.game = game;
-        this.test = [];
-        this.collidable = [];
-        this.events = [];
-		this.app = [];
-        this.room = "";
-		this.background = "";
+        this.empty();
     }
 
 	empty() {
-		this.test = [];
+        this.test = {"yin":[], "yang":[]};
+        this.collidable = {"yin":[], "yang":[]};
+        this.events = {"yin":[], "yang":[]};
+		this.app = {"yin":[], "yang":[]};
         this.room = "";
-		this.collidable = [];
-		this.events = [];
-		this.app = [];
 		this.background = "";
 	}
 
@@ -42,41 +37,45 @@ class mapmanager {
         this.game.hp.reset();
         this.empty();
 
-        for (let i of data.tileMap) {
-            await this.addTile(i);
+        for (let i of data.yin.tileMap) {
+            await this.addTile("yin", i);
 //			console.log('block', i)
         }
+        for (let i of data.yang.tileMap) {
+            await this.addTile("yang", i);
+        }
 
-		if (data.background) {
-			let bg = await this.game.datamanager.loadImg(data.background);
+
+		if (data.yang.background) {
+			let bg = await this.game.datamanager.loadImg(data.yang.background);
 			this.background = bg;
 		}
 //		console.log('events', this.events);
     }
 
-    async addTile(i) {
+    async addTile(type, i) {
 		const [x, y, w, h] = i.hitbox;
 		let img = null;
 		let tile = new Tile(x, y, w, h, img, i.event); // 去掉 this.game   
 		
-		if (i.event && i.event.type === 'kill') this.app.push(tile);     //这是伤害的方块 不对这里
-		if (i.col != false) this.collidable.push(tile);
+		if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 不对这里
+		if (i.col != false) this.collidable[type].push(tile);
 		//if (i.app) this.app.push(tile);
-		this.test.push(tile);
+		this.test[type].push(tile);
 		if (i.event) {
 	//		console.log(i.event);
-			 this.events.push(tile);
+			 this.events[type].push(tile);
 		}
-		for (let tile of this.game.mapmanager.events) {
-			console.log(tile.event);
+		for (let tile of this.game.mapmanager.events[type]) {
+			console.log(tile.event[type]);
     	}
 	}
 
-    getCollidable() {
-        return this.collidable;
+    getCollidable(type) {
+        return this.collidable[type];
     }
 
-	draw() {
+	draw(type = true) {
     // 绘制背景
     if (!this.background) {
         this.game.ctx.fillStyle = "#87cefa";
@@ -86,7 +85,7 @@ class mapmanager {
     }
 
     // 遍历所有元素
-    for (let i of this.collidable) {
+    for (let i of this.collidable[type]) {
         const ctx = this.game.ctx;
         const { x, y, w, h } = i;
 
@@ -140,7 +139,7 @@ class mapmanager {
     }
 
 	// 遍历所有元素
-    for (let i of this.app) {
+    for (let i of this.app[type]) {
     const ctx = this.game.ctx;
     const { x, y, w, h } = i;
 

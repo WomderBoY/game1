@@ -1,4 +1,4 @@
-_jsonCallback({
+_jsonCallback({"yang":{
 	"tileMap":[
 	{
         "hitbox":[155,600,155,40],
@@ -36,4 +36,12 @@ _jsonCallback({
 	],
 	"enemy":[],
 	"background":"../images/map1.png"
-})
+},
+"yin":{
+	"tileMap":[],
+	"enemy":[
+	],
+
+	"background":""
+}}
+)
