@@ -35,6 +35,7 @@ _jsonCallback({"yang":{
 
 	],
 	"enemy":[],
+	"bagua":[],
 	"background":"../images/map1.png"
 },
 "yin":{

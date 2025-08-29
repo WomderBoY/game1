@@ -21,9 +21,10 @@ class Enemy {
 
         //是否死亡
         this.dead = false;
-
-        this.ingYin = this.game.datamanager.loadImg("../images/enemy-black.png");
-        this.imgYang = this.game.datamanager.loadImg("../images/enemy-white.png");
+        (async () => {
+            this.imgYin = await this.game.datamanager.loadImg("../images/enemy-black.png");
+            this.imgYang = await this.game.datamanager.loadImg("../images/enemy-white.png");
+        })();
     }
 
     update(colliders) {
@@ -86,20 +87,9 @@ class Enemy {
      * 绘制敌人
      */
     draw(ctx) {
-        const pos = this.rect.position;
-        const size = this.rect.size;
-
-        // 根据类型选择不同图片
         const img = this.type ? this.imgYin : this.imgYang;
-
-        // 确保图片加载完成后再绘制
-        if (img.complete) {
-            ctx.drawImage(img, pos.x, pos.y, size.x, size.y);
-        } else {
-            // 图片还没加载好时，先绘制占位矩形
-            ctx.fillStyle = this.type ? "black" : "white";
-            ctx.fillRect(pos.x, pos.y, size.x, size.y);
-        }
+        if (!img) return; // 还没加载完
+        ctx.drawImage(img, this.rect.position.x, this.rect.position.y, this.rect.size.x, this.rect.size.y);
     }
 }
 

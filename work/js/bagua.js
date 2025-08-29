@@ -25,7 +25,7 @@ class BaguaManager {
         this.baguas = [];
     }
 
-    async LoadEnemy(src) {
+    async LoadBagua(src) {
         let data = await this.game.datamanager.loadJSON(src);
 
         this.empty();
