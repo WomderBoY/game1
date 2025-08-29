@@ -227,7 +227,7 @@ class entitymanager {
     async drawPlayer() {
         
         let machine=this.game.animationmachine;
-        if (this.keys.up && entitymanager.onground == false) {
+        if (this.keys.up || entitymanager.onground == false) {
             machine.current = 'jump';
         }
         else if (this.keys.left || this.keys.right) {

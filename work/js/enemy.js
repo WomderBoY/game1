@@ -87,7 +87,7 @@ class Enemy {
      * 绘制敌人
      */
     draw(ctx) {
-        const img = this.type ? this.imgYin : this.imgYang;
+        const img = this.type ? this.imgYang : this.imgYin;
         if (!img) return; // 还没加载完
         ctx.drawImage(img, this.rect.position.x, this.rect.position.y, this.rect.size.x, this.rect.size.y);
     }
