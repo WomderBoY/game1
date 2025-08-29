@@ -12,10 +12,10 @@ class CGManager {
     }
 
     // 添加一个新的 CG 事件到队列
-    play(event) {
+    async play(event) {
         this.queue.push(event);
         if (!this.isPlaying) {
-            this._runQueue();
+            await this._runQueue();
         }
     }
 
@@ -30,6 +30,8 @@ class CGManager {
         document.addEventListener("click", this._clickHandler);
 
         while (this.queue.length > 0) {
+            console.log('cg event start');
+            console.log(this.game.canmove);
             const event = this.queue.shift();
             this.images = event.images || [];
             this.texts = event.text || [];
@@ -40,11 +42,12 @@ class CGManager {
 
                 const img = document.createElement("img");
                 img.src = this.images[i];
-                Object.assign(img.style, { maxWidth: "80%", maxHeight: "80%", objectFit: "contain" });
+                Object.assign(img.style, { maxWidth: "80%", maxHeight: "80%", objectFit: "contain", opacity: "1", transition: "opacity 0.5s" });
                 this.overlay.appendChild(img);
 
                 if (this.texts[i] && !this.canceled) {
                     await this.dialog.prints([this.texts[i]]);
+                    console.log('cg text done');
                 }
 
                 if (!this.canceled) {
@@ -54,9 +57,18 @@ class CGManager {
                     this._resolveNext = null;
                 }
             }
+            console.log('cg event end');
+        }
+
+        // ==== 图片淡出动画 ====
+        if (this.overlay && this.overlay.firstChild) {
+            const img = this.overlay.firstChild;
+            img.style.opacity = "0"; // 开始淡出
+            await new Promise(resolve => setTimeout(resolve, 500)); // 等待 0.5 秒
         }
 
         this.end();
+        console.log('cg end');
         this.game.cg = false;
         this.game.canmove = true;
         this.isPlaying = false;

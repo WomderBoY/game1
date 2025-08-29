@@ -153,7 +153,7 @@ class game {
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
-        console.log(this.canmove);
+//        console.log(this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
