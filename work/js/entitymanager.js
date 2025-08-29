@@ -203,7 +203,6 @@ class entitymanager {
         if (!overlapX || !overlapY) continue;
 
         const fromTop = playerPrevY + player.size.y <= rect.position.y;
-        const fromBottom = playerPrevY >= enemyBottom;
         const isHead = fromTop && (playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10);
 
         if (this.game.yingyang !== enemy.type && isHead) {
@@ -216,22 +215,10 @@ class entitymanager {
                 if (this.game.hp) this.game.hp.decrease();
                 entitymanager.safeUntil = now + 3000; // 3秒无敌
             }
-
-            // 竖直碰撞修正
-            if (fromTop) { player.position.y = rect.position.y - player.size.y; entitymanager.vy = 0; }
-            else if (fromBottom) { player.position.y = enemyBottom; entitymanager.vy = 0; }
-
-            // 水平碰撞修正
-            if (playerPrevX + player.size.x <= rect.position.x) { // 从左撞
-                player.position.x = rect.position.x - player.size.x;
-                entitymanager.vx = 0;
-            } else if (playerPrevX >= enemyRight) { // 从右撞
-                player.position.x = enemyRight;
-                entitymanager.vx = 0;
-            }
         }
     }
 }
+
 
 
 
@@ -310,7 +297,7 @@ class entitymanager {
     drawPortals() {
         if (!this.portalImg) return;
         
-        for (let e of this.game.mapmanager.events) {
+        for (let e of this.game.mapmanager.events[this.game.env]) {
             if (e.event && e.event.type === 'changemap') {
                 // 计算传送门位置（居中显示在事件区域）
                 const portalX = e.x + (e.w - this.portalImg.width) / 2;

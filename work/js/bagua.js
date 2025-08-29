@@ -43,8 +43,8 @@ class BaguaManager {
         for (let b of this.baguas) {
             // 如果和玩家重叠，并且按下Enter，就切换环境
             if (b.checkInteract(player) && this.game.inputmanager.takeEnter()) {
-                // 切换 game.env（假设只有 true/false 两种）
-                this.game.env = !this.game.env;
+                // 切换 game.env（假设只有 'yin'/'yang' 两种）
+                this.game.env = this.game.env == 'yin' ? 'yang' :"yin";
             }
         }
     }

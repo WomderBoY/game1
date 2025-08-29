@@ -75,7 +75,7 @@ class mapmanager {
         return this.collidable[type];
     }
 
-	draw(type = true) {
+	draw(type = "yang") {
     // 绘制背景
     if (!this.background) {
         this.game.ctx.fillStyle = "#87cefa";
