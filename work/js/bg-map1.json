@@ -1,48 +1,83 @@
-_jsonCallback({"yang":{
-	"tileMap":[
-	{
-        "hitbox":[155,600,155,40],
-		"col":true
-    },
-	{
-        "hitbox":[490,500,155,40],
-		"col":true
-    },
-	{
-        "hitbox":[200,370,155,40],
-		"col":true
-    },
-	{
-        "hitbox":[630,280,155,40],
-		"col":true
-    },
-	{
-        "hitbox":[1180,550,800,45],
-		"col":true
-    },
-	{
-        "hitbox":[0,675,2000,75],
-		"event":{
-			"type":"kill", //
-			"way":"tunnal", //x和y不知道要不要保留
-		},
-		"col":false
-    },
-	{
-        "hitbox":[0,165,350,40],
-		"col":true
-    }
-
-	],
-	"enemy":[],
-	"bagua":[],
-	"background":"../images/map1.png"
-},
-"yin":{
-	"tileMap":[],
-	"enemy":[
-	],
-	"bagua":[],
-	"background":""
-}}
+_jsonCallback({
+	"yang": {
+		"tileMap": [
+			{
+				"hitbox": [
+					155,
+					600,
+					155,
+					40
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					490,
+					500,
+					155,
+					40
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					200,
+					370,
+					155,
+					40
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					630,
+					280,
+					155,
+					40
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					1180,
+					550,
+					800,
+					45
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					0,
+					675,
+					2000,
+					75
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			},
+			{
+				"hitbox": [
+					0,
+					165,
+					350,
+					40
+				],
+				"col": true
+			}
+		],
+		"enemy": [],
+		"bagua": [],
+		"background": "../images/lib2.png"
+	},
+	"yin": {
+		"tileMap": [],
+		"enemy": [],
+		"bagua": [],
+		"background": ""
+	}
+}
 )
