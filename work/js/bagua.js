@@ -4,6 +4,7 @@ class Bagua {
     }
 
     draw(ctx) {
+  //      console.log('绘制八卦阵', this.rect );
         ctx.fillStyle = "purple"; // 先画个紫色矩形代替
         ctx.fillRect(this.rect.position.x, this.rect.position.y, this.rect.size.x, this.rect.size.y);
     }
@@ -30,8 +31,9 @@ class BaguaManager {
 
         this.empty();
 
-        for (let i of data.bagua) {
-            await this.addBagua(i.x, i.y, i.w, i.h);
+        for (let i of data[this.game.env].bagua) {
+            let [x, y, w, h] = i.hitbox;
+            await this.addBagua(x, y, w, h);
         }
     }
 

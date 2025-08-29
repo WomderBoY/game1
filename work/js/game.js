@@ -24,7 +24,7 @@ class game {
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
         this.hp = new hp(10, this);
-        this.baguaManager = new BaguaManager(this);
+        this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
 
         this.entitymanager = new entitymanager(this);
@@ -39,6 +39,7 @@ class game {
 
         await this.mapmanager.loadMap("bg.json");
         await this.enemymanager.LoadEnemy("bg.json");
+        await this.baguamanager.LoadBagua("bg.json");
         this.mapmanager.draw(this.env);
         this.update();
         window.addEventListener('resize', () => this.autoScale(this.view));
@@ -149,7 +150,7 @@ class game {
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
-        console.log(this.canmove);
+ //       console.log(this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
 
@@ -162,8 +163,8 @@ class game {
                 this.entitymanager.drawPlayer();
                 this.entitymanager.drawPortals();
                 this.enemymanager.draw(this.ctx);
-                this.baguaManager.update(this.player, this.inputmanager);
-                this.baguaManager.draw(this.ctx);
+                this.baguamanager.draw(this.ctx);
+                this.baguamanager.update(this.player);
                 await this.eventmanager.handle();
                 // console.log('游戏运行中...');
 

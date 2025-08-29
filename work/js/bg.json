@@ -45,7 +45,12 @@ _jsonCallback({"yang":{
 			"speed":2
 		}
 	],
-
+	
+	"bagua":[
+		{
+			"hitbox":[200, 400, 20, 20],
+		}
+	],
 	"background":"../images/road2.png"
 },
 "yin":{
@@ -71,6 +76,8 @@ _jsonCallback({"yang":{
 	"enemy":[
 	],
 
+	"bagua":[
+	],
 	"background":""
 }}
 

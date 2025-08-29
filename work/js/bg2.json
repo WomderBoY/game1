@@ -49,6 +49,7 @@ _jsonCallback({"yang":{
 		}
 	],
 
+	"bagua":[],
 	"background":"../images/classroom.png"
 }, 
 "yin":{
@@ -71,6 +72,7 @@ _jsonCallback({"yang":{
 	"enemy":[
 	],
 
+	"bagua":[],
 	"background":""
 }
 
