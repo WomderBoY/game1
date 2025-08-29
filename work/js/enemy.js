@@ -1,6 +1,7 @@
 class Enemy {
-    constructor(x, y, width, height, speed = 2, type=true) {
+    constructor(game, x, y, width, height, speed = 2, type=true) {
         // 敌人矩形
+        this.game = game;
         this.rect = new Rect(x, y, width, height);
 
         // 水平速度（左右移动）
@@ -19,7 +20,10 @@ class Enemy {
         this.type = type;
 
         //是否死亡
-        this.dead = false
+        this.dead = false;
+
+        this.ingYin = this.game.datamanager.loadImg("../images/enemy-black.png");
+        this.imgYang = this.game.datamanager.loadImg("../images/enemy-white.png");
     }
 
     update(colliders) {
@@ -82,19 +86,20 @@ class Enemy {
      * 绘制敌人
      */
     draw(ctx) {
-        // yin
-        if(this.type){
-            ctx.fillStyle = "black";
+        const pos = this.rect.position;
+        const size = this.rect.size;
+
+        // 根据类型选择不同图片
+        const img = this.type ? this.imgYin : this.imgYang;
+
+        // 确保图片加载完成后再绘制
+        if (img.complete) {
+            ctx.drawImage(img, pos.x, pos.y, size.x, size.y);
+        } else {
+            // 图片还没加载好时，先绘制占位矩形
+            ctx.fillStyle = this.type ? "black" : "white";
+            ctx.fillRect(pos.x, pos.y, size.x, size.y);
         }
-        else{
-            ctx.fillStyle = "white";
-        }
-        ctx.fillRect(
-            this.rect.position.x,
-            this.rect.position.y,
-            this.rect.size.x,
-            this.rect.size.y
-        );
     }
 }
 
@@ -123,7 +128,7 @@ class EnemyManager {
     }
 
     addEnemy(x, y, width, height, speed = 2) {
-        this.enemies.push(new Enemy(x, y, width, height, speed));
+        this.enemies.push(new Enemy(this.game, x, y, width, height, speed));
     }
 
     /**
