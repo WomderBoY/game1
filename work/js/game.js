@@ -158,6 +158,7 @@ class game {
                 this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
+                this.entitymanager.drawPortals();
                 this.enemymanager.draw(this.ctx);
                 this.baguaManager.update(this.player, this.inputmanager);
                 this.baguaManager.draw(this.ctx);
@@ -173,6 +174,7 @@ class game {
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
                 this.baguaManager.draw(this.ctx);
+                this.entitymanager.drawPortals();
                 break;
             case "over":
                 console.log("游戏结束");
@@ -183,7 +185,8 @@ class game {
             
                 // 绘制死亡状态的玩家（在地图和敌人之上）
                 this.entitymanager.drawDeadPlayer();
-                
+                this.baguaManager.draw(this.ctx);
+                this.entitymanager.drawPortals();
                 // 绘制游戏结束遮罩和文字（在最上层）
                 this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
                 this.ctx.fillRect(0, 0, this.view.width, this.view.height);
