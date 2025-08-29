@@ -159,7 +159,7 @@ class game {
                 //
                 // 绘制地图（背景或场景元素）
                 this.mapmanager.draw(this.env);
-                if (this.cg == false) this.mapmanager.draw();
+                if (this.cg == false) this.mapmanager.draw(this.env);
                 await this.enemymanager.update();
                 await this.entitymanager.update();
                 this.entitymanager.checkCollision();

@@ -23,7 +23,7 @@ class mapmanager {
         this.events = {"yin":[], "yang":[]};
 		this.app = {"yin":[], "yang":[]};
         this.room = "";
-		this.background = "";
+		this.background = {"yin":[], "yang":[]};
 	}
 
     async loadMap(src) {
@@ -48,8 +48,12 @@ class mapmanager {
 
 		if (data.yang.background) {
 			let bg = await this.game.datamanager.loadImg(data.yang.background);
-			this.background = bg;
+			this.background["yang"] = bg;
 		}
+        if (data.yin.background) {
+            let bg = await this.game.datamanager.loadImg(data.yin.background);
+            this.background["yin"] = bg;
+        }
 //		console.log('events', this.events);
     }
 
@@ -75,13 +79,15 @@ class mapmanager {
         return this.collidable[type];
     }
 
-	draw(type = "yang") {
+	draw(type) {
     // 绘制背景
-    if (!this.background) {
+    console.log(type);
+    console.log(this.background);       
+    if (this.background[type] == "") {
         this.game.ctx.fillStyle = "#87cefa";
         this.game.ctx.fillRect(0, 0, this.game.width, this.game.height);
     } else {
-        this.game.ctx.drawImage(this.background, 0, 0, this.game.width, this.game.height);
+        this.game.ctx.drawImage(this.background[type]  , 0, 0, this.game.width, this.game.height);
     }
 
     // 遍历所有元素
