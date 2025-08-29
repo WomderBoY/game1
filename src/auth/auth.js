@@ -32,8 +32,49 @@ function transitionToGame() {
 
 /* ================== 弹窗 & 登出逻辑 ================== */
 
+function getSavedAchievements(){
+    try {
+        const raw = localStorage.getItem('yyj_achievements_v1');
+        if (!raw) return null;
+        return JSON.parse(raw);
+    } catch (_) { return null; }
+}
+
+function renderAchievementsList(){
+    const list = document.getElementById('achievement-list');
+    if (!list) return;
+    list.innerHTML = '';
+    const saved = getSavedAchievements();
+    // 定义已知成就的基本信息（与游戏中 AchievementsManager 对应）
+    const defs = {
+        first_kill: { name: '初战告捷', desc: '击杀一个小怪' },
+        first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' }
+    };
+    const ids = Object.keys(defs);
+    ids.forEach(id => {
+        const unlocked = saved && saved[id] ? !!saved[id].unlocked : false;
+        const li = document.createElement('li');
+        li.className = 'achievement-item' + (unlocked ? '' : ' locked');
+        const icon = document.createElement('div');
+        icon.className = 'icon';
+        icon.textContent = unlocked ? '🏆' : '🔒';
+        const details = document.createElement('div');
+        details.className = 'details';
+        const h3 = document.createElement('h3');
+        h3.textContent = defs[id].name;
+        const p = document.createElement('p');
+        p.textContent = defs[id].desc + (unlocked && saved[id].unlockedAt ? `（已解锁）` : '');
+        details.appendChild(h3);
+        details.appendChild(p);
+        li.appendChild(icon);
+        li.appendChild(details);
+        list.appendChild(li);
+    });
+}
+
 function showAchievements() {
     const modal = document.getElementById('achievement-modal');
+    renderAchievementsList();
     modal.classList.remove('hidden');
     requestAnimationFrame(() => { modal.classList.add('show'); });
 }
