@@ -310,7 +310,7 @@ class entitymanager {
     drawPortals() {
         if (!this.portalImg) return;
         
-        for (let e of this.game.mapmanager.events) {
+        for (let e of this.game.mapmanager.events[this.game.env]) {
             if (e.event && e.event.type === 'changemap') {
                 // 计算传送门位置（居中显示在事件区域）
                 const portalX = e.x + (e.w - this.portalImg.width) / 2;

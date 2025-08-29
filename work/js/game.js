@@ -181,7 +181,7 @@ class game {
             case "over":
                 console.log("游戏结束");
                 // 绘制背景和场景
-                this.mapmanager.draw();
+                this.mapmanager.draw(this.env);
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
             
