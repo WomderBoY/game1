@@ -16,6 +16,7 @@ class game {
         this.prevStatus = null;
         this.canmove = true;
         this.createStage();
+        this.env = true; // 默认环境为阳
 
         this.datamanager = new datamanager(this);
 
@@ -23,6 +24,7 @@ class game {
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
         this.hp = new hp(10, this);
+        this.baguaManager = new BaguaManager(this);
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
@@ -157,7 +159,10 @@ class game {
                 this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
+                this.entitymanager.drawPortals();
                 this.enemymanager.draw(this.ctx);
+                this.baguaManager.update(this.player, this.inputmanager);
+                this.baguaManager.draw(this.ctx);
                 await this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
@@ -170,33 +175,36 @@ class game {
                 this.mapmanager.draw(this.env);
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
+                this.baguaManager.draw(this.ctx);
+                this.entitymanager.drawPortals();
                 break;
             case "over":
                 console.log("游戏结束");
-        // 绘制背景和场景
-        this.mapmanager.draw(this.env);
-        this.enemymanager.draw(this.ctx);
-        this.hp.draw(this.ctx, this.width, this.height);
-    
-        // 绘制死亡状态的玩家（在地图和敌人之上）
-        this.entitymanager.drawDeadPlayer();
-        
-        // 绘制游戏结束遮罩和文字（在最上层）
-        this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
-        this.ctx.fillRect(0, 0, this.view.width, this.view.height);
-        
-        this.ctx.fillStyle = "white";
-        this.ctx.font = "bold 60px Arial";
-        this.ctx.textAlign = "center";
-        this.ctx.textBaseline = "middle";
-        this.ctx.fillText("游戏结束", this.view.width / 2, this.view.height / 2);
-        this.ctx.font = "30px Arial";
-        this.ctx.fillText("按 Enter 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
-        if (this.inputmanager.takeEnter()) {
-                    await this.savemanager.load();
-                    this.hp.reset()
-        }
-        break;
+                // 绘制背景和场景
+                this.mapmanager.draw();
+                this.enemymanager.draw(this.ctx);
+                this.hp.draw(this.ctx, this.width, this.height);
+            
+                // 绘制死亡状态的玩家（在地图和敌人之上）
+                this.entitymanager.drawDeadPlayer();
+                this.baguaManager.draw(this.ctx);
+                this.entitymanager.drawPortals();
+                // 绘制游戏结束遮罩和文字（在最上层）
+                this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
+                this.ctx.fillRect(0, 0, this.view.width, this.view.height);
+                
+                this.ctx.fillStyle = "white";
+                this.ctx.font = "bold 60px Arial";
+                this.ctx.textAlign = "center";
+                this.ctx.textBaseline = "middle";
+                this.ctx.fillText("游戏结束", this.view.width / 2, this.view.height / 2);
+                this.ctx.font = "30px Arial";
+                this.ctx.fillText("按 Enter 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
+                if (this.inputmanager.takeEnter()) {
+                            await this.savemanager.load();
+                            this.hp.reset()
+                }
+            break;
                 //load...
         }
 

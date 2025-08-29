@@ -82,11 +82,12 @@ class Enemy {
      * 绘制敌人
      */
     draw(ctx) {
+        // yin
         if(this.type){
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "black";
         }
         else{
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "white";
         }
         ctx.fillRect(
             this.rect.position.x,
