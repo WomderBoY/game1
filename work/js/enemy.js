@@ -1,6 +1,7 @@
 class Enemy {
-    constructor(x, y, width, height, speed = 2, type=true) {
+    constructor(game, x, y, width, height, speed = 2, type=true) {
         // 敌人矩形
+        this.game = game;
         this.rect = new Rect(x, y, width, height);
 
         // 水平速度（左右移动）
@@ -19,7 +20,11 @@ class Enemy {
         this.type = type;
 
         //是否死亡
-        this.dead = false
+        this.dead = false;
+        (async () => {
+            this.imgYin = await this.game.datamanager.loadImg("../images/enemy-black.png");
+            this.imgYang = await this.game.datamanager.loadImg("../images/enemy-white.png");
+        })();
     }
 
     update(colliders) {
@@ -82,18 +87,9 @@ class Enemy {
      * 绘制敌人
      */
     draw(ctx) {
-        if(this.type){
-            ctx.fillStyle = "red";
-        }
-        else{
-            ctx.fillStyle = "blue";
-        }
-        ctx.fillRect(
-            this.rect.position.x,
-            this.rect.position.y,
-            this.rect.size.x,
-            this.rect.size.y
-        );
+        const img = this.type ? this.imgYin : this.imgYang;
+        if (!img) return; // 还没加载完
+        ctx.drawImage(img, this.rect.position.x, this.rect.position.y, this.rect.size.x, this.rect.size.y);
     }
 }
 
@@ -116,20 +112,20 @@ class EnemyManager {
 
         this.empty();
 
-        for (let i of data.enemy) {
+        for (let i of data.yang.enemy) {
             await this.addEnemy(i.x, i.y, i.w, i.h, i.speed);
         }
     }
 
     addEnemy(x, y, width, height, speed = 2) {
-        this.enemies.push(new Enemy(x, y, width, height, speed));
+        this.enemies.push(new Enemy(this.game, x, y, width, height, speed));
     }
 
     /**
      * 更新所有敌人
      */
     update() {
-        const colliders = this.game.mapmanager.getCollidable();
+        const colliders = this.game.mapmanager.getCollidable(this.game.env);
         for (let enemy of this.enemies) {
             enemy.update(colliders);
         }

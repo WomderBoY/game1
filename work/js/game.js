@@ -9,12 +9,14 @@ class game {
     static yingyang = true;
     async init() {
         this.player = new Rect(0, 0, 30, 40);
+        this.env = "yang";
         this.gameFrame = 0;
         this.lst = 0;
         this.status = "running";
         this.prevStatus = null;
         this.canmove = true;
         this.createStage();
+        this.env = 'yang'; // 默认环境为阳
 
         this.datamanager = new datamanager(this);
 
@@ -22,6 +24,8 @@ class game {
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
         this.hp = new hp(10, this);
+        this.baguamanager = new BaguaManager(this);
+        this.achievements = new AchievementsManager(this);
         this.cg =false;
 
         this.entitymanager = new entitymanager(this);
@@ -37,7 +41,8 @@ class game {
 
         await this.mapmanager.loadMap("bg.json");
         await this.enemymanager.LoadEnemy("bg.json");
-        this.mapmanager.draw();
+        await this.baguamanager.LoadBagua("bg.json");
+        this.mapmanager.draw(this.env);
         this.update();
         window.addEventListener('resize', () => this.autoScale(this.view));
 
@@ -148,19 +153,23 @@ class game {
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
-    //    console.log(this.canmove);
+        console.log(this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
                 // 绘制地图（背景或场景元素）
+                this.mapmanager.draw(this.env);
                 if (this.cg == false) this.mapmanager.draw();
                 await this.enemymanager.update();
                 await this.entitymanager.update();
                 this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
                 if (this.cg == false) this.entitymanager.drawPlayer();
+                this.entitymanager.drawPortals();
                 if (this.cg == false) this.enemymanager.draw(this.ctx);
-                await this.eventmanager.handle();
+                this.baguamanager.draw(this.ctx);
+                this.baguamanager.update(this.player);
+                this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
                 // 绘制血条，放在最后，保证在最上层
@@ -169,35 +178,39 @@ class game {
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制）
+                this.mapmanager.draw(this.env);
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
+                this.baguaManager.draw(this.ctx);
+                this.entitymanager.drawPortals();
                 break;
             case "over":
                 console.log("游戏结束");
-        // 绘制背景和场景
-        this.mapmanager.draw();
-        this.enemymanager.draw(this.ctx);
-        this.hp.draw(this.ctx, this.width, this.height);
-    
-        // 绘制死亡状态的玩家（在地图和敌人之上）
-        this.entitymanager.drawDeadPlayer();
-        
-        // 绘制游戏结束遮罩和文字（在最上层）
-        this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
-        this.ctx.fillRect(0, 0, this.view.width, this.view.height);
-        
-        this.ctx.fillStyle = "white";
-        this.ctx.font = "bold 60px Arial";
-        this.ctx.textAlign = "center";
-        this.ctx.textBaseline = "middle";
-        this.ctx.fillText("游戏结束", this.view.width / 2, this.view.height / 2);
-        this.ctx.font = "30px Arial";
-        this.ctx.fillText("按 Enter 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
-        if (this.inputmanager.takeEnter()) {
-                    await this.savemanager.load();
-                    this.hp.reset()
-        }
-        break;
+                // 绘制背景和场景
+                this.mapmanager.draw(this.env);
+                this.enemymanager.draw(this.ctx);
+                this.hp.draw(this.ctx, this.width, this.height);
+            
+                // 绘制死亡状态的玩家（在地图和敌人之上）
+                this.entitymanager.drawDeadPlayer();
+                this.baguamanager.draw(this.ctx);
+                this.entitymanager.drawPortals();
+                // 绘制游戏结束遮罩和文字（在最上层）
+                this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
+                this.ctx.fillRect(0, 0, this.view.width, this.view.height);
+                
+                this.ctx.fillStyle = "white";
+                this.ctx.font = "bold 60px Arial";
+                this.ctx.textAlign = "center";
+                this.ctx.textBaseline = "middle";
+                this.ctx.fillText("游戏结束", this.view.width / 2, this.view.height / 2);
+                this.ctx.font = "30px Arial";
+                this.ctx.fillText("按 Enter 键重新开始", this.view.width / 2, this.view.height / 2 + 40);
+                if (this.inputmanager.takeEnter()) {
+                            await this.savemanager.load();
+                            this.hp.reset()
+                }
+            break;
                 //load...
         }
 

@@ -23,7 +23,7 @@ class entitymanager {
         this.keys = { left: false, right: false, up: false, change : false };
 //        this.bg = null;
         this.lt = 'stand';
-        this.re = 0;
+        this.re = this.rre = 0;
         this.init();
         this.safeUntil = 0;
     }
@@ -31,16 +31,18 @@ class entitymanager {
         async init() {
             this.bg = await this.game.datamanager.loadImg('../images/point.png');
             this.deadImg = await this.game.datamanager.loadImg('../images/die.png');
+            this.portalImg = await this.game.datamanager.loadImg('../images/portal.png');
   //          bg = await this.game.datamanager.loadImg('../images/point.png');
         }
     // 更新逻辑优化
     async update() {
-        this.keys = { left: false, right: false, up: false };
+        this.keys = { left: false, right: false, up: false, change : false , envchange:false};
         
         if (this.game.inputmanager.askA() == true) this.keys.left = true;
         if (this.game.inputmanager.askD() == true) this.keys.right = true;
         if (this.game.inputmanager.askW() == true) this.keys.up = true;
         if (this.game.inputmanager.askJ() == true) this.keys.change = true;
+        if (this.game.inputmanager.askK() == true) this.keys.envchange = true;
         let machine = this.game.animationmachine;
 
     //    console.log(this.keys);
@@ -52,6 +54,12 @@ class entitymanager {
         if (ky.change && this.game.gameFrame - this.re >= 200) {
             ga.yingyang = !ga.yingyang;
             this.re = this.game.gameFrame;
+            if (this.game.achievements) this.game.achievements.unlock('first_toggle');
+        }
+
+        if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
+            ga.env = (ga.env === "yin") ? "yang" : "yin";
+            this.rre = this.game.gameFrame;
         }
   //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
@@ -109,7 +117,7 @@ class entitymanager {
      //   console.log(ga.player.position.y, ga.player.position.y);
 
         // 平台移动 & 碰撞逻辑
-        for (let p of ga.mapmanager.collidable) {
+        for (let p of ga.mapmanager.collidable[this.game.env]) {
             if (ga.player.containsRect(p)) {
                 const prevX = ga.player.position.x - vx;
                 const prevY = ga.player.position.y - vy;
@@ -158,7 +166,7 @@ class entitymanager {
     async chcevent() {
      //   console.log(this.game.player.position.x, this.game.player.position.y);
 //     console.log(this.game.mapmanager.events);
-        for (let e of this.game.mapmanager.events) {
+        for (let e of this.game.mapmanager.events[this.game.env]) {
             if (e.way == 'tunnal') console.log('check', e);
             if (this.game.player.containsRect(e)) {
                 if (e.event.way == "tunnal") {
@@ -196,35 +204,23 @@ class entitymanager {
         if (!overlapX || !overlapY) continue;
 
         const fromTop = playerPrevY + player.size.y <= rect.position.y;
-        const fromBottom = playerPrevY >= enemyBottom;
         const isHead = fromTop && (playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10);
 
         if (this.game.yingyang !== enemy.type && isHead) {
             // 阴阳不同踩头 → 敌人死亡
             enemy.dead = true;
             entitymanager.vy = -10;
+            if (this.game.achievements) this.game.achievements.unlock('first_kill');
         } else {
             // 扣血条件：阴阳相同 或 阴阳不同非踩头
             if (now >= entitymanager.safeUntil) {
                 if (this.game.hp) this.game.hp.decrease();
                 entitymanager.safeUntil = now + 3000; // 3秒无敌
             }
-
-            // 竖直碰撞修正
-            if (fromTop) { player.position.y = rect.position.y - player.size.y; entitymanager.vy = 0; }
-            else if (fromBottom) { player.position.y = enemyBottom; entitymanager.vy = 0; }
-
-            // 水平碰撞修正
-            if (playerPrevX + player.size.x <= rect.position.x) { // 从左撞
-                player.position.x = rect.position.x - player.size.x;
-                entitymanager.vx = 0;
-            } else if (playerPrevX >= enemyRight) { // 从右撞
-                player.position.x = enemyRight;
-                entitymanager.vx = 0;
-            }
         }
     }
 }
+
 
 
 
@@ -265,7 +261,7 @@ class entitymanager {
     //    machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
         //	console.log(bg);
         let fl = false;
-        for (let e of this.game.mapmanager.events) {
+        for (let e of this.game.mapmanager.events[this.game.env]) {
       //      console.log(e);
             if (this.game.player.containsRect(e) && e.event.way == "negative") {
                 fl = true;
@@ -298,5 +294,35 @@ class entitymanager {
         this.deadImg.width,
         this.deadImg.height
         );
+    }
+
+    drawPortals() {
+        if (!this.portalImg) return;
+        
+        for (let e of this.game.mapmanager.events[this.game.env]) {
+            if (e.event && e.event.type === 'changemap') {
+                // 计算传送门位置（居中显示在事件区域）
+                const portalX = e.x + (e.w - this.portalImg.width) / 2;
+                const portalY = e.y + (e.h - this.portalImg.height) / 2;
+                
+                // 添加简单的呼吸动画效果
+                const scale = 1 + 0.1 * Math.sin(this.game.gameFrame * 0.1);
+                const scaledWidth = this.portalImg.width * scale;
+                const scaledHeight = this.portalImg.height * scale;
+                const offsetX = (scaledWidth - this.portalImg.width) / 2;
+                const offsetY = (scaledHeight - this.portalImg.height) / 2;
+                
+                this.game.ctx.save();
+                this.game.ctx.globalAlpha = 0.8 + 0.2 * Math.sin(this.game.gameFrame * 0.15);
+                this.game.ctx.drawImage(
+                    this.portalImg,
+                    portalX - offsetX,
+                    portalY - offsetY,
+                    scaledWidth,
+                    scaledHeight
+                );
+                this.game.ctx.restore();
+            }
+        }
     }
 }
