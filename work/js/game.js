@@ -15,7 +15,7 @@ class game {
         this.prevStatus = null;
         this.canmove = true;
         this.createStage();
-        this.env = true; // 默认环境为阳
+        this.env = 'yang'; // 默认环境为阳
 
         this.datamanager = new datamanager(this);
 
