@@ -189,7 +189,7 @@ class game {
             
                 // 绘制死亡状态的玩家（在地图和敌人之上）
                 this.entitymanager.drawDeadPlayer();
-                this.baguaManager.draw(this.ctx);
+                this.baguamanager.draw(this.ctx);
                 this.entitymanager.drawPortals();
                 // 绘制游戏结束遮罩和文字（在最上层）
                 this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
