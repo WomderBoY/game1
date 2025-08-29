@@ -18,8 +18,13 @@ _jsonCallback({"yang":{
 			"type":"cg",
                 "way":"negative",
                 "images":["../js/player.png","../js/white.png"],
-                "text":["【诺艾尔】这，这难道就是",
-                        "【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！"]
+                "text":[["【诺艾尔】这，这难道就是",
+                        "【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！"],
+						[
+						
+							"【诺艾尔】就是这一本书，我需要的就是这个",
+							"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
+						] ],
 		},
 		"col":false
 	}

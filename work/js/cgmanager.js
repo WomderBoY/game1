@@ -46,7 +46,7 @@ class CGManager {
                 this.overlay.appendChild(img);
 
                 if (this.texts[i] && !this.canceled) {
-                    await this.dialog.prints([this.texts[i]]);
+                    await this.dialog.prints(this.texts[i]);
                     console.log('cg text done');
                 }
 
