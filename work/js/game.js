@@ -180,6 +180,7 @@ class game {
                 // 仍然绘制当前画面（如需要也可不绘制）
                 this.mapmanager.draw(this.env);
                 this.enemymanager.draw(this.ctx);
+                this.entitymanager.drawPlayer();
                 this.hp.draw(this.ctx, this.width, this.height);
                 this.baguamanager.draw(this.ctx);
                 this.entitymanager.drawPortals();
