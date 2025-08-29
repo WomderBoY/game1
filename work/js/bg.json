@@ -1,50 +1,48 @@
 _jsonCallback({
     "tileMap":[
-	{
-        "hitbox":[0,450,300,150],
-		"col":true
-    },
-	{
-		"hitbox":[504, 576, 190, 142],
-		"col": true,
-	},
-	{
-		"hitbox":[550, 550, 10, 10],
-		"col":true,
-	},
-	{
-		"hitbox":[100,400,30,20],
-		"event":{
-			"type":"dialog",
-			"way":"negative",
-			"text":["【诺艾尔】这，这难道就是",
-				"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！",
-				"【诺艾尔】就是这一本书，我需要的就是这个",
-				"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"]
-		},
-		"col":false
-	}
-	,{
-		"hitbox":[150,400,30,20],
-		"event":{
-			"type":"changemap",
-			"way":"negative",
-			"x":100,
-			"y":350,
-			"target":"bg2.json"
-		},
-		"col":false
-	}
-	],
-	"enemy":[
-		{
-			"x":600,
-			"y":400,
-			"w":30,
-			"h":30,
-			"speed":2
-		}
-	],
-
-	"background":"../images/road2.png"
+        {
+            "hitbox":[0,450,300,150],
+            "col":true
+        },
+        {
+            "hitbox":[504, 576, 190, 142],
+            "col": true
+        },
+        {
+            "hitbox":[550, 550, 10, 10],
+            "col":true
+        },
+        {
+            "hitbox":[100,400,30,20],
+            "event":{
+                "type":"cg",
+                "way":"negative",
+                "images":["../js/player.png","../js/white.png"],
+                "text":["【诺艾尔】这，这难道就是",
+                        "【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！"]
+            },
+            "col":false
+        },
+        {
+            "hitbox":[150,400,30,20],
+            "event":{
+                "type":"changemap",
+                "way":"negative",
+                "x":100,
+                "y":350,
+                "target":"bg2.json"
+            },
+            "col":false
+        }
+    ],
+    "enemy":[
+        {
+            "x":600,
+            "y":400,
+            "w":30,
+            "h":30,
+            "speed":2
+        }
+    ],
+    "background":"../images/road2.png"
 })

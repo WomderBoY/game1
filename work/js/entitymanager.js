@@ -258,7 +258,7 @@ class entitymanager {
 		++machine.timer;
         this.lt = machine.current;
         let now = Date.now();
-        console.log(now, entitymanager.safeUntil);
+    //    console.log(now, entitymanager.safeUntil);
         if (now > entitymanager.safeUntil) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
         else if (this.game.gameFrame % 2 == 1) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
     
