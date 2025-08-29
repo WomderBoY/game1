@@ -31,6 +31,7 @@ class entitymanager {
         async init() {
             this.bg = await this.game.datamanager.loadImg('../images/point.png');
             this.deadImg = await this.game.datamanager.loadImg('../images/die.png');
+            this.portalImg = await this.game.datamanager.loadImg('../images/portal.png');
   //          bg = await this.game.datamanager.loadImg('../images/point.png');
         }
     // 更新逻辑优化
@@ -298,5 +299,35 @@ class entitymanager {
         this.deadImg.width,
         this.deadImg.height
         );
+    }
+
+    drawPortals() {
+        if (!this.portalImg) return;
+        
+        for (let e of this.game.mapmanager.events) {
+            if (e.event && e.event.type === 'changemap') {
+                // 计算传送门位置（居中显示在事件区域）
+                const portalX = e.x + (e.w - this.portalImg.width) / 2;
+                const portalY = e.y + (e.h - this.portalImg.height) / 2;
+                
+                // 添加简单的呼吸动画效果
+                const scale = 1 + 0.1 * Math.sin(this.game.gameFrame * 0.1);
+                const scaledWidth = this.portalImg.width * scale;
+                const scaledHeight = this.portalImg.height * scale;
+                const offsetX = (scaledWidth - this.portalImg.width) / 2;
+                const offsetY = (scaledHeight - this.portalImg.height) / 2;
+                
+                this.game.ctx.save();
+                this.game.ctx.globalAlpha = 0.8 + 0.2 * Math.sin(this.game.gameFrame * 0.15);
+                this.game.ctx.drawImage(
+                    this.portalImg,
+                    portalX - offsetX,
+                    portalY - offsetY,
+                    scaledWidth,
+                    scaledHeight
+                );
+                this.game.ctx.restore();
+            }
+        }
     }
 }

@@ -157,6 +157,7 @@ class game {
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
                 this.enemymanager.draw(this.ctx);
+                this.entitymanager.drawPortals();
                 await this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
@@ -166,8 +167,11 @@ class game {
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制）
+                this.mapmanager.draw();
+                this.entitymanager.drawPlayer();
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
+                this.entitymanager.drawPortals();
                 break;
             case "over":
                 console.log("游戏结束");
@@ -178,6 +182,9 @@ class game {
     
         // 绘制死亡状态的玩家（在地图和敌人之上）
         this.entitymanager.drawDeadPlayer();
+        
+        // 绘制传送门（在死亡玩家之上）
+        this.entitymanager.drawPortals();
         
         // 绘制游戏结束遮罩和文字（在最上层）
         this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
