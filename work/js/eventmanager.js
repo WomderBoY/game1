@@ -27,13 +27,16 @@ class eventmanager {
 
   // 直接设置当前事件并将进度置为开始
   set(e) {
-    this.event = e;
-    this.progress = 'start';
+    if (this.game.canmove){
+      this.event = e;
+      this.progress = 'start';
+    }
   }
 
   // 将新事件加入队列
   add(e) {
     // 如果当前没有事件，直接 set 并马上准备处理
+    if (this.game.canmove == false) return;
     if (!this.event) {
       this.set(e);
       return;

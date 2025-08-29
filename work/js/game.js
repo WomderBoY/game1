@@ -165,7 +165,7 @@ class game {
                 this.enemymanager.draw(this.ctx);
                 this.baguamanager.draw(this.ctx);
                 this.baguamanager.update(this.player);
-                await this.eventmanager.handle();
+                this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
                 // 绘制血条，放在最后，保证在最上层
