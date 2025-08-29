@@ -54,6 +54,7 @@ class entitymanager {
         if (ky.change && this.game.gameFrame - this.re >= 200) {
             ga.yingyang = !ga.yingyang;
             this.re = this.game.gameFrame;
+            if (this.game.achievements) this.game.achievements.unlock('first_toggle');
         }
 
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
@@ -209,6 +210,7 @@ class entitymanager {
             // 阴阳不同踩头 → 敌人死亡
             enemy.dead = true;
             entitymanager.vy = -10;
+            if (this.game.achievements) this.game.achievements.unlock('first_kill');
         } else {
             // 扣血条件：阴阳相同 或 阴阳不同非踩头
             if (now >= entitymanager.safeUntil) {

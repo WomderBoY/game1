@@ -25,6 +25,7 @@ class game {
         this.inputmanager = new inputmanager(this);
         this.hp = new hp(10, this);
         this.baguaManager = new BaguaManager(this);
+        this.achievements = new AchievementsManager(this);
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
