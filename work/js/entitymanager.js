@@ -60,6 +60,7 @@ class entitymanager {
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
             ga.env = (ga.env === "yin") ? "yang" : "yin";
             this.rre = this.game.gameFrame;
+            ++this.game.changetimes;
         }
   //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
@@ -118,6 +119,8 @@ class entitymanager {
 
         // 平台移动 & 碰撞逻辑
         for (let p of ga.mapmanager.collidable[this.game.env]) {
+   //         console.log('alive', p.alive(this.game.changetimes));
+            if (p.alive(this.game.changetimes) == false) continue;
             if (ga.player.containsRect(p)) {
                 const prevX = ga.player.position.x - vx;
                 const prevY = ga.player.position.y - vy;
@@ -167,6 +170,7 @@ class entitymanager {
      //   console.log(this.game.player.position.x, this.game.player.position.y);
 //     console.log(this.game.mapmanager.events);
         for (let e of this.game.mapmanager.events[this.game.env]) {
+            if (!e.alive(this.game.changetimes)) continue;
             if (e.way == 'tunnal') console.log('check', e);
             if (this.game.player.containsRect(e)) {
                 if (e.event.way == "tunnal") {

@@ -2,6 +2,8 @@ _jsonCallback({"yang":{
     "tileMap":[
 	{
         "hitbox":[0,450,300,150],
+		"img":["player.png", "black-right2-0.png", "white.png"],
+		"hp":3,
 		"col":true
     },
 	{
@@ -37,6 +39,7 @@ _jsonCallback({"yang":{
 	},
 	{
 		"hitbox":[500, 500, 300, 10],
+	//	"hp":1,
 		"col":true,
 	}],
 	"enemy":[
@@ -55,7 +58,7 @@ _jsonCallback({"yang":{
 "yin":{
 	"tileMap":[
 		{
-        "hitbox":[0,450,300,150],
+        "hitbox":[100,450,300,150],
 		"col":true
     },
 	{

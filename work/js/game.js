@@ -17,6 +17,7 @@ class game {
         this.canmove = true;
         this.createStage();
         this.env = 'yang'; // 默认环境为阳
+        this.changetimes = 0; // 切换环境次数
 
         this.datamanager = new datamanager(this);
 
@@ -153,7 +154,7 @@ class game {
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
-        console.log(this.status);
+  //      console.log(this.changetimes);
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
@@ -186,7 +187,7 @@ class game {
                 this.entitymanager.drawPortals();
                 break;
             case "over":
-                console.log("游戏结束");
+                    console.log("游戏结束");
                 // 绘制背景和场景
                 this.mapmanager.draw(this.env);
                 this.enemymanager.draw(this.ctx);

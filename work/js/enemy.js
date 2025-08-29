@@ -47,6 +47,7 @@ class Enemy {
         this.onGround = false;
 
         for (let box of colliders) {
+            if (!box.alive(this.game.changetimes)) continue;
             if (this.rect.containsRect(box)) {
                 // 碰到地面
                 this.rect.position.y -= this.vy; // 回退
