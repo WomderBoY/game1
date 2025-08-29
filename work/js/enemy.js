@@ -82,11 +82,12 @@ class Enemy {
      * 绘制敌人
      */
     draw(ctx) {
+        // yin
         if(this.type){
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "black";
         }
         else{
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "white";
         }
         ctx.fillRect(
             this.rect.position.x,
@@ -116,7 +117,7 @@ class EnemyManager {
 
         this.empty();
 
-        for (let i of data.enemy) {
+        for (let i of data.yang.enemy) {
             await this.addEnemy(i.x, i.y, i.w, i.h, i.speed);
         }
     }
@@ -129,7 +130,7 @@ class EnemyManager {
      * 更新所有敌人
      */
     update() {
-        const colliders = this.game.mapmanager.getCollidable();
+        const colliders = this.game.mapmanager.getCollidable(this.game.env);
         for (let enemy of this.enemies) {
             enemy.update(colliders);
         }

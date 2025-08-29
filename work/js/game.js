@@ -9,6 +9,7 @@ class game {
     static yingyang = true;
     async init() {
         this.player = new Rect(0, 0, 30, 40);
+        this.env = "yang";
         this.gameFrame = 0;
         this.lst = 0;
         this.status = "running";
@@ -37,7 +38,7 @@ class game {
 
         await this.mapmanager.loadMap("bg.json");
         await this.enemymanager.LoadEnemy("bg.json");
-        this.mapmanager.draw();
+        this.mapmanager.draw(this.env);
         this.update();
         window.addEventListener('resize', () => this.autoScale(this.view));
     }
@@ -152,12 +153,13 @@ class game {
             case "running": // 游戏运行状态
 
                 // 绘制地图（背景或场景元素）
-                this.mapmanager.draw();
+                this.mapmanager.draw(this.env);
                 await this.enemymanager.update();
                 await this.entitymanager.update();
                 this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
                 this.entitymanager.drawPlayer();
+                this.entitymanager.drawPortals();
                 this.enemymanager.draw(this.ctx);
                 this.baguaManager.update(this.player, this.inputmanager);
                 this.baguaManager.draw(this.ctx);
@@ -170,9 +172,11 @@ class game {
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制）
+                this.mapmanager.draw(this.env);
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
                 this.baguaManager.draw(this.ctx);
+                this.entitymanager.drawPortals();
                 break;
             case "over":
                 console.log("游戏结束");
@@ -183,7 +187,8 @@ class game {
             
                 // 绘制死亡状态的玩家（在地图和敌人之上）
                 this.entitymanager.drawDeadPlayer();
-                
+                this.baguaManager.draw(this.ctx);
+                this.entitymanager.drawPortals();
                 // 绘制游戏结束遮罩和文字（在最上层）
                 this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)"; 
                 this.ctx.fillRect(0, 0, this.view.width, this.view.height);
