@@ -26,12 +26,14 @@ class game {
         this.hp = new hp(10, this);
         this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
+        this.cg =false;
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
         this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
+        this.cgmanager = new CGManager(this);
         let s1 = await this.datamanager.loadSpritesheet('ying-data.json');
         let s2 = await this.datamanager.loadSpritesheet('yang-right-0.json');
     //    console.log(s);
@@ -43,6 +45,7 @@ class game {
         this.mapmanager.draw(this.env);
         this.update();
         window.addEventListener('resize', () => this.autoScale(this.view));
+
     }
 
     pauseGame() {
@@ -150,19 +153,20 @@ class game {
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
- //       console.log(this.canmove);
+//        console.log(this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
-
+                //
                 // 绘制地图（背景或场景元素）
                 this.mapmanager.draw(this.env);
+                if (this.cg == false) this.mapmanager.draw();
                 await this.enemymanager.update();
                 await this.entitymanager.update();
                 this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
-                this.entitymanager.drawPlayer();
+                if (this.cg == false) this.entitymanager.drawPlayer();
                 this.entitymanager.drawPortals();
-                this.enemymanager.draw(this.ctx);
+                if (this.cg == false) this.enemymanager.draw(this.ctx);
                 this.baguamanager.draw(this.ctx);
                 this.baguamanager.update(this.player);
                 this.eventmanager.handle();

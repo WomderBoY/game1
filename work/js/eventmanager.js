@@ -27,16 +27,18 @@ class eventmanager {
 
   // 直接设置当前事件并将进度置为开始
   set(e) {
-    if (this.game.canmove){
-      this.event = e;
-      this.progress = 'start';
-    }
+    if (this.game.canmove == false) return;
+    this.event = e;
+    this.progress = 'start';
   }
 
   // 将新事件加入队列
   add(e) {
     // 如果当前没有事件，直接 set 并马上准备处理
+    
     if (this.game.canmove == false) return;
+    console.log('加入新event', e);
+    console.log(this.game.canmove);
     if (!this.event) {
       this.set(e);
       return;
@@ -72,6 +74,14 @@ class eventmanager {
         console.log('player pos', this.game.player.position.x, this.game.player.position.y);
 //        this.game.player.facing = e.facing;
     }
+    if (e.type === 'cg') {
+        // this.game.status = "cg"; // 进入CG状态
+        // 
+        console.log('startcg');
+        await this.game.cgmanager.play(e);// 触发CG播放
+        console.log('endcg');
+    }
+
 
 
     if (e.type === 'kill'){
