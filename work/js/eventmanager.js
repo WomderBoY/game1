@@ -53,7 +53,7 @@ class eventmanager {
   // 处理当前事件（主事件处理器）
   // 只有当 progress === 'start' 时才会真正启动处理，避免重复并发执行
   async handle() {
-    console.log('shijian', this.game.canmove);
+//    console.log('shijian', this.game.canmove);
     if (this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
     let e = this.event;
     this.progress = 'processing';
@@ -67,15 +67,15 @@ class eventmanager {
     }
     if (e.type === 'changemap') {
         // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
+        if (e.with) {
+            console.warn('start', this.event.next);
+            await this.game.cgmanager.play(e.with);
+        }
         this.game.player.position.x = e.x;
         this.game.player.position.y = e.y;
         await this.game.mapmanager.loadMap(e.target);
         await this.game.enemymanager.LoadEnemy(e.target);
         await this.game.baguamanager.LoadBagua(e.target);
-        if (e.with) {
-            console.warn('start', this.event.next);
-            await this.game.cgmanager.play(e.with);
-        }
         // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
         this.game.status = "running";
         console.log('player pos', this.game.player.position.x, this.game.player.position.y);

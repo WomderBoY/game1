@@ -35,21 +35,95 @@ class mapmanager {
     }
 
     async loadMap(src) {
-        // 使用传入的 game 实例
-        let data = await this.game.datamanager.loadJSON(src);
+        console.log('开始加载地图:', src);
+        
+        // 如果是第一次加载地图，直接调用 loadNewMap
+        if (this.room === "") {
+            console.log('首次加载地图，跳过淡出效果');
+            await this.loadNewMap(src);
+            return;
+        }
+        
+        // 设置初始透明度
+        let opacity = 1;
+
+        // 渐变淡出效果
+        const fadeOut = () => {
+            return new Promise(resolve => {
+                const animate = () => {
+                    if (opacity > 0) {
+                        opacity -= 0.05;  // 逐渐减少透明度
+                        this.game.ctx.globalAlpha = opacity;
+                        this.game.ctx.clearRect(0, 0, this.game.view.width, this.game.view.height);  // 清除画布内容
+
+                        // 绘制背景或其他需要保留的内容
+                        this.drawBackground();  
+                        // 继续执行渐变
+                        requestAnimationFrame(animate);
+                    } else {
+                        // 淡出完成后，调用 loadNewMap
+                        console.log('淡出完成，开始加载新地图');
+                        resolve();
+                    }
+                };
+                animate(); // 启动动画
+            });
+        };
+
+        // 等待 fadeOut 完成后再调用 loadNewMap
+        fadeOut();
+        this.loadNewMap(src);
+    }
+
+    // 加载新地图
+    async loadNewMap(src) {
+        console.log("=== loadNewMap 开始 ===");
+        
+        // 重置玩家状态、清空地图和事件
+        entitymanager.vx = 0;
+        entitymanager.vy = 0;
+        this.game.changetimes = 0;
+        this.game.hp.reset();
+        this.empty();
+
+        console.warn("LOAD NEW MAP", src);
+        console.log("准备调用 datamanager.loadJSON...");
+        
+        // 加载地图数据
+        let data;
+        try {
+            console.log("开始调用 datamanager.loadJSON...");
+            data = await this.game.datamanager.loadJSON(src);
+            console.log("datamanager.loadJSON 调用完成");
+            console.warn("LOAD NEW MAP - 数据加载成功");
+            console.warn("data 类型:", typeof data);
+            console.warn("data 内容:", data);
+            
+            if (!data) {
+                console.error("地图数据为空，无法加载地图:", src);
+                return;
+            }
+        } catch (error) {
+            console.error("加载地图数据失败:", error);
+            console.error("地图文件:", src);
+            console.error("错误堆栈:", error.stack);
+            return;
+        }
+
+        // 如果地图数据中有出生点(born)，更新玩家位置
         if (data.born) {
             [this.game.player.position.x, this.game.player.position.y] = data.born;
         }
+
+        // 保存当前的地图状态
         await this.game.savemanager.save(src);
         this.room = src;
+
         console.warn('loadmap', data);
-        console.log(this.game.canmove);
+
+        // 根据 data.with 字段处理特殊事件
         if (data.with) {
             console.log('发现 data.with:', data.with);
-            console.log('data.with 类型:', typeof data.with);
-            console.log('data.with 是否为数组:', Array.isArray(data.with));
-            
-            // 检查 data.with 的类型
             if (Array.isArray(data.with)) {
                 console.log('data.with 是数组，遍历播放');
                 // 如果是数组，遍历每个元素
@@ -59,14 +133,11 @@ class mapmanager {
                 }
             } else if (typeof data.with === 'object') {
                 console.log('data.with 是对象，检查 event 字段');
-                // 如果是对象，检查是否有 event 字段
                 if (data.with.event) {
                     console.log('播放 data.with.event:', data.with.event);
-                    // 如果有 event 字段，播放 event 内容
                     this.cgmanager.play(data.with.event);
                 } else {
                     console.log('直接播放 data.with:', data.with);
-                    // 如果没有 event 字段，直接播放整个对象
                     this.cgmanager.play(data.with);
                 }
             } else {
@@ -75,32 +146,91 @@ class mapmanager {
         } else {
             console.log('没有 data.with 字段');
         }
-        entitymanager.vx = 0;
-        entitymanager.vy = 0;
-        this.game.changetimes = 0;
 
-        this.game.hp.reset();
-        this.empty();
-
+        console.log('hahaha');
+        // 加载 yin 和 yang 区域的瓦片
         for (let i of data.yin.tileMap) {
             await this.addTile("yin", i);
-            //			console.log('block', i)
         }
         for (let i of data.yang.tileMap) {
             await this.addTile("yang", i);
         }
 
-
+        // 加载背景图
         if (data.yang.background) {
-            let bg = await this.game.datamanager.loadImg(data.yang.background);
-            this.background["yang"] = bg;
+            console.log('加载 yang 背景图:', data.yang.background);
+            try {
+                let bg = await this.game.datamanager.loadImg(data.yang.background);
+                console.log('yang 背景图加载结果:', bg);
+                this.background["yang"] = bg;
+            } catch (error) {
+                console.error('yang 背景图加载失败:', error);
+                this.background["yang"] = ""; // 设置为空字符串，使用默认背景
+            }
         }
         if (data.yin.background) {
-            let bg = await this.game.datamanager.loadImg(data.yin.background);
-            this.background["yin"] = bg;
+            console.log('加载 yin 背景图:', data.yin.background);
+            try {
+                let bg = await this.game.datamanager.loadImg(data.yin.background);
+                console.log('yin 背景图加载结果:', bg);
+                this.background["yin"] = bg;
+            } catch (error) {
+                console.error('yin 背景图加载失败:', error);
+                this.background["yin"] = ""; // 设置为空字符串，使用默认背景
+            }
         }
         console.log('events', this.collidable);
+
+        // 加载完成后，执行淡入效果
+        this.fadeIn();
     }
+
+    // 渐变淡入效果
+    fadeIn() {
+        let opacity = 0;
+
+        // 渐变淡入
+        const animate = () => {
+            if (opacity < 1) {
+                opacity += 0.05;  // 逐渐增加透明度
+                this.game.ctx.globalAlpha = opacity;
+                this.game.ctx.clearRect(0, 0, this.game.view.width, this.game.view.height);  // 清除画布内容
+
+                // 在这里可以绘制新场景的内容
+                this.drawBackground();  // 假设你有一个方法来重新绘制背景
+
+                // 继续执行渐变
+                requestAnimationFrame(animate);
+            } else {
+                // 淡入完成后，可以触发其他操作
+                console.warn('场景切换完成');
+                this.game.ctx.globalAlpha = 1; // 确保透明度重置为1
+            }
+        };
+
+        animate();  // 启动淡入效果
+    }
+
+    // 假设你有一个绘制背景的方法
+    drawBackground() {
+        // 清空画布并绘制背景（如果背景存在）
+        if (this.background["yang"] && this.background["yang"] instanceof Image) {
+            this.game.ctx.drawImage(this.background["yang"], 0, 0, this.game.view.width, this.game.view.height);
+        } else if (this.background["yang"] === "") {
+            // 如果没有背景图，绘制默认背景色
+            this.game.ctx.fillStyle = "#87cefa";
+            this.game.ctx.fillRect(0, 0, this.game.view.width, this.game.view.height);
+        }
+        
+        if (this.background["yin"] && this.background["yin"] instanceof Image) {
+            this.game.ctx.drawImage(this.background["yin"], 0, 0, this.game.view.width, this.game.view.height);
+        } else if (this.background["yin"] === "") {
+            // 如果没有背景图，绘制默认背景色
+            this.game.ctx.fillStyle = "#87cefa";
+            this.game.ctx.fillRect(0, 0, this.game.view.width, this.game.view.height);
+        }
+    }
+
 
     async addTile(type, i) {
         const [x, y, w, h] = i.hitbox;

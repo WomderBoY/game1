@@ -182,6 +182,7 @@ class game {
         this.view.style.display = "block";
         this.view.style.margin = "auto";
         this.view.style.inset = 0;
+        this.view.style.boxSizing = "border-box";
 
         // 根据当前窗口大小进行缩放
         this.autoScale(this.view);
@@ -199,18 +200,62 @@ class game {
         } else {
             console.error("页面缺少 id 为 'game' 的容器");
         }
+
+        // 锁定画布尺寸，防止意外变化
+        this._lockCanvasSize();
+    }
+
+    _lockCanvasSize() {
+        // 使用 ResizeObserver 监控画布尺寸变化
+        if (window.ResizeObserver) {
+            this._resizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    const { width, height } = entry.contentRect;
+                    const expectedWidth = this.width * (parseFloat(this.view.style.width) / this.width);
+                    const expectedHeight = this.height * (parseFloat(this.view.style.height) / this.height);
+                    
+                    // 如果尺寸变化超过容差范围，重新应用缩放
+                    if (Math.abs(width - expectedWidth) > 10 || Math.abs(height - expectedHeight) > 10) {
+                        console.log('检测到画布尺寸异常变化，重新应用缩放');
+                        this.autoScale(this.view);
+                    }
+                }
+            });
+            this._resizeObserver.observe(this.view);
+        }
     }
 
     autoScale(view) {
+        // 防止频繁调用
+        if (this._lastScaleTime && Date.now() - this._lastScaleTime < 100) {
+            return;
+        }
+        this._lastScaleTime = Date.now();
+
         // 计算缩放比例，取窗口宽高比与画布宽高比的最小值
         let scale = Math.min(window.innerWidth / view.width, window.innerHeight / view.height);
 
         // 如果缩放比例接近 1（小于 0.5% 的差距），则直接保持原始大小
         if (Math.abs(scale - 1) < 0.005) scale = 1;
 
-        // 设置缩放后的宽高
-        view.style.width = view.width * scale + 'px';
-        view.style.height = view.height * scale + 'px';
+        // 计算新的宽高
+        const newWidth = view.width * scale;
+        const newHeight = view.height * scale;
+
+        // 只有当尺寸真正发生变化时才更新
+        const currentWidth = parseFloat(view.style.width) || view.width;
+        const currentHeight = parseFloat(view.style.height) || view.height;
+
+        // 使用更大的容差范围，避免微小变化
+        if (Math.abs(newWidth - currentWidth) > 5 || Math.abs(newHeight - currentHeight) > 5) {
+            view.style.width = newWidth + 'px';
+            view.style.height = newHeight + 'px';
+            
+            // 清除缓存，强制重新计算
+            if (this.taijimanager) {
+                this.taijimanager._canvasRect = null;
+            }
+        }
     }
 
     // 添加窗口大小变化监听器
@@ -227,8 +272,8 @@ class game {
 
     async update(delta) {
         const debug = true; // 调试开关
-        if (debug) {
-            
+        if (debug && !this.debugListenerAdded) {
+            this.debugListenerAdded = true;
             this.view.addEventListener('click', e => {
                 const rect = this.view.getBoundingClientRect();
                 const scaleX = this.view.width / rect.width;
@@ -258,7 +303,7 @@ class game {
                 this.mapmanager.draw(this.env);
             if (this.cg == false){
                 if (this.night == false ){
-                    console.log('Night state before drawing:', this.night);  // 打印 night 状态
+    //                console.log('Night state before drawing:', this.night);  // 打印 night 状态
                     this.mapmanager.draw(this.env);
                 }
                 else {
