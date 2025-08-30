@@ -16,7 +16,23 @@ function transitionToMainMenu() {
         requestAnimationFrame(() => { mainMenuScreen.style.opacity = '1'; });
         // 播放登录 BGM（索引 0）
         if (bgmmanager) bgmmanager.play(0);
+        requestAnimationFrame(() => { 
+            mainMenuScreen.style.opacity = '1';
+            updateUsernameDisplay();
+        });
     }, 500);
+}
+
+function updateUsernameDisplay() {
+    const usernameDisplay = document.getElementById('username-display');
+    if (usernameDisplay) {
+        const username = localStorage.getItem('yyj_username');
+        if (username) {
+            usernameDisplay.textContent = `你好：${username}`;
+        } else {
+            usernameDisplay.textContent = '你好：旅行者';
+        }
+    }
 }
 
 function transitionToGame() {
@@ -28,6 +44,7 @@ function transitionToGame() {
 
     // 在淡出动画结束后 (大约半秒)，执行页面跳转
     setTimeout(() => {
+        
         window.location.href = 'work/js/index.html'; // 这就是跳转到 game.html 的核心代码
     }, 500); // 500毫秒对应CSS中的淡出动画时间
 }
@@ -229,6 +246,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if (mainMenuScreen) {
             mainMenuScreen.classList.remove('hidden');
             mainMenuScreen.style.opacity = '1';
+            updateUsernameDisplay();
         }
     }
 });
