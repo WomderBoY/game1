@@ -242,6 +242,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // 初始化 BGM 音轨（索引 0 = 登录，索引 1 = 游戏）
     bgmmanager.add("./work/bgms/bg1.mp3"); // 索引 0
 
+
     document.getElementById('start-game-btn').addEventListener('click', transitionToGame);
     document.getElementById('achievements-btn').addEventListener('click', showAchievements);
     document.getElementById('options-btn').addEventListener('click', ()=>showPopup("游戏设置功能待开发"));
@@ -265,6 +266,21 @@ document.addEventListener('DOMContentLoaded', ()=>{
             mainMenuScreen.style.opacity = '1';
             updateUsernameDisplay();
         }
+    }
+     // 如果是从游戏返回，直接播放 BGM
+    if (window.location.hash.includes('fromGame=true')) {
+        bgmmanager.play(0);
+    }
+
+    // 普通首次访问，等待用户交互再播放
+    else {
+        const play = () => {
+            bgmmanager.play(0);
+            document.removeEventListener('click', play);
+            document.removeEventListener('keydown', play);
+        };
+        document.addEventListener('click', play);
+        document.addEventListener('keydown', play);
     }
 });
 window.addEventListener('resize',()=>{
