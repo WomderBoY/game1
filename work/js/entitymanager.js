@@ -110,6 +110,7 @@ class entitymanager {
 
     //    console.log(this.keys);
 
+        vy += gravity;
         if (this.game.status !== 'running') return;
         if (this.game.canmove == false) return;
         const ky = this.keys;
@@ -163,7 +164,6 @@ class entitymanager {
 
         ga.player.position.x += vx;
 
-        vy += gravity;
         // 垂直移动
         if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 5)))
         {
