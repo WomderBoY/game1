@@ -62,6 +62,27 @@ _jsonCallback({
 				]
 			},
 			{
+				"hitbox":[
+					1200,
+					530,
+					30,
+					20
+				],
+				"event": {
+					"type": "changemap",
+					"way": "tunnal",
+					"x": 256,
+					"y": 500,
+					"target": "bg3.json"
+				},
+				"col":false,
+				"img": [
+					"../images/test1.png"
+				]
+				
+			},
+			
+			{
 				"hitbox": [
 					0,
 					675,
@@ -74,6 +95,7 @@ _jsonCallback({
 				},
 				"col": false
 			},
+
 			{
 				"hitbox": [
 					0,

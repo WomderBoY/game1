@@ -94,6 +94,13 @@ class eventmanager {
         await this.game.cgmanager.play(e);// 触发CG播放
         console.log('endcg');
     }
+    if (e.type === "night") {
+    
+      this.game.nightmanager.activateNight();
+    }
+    if(e.type === 'day') {
+      this.game.nightmanager.deactivateNight();
+    }
 
 
 

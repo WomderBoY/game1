@@ -31,6 +31,7 @@ class game {
         this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
         this.cg = false;
+        this.night = false;
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
@@ -38,6 +39,7 @@ class game {
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
         this.cgmanager = new CGManager(this);
+        this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
         await this.soundmanager.init();
         let s1 = await this.datamanager.loadSpritesheet('ying-data.json');
@@ -259,7 +261,16 @@ class game {
                 //
                 // 绘制地图（背景或场景元素）
                 this.mapmanager.draw(this.env);
-                if (this.cg == false) this.mapmanager.draw(this.env);
+            if (this.cg == false){
+                if (this.night == false ){
+                    console.log('Night state before drawing:', this.night);  // 打印 night 状态
+                    this.mapmanager.draw(this.env);
+                }
+                else {
+                    this.ctx.fillStyle = "#484848ff";
+                    this.ctx.fillRect(0, 0, this.width, this.height);
+                }
+            }  
                 await this.enemymanager.update();
                 await this.entitymanager.update();
                 this.entitymanager.checkCollision();
@@ -288,10 +299,19 @@ class game {
             case "over":
                     console.log("游戏结束");
                 // 绘制背景和场景
-                this.mapmanager.draw(this.env);
+                if (this.cg == false){
+                if (this.night == false ){
+                    console.log('Night state before drawing:', this.night);  // 打印 night 状态
+                    this.mapmanager.draw(this.env);
+                }
+                else {
+                    this.ctx.fillStyle = "#484848ff";
+                    this.ctx.fillRect(0, 0, this.width, this.height);
+                }
+                }   
                 this.enemymanager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
-            
+
                 // 绘制死亡状态的玩家（在地图和敌人之上）
                 this.entitymanager.drawDeadPlayer();
                 this.baguamanager.draw(this.ctx);
@@ -310,8 +330,9 @@ class game {
                 if (this.inputmanager.takeEnter()) {
                             await this.savemanager.load();
                             this.hp.reset()
+                         this.nightmanager.deactivateNight();
                 }
-            break;
+                break;
                 //load...
         }
 
