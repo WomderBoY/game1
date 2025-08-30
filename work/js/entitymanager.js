@@ -16,8 +16,10 @@ class entitymanager {
     static safeUntil = 0;
     static isjp;
     static lstjp;
+    static soundspeed = [3, 1.5];
 
     static onground = false;
+    static lstrun = 0;
 
     constructor(game) {
         this.game = game;
@@ -30,12 +32,63 @@ class entitymanager {
         this.safeUntil = 0;
     }
 
-        async init() {
-            this.bg = await this.game.datamanager.loadImg('../images/point.png');
-            this.deadImg = await this.game.datamanager.loadImg('../images/die.png');
-            this.portalImg = await this.game.datamanager.loadImg('../images/portal.png');
-  //          bg = await this.game.datamanager.loadImg('../images/point.png');
+    async init() {
+        this.bg = await this.game.datamanager.loadImg('../images/point.png');
+        this.deadImg = await this.game.datamanager.loadImg('../images/die.png');
+        this.portalImg = await this.game.datamanager.loadImg('../images/portal.png');
+  //    bg = await this.game.datamanager.loadImg('../images/point.png');
+    }
+
+    static pre = 'stand'; // 面向方向，1为右，-1为左
+    async makesound() {
+        console.log(entitymanager.onground);
+        let ky = this.keys, ps = entitymanager.pre;
+        if (this.game.status !== 'running') return;
+        if (this.game.canmove == false) return;
+        if (ky.up && entitymanager.onground) {
+            ps = 'startjump';
         }
+        else if ((ky.left || ky.right) && entitymanager.onground) {
+            ps = 'run';
+            entitymanager.lstrun = this.game.gameFrame;
+        }
+        else if (entitymanager.onground) {
+            ps = 'stand';
+        }
+        else if (!entitymanager.onground) {
+            ps = 'onjump';
+        }
+        if (ps == 'run') {
+  //          console.log('run sound', this.game.soundmanager.isPlay('run'));
+            if (entitymanager.pre == 'onjump') {
+    //            this.game.soundmanager.playOnce('land', 1, 1);
+            }
+            if (this.game.soundmanager.isPlay('run') == false)
+            {
+                console.log('play run');
+                this.game.soundmanager.playLoop('run', true, entitymanager.soundspeed[this.game.yingyang ? 1 : 0]);
+            }
+        }
+        else if (ps == 'startjump') {
+            console.log('startjump');
+            this.game.soundmanager.playOnce('jump', 1, 1);// 停下或跳跃时淡出音效
+            if (this.game.gameFrame - entitymanager.lstrun >= 10)
+                this.game.soundmanager.fadeLoop('run', 0.1); 
+
+        }
+        else if (ps == 'stand') {
+            if (entitymanager.pre == 'onjump') {
+      //          this.game.soundmanager.playOnce('land', 1, 1);
+            }
+            if (this.game.gameFrame - entitymanager.lstrun >= 10)
+                this.game.soundmanager.fadeLoop('run', 0.1); 
+        }
+        else if (ps == 'onjump') {
+            if (this.game.gameFrame - entitymanager.lstrun >= 10)
+                this.game.soundmanager.fadeLoop('run', 0.1); 
+        }
+        entitymanager.pre = ps;
+    }
 
     // 更新逻辑优化
     async update() {
@@ -47,6 +100,8 @@ class entitymanager {
         if (this.game.inputmanager.askJ() == true) this.keys.change = true;
         if (this.game.inputmanager.askK() == true) this.keys.envchange = true;
         let machine = this.game.animationmachine;
+
+        await this.makesound();
 
     //    console.log(this.keys);
 
@@ -197,41 +252,42 @@ class entitymanager {
     }
 
     checkCollision() {
-    const player = this.game.player;
-    const playerPrevX = player.position.x - entitymanager.vx;
-    const playerPrevY = player.position.y - entitymanager.vy;
-    const playerBottom = player.position.y + player.size.y;
-    const playerRight = player.position.x + player.size.x;
+        const player = this.game.player;
+        const playerPrevX = player.position.x - entitymanager.vx;
+        const playerPrevY = player.position.y - entitymanager.vy;
+        const playerBottom = player.position.y + player.size.y;
+        const playerRight = player.position.x + player.size.x;
 
-    const now = Date.now();
+        const now = Date.now();
 
-    for (let enemy of this.game.enemymanager.enemies) {
-        const rect = enemy.rect;
-        const enemyBottom = rect.position.y + rect.size.y;
-        const enemyRight = rect.position.x + rect.size.x;
+        for (let enemy of this.game.enemymanager.enemies) {
+            const rect = enemy.rect;
+            const enemyBottom = rect.position.y + rect.size.y;
+            const enemyRight = rect.position.x + rect.size.x;
 
-        const overlapX = player.position.x < enemyRight && playerRight > rect.position.x;
-        const overlapY = player.position.y < enemyBottom && playerBottom > rect.position.y;
+            const overlapX = player.position.x < enemyRight && playerRight > rect.position.x;
+            const overlapY = player.position.y < enemyBottom && playerBottom > rect.position.y;
 
-        if (!overlapX || !overlapY) continue;
+            if (!overlapX || !overlapY) continue;
 
-        const fromTop = playerPrevY + player.size.y <= rect.position.y;
-        const isHead = fromTop && (playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10);
+            const fromTop = playerPrevY + player.size.y <= rect.position.y;
+            const isHead = fromTop && (playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10);
 
-        if (this.game.yingyang !== enemy.type && isHead) {
-            // 阴阳不同踩头 → 敌人死亡
-            enemy.dead = true;
-            entitymanager.vy = -10;
-            if (this.game.achievements) this.game.achievements.unlock('first_kill');
-        } else {
-            // 扣血条件：阴阳相同 或 阴阳不同非踩头
-            if (now >= entitymanager.safeUntil) {
-                if (this.game.hp) this.game.hp.decrease();
-                entitymanager.safeUntil = now + 3000; // 3秒无敌
+            if (this.game.yingyang !== enemy.type && isHead) {
+                // 阴阳不同踩头 → 敌人死亡
+                enemy.dead = true;
+                this.game.soundmanager.playOnce('enemydeath');
+                entitymanager.vy = -10;
+                if (this.game.achievements) this.game.achievements.unlock('first_kill');
+            } else {
+                // 扣血条件：阴阳相同 或 阴阳不同非踩头
+                if (now >= entitymanager.safeUntil) {
+                    if (this.game.hp) this.game.hp.decrease();
+                    entitymanager.safeUntil = now + 3000; // 3秒无敌
+                }
             }
         }
     }
-}
 
 
 

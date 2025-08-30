@@ -35,6 +35,8 @@ class game {
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
         this.cgmanager = new CGManager(this);
+        this.soundmanager = new SoundManager(this);
+        await this.soundmanager.init();
         let s1 = await this.datamanager.loadSpritesheet('ying-data.json');
         let s2 = await this.datamanager.loadSpritesheet('yang-right-0.json');
     //    console.log(s);

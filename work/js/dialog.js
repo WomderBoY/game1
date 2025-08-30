@@ -1,8 +1,9 @@
 class dialog {
-    constructor() {
+    constructor(game) {
         this.buffer = [];
         this.canceled = false;
         this._cancel = null;
+        this.game = game;
 
         this.createDialog();
     }
@@ -85,10 +86,14 @@ class dialog {
         this.text.innerHTML = "";
         let chars = text.split("");
         let skip = false;
+        this.game.soundmanager.playLoop('typing', 3, 1);
 
         // 逐字打印
         for (let i = 0; i < chars.length; i++) {
-            if (this.canceled) return;
+            if (this.canceled) {
+      //          this.game.soundmanager.fadeLoop('typing', 0.5);
+                return ;
+            }
 
             let span = document.createElement("span");
             span.textContent = chars[i];
@@ -110,6 +115,8 @@ class dialog {
                 document.addEventListener("keydown", handler);
             });
         }
+
+        this.game.soundmanager.fadeLoop('typing', 0.5);        
 
         // 段落显示完成，等待 Enter 再进入下一段
         if (this.canceled) return;
