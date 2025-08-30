@@ -99,20 +99,20 @@ class entitymanager {
     async update() {
         this.keys = { left: false, right: false, up: false, change : false , envchange:false};
         
-        if (this.game.inputmanager.askA() == true) this.keys.left = true;
-        if (this.game.inputmanager.askD() == true) this.keys.right = true;
-        if (this.game.inputmanager.askW() == true) this.keys.up = true;
-        if (this.game.inputmanager.askJ() == true) this.keys.change = true;
-        if (this.game.inputmanager.askK() == true) this.keys.envchange = true;
+        if (this.game.canmove == true) {
+            if (this.game.inputmanager.askA() == true) this.keys.left = true;
+            if (this.game.inputmanager.askD() == true) this.keys.right = true;
+            if (this.game.inputmanager.askW() == true) this.keys.up = true;
+            if (this.game.inputmanager.askJ() == true) this.keys.change = true;
+            if (this.game.inputmanager.askK() == true) this.keys.envchange = true;
+        }
         let machine = this.game.animationmachine;
 
         await this.makesound();
 
     //    console.log(this.keys);
 
-        vy += gravity;
         if (this.game.status !== 'running') return;
-        if (this.game.canmove == false) return;
         const ky = this.keys;
         const ga = this.game;
         if (ky.change && this.game.gameFrame - this.re >= 200) {
@@ -173,6 +173,8 @@ class entitymanager {
             isjp = true;
             lstjp = ga.gameFrame;
         }
+
+        vy += gravity;
         ga.player.position.y += vy;
 
         if (this.keys.up && entitymanager.onground == false) {

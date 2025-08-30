@@ -1,84 +1,167 @@
-_jsonCallback({"yang":{
-    "tileMap":[
-	{
-        "hitbox":[0,450,300,150],
-		"col":true
-    },
-	{
-		"hitbox":[504, 576, 190, 142],
-		"col": true,
+_jsonCallback({
+	"born":[0, 0],
+	"with":[
+		{
+					"type": "cg",
+					"way": "negative",
+					"images": [
+						"../js/black-right2-0.png",
+						"../js/white.png"
+					],
+					"text": [
+						[
+							"我是一名北理工大学生。因为对古代哲学颇有兴趣，所以这学期课余都在研究一本残破的古籍《周易注疏》。某天，我在图书馆查资料时趴在桌上睡着了。",
+							"某天，我在图书馆查资料时趴在桌上睡着了。"
+						],
+						[
+							"这是一个光怪陆离的梦。",
+							"梦中，悬浮在星空中的巨大八卦台上，一位仙风道骨的祖师正在与一个身披玄黑长袍、面容被阴影笼罩的天机叟对峙。"
+						]
+					],
+				}
+			],
+	"yang": {
+		"tileMap": [
+			{
+				"hitbox": [
+					0,
+					450,
+					300,
+					150
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					504,
+					576, //左上角坐标
+					190, //x轴长度
+					142 //y轴长度
+				],
+				"col": true,
+			},
+			{
+				"hitbox": [
+					550,
+					550,
+					10,
+					10
+				],
+				"col": true,
+			},
+			{
+				"hitbox": [
+					100,
+					400,
+					30,
+					20
+				],
+				"event": {
+					"type": "cg",
+					"way": "negative",
+					"images": [
+						"../js/black-right2-0.png",
+						"../js/white.png"
+					],
+					"text": [
+						[
+								"这是传送门"
+							],
+							[
+								"将你传送到下一关"
+							]
+					],
+				},
+				"col": false
+			},
+			{
+				"hitbox": [
+					150,
+					400,
+					30,
+					20
+				],
+				"event": {
+					"type": "changemap",
+					"way": "negative",
+					"x": 100,
+					"y": 350,
+					"target": "bg2.json",
+					"with": {
+						"type": "cg",
+						"way": "negative",
+						"images": [
+							"../js/black-right2-0.png",
+							"../js/white.png"
+						],
+						"text":[
+						[
+								"这是传送门"
+							],
+							[
+								"将你传送到下一关"
+							]
+					],
+					}
+				},
+				"col": false
+			}
+		],
+		"enemy": [
+			{
+				"x": 600,
+				"y": 400,
+				"w": 30,
+				"h": 30,
+				"speed": 2
+			}
+		],
+		"bagua": [
+			{
+				"hitbox": [
+					200,
+					400,
+					50,
+					50
+				],
+			}
+		],
+		"background": "../images/lib2.png"
 	},
-	{
-		"hitbox":[550, 550, 10, 10],
-		"col":true,
-	},
-	{
-		"hitbox":[100,400,30,20],
-		"event":{
-			"type":"dialog",
-			"way":"negative",
-			"text":["【诺艾尔】这，这难道就是",
-				"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！",
-				"【诺艾尔】就是这一本书，我需要的就是这个",
-				"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"]
-		},
-		"col":false
+	"yin": {
+		"tileMap": [
+			{
+				"hitbox": [
+					100,
+					400,
+					30,
+					20
+				],
+				"event": {
+					"type": "dialog",
+					"way": "negative",
+					"text": [
+						"请输入用户名：",
+						"【系统】你好：{用户名}，欢迎来到阴阳劫的世界！",
+						
+					]
+				},
+				"col": false
+			},
+			{
+				"hitbox": [
+					0,
+					450,
+					300,
+					150
+				],
+				"col": true
+			}
+		],
+		"enemy": [],
+		"bagua": [],
+		"background": ""
 	}
-	,{
-		"hitbox":[150,400,30,20],
-		"event":{
-			"type":"changemap",
-			"way":"negative",
-			"x":100,
-			"y":350,
-			"target":"bg2.json"
-		},
-		"col":false
-	}
-	],
-	"enemy":[
-		{
-			"x":600,
-			"y":400,
-			"w":30,
-			"h":30,
-			"speed":2
-		}
-	],
-	
-	"bagua":[
-		{
-			"hitbox":[200, 400, 20, 20],
-		}
-	],
-	"background":"../images/road2.png"
-},
-"yin":{
-	"tileMap":[
-		{
-		"hitbox":[100,400,30,20],
-		"event":{
-			"type":"dialog",
-			"way":"negative",
-			"text":["【诺艾尔】这，这难道就是",
-				"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！",
-				"【诺艾尔】就是这一本书，我需要的就是这个",
-				"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"]
-		},
-		"col":false
-	},
-	{
-        "hitbox":[0,450,300,150],
-		"col":true
-    }
-
-	],
-	"enemy":[
-	],
-
-	"bagua":[
-	],
-	"background":""
-}}
+}
 
 )
