@@ -30,7 +30,7 @@ class game {
         this.hp = new hp(10, this);
         this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
-        this.cg =false;
+        this.cg = false;
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
@@ -38,6 +38,8 @@ class game {
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
         this.cgmanager = new CGManager(this);
+        this.soundmanager = new SoundManager(this);
+        await this.soundmanager.init();
         let s1 = await this.datamanager.loadSpritesheet('ying-data.json');
         let s2 = await this.datamanager.loadSpritesheet('yang-right-0.json');
     //    console.log(s);
@@ -68,6 +70,11 @@ class game {
              this.eventmanager.handle();
              this.mapmanager.draw(this.env);
          }
+        this.bgmmanager = new BGMManager();        // 创建游戏页面自己的 bgmmanager
+        this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
+        window.addEventListener('click', () => {
+            this.bgmmanager.play(0);
+        }, { once: true });
         this.update();
     //    window.addEventListener('resize', () => this.autoScale(this.view));
 

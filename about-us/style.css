@@ -1,0 +1,148 @@
+/* Google Fonts - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* 通用样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('../images/bcg.jpg') no-repeat center center/cover;
+  overflow: hidden;
+}
+
+header {
+  z-index: 1000;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Card Container */
+#team-container {
+  width: 80%;
+  height: 100%;
+  overflow-y: scroll;
+  padding-top: 100px; /* offset from fixed header */
+}
+
+#team-members {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 每行显示 2 个成员 */
+  grid-gap: 20px; /* 控制每个卡片之间的间距 */
+  justify-items: center; /* 水平居中卡片 */
+  align-items: center; /* 垂直居中卡片 */
+  padding: 20px;
+}
+
+.card {
+  position: relative;
+  width: 500px;
+  height: 500px;  /* 调整卡片高度，确保空间足够 */
+  background-color: #758a99;
+  border-radius: 30px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.card .photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* 确保图片容器的高度占据卡片的一部分 */
+  border-radius: 30px 30px 0 0; /* 圆角边界，保持头像的圆形 */
+  overflow: hidden;
+  transition: 0.5s;
+  background: linear-gradient(135deg, #636363, #626262); /* 初始渐变背景 */
+}
+
+.card:hover .photo {
+  background: linear-gradient(135deg, #636363, #626262); /* 鼠标悬停时渐变变化 */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.card .photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 确保头像图片按比例覆盖容器 */
+  transition: 0.5s;
+}
+
+.card:hover .photo img {
+  opacity: 0.8; /* 头像变为半透明 */
+}
+
+.card h1 {
+
+  position: absolute;
+  top: 70%; /* 默认位置（头像的上方） */
+  left: 50%; /* 水平居中 */
+  transform: translateX(-50%); /* 完全居中 */
+  color: white;
+  font-size: 32px;
+  font-weight: 600;
+  transition: top 0.5s ease; /* 添加滑动过渡效果 */
+}
+
+.card:hover h1 {
+  /* top: 170px; */
+   top: 50%; /* 鼠标悬停时，文字垂直居中 */
+  transform: translateX(-50%) translateY(-50%); /* 水平居中并垂直居中 */
+}
+
+.card a {
+  display: block; /* 使整个卡片都可以点击 */
+  color: inherit;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.card a:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* 鼠标悬停时的样式 */
+}
+
+/* 滚动效果 */
+#team-container {
+  overflow-y: scroll;
+  height: 80vh; /* 限制容器高度 */
+  scroll-behavior: smooth; /* 平滑滚动效果 */
+}
+
+/* 响应式设计 */
+@media screen and (max-width: 768px) {
+  #team-members {
+    grid-template-columns: 1fr; /* 单列布局 */
+  }
+
+  .card {
+    width: 250px;
+    height: 350px;  /* 调整小屏幕时卡片高度 */
+  }
+}
+
