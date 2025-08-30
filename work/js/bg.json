@@ -1,158 +1,84 @@
-_jsonCallback({
-	"yang": {
-		"tileMap": [
-			{
-				"hitbox": [
-					0,
-					450,
-					300,
-					150
-				],
-				"col": true
-			},
-			{
-				"hitbox": [
-					504,
-					576, //左上角坐标
-					190, //x轴长度
-					142 //y轴长度
-				],
-				"col": true,
-			},
-			{
-				"hitbox": [
-					550,
-					550,
-					10,
-					10
-				],
-				"col": true,
-			},
-			{
-				"hitbox": [
-					100,
-					400,
-					30,
-					20
-				],
-				"event": {
-					"type": "night",
-					"way":"negative",
-				},
-				// "event": {
-				// 	"type": "cg",
-				// 	"way": "negative",
-				// 	"images": [
-				// 		"../js/player.png",
-				// 		"../js/hitbox.png"
-				// 	],
-				// 	"text": [
-				// 		[
-				// 			"【诺艾尔】这，这难道就是",
-				// 			"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！"
-				// 		],
-				// 		[
-				// 			"【诺艾尔】就是这一本书，我需要的就是这个",
-				// 			"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
-				// 		]
-				// 	],
-				// },
-				"col": false
-			},
-			{
-				"hitbox": [
-					150,
-					400,
-					30,
-					20
-				],
-				"event": {
-					
-					"type": "changemap",
-					"way": "negative",
-					"x": 100,
-					"y": 350,
-					"target": "bg2.json",
-					"with": {
-						"type": "cg",
-						"way": "negative",
-						"images": [
-							"../js/player.png",
-							"../js/white.png"
-						],
-						"text": [
-							[
-								"【诺艾尔】这，这难道就是",
-								"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！"
-							],
-							[
-								"【诺艾尔】就是这一本书，我需要的就是这个",
-								"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
-							]
-						],
-					}
-				},
-				"col": false
-			}
-		],
-		"enemy": [
-			{
-				"x": 600,
-				"y": 400,
-				"w": 30,
-				"h": 30,
-				"speed": 2
-			}
-		],
-		"bagua": [
-			{
-				"hitbox": [
-					200,
-					400,
-					50,
-					50
-				],
-			}
-		],
-		"background": "../images/road2.png"
+_jsonCallback({"yang":{
+    "tileMap":[
+	{
+        "hitbox":[0,450,300,150],
+		"col":true
+    },
+	{
+		"hitbox":[504, 576, 190, 142],
+		"col": true,
 	},
-	"yin": {
-		"tileMap": [
-			{
-				"hitbox": [
-					100,
-					400,
-					30,
-					20
-				],
-				"event": {
-					"type": "dialog",
-					"way": "negative",
-					"text": [
-						"请输入用户名：",
-						"【系统】你好：{用户名}，欢迎来到阴阳劫的世界！",
-						"【诺艾尔】这，这难道就是",
-						"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！",
-						"【诺艾尔】就是这一本书，我需要的就是这个",
-						"【用户名】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
-					]
-				},
-				"col": false
-			},
-			{
-				"hitbox": [
-					0,
-					450,
-					300,
-					150
-				],
-				"col": true
-			}
-		],
-		"enemy": [],
-		"bagua": [],
-		"background": ""
+	{
+		"hitbox":[550, 550, 10, 10],
+		"col":true,
+	},
+	{
+		"hitbox":[100,400,30,20],
+		"event":{
+			"type":"dialog",
+			"way":"negative",
+			"text":["【诺艾尔】这，这难道就是",
+				"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！",
+				"【诺艾尔】就是这一本书，我需要的就是这个",
+				"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"]
+		},
+		"col":false
 	}
-}
+	,{
+		"hitbox":[150,400,30,20],
+		"event":{
+			"type":"changemap",
+			"way":"negative",
+			"x":100,
+			"y":350,
+			"target":"bg2.json"
+		},
+		"col":false
+	}
+	],
+	"enemy":[
+		{
+			"x":600,
+			"y":400,
+			"w":30,
+			"h":30,
+			"speed":2
+		}
+	],
+	
+	"bagua":[
+		{
+			"hitbox":[200, 400, 20, 20],
+		}
+	],
+	"background":"../images/road2.png"
+},
+"yin":{
+	"tileMap":[
+		{
+		"hitbox":[100,400,30,20],
+		"event":{
+			"type":"dialog",
+			"way":"negative",
+			"text":["【诺艾尔】这，这难道就是",
+				"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！",
+				"【诺艾尔】就是这一本书，我需要的就是这个",
+				"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"]
+		},
+		"col":false
+	},
+	{
+        "hitbox":[0,450,300,150],
+		"col":true
+    }
+
+	],
+	"enemy":[
+	],
+
+	"bagua":[
+	],
+	"background":""
+}}
 
 )

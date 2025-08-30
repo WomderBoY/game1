@@ -55,6 +55,7 @@
 
     <!-- 场景2: 游戏主菜单 (默认隐藏) -->
     <div id="main-menu-screen" class="hidden">
+    <a id="goto-main-menu" name="goto-main-menu"></a>
         <svg class="taijitu-bg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <!-- 第1步: 绘制一个完整的黑色背景圆，作为“阴”的基础 -->
     <circle cx="50" cy="50" r="50" fill="#000"/>
@@ -90,6 +91,16 @@
     </div>
     <script src="./work/js/bgmmanager.js"></script>
     <script src="./src/auth/auth.js"></script>
-
+    <script>
+        // 如果URL带有#goto-main-menu，则直接显示主菜单，并初始化
+        if (window.location.hash === "#goto-main-menu") {
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('main-menu-screen').classList.remove('hidden');
+            // 如果有主菜单初始化函数，调用它
+            if (typeof transitionToMainMenu === 'function') {
+            transitionToMainMenu();
+            }
+        }
+    </script>
 </body>
 </html>

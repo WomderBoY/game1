@@ -1,4 +1,25 @@
 _jsonCallback({
+	"born":[100, 350],
+	"with":[
+		{
+					"type": "cg",
+					"way": "negative",
+					"images": [
+						"../js/black-right2-0.png",
+						"../js/white.png"
+					],
+					"text": [
+						[
+							"天机叟手持罗盘，口念卦辞，引动天地之力。",
+							"他从八卦台中央夺走一块通体漆黑、散发着寒气的阴石。"
+						],
+						[
+							"瞬间，世界开始崩塌，星辰陨落。",
+							"祖师手持另一块散发着温润白光的阳石，发动禁术，以自身精血为引，画出一道巨大的符咒封印了天机叟大部分的力量，但自己也元神涣散，濒临消亡。"
+						]
+					],
+				}
+			],
 	"yang": {
 		"tileMap": [
 			{
@@ -86,7 +107,7 @@ _jsonCallback({
 			}
 		],
 		"bagua": [],
-		"background": "../images/classroom.png"
+		"background": "../images/baguazhen.png"
 	},
 	"yin": {
 		"tileMap": [

@@ -41,6 +41,11 @@ class entitymanager {
 
     static pre = 'stand'; // 面向方向，1为右，-1为左
     async makesound() {
+//        console.warn(this.game.canmove);
+        if (!this.game.canmove) {
+                this.game.soundmanager.fadeLoop('run', 0.1); 
+            return ;
+        }
   //      console.log(entitymanager.onground);
         let ky = this.keys, ps = entitymanager.pre;
         if (this.game.status !== 'running') return;
@@ -66,7 +71,7 @@ class entitymanager {
             if (this.game.soundmanager.isPlay('run') == false)
             {
                 console.log('play run');
-                this.game.soundmanager.playLoop('run', true, entitymanager.soundspeed[this.game.yingyang ? 1 : 0]);
+                this.game.soundmanager.playLoop('run', 1, entitymanager.soundspeed[this.game.yingyang ? 1 : 0]);
             }
         }
         else if (ps == 'startjump') {
@@ -120,6 +125,7 @@ class entitymanager {
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
             ga.env = (ga.env === "yin") ? "yang" : "yin";
             this.rre = this.game.gameFrame;
+            ++this.game.changetimes;
         }
   //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等

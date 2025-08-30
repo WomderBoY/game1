@@ -100,6 +100,7 @@ class dialog {
         await this.open();
         await this._prints();
         await this.close();
+
     }
 
     async _prints() {
@@ -140,7 +141,7 @@ class dialog {
         this.text.innerHTML = "";
         let chars = text.split("");
         let skip = false;
-        this.game.soundmanager.playLoop('typing', 3, 1);
+        this.game.soundmanager.playLoop('typing', 1, 1);
 
         // 逐字打印
         for (let i = 0; i < chars.length; i++) {
@@ -170,7 +171,7 @@ class dialog {
             });
         }
 
-        this.game.soundmanager.fadeLoop('typing', 0.5);        
+        await  this.game.soundmanager.fadeLoop('typing', 0.5);        
 
         // 段落显示完成，等待 Enter 再进入下一段
         if (this.canceled) return;

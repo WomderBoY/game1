@@ -27,17 +27,17 @@ class eventmanager {
 
   // 直接设置当前事件并将进度置为开始
   set(e) {
-    if (this.game.canmove == false) return;
+  //  if (this.game.canmove == false) return;
     this.event = e;
     this.progress = 'start';
   }
 
   // 将新事件加入队列
-  add(e) {
+  add(e, force = false) {
     // 如果当前没有事件，直接 set 并马上准备处理
-    
-    if (this.game.canmove == false) return;
-    console.log('加入新event', e);
+    console.warn('ADD', e, force);
+    if (this.game.canmove == false && !force) return;
+    console.warn('加入新event', e, this.game.canmove);
     console.log(this.game.canmove);
     if (!this.event) {
       this.set(e);
@@ -53,6 +53,7 @@ class eventmanager {
   // 处理当前事件（主事件处理器）
   // 只有当 progress === 'start' 时才会真正启动处理，避免重复并发执行
   async handle() {
+    console.log('shijian', this.game.canmove);
     if (this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
     let e = this.event;
     this.progress = 'processing';
@@ -60,7 +61,9 @@ class eventmanager {
 //    this.game.status = 'event'; // 切换游戏状态到事件处理态
     this.game.canmove = false; // 禁止玩家移动
     if (e.type === 'dialog') {
+        this.game.canmove = false;
         await this.game.dialog.prints(e.text);
+        this.game.canmove = true;
     }
     if (e.type === 'changemap') {
         // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
@@ -70,6 +73,7 @@ class eventmanager {
         await this.game.enemymanager.LoadEnemy(e.target);
         await this.game.baguamanager.LoadBagua(e.target);
         if (e.with) {
+            console.warn('start', this.event.next);
             await this.game.cgmanager.play(e.with);
         }
         // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
@@ -85,6 +89,7 @@ class eventmanager {
         if (this.game.unlockNextLevel) {
             this.game.unlockNextLevel(e.target);
         }
+        console.warn('loadmap over');
 //        this.game.player.facing = e.facing;
     }
     if (e.type === 'cg') {
@@ -106,11 +111,11 @@ class eventmanager {
 
     if (e.type === 'kill'){
       this.game.hp.decrease(10);
-      this.game.soundmanager.playOnce('death');
     }
 
     // 如果当前事件有链式 next 事件（数组），取出一个继续处理
     if (e.next && e.next.length > 0) {
+      console.warn('fuck');
       // 从 e.next 队列中取出下一个事件（shift 从数组前端取出）
       let next = e.next.shift();
       // 把剩余的 next 继续传递下去（维持链式关系）
