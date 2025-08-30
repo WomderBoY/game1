@@ -113,6 +113,8 @@ class game {
     returnToMainMenu() {
         const menu = document.getElementById('pauseMenu');
         if (menu) menu.style.display = 'none';
+        // 返回主菜单：从 work/js/game.html 回到项目根目录 index.html#menu
+        const maybe = '../../index.html#menu&fromGame=true';
         // 返回关卡选择页面
         try {
             window.location.href = 'level-select.html';
