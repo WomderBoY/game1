@@ -233,15 +233,20 @@ class game {
     async update(delta) {
         const debug = true; // 调试开关
         if (debug) {
-            const now = Date.now();
-            if (this.lst == 0 || now - this.lst > 500) {
-                 document.addEventListener('click', e => {
-                    const x = e.clientX * 300 / 345;
-                    const y = e.clientY * 450/ 500 * 450 / 445;
-                    console.log(`点击坐标：x=${x}, y=${y}`);
-                });
-                this.lst = now;
-            }
+            
+            this.view.addEventListener('click', e => {
+                const rect = this.view.getBoundingClientRect();
+                const scaleX = this.view.width / rect.width;
+                const scaleY = this.view.height / rect.height;
+                const x = Math.round((e.clientX - rect.left) * scaleX);
+                const y = Math.round((e.clientY - rect.top) * scaleY);
+                console.log(`点击坐标：x=${x}, y=${y}`);
+                
+                // 在画布上显示坐标
+                this.ctx.fillStyle = 'white';
+                this.ctx.font = '16px Arial';
+                this.ctx.fillText(`(${x}, ${y})`, x + 10, y - 10);
+            });
         }
 //        console.log(this.player.position.x, this.player.position.y);
         // 只在窗口大小变化时重新计算缩放，而不是每帧都计算
