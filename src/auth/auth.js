@@ -100,7 +100,7 @@ function transitionTous(){
     // 在淡出动画结束后 (大约半秒)，执行页面跳转
     setTimeout(() => {
 
-        window.location.href = '../../work/about-us/index.html'; // 这就是跳转到 game.html 的核心代码
+        window.location.href = 'work/about-us/index.html'; // 这就是跳转到 game.html 的核心代码
     }, 500); // 500毫秒对应CSS中的淡出动画时间
 }
 
