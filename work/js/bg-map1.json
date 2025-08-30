@@ -67,7 +67,19 @@ _jsonCallback({
 					40
 				],
 				"col": true
-			}
+			},
+			// {
+			// 	"hitbox":[1240,500,30,20],
+			// 	"event":{
+			// 		"type":"changemap",
+			// 		"way":"tunnal",
+			// 		"x":100,
+			// 		"y":350,
+			// 		"target":"bg.json"
+			// 	},
+			// 	"col":false
+		
+			// }
 		],
 		"enemy": [],
 		"bagua": [],

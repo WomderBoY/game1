@@ -13,6 +13,9 @@ function transitionToMainMenu() {
     setTimeout(() => {
         sliderWrapper.style.display = 'none';
         mainMenuScreen.classList.remove('hidden');
+        requestAnimationFrame(() => { mainMenuScreen.style.opacity = '1'; });
+        // 播放登录 BGM（索引 0）
+        if (bgmmanager) bgmmanager.play(0);
         requestAnimationFrame(() => { 
             mainMenuScreen.style.opacity = '1';
             updateUsernameDisplay();
@@ -42,7 +45,7 @@ function transitionToGame() {
     // 在淡出动画结束后 (大约半秒)，执行页面跳转
     setTimeout(() => {
         
-        window.location.href = 'work/js/index.html'; // 这就是跳转到 game.html 的核心代码
+        window.location.href = 'work/js/level-select.html'; // 跳转到关卡选择页面
     }, 500); // 500毫秒对应CSS中的淡出动画时间
 }
 
@@ -87,6 +90,22 @@ function renderAchievementsList(){
         list.appendChild(li);
     });
 }
+
+
+function transitionTous(){
+    // 获取主菜单元素，让它优雅地淡出
+    /*const mainMenuScreen = document.getElementById('main-menu-screen');
+    if (mainMenuScreen) {
+        mainMenuScreen.style.opacity = '0';
+    }*/
+
+    // 在淡出动画结束后 (大约半秒)，执行页面跳转
+    setTimeout(() => {
+        
+        window.location.href = 'about-us/index.html'; // 这就是跳转到 game.html 的核心代码
+    }, 500); // 500毫秒对应CSS中的淡出动画时间
+}
+
 
 function showAchievements() {
     const modal = document.getElementById('achievement-modal');
@@ -220,11 +239,15 @@ function drawBackground(){
 /* ================== 事件监听 (代码不变) ================== */
 document.addEventListener('DOMContentLoaded', ()=>{
     drawBackground();
+    // 初始化 BGM 音轨（索引 0 = 登录，索引 1 = 游戏）
+    bgmmanager.add("./work/bgms/bg1.mp3"); // 索引 0
+
     document.getElementById('start-game-btn').addEventListener('click', transitionToGame);
     document.getElementById('achievements-btn').addEventListener('click', showAchievements);
     document.getElementById('options-btn').addEventListener('click', ()=>showPopup("游戏设置功能待开发"));
     document.getElementById('logout-btn').addEventListener('click', logout);
     document.querySelector('.modal-close-btn').addEventListener('click', hideAchievements);
+    document.getElementById('about-us').addEventListener('click', transitionTous);
 
     // 如果 URL 带有 #menu，直接展示主菜单界面
     if (window.location.hash === '#menu') {
