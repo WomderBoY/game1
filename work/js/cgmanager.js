@@ -42,8 +42,25 @@ class CGManager {
 
                 const img = document.createElement("img");
                 img.src = this.images[i];
-                Object.assign(img.style, { maxWidth: "80%", maxHeight: "80%", objectFit: "contain", opacity: "1", transition: "opacity 0.5s" });
-                this.overlay.appendChild(img);
+
+                // 公共样式
+                Object.assign(img.style, { 
+                    maxWidth: "80%", 
+                    maxHeight: "80%", 
+                    objectFit: "contain", 
+                    transition: "opacity 0.5s"
+                });
+
+                // 第一张淡入，其余直接显示
+                   img.style.opacity = "0"; // 初始透明
+                   this.overlay.appendChild(img);
+                    // 触发淡入
+                   requestAnimationFrame(() => {
+                       img.style.opacity = "1";
+                   });
+                    // 等待淡入完成
+                   await new Promise(resolve => setTimeout(resolve, 500));
+
 
                 if (this.texts[i] && !this.canceled) {
                     await this.dialog.prints(this.texts[i]);

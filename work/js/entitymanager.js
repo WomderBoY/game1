@@ -14,6 +14,8 @@ class entitymanager {
     static lt;
     static re;
     static safeUntil = 0;
+    static isjp;
+    static lstjp;
 
     static onground = false;
 
@@ -34,6 +36,7 @@ class entitymanager {
             this.portalImg = await this.game.datamanager.loadImg('../images/portal.png');
   //          bg = await this.game.datamanager.loadImg('../images/point.png');
         }
+
     // 更新逻辑优化
     async update() {
         this.keys = { left: false, right: false, up: false, change : false , envchange:false};
@@ -55,12 +58,13 @@ class entitymanager {
             ga.yingyang = !ga.yingyang;
             this.re = this.game.gameFrame;
             if (this.game.achievements) this.game.achievements.unlock('first_toggle');
+            this.game.taijimanager.trigger(); // 触发太极动画切换效果
         }
+
 
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
             ga.env = (ga.env === "yin") ? "yang" : "yin";
             this.rre = this.game.gameFrame;
-            ++this.game.changetimes;
         }
   //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
@@ -73,6 +77,8 @@ class entitymanager {
         let fw = entitymanager.fw;
         const jp = this.game.yingyang ? entitymanager.jump : entitymanager.yingjump;
         let og = entitymanager.onground;
+        let isjp = entitymanager.isjp;
+        let lstjp = entitymanager.lstjp;
 
         // 水平移动
         if (ky.left) {
@@ -98,10 +104,13 @@ class entitymanager {
 
         vy += gravity;
         // 垂直移动
-        if (ky.up && og)
+        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 5)))
         {
-            vy += jp;
+            if (og) vy = jp;
+            else vy = - Math.sqrt(jp * jp + gravity * gravity * (ga.gameFrame - lstjp) * (ga.gameFrame - lstjp)); // 控制跳跃高度
             og = false;
+            isjp = true;
+            lstjp = ga.gameFrame;
         }
         ga.player.position.y += vy;
 
@@ -119,8 +128,6 @@ class entitymanager {
 
         // 平台移动 & 碰撞逻辑
         for (let p of ga.mapmanager.collidable[this.game.env]) {
-   //         console.log('alive', p.alive(this.game.changetimes));
-            if (p.alive(this.game.changetimes) == false) continue;
             if (ga.player.containsRect(p)) {
                 const prevX = ga.player.position.x - vx;
                 const prevY = ga.player.position.y - vy;
@@ -130,6 +137,7 @@ class entitymanager {
                     ga.player.position.y = p.y - ga.player.size.y;
                     vy = 0;
                     og = true;
+                    isjp = false;
                 }
                 // 下方碰撞
                 else if (prevY >= p.y + p.h) {
@@ -157,6 +165,7 @@ class entitymanager {
             ga.player.position.y = ga.height - ga.player.size.y;
             vy = 0;
             og = true;
+            isjp = false;
         }
 
         // 更新静态速度
@@ -164,6 +173,8 @@ class entitymanager {
         entitymanager.vy = vy;
         entitymanager.fw = fw;
         entitymanager.onground = og;
+        entitymanager.isjp = isjp;
+        entitymanager.lstjp = lstjp;
     }
 
     async chcevent() {

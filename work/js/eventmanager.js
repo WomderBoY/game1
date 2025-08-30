@@ -56,7 +56,7 @@ class eventmanager {
     if (this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
     let e = this.event;
     this.progress = 'processing';
-
+    console.log('handle', e);
 //    this.game.status = 'event'; // 切换游戏状态到事件处理态
     this.game.canmove = false; // 禁止玩家移动
     if (e.type === 'dialog') {
@@ -64,6 +64,9 @@ class eventmanager {
     }
     if (e.type === 'changemap') {
         // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
+        if (e.withcg) {
+            await this.game.cgmanager.play(e.withcg);
+        }
         this.game.player.position.x = e.x;
         this.game.player.position.y = e.y;
         await this.game.mapmanager.loadMap(e.target);
@@ -72,9 +75,6 @@ class eventmanager {
         // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
         this.game.status = "running";
         console.log('player pos', this.game.player.position.x, this.game.player.position.y);
-        if (e.withcg) {
-            await this.game.cgmanager.play(e.withcg);
-        }
 //        this.game.player.facing = e.facing;
     }
     if (e.type === 'cg') {
