@@ -42,7 +42,7 @@ function transitionToGame() {
     // 在淡出动画结束后 (大约半秒)，执行页面跳转
     setTimeout(() => {
         
-        window.location.href = 'work/js/index.html'; // 这就是跳转到 game.html 的核心代码
+        window.location.href = 'work/js/level-select.html'; // 跳转到关卡选择页面
     }, 500); // 500毫秒对应CSS中的淡出动画时间
 }
 
