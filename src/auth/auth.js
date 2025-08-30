@@ -91,6 +91,22 @@ function renderAchievementsList(){
     });
 }
 
+
+function transitionTous(){
+    // 获取主菜单元素，让它优雅地淡出
+    /*const mainMenuScreen = document.getElementById('main-menu-screen');
+    if (mainMenuScreen) {
+        mainMenuScreen.style.opacity = '0';
+    }*/
+
+    // 在淡出动画结束后 (大约半秒)，执行页面跳转
+    setTimeout(() => {
+        
+        window.location.href = 'about/index.html'; // 这就是跳转到 game.html 的核心代码
+    }, 500); // 500毫秒对应CSS中的淡出动画时间
+}
+
+
 function showAchievements() {
     const modal = document.getElementById('achievement-modal');
     renderAchievementsList();
@@ -231,6 +247,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     document.getElementById('options-btn').addEventListener('click', ()=>showPopup("游戏设置功能待开发"));
     document.getElementById('logout-btn').addEventListener('click', logout);
     document.querySelector('.modal-close-btn').addEventListener('click', hideAchievements);
+    document.querySelector('.about-us').addEventListener('click', transitionTous);
 
     // 如果 URL 带有 #menu，直接展示主菜单界面
     if (window.location.hash === '#menu') {
