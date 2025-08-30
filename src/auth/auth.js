@@ -14,8 +14,6 @@ function transitionToMainMenu() {
         sliderWrapper.style.display = 'none';
         mainMenuScreen.classList.remove('hidden');
         requestAnimationFrame(() => { mainMenuScreen.style.opacity = '1'; });
-        // 播放登录 BGM（索引 0）
-        if (bgmmanager) bgmmanager.play(0);
         requestAnimationFrame(() => { 
             mainMenuScreen.style.opacity = '1';
             updateUsernameDisplay();
@@ -101,8 +99,8 @@ function transitionTous(){
 
     // 在淡出动画结束后 (大约半秒)，执行页面跳转
     setTimeout(() => {
-        
-        window.location.href = 'about-us/index.html'; // 这就是跳转到 game.html 的核心代码
+
+        window.location.href = '../../work/about-us/index.html'; // 这就是跳转到 game.html 的核心代码
     }, 500); // 500毫秒对应CSS中的淡出动画时间
 }
 
@@ -122,7 +120,11 @@ function hideAchievements() {
 
 function logout() {
     showPopup("正在退出...");
-    setTimeout(() => { location.reload(); }, 1000); // 刷新页面回到登录
+    setTimeout(() => {
+        // 清除 hash，刷新页面
+        window.location.hash = '';
+        location.reload();
+    }, 1000);
 }
 
 /* ================== 登录注册逻辑 ================== */
