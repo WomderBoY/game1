@@ -1,86 +1,24 @@
-_jsonCallback({"yang":{
-    "tileMap":[
-	{
-        "hitbox":[0,450,300,150],
-		"img":["player.png", "black-right2-0.png", "white.png"],
-		"hp":3,
-		"col":true
-    },
-	{
-		"hitbox":[100,400,30,20],
-		"event":{
-			"type":"dialog",
-			"way":"negative",
-			"text":["【test】这是一条测试",
-                "【test】这是第二条测试"]
-		},
-		"col":false
-	},{
-		"hitbox":[150,400,30,20],
-		"event":{
-			"type":"changemap",
-			"way":"negative",
-			"x":100,
-			"y":350,
-			"target":"bg.json"
-		},
-		"col":false
-
-	},{
-		"hitbox":[1225,377,80,278],
-		"event":{
-			"type":"changemap",
-			"way":"tunnal",
-			"x":256,
-			"y":500	,
-			"target":"bg-map1.json"
-		},
-		"col":false
-	},
-	{
-		"hitbox":[500, 500, 300, 50],
-		"img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
-		"hp":1,
-		"col":true,
-	}],
-	"enemy":[
-		{
-			"x":500,
-			"y":400,
-			"w":30,
-			"h":30,
-			"speed":2
-		}
-	],
-
-	"bagua":[],
-	"background":"../images/classroom.png"
-}, 
-"yin":{
-	"tileMap":[
-		{
-        "hitbox":[100,450,300,150],
-		"col":true
-    },
-	{
-		"hitbox":[100,400,30,20],
-		"event":{
-			"type":"dialog",
-			"way":"negative",
-			"text":["【test】这是一条测试",
-                "【test】这是第二条测试"]
-		},
-		"col":false
-	}
-	],
-	"enemy":[
-	],
-
-	"bagua":[],
-	"background":""
-}
-
 _jsonCallback({
+	"with":[
+		{
+					"type": "cg",
+					"way": "negative",
+					"images": [
+						"../js/player.png",
+						"../js/white.png"
+					],
+					"text": [
+						[
+							"【诺艾尔】这，这难道就是",
+							"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！"
+						],
+						[
+							"【诺艾尔】就是这一本书，我需要的就是这个",
+							"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
+						]
+					],
+				}
+			],
 	"yang": {
 		"tileMap": [
 			{

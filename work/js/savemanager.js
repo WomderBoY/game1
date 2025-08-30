@@ -83,12 +83,6 @@ class SaveManager{
                 this.game.status = "running";
                 
                 // 只有当 event 不为 null 时才添加到事件管理器
-                if (dt.event) {
-                    console.log("添加事件:", dt.event);
-                    this.game.eventmanager.add(dt.event);
-                } else {
-                    console.log("没有事件需要添加");
-                }
             }
         } catch (error) {
             console.error("加载存档时发生错误:", error);
