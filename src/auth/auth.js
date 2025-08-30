@@ -14,8 +14,6 @@ function transitionToMainMenu() {
         sliderWrapper.style.display = 'none';
         mainMenuScreen.classList.remove('hidden');
         requestAnimationFrame(() => { mainMenuScreen.style.opacity = '1'; });
-        // 播放登录 BGM（索引 0）
-        if (bgmmanager) bgmmanager.play(0);
         requestAnimationFrame(() => { 
             mainMenuScreen.style.opacity = '1';
             updateUsernameDisplay();
