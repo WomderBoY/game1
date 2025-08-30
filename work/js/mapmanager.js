@@ -35,10 +35,13 @@ class mapmanager {
     }
 
     async loadMap(src) {
-        await this.game.savemanager.save(src);
         // 使用传入的 game 实例
-        this.room = src;
         let data = await this.game.datamanager.loadJSON(src);
+        if (data.born) {
+            [this.game.player.position.x, this.game.player.position.y] = data.born;
+        }
+        await this.game.savemanager.save(src);
+        this.room = src;
         console.warn('loadmap', data);
         console.log(this.game.canmove);
         if (data.with) {

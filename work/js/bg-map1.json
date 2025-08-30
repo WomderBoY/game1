@@ -1,4 +1,5 @@
 _jsonCallback({
+	"born":[256, 500],
 	"with":[
 		{
 					"type": "dialog",
