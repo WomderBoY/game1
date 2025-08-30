@@ -14,6 +14,8 @@ function transitionToMainMenu() {
         sliderWrapper.style.display = 'none';
         mainMenuScreen.classList.remove('hidden');
         requestAnimationFrame(() => { mainMenuScreen.style.opacity = '1'; });
+        // 播放登录 BGM（索引 0）
+        if (bgmmanager) bgmmanager.play(0);
     }, 500);
 }
 
@@ -204,6 +206,9 @@ function drawBackground(){
 /* ================== 事件监听 (代码不变) ================== */
 document.addEventListener('DOMContentLoaded', ()=>{
     drawBackground();
+    // 初始化 BGM 音轨（索引 0 = 登录，索引 1 = 游戏）
+    bgmmanager.add("./work/bgms/bg1.mp3"); // 索引 0
+
     document.getElementById('start-game-btn').addEventListener('click', transitionToGame);
     document.getElementById('achievements-btn').addEventListener('click', showAchievements);
     document.getElementById('options-btn').addEventListener('click', ()=>showPopup("游戏设置功能待开发"));
