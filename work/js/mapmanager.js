@@ -39,6 +39,39 @@ class mapmanager {
         // 使用传入的 game 实例
         this.room = src;
         let data = await this.game.datamanager.loadJSON(src);
+        console.warn('loadmap', data);
+        console.log(this.game.canmove);
+        if (data.with) {
+            console.log('发现 data.with:', data.with);
+            console.log('data.with 类型:', typeof data.with);
+            console.log('data.with 是否为数组:', Array.isArray(data.with));
+            
+            // 检查 data.with 的类型
+            if (Array.isArray(data.with)) {
+                console.log('data.with 是数组，遍历播放');
+                // 如果是数组，遍历每个元素
+                for (let i of data.with) {
+                    console.warn('addmap', i);
+                    this.game.eventmanager.add(i, true);
+                }
+            } else if (typeof data.with === 'object') {
+                console.log('data.with 是对象，检查 event 字段');
+                // 如果是对象，检查是否有 event 字段
+                if (data.with.event) {
+                    console.log('播放 data.with.event:', data.with.event);
+                    // 如果有 event 字段，播放 event 内容
+                    this.cgmanager.play(data.with.event);
+                } else {
+                    console.log('直接播放 data.with:', data.with);
+                    // 如果没有 event 字段，直接播放整个对象
+                    this.cgmanager.play(data.with);
+                }
+            } else {
+                console.warn('data.with 既不是数组也不是对象:', data.with);
+            }
+        } else {
+            console.log('没有 data.with 字段');
+        }
         entitymanager.vx = 0;
         entitymanager.vy = 0;
         this.game.changetimes = 0;

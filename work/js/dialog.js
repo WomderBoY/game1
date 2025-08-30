@@ -103,6 +103,7 @@ class dialog {
     }
 
     async _prints() {
+        this.game.canmove = false;
         while (this.buffer.length > 0) {
             let text = this.buffer.shift();
 
@@ -187,6 +188,7 @@ class dialog {
             this.name.textContent = "";
             this.text.innerHTML = "";
         }
+        this.game.canmove = true;
     }
 
     async handleUsernameInput() {

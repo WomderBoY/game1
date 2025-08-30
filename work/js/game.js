@@ -62,13 +62,6 @@ class game {
              await this.enemymanager.LoadEnemy(selectedLevel);
              await this.baguamanager.LoadBagua(selectedLevel);
              this.mapmanager.draw(this.env);
-         } else {
-             // 没有选择关卡，加载默认的第一关
-             console.log("加载默认关卡");
-             let begin = await this.datamanager.loadJSON("begin.json");
-             this.eventmanager.add(begin);
-             this.eventmanager.handle();
-             this.mapmanager.draw(this.env);
          }
         this.bgmmanager = new BGMManager();        // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
@@ -248,12 +241,14 @@ class game {
                 this.ctx.fillText(`(${x}, ${y})`, x + 10, y - 10);
             });
         }
+//        console.log('canmove = ', this.canmove);
 //        console.log(this.player.position.x, this.player.position.y);
         // 只在窗口大小变化时重新计算缩放，而不是每帧都计算
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
   //      console.log(this.changetimes);
+        console.log(this.status, this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
