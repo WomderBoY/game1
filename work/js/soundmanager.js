@@ -1,7 +1,6 @@
 class SoundManager {
     constructor() {
-        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        this.buffers = {};        // 已解码音效
+        this.buffers = {};        // 已加载的音效
         this.instances = {};      // 正在播放的实例列表
         this.loopSources = {};    // 循环音效单独存储
     }
@@ -15,32 +14,36 @@ class SoundManager {
         await this.load('enemydeath', "../sound/enemydeath.mp3");
     }
 
+    /** 加载音效 */
     async load(name, url) {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await this.audioCtx.decodeAudioData(arrayBuffer);
-        this.buffers[name] = audioBuffer;
+        const audio = new Audio(url);
+        audio.preload = 'auto';  // 预加载音频
+
+        this.buffers[name] = audio;
         this.instances[name] = [];
     }
 
     /** 播放一次性音效 */
     playOnce(name, volume = 1, playbackRate = 1) {
+        console.log(name, volume);
         if (!this.buffers[name]) return null;
 
-        const source = this.audioCtx.createBufferSource();
-        source.buffer = this.buffers[name];
-        source.playbackRate.value = playbackRate;
+        // 验证音量参数
+        if (volume < 0 || volume > 1) {
+            console.warn(`警告：音量值 ${volume} 超出有效范围 [0,1]，已调整为 ${Math.max(0, Math.min(1, volume))}`);
+            volume = Math.max(0, Math.min(1, volume));
+        }
 
-        const gainNode = this.audioCtx.createGain();
-        gainNode.gain.value = volume;
+        const audio = this.buffers[name].cloneNode();  // 克隆一个新的音频元素
+        audio.volume = volume;
+        audio.playbackRate = playbackRate;
 
-        source.connect(gainNode).connect(this.audioCtx.destination);
-        source.start(0);
+        audio.play().catch(e => console.error('音效播放失败', e));
 
-        const instance = { source, gainNode };
+        const instance = { audio };
         this.instances[name].push(instance);
 
-        source.onended = () => {
+        audio.onended = () => {
             const idx = this.instances[name].indexOf(instance);
             if (idx !== -1) this.instances[name].splice(idx, 1);
         };
@@ -50,38 +53,70 @@ class SoundManager {
 
     /** 循环播放音效 */
     playLoop(name, volume = 1, playbackRate = 1) {
+        console.log(name, volume);
         if (this.loopSources[name]) return; // 已经在循环播放
 
         if (!this.buffers[name]) return null;
-        const source = this.audioCtx.createBufferSource();
-        source.buffer = this.buffers[name];
-        source.loop = true;
-        source.playbackRate.value = playbackRate;
 
-        const gainNode = this.audioCtx.createGain();
-        gainNode.gain.value = volume;
+        // 验证音量参数
+        if (volume < 0 || volume > 1) {
+            console.warn(`警告：音量值 ${volume} 超出有效范围 [0,1]，已调整为 ${Math.max(0, Math.min(1, volume))}`);
+            volume = Math.max(0, Math.min(1, volume));
+        }
 
-        source.connect(gainNode).connect(this.audioCtx.destination);
-        source.start(0);
+        const audio = this.buffers[name].cloneNode();  // 克隆一个新的音频元素
+        audio.loop = true;
+        audio.volume = volume;
+        audio.playbackRate = playbackRate;
 
-        this.loopSources[name] = { source, gainNode };
+        audio.play().catch(e => console.error('音效播放失败', e));
+
+        this.loopSources[name] = audio;
     }
 
     /** 停止循环播放 */
     stopLoop(name) {
         if (!this.loopSources[name]) return;
-        const { source } = this.loopSources[name];
-        source.stop();
+
+        const audio = this.loopSources[name];
+        audio.pause();
+        audio.currentTime = 0;  // 重置播放位置
         delete this.loopSources[name];
     }
 
     /** 淡出循环音效 */
     fadeLoop(name, duration = 0.1) {
         if (!this.loopSources[name]) return;
-        const { source, gainNode } = this.loopSources[name];
-        gainNode.gain.linearRampToValueAtTime(0, this.audioCtx.currentTime + duration);
-        source.stop(this.audioCtx.currentTime + duration);
-        delete this.loopSources[name];
+
+        const audio = this.loopSources[name];
+        const initialVolume = audio.volume;
+
+        // 渐变音量
+        let fadeInterval = setInterval(() => {
+            if (audio.volume > 0) {
+                // 修复：确保音量不会变成负数
+                const decreaseAmount = initialVolume / (duration * 10);
+                const newVolume = Math.max(0, audio.volume - decreaseAmount);
+                
+                // 监控音量变化
+                if (newVolume !== audio.volume) {
+                    console.log(`音效 ${name} 音量变化: ${audio.volume.toFixed(3)} -> ${newVolume.toFixed(3)}`);
+                }
+                
+                audio.volume = newVolume;
+                
+                // 如果音量已经接近0，直接停止
+                if (audio.volume <= 0.01) {
+                    clearInterval(fadeInterval);
+                    this.stopLoop(name);
+                }
+            } else {
+                clearInterval(fadeInterval);
+                this.stopLoop(name);
+            }
+        }, 100);  // 每100ms减少音量
+
+        this.loopSources[name] = audio;  // 保证播放中的音频持续管理
     }
 
     /** 判断音效是否在播放 */

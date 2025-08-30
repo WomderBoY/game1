@@ -40,7 +40,7 @@ _jsonCallback({
 					"way": "negative",
 					"images": [
 						"../js/player.png",
-						"../js/hitbox.png"
+						"../js/white.png"
 					],
 					"text": [
 						[

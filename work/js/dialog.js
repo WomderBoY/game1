@@ -140,7 +140,7 @@ class dialog {
         this.text.innerHTML = "";
         let chars = text.split("");
         let skip = false;
-        this.game.soundmanager.playLoop('typing', 3, 1);
+        this.game.soundmanager.playLoop('typing', 1, 1);
 
         // 逐字打印
         for (let i = 0; i < chars.length; i++) {
