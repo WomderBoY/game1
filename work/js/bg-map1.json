@@ -10,7 +10,7 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/test1.png"
+					"../images/hit_short.png"
 				]
 			},
 			{
@@ -22,7 +22,7 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/test1.png"
+					"../images/hit_short.png"
 				]
 			},
 			{
@@ -34,7 +34,7 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/test1.png"
+					"../images/hit_short.png"
 				]
 			},
 			{
@@ -46,7 +46,7 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/test1.png"
+					"../images/hit_short.png"
 				]
 			},
 			{
@@ -58,7 +58,7 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/test1.png"
+					"../images/hit_short.png"
 				]
 			},
 			{
@@ -83,7 +83,7 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/test1.png"
+					"../images/hit_short.png"
 				]
 			}
 		],
