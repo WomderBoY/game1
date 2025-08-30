@@ -41,7 +41,7 @@ class entitymanager {
 
     static pre = 'stand'; // 面向方向，1为右，-1为左
     async makesound() {
-        console.log(entitymanager.onground);
+  //      console.log(entitymanager.onground);
         let ky = this.keys, ps = entitymanager.pre;
         if (this.game.status !== 'running') return;
         if (this.game.canmove == false) return;

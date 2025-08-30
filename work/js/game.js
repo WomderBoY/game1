@@ -27,7 +27,7 @@ class game {
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
-        this.hp = new hp(10, this);
+        this.hp = new hp(1, this);
         this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
         this.cg = false;
@@ -113,6 +113,8 @@ class game {
     returnToMainMenu() {
         const menu = document.getElementById('pauseMenu');
         if (menu) menu.style.display = 'none';
+        // 返回主菜单：从 work/js/game.html 回到项目根目录 index.html#menu
+        const maybe = '../../index.html#menu&fromGame=true';
         // 返回关卡选择页面
         try {
             window.location.href = 'level-select.html';
@@ -189,6 +191,9 @@ class game {
         // 根据当前窗口大小进行缩放
         this.autoScale(this.view);
 
+        // 设置窗口大小变化监听器
+        this.setupResizeListener();
+
         // 获取画布的 2D 渲染上下文
         this.ctx = this.view.getContext('2d');
 
@@ -213,6 +218,18 @@ class game {
         view.style.height = view.height * scale + 'px';
     }
 
+    // 添加窗口大小变化监听器
+    setupResizeListener() {
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            // 使用防抖，避免频繁触发
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.autoScale(this.view);
+            }, 100);
+        });
+    }
+
     async update(delta) {
         const debug = true; // 调试开关
         if (debug) {
@@ -232,8 +249,7 @@ class game {
             });
         }
 //        console.log(this.player.position.x, this.player.position.y);
-        // 每一帧都重新计算缩放，保证窗口大小改变时画布自适应
-        this.autoScale(this.view);
+        // 只在窗口大小变化时重新计算缩放，而不是每帧都计算
         this.ctx.clearRect(0, 0, this.view.width, this.view.height);
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
