@@ -27,7 +27,7 @@ class game {
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
-        this.hp = new hp(10, this);
+        this.hp = new hp(1, this);
         this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
         this.cg = false;
@@ -48,11 +48,28 @@ class game {
   //      await this.mapmanager.loadMap("bg.json");
     //    await this.enemymanager.LoadEnemy("bg.json");
       //  await this.baguamanager.LoadBagua("bg.json");
-        let begin = await this.datamanager.loadJSON("begin.json");
-        console.log(begin);
-        this.eventmanager.add(begin);
-        this.eventmanager.handle();
-        this.mapmanager.draw(this.env);
+                 // 检查是否有选择的关卡
+         const selectedLevel = localStorage.getItem('selectedLevel');
+         
+         if (selectedLevel) {
+             // 有选择的关卡，直接加载该关卡
+             console.log("加载选择的关卡:", selectedLevel);
+             
+             // 确保选择的关卡被解锁
+             this.unlockNextLevel(selectedLevel);
+             
+             await this.mapmanager.loadMap(selectedLevel);
+             await this.enemymanager.LoadEnemy(selectedLevel);
+             await this.baguamanager.LoadBagua(selectedLevel);
+             this.mapmanager.draw(this.env);
+         } else {
+             // 没有选择关卡，加载默认的第一关
+             console.log("加载默认关卡");
+             let begin = await this.datamanager.loadJSON("begin.json");
+             this.eventmanager.add(begin);
+             this.eventmanager.handle();
+             this.mapmanager.draw(this.env);
+         }
         this.bgmmanager = new BGMManager();        // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
         window.addEventListener('click', () => {
@@ -98,12 +115,61 @@ class game {
         if (menu) menu.style.display = 'none';
         // 返回主菜单：从 work/js/game.html 回到项目根目录 index.html#menu
         const maybe = '../../index.html#menu&fromGame=true';
+        // 返回关卡选择页面
         try {
-            window.location.href = maybe;
+            window.location.href = 'level-select.html';
         } catch (e) {
             // 兜底：如果无法跳转，恢复游戏避免卡住
             this.resumeGame();
         }
+    }
+
+    // 解锁关卡系统
+    unlockNextLevel(currentLevel) {
+        const levelOrder = ['bg.json', 'bg2.json', 'bg-map1.json'];
+        const currentIndex = levelOrder.indexOf(currentLevel);
+        
+        if (currentIndex >= 0) {
+            // 解锁当前关卡和之前的所有关卡
+            const unlockedLevels = JSON.parse(localStorage.getItem('unlockedLevels') || '[]');
+            
+            // 确保当前关卡和之前的所有关卡都被解锁
+            for (let i = 0; i <= currentIndex; i++) {
+                const levelToUnlock = levelOrder[i];
+                if (!unlockedLevels.includes(levelToUnlock)) {
+                    unlockedLevels.push(levelToUnlock);
+                    console.log(`解锁关卡: ${levelToUnlock}`);
+                }
+            }
+            
+            // 如果当前关卡不是最后一关，也解锁下一关
+            // if (currentIndex < levelOrder.length - 1) {
+            //     const nextLevel = levelOrder[currentIndex + 1];
+            //     if (!unlockedLevels.includes(nextLevel)) {
+            //         unlockedLevels.push(nextLevel);
+            //         console.log(`解锁下一个关卡: ${nextLevel}`);
+            //     }
+            // }
+            
+            localStorage.setItem('unlockedLevels', JSON.stringify(unlockedLevels));
+        }
+    }
+
+    // 获取已解锁的关卡列表
+    getUnlockedLevels() {
+        const unlockedLevels = JSON.parse(localStorage.getItem('unlockedLevels') || '[]');
+        // 确保第一关总是解锁的
+        if (!unlockedLevels.includes('bg.json')) {
+            unlockedLevels.push('bg.json');
+            localStorage.setItem('unlockedLevels', JSON.stringify(unlockedLevels));
+        }
+        return unlockedLevels;
+    }
+
+    // 检查关卡是否已解锁
+    isLevelUnlocked(levelFile) {
+        const unlockedLevels = this.getUnlockedLevels();
+        return unlockedLevels.includes(levelFile);
     }
 
     createStage() {

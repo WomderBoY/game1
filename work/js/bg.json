@@ -68,7 +68,7 @@ _jsonCallback({
 					"x": 100,
 					"y": 350,
 					"target": "bg2.json",
-					"withcg": {
+					"with": {
 						"type": "cg",
 						"way": "negative",
 						"images": [
