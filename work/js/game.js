@@ -172,11 +172,11 @@ class game {
                 await this.entitymanager.update();
                 this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
-                if (this.cg == false) this.entitymanager.drawPlayer();
                 this.entitymanager.drawPortals();
-                if (this.cg == false) this.enemymanager.draw(this.ctx);
                 this.baguamanager.draw(this.ctx);
                 this.baguamanager.update(this.player);
+                if (this.cg == false) this.entitymanager.drawPlayer();
+                if (this.cg == false) this.enemymanager.draw(this.ctx);
                 this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
