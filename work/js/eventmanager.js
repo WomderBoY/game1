@@ -56,7 +56,7 @@ class eventmanager {
     if (this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
     let e = this.event;
     this.progress = 'processing';
-
+    console.log('handle', e);
 //    this.game.status = 'event'; // 切换游戏状态到事件处理态
     this.game.canmove = false; // 禁止玩家移动
     if (e.type === 'dialog') {

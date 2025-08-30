@@ -112,7 +112,10 @@ class entitymanager {
         if (ky.change && this.game.gameFrame - this.re >= 200) {
             ga.yingyang = !ga.yingyang;
             this.re = this.game.gameFrame;
+            if (this.game.achievements) this.game.achievements.unlock('first_toggle');
+            this.game.taijimanager.trigger(); // 触发太极动画切换效果
         }
+
 
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
             ga.env = (ga.env === "yin") ? "yang" : "yin";
