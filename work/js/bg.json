@@ -105,7 +105,7 @@ _jsonCallback({
 				],
 			}
 		],
-		"background": "../images/road2.png"
+		"background": "../images/lib2.png"
 	},
 	"yin": {
 		"tileMap": [
