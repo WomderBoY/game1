@@ -31,6 +31,30 @@ header {
   align-items: center;
 }
 
+/* 在现有header样式下方添加 */
+.back-btn {
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid #fff;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+/* 保持响应式适配（可选，确保小屏幕显示正常） */
+@media screen and (max-width: 768px) {
+  .back-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
 .logo {
   font-size: 30px;
   font-weight: 700;

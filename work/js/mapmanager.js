@@ -13,7 +13,7 @@ class Tile extends Rect {
 
     alive(x) {
         if (!this.hp) return true;
-//        console.log('hp', this.hp, x);
+        //        console.log('hp', this.hp, x);
         if ((x / 2) < this.hp) return true;
         return false;
     }
@@ -25,83 +25,111 @@ class mapmanager {
         this.empty();
     }
 
-	empty() {
-        this.test = {"yin":[], "yang":[]};
-        this.collidable = {"yin":[], "yang":[]};
-        this.events = {"yin":[], "yang":[]};
-		this.app = {"yin":[], "yang":[]};
+    empty() {
+        this.test = { "yin": [], "yang": [] };
+        this.collidable = { "yin": [], "yang": [] };
+        this.events = { "yin": [], "yang": [] };
+        this.app = { "yin": [], "yang": [] };
         this.room = "";
-		this.background = {"yin":[], "yang":[]};
-	}
+        this.background = { "yin": [], "yang": [] };
+    }
 
     async loadMap(src) {
         await this.game.savemanager.save(src);
         // 使用传入的 game 实例
         this.room = src;
         let data = await this.game.datamanager.loadJSON(src);
-		entitymanager.vx = 0;
-		entitymanager.vy = 0;
+        entitymanager.vx = 0;
+        entitymanager.vy = 0;
         this.game.changetimes = 0;
-		
+
         this.game.hp.reset();
         this.empty();
 
         for (let i of data.yin.tileMap) {
             await this.addTile("yin", i);
-//			console.log('block', i)
+            //			console.log('block', i)
         }
         for (let i of data.yang.tileMap) {
             await this.addTile("yang", i);
         }
 
 
-		if (data.yang.background) {
-			let bg = await this.game.datamanager.loadImg(data.yang.background);
-			this.background["yang"] = bg;
-		}
+        if (data.yang.background) {
+            let bg = await this.game.datamanager.loadImg(data.yang.background);
+            this.background["yang"] = bg;
+        }
         if (data.yin.background) {
             let bg = await this.game.datamanager.loadImg(data.yin.background);
             this.background["yin"] = bg;
         }
-		console.log('events', this.collidable);
+        console.log('events', this.collidable);
     }
 
     async addTile(type, i) {
-		const [x, y, w, h] = i.hitbox;
-		let img = [];
+        const [x, y, w, h] = i.hitbox;
+        let img = [];
         if (i.img) {
             for (let path of i.img) {
-                img.push(await this.game.datamanager.loadImg(path));
+                let loadedImage = await this.game.datamanager.loadImg(path);
+                if (loadedImage instanceof Image) {
+                    img.push(loadedImage);
+                } else {
+                    console.error(`图片加载失败：${path}`);
+                }
+            }
+
+            // 加载 overlayImg
+            let tile = new Tile(x, y, w, h, i.hp, img, i.event); // 去掉 this.game
+
+            // 把 overlayImg 存进去
+            //调试图片是否加载出来
+            console.log('img paths:', i.img);
+            console.log('overlayImg paths:', i.overlayImg);
+
+            if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 不对这里
+            if (i.col != false) this.collidable[type].push(tile);
+            //if (i.app) this.app.push(tile);
+            this.test[type].push(tile);
+            if (i.event) {
+                //		console.log(i.event);
+                this.events[type].push(tile);
+            }
+            // for (let tile of this.game.mapmanager.events[type]) {
+            //     console.log(tile.event);
+        } else {
+            let tile = new Tile(x, y, w, h, i.hp, img, i.event); // 去掉 this.game
+
+            // 把 overlayImg 存进去
+            //调试图片是否加载出来
+            console.log('img paths:', i.img);
+            console.log('overlayImg paths:', i.overlayImg);
+
+            if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 不对这里
+            if (i.col != false) this.collidable[type].push(tile);
+            //if (i.app) this.app.push(tile);
+            this.test[type].push(tile);
+            if (i.event) {
+                //		console.log(i.event);
+                this.events[type].push(tile);
             }
         }
-		let tile = new Tile(x, y, w, h, i.hp, img, i.event); // 去掉 this.game
-		
-		if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 不对这里
-		if (i.col != false) this.collidable[type].push(tile);
-		//if (i.app) this.app.push(tile);
-		this.test[type].push(tile);
-		if (i.event) {
-	//		console.log(i.event);
-			 this.events[type].push(tile);
-		}
-		for (let tile of this.game.mapmanager.events[type]) {
-			console.log(tile);
-    	}
-	}
+
+    }
 
     getCollidable(type) {
         return this.collidable[type];
     }
 
-	draw(type) {
+    draw(type = 'yin') {
         // 绘制背景
-    //    console.log(type);
-    //    console.log(this.background);       
+        //    console.log(type);
+        //    console.log(this.background);       
         if (this.background[type] == "") {
             this.game.ctx.fillStyle = "#87cefa";
             this.game.ctx.fillRect(0, 0, this.game.width, this.game.height);
         } else {
-            this.game.ctx.drawImage(this.background[type]  , 0, 0, this.game.width, this.game.height);
+            this.game.ctx.drawImage(this.background[type], 0, 0, this.game.width, this.game.height);
         }
 
         // 遍历所有元素
@@ -111,7 +139,7 @@ class mapmanager {
 
             // 检查是否为实体碰撞区域（根据你的实际属性名调整，比如i.collision或i.solid）
             // 明确判断为true的情况
-        //		console.log('进入染色');
+            //		console.log('进入染色');
             if (i.img.length == 0) {
                 // 石板砖块效果
                 ctx.save(); // 保存当前绘图状态
@@ -153,74 +181,82 @@ class mapmanager {
 
                 ctx.restore(); // 恢复绘图状态
             }
+            // 绘制贴纸/装饰图层（每个碰撞箱都使用同一张贴纸）
             else {
-    //            console.log('draw image');
-                let o = i.hp - Math.floor(this.game.changetimes / 2);
-                if (o > 0) {
-                    let k = o - 1;
-                    ctx.drawImage(i.img[k], x, y, w, h);
+                if (i.hp) {
+                    console.log('draw image');
+                    let o = i.hp - Math.floor(this.game.changetimes / 2);
+                    if (o > 0) {
+                        let k = o - 1;
+                        ctx.drawImage(i.img[k], x, y, w, h);
+                    }
+                }
+                else {
+                    ctx.drawImage(i.img[0], x, y, w, h)
                 }
             }
-            // 非碰撞区域不绘制石板效果，保持原样
-            // 如果你需要绘制非碰撞区域的其他样式，可以在这里添加
-            // else {
-            //   // 非碰撞区域的绘制代码
-            // }
         }
+        // 非碰撞区域不绘制石板效果，保持原样
+        // 如果你需要绘制非碰撞区域的其他样式，可以在这里添加
+        // else {
+        //   // 非碰撞区域的绘制代码
+        // }
+        // console.log('Collidable object:', i);//调试代码
+
 
         // 遍历所有元素
         for (let i of this.app[type]) {
-        const ctx = this.game.ctx;
-        const { x, y, w, h } = i;
+            const ctx = this.game.ctx;
+            const { x, y, w, h } = i;
 
-    //   console.log('进入岩浆绘制');
+            //   console.log('进入岩浆绘制');
 
-        ctx.save();
+            ctx.save();
 
-        // 1. 岩浆底色（深红）
-        const lavaGradient = ctx.createLinearGradient(x, y, x, y + h);
-        lavaGradient.addColorStop(0, "#8B0000"); // 深红
-        lavaGradient.addColorStop(0.5, "#FF4500"); // 橙红
-        lavaGradient.addColorStop(1, "#FF6347"); // 番茄红
-        ctx.fillStyle = lavaGradient;
-        ctx.fillRect(x, y, w, h);
+            // 1. 岩浆底色（深红）
+            const lavaGradient = ctx.createLinearGradient(x, y, x, y + h);
+            lavaGradient.addColorStop(0, "#8B0000"); // 深红
+            lavaGradient.addColorStop(0.5, "#FF4500"); // 橙红
+            lavaGradient.addColorStop(1, "#FF6347"); // 番茄红
+            ctx.fillStyle = lavaGradient;
+            ctx.fillRect(x, y, w, h);
 
-        // 2. 岩浆裂纹（亮橙/黄色）
-        ctx.strokeStyle = "#FFD700"; // 金黄
-        ctx.lineWidth = 2;
+            // 2. 岩浆裂纹（亮橙/黄色）
+            ctx.strokeStyle = "#FFD700"; // 金黄
+            ctx.lineWidth = 2;
 
-        // 横向裂纹
-        for (let ly = y + 10; ly < y + h; ly += 20) {
-            ctx.beginPath();
-            ctx.moveTo(x, ly);
-            ctx.lineTo(x + w, ly + Math.sin(ly * 0.3) * 5); // 不规则波动
-            ctx.stroke();
+            // 横向裂纹
+            for (let ly = y + 10; ly < y + h; ly += 20) {
+                ctx.beginPath();
+                ctx.moveTo(x, ly);
+                ctx.lineTo(x + w, ly + Math.sin(ly * 0.3) * 5); // 不规则波动
+                ctx.stroke();
+            }
+
+            // 纵向裂纹
+            for (let lx = x + 10; lx < x + w; lx += 20) {
+                ctx.beginPath();
+                ctx.moveTo(lx, y);
+                ctx.lineTo(lx + Math.sin(lx * 0.3) * 5, y + h);
+                ctx.stroke();
+            }
+
+            // 3. 熔岩高光（模拟发光边缘）
+            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+            ctx.fillRect(x, y, w, 3); // 顶部高光
+            ctx.fillRect(x, y, 3, h); // 左侧高光
+
+            // 4. 发光外晕（危险感）
+            ctx.shadowColor = "rgba(255, 69, 0, 0.8)";
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = "rgba(255, 69, 0, 0.2)";
+            ctx.fillRect(x, y, w, h);
+
+            ctx.restore();
         }
 
-        // 纵向裂纹
-        for (let lx = x + 10; lx < x + w; lx += 20) {
-            ctx.beginPath();
-            ctx.moveTo(lx, y);
-            ctx.lineTo(lx + Math.sin(lx * 0.3) * 5, y + h);
-            ctx.stroke();
-        }
 
-        // 3. 熔岩高光（模拟发光边缘）
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-        ctx.fillRect(x, y, w, 3); // 顶部高光
-        ctx.fillRect(x, y, 3, h); // 左侧高光
-
-        // 4. 发光外晕（危险感）
-        ctx.shadowColor = "rgba(255, 69, 0, 0.8)";
-        ctx.shadowBlur = 20;
-        ctx.fillStyle = "rgba(255, 69, 0, 0.2)";
-        ctx.fillRect(x, y, w, h);
-
-        ctx.restore();
     }
 
-
-}
-    
 
 }
