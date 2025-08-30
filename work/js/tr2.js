@@ -22,6 +22,12 @@ const player = {
   facing: 'right'
 };
 
+    async init() {
+        this.load("run", "../sound/move.mp3");
+        this.load("jump", "../sound/jump.mp3");
+        this.load("land", "../sound/fallog.mp3");
+    }
+
 // 平台列表
 const platforms = [
   { x: 0, y: 450, width: 3000, height: 150, vx: 0 },

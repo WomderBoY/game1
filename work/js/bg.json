@@ -68,7 +68,7 @@ _jsonCallback({
 					"x": 100,
 					"y": 350,
 					"target": "bg2.json",
-					"withcg": {
+					"with": {
 						"type": "cg",
 						"way": "negative",
 						"images": [
@@ -104,8 +104,8 @@ _jsonCallback({
 				"hitbox": [
 					200,
 					400,
-					20,
-					20
+					50,
+					50
 				],
 			}
 		],
@@ -124,10 +124,12 @@ _jsonCallback({
 					"type": "dialog",
 					"way": "negative",
 					"text": [
+						"请输入用户名：",
+						"【系统】你好：{用户名}，欢迎来到阴阳劫的世界！",
 						"【诺艾尔】这，这难道就是",
 						"【诺艾尔】《HTML+CSS+Javascript从入门到精通》？！",
 						"【诺艾尔】就是这一本书，我需要的就是这个",
-						"【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
+						"【用户名】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
 					]
 				},
 				"col": false

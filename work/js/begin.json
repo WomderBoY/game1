@@ -1,0 +1,30 @@
+_jsonCallback({
+
+
+        "type": "changemap",
+        "way": "negative",
+        "x": 0,
+        "y": 0,
+        "target": "bg.json", //目标的地图
+        "withcg": {
+            "type": "cg",
+            "way": "negative",
+            "images": [ //这个是顺寻播放的图片
+                "../images/1.png",
+                "../js/white.png"
+            ],
+            "text": [ //顺序播放的文字
+                [
+                    "【user】:我是一个北京理工大学的大学生",
+                    "【user】:"
+                ],
+                [
+                    "【诺艾尔】就是这一本书，我需要的就是这个",
+                    "【诺艾尔】好想现在就带回去看看，别管上面那一看就是彩蛋的房间了"
+                ]
+            ],
+        }
+    }
+
+
+)

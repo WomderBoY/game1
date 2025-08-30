@@ -56,7 +56,7 @@ class eventmanager {
     if (this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
     let e = this.event;
     this.progress = 'processing';
-
+    console.log('handle', e);
 //    this.game.status = 'event'; // 切换游戏状态到事件处理态
     this.game.canmove = false; // 禁止玩家移动
     if (e.type === 'dialog') {
@@ -69,11 +69,21 @@ class eventmanager {
         await this.game.mapmanager.loadMap(e.target);
         await this.game.enemymanager.LoadEnemy(e.target);
         await this.game.baguamanager.LoadBagua(e.target);
+        if (e.with) {
+            await this.game.cgmanager.play(e.with);
+        }
         // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
         this.game.status = "running";
         console.log('player pos', this.game.player.position.x, this.game.player.position.y);
-        if (e.withcg) {
-            await this.game.cgmanager.play(e.withcg);
+        
+        // 自动保存当前进度
+        if (this.game.savemanager) {
+            await this.game.savemanager.save(e.target);
+        }
+        
+        // 解锁下一个关卡
+        if (this.game.unlockNextLevel) {
+            this.game.unlockNextLevel(e.target);
         }
 //        this.game.player.facing = e.facing;
     }
@@ -89,6 +99,7 @@ class eventmanager {
 
     if (e.type === 'kill'){
       this.game.hp.decrease(10);
+      this.game.soundmanager.playOnce('death');
     }
 
     // 如果当前事件有链式 next 事件（数组），取出一个继续处理
