@@ -13,8 +13,23 @@ function transitionToMainMenu() {
     setTimeout(() => {
         sliderWrapper.style.display = 'none';
         mainMenuScreen.classList.remove('hidden');
-        requestAnimationFrame(() => { mainMenuScreen.style.opacity = '1'; });
+        requestAnimationFrame(() => { 
+            mainMenuScreen.style.opacity = '1';
+            updateUsernameDisplay();
+        });
     }, 500);
+}
+
+function updateUsernameDisplay() {
+    const usernameDisplay = document.getElementById('username-display');
+    if (usernameDisplay) {
+        const username = localStorage.getItem('yyj_username');
+        if (username) {
+            usernameDisplay.textContent = `你好：${username}`;
+        } else {
+            usernameDisplay.textContent = '你好：旅行者';
+        }
+    }
 }
 
 function transitionToGame() {
@@ -224,6 +239,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if (mainMenuScreen) {
             mainMenuScreen.classList.remove('hidden');
             mainMenuScreen.style.opacity = '1';
+            updateUsernameDisplay();
         }
     }
 });
