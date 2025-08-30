@@ -35,7 +35,7 @@ class mapmanager {
 	}
 
     async loadMap(src) {
-        this.game.savemanager.save(src);
+        await this.game.savemanager.save(src);
         // 使用传入的 game 实例
         this.room = src;
         let data = await this.game.datamanager.loadJSON(src);
@@ -85,7 +85,7 @@ class mapmanager {
 			 this.events[type].push(tile);
 		}
 		for (let tile of this.game.mapmanager.events[type]) {
-			console.log(tile.event[type]);
+			console.log(tile);
     	}
 	}
 
