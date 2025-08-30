@@ -24,7 +24,9 @@ class hp {
         if (this.currentHP === 0) {
             // 执行死亡相关逻辑
             this.game.status = "over";
+            this.game.soundmanager.playOnce('death');
         }
+        return this.currentHP === 0;
     }
 
     draw(ctx, canvasWidth = 1280, canvasHeight = 720) {
