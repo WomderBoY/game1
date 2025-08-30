@@ -53,7 +53,7 @@ class eventmanager {
   // 处理当前事件（主事件处理器）
   // 只有当 progress === 'start' 时才会真正启动处理，避免重复并发执行
   async handle() {
-//    console.log('shijian', this.progress);
+    console.log('shijian', this.game.canmove);
     if (this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
     let e = this.event;
     this.progress = 'processing';
@@ -61,7 +61,9 @@ class eventmanager {
 //    this.game.status = 'event'; // 切换游戏状态到事件处理态
     this.game.canmove = false; // 禁止玩家移动
     if (e.type === 'dialog') {
+        this.game.canmove = false;
         await this.game.dialog.prints(e.text);
+        this.game.canmove = true;
     }
     if (e.type === 'changemap') {
         // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）

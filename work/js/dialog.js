@@ -94,14 +94,12 @@ class dialog {
     }
 
     async prints(texts) {
-        this.game.canmove = false;
         this.canceled = false;
         this.reloadUsername(); // 重新加载用户名状态
         this.buffer.push(...texts);
         await this.open();
         await this._prints();
         await this.close();
-        this.game.canmove = true;
 
     }
 
