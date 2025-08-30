@@ -122,7 +122,11 @@ function hideAchievements() {
 
 function logout() {
     showPopup("正在退出...");
-    setTimeout(() => { location.reload(); }, 1000); // 刷新页面回到登录
+    setTimeout(() => {
+        // 清除 hash，刷新页面
+        window.location.hash = '';
+        location.reload();
+    }, 1000);
 }
 
 /* ================== 登录注册逻辑 ================== */

@@ -10,7 +10,7 @@
 <body>
   <header class="header">
     <div class="logo">Team Members</div>
-    <a href="../js/game.html" class="back-btn">返回菜单</a>
+    <a href="../../index.html#goto-main-menu" class="back-btn">返回菜单</a>
   </header>
 
   <section id="team-container">
@@ -84,5 +84,13 @@
   </section>
 
   <script src="script.js"></script>
+  <!-- ...existing code... -->
+  <script>
+    // 如果URL带有#goto-main-menu，则直接显示主菜单
+    if (window.location.hash === "#goto-main-menu") {
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('main-menu-screen').classList.remove('hidden');
+    }
+  </script>
 </body>
 </html>
