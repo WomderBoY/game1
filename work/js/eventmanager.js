@@ -99,7 +99,6 @@ class eventmanager {
 
     if (e.type === 'kill'){
       this.game.hp.decrease(10);
-      this.game.soundmanager.playOnce('death');
     }
 
     // 如果当前事件有链式 next 事件（数组），取出一个继续处理

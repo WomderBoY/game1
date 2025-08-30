@@ -120,6 +120,7 @@ class entitymanager {
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
             ga.env = (ga.env === "yin") ? "yang" : "yin";
             this.rre = this.game.gameFrame;
+            ++this.game.changetimes;
         }
   //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等

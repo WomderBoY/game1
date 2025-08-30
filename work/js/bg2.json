@@ -40,7 +40,7 @@ _jsonCallback({"yang":{
 	{
 		"hitbox":[500, 500, 300, 50],
 		"img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
-		"hp":5,
+		"hp":1,
 		"col":true,
 	}],
 	"enemy":[
