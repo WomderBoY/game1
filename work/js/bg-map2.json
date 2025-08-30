@@ -8,10 +8,7 @@ _jsonCallback({
 					155,
 					40
 				],
-				"col": true,
-				"img": [
-					"../images/test1.png"
-				]
+				"col": true
 			},
 			{
 				"hitbox": [
@@ -20,10 +17,7 @@ _jsonCallback({
 					155,
 					40
 				],
-				"col": true,
-				"img": [
-					"../images/test1.png"
-				]
+				"col": true
 			},
 			{
 				"hitbox": [
@@ -32,10 +26,7 @@ _jsonCallback({
 					155,
 					40
 				],
-				"col": true,
-				"img": [
-					"../images/test1.png"
-				]
+				"col": true
 			},
 			{
 				"hitbox": [
@@ -44,10 +35,7 @@ _jsonCallback({
 					155,
 					40
 				],
-				"col": true,
-				"img": [
-					"../images/test1.png"
-				]
+				"col": true
 			},
 			{
 				"hitbox": [
@@ -56,10 +44,7 @@ _jsonCallback({
 					800,
 					45
 				],
-				"col": true,
-				"img": [
-					"../images/test1.png"
-				]
+				"col": true
 			},
 			{
 				"hitbox": [
@@ -81,10 +66,7 @@ _jsonCallback({
 					350,
 					40
 				],
-				"col": true,
-				"img": [
-					"../images/test1.png"
-				]
+				"col": true
 			}
 		],
 		"enemy": [],
