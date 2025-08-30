@@ -66,7 +66,7 @@ class entitymanager {
             if (this.game.soundmanager.isPlay('run') == false)
             {
                 console.log('play run');
-                this.game.soundmanager.playLoop('run', true, entitymanager.soundspeed[this.game.yingyang ? 1 : 0]);
+                this.game.soundmanager.playLoop('run', 1, entitymanager.soundspeed[this.game.yingyang ? 1 : 0]);
             }
         }
         else if (ps == 'startjump') {
