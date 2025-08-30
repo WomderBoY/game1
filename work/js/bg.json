@@ -13,9 +13,9 @@ _jsonCallback({
 			{
 				"hitbox": [
 					504,
-					576,
-					190,
-					142
+					576, //左上角坐标
+					190, //x轴长度
+					142 //y轴长度
 				],
 				"col": true,
 			},
@@ -40,7 +40,7 @@ _jsonCallback({
 					"way": "negative",
 					"images": [
 						"../js/player.png",
-						"../js/white.png"
+						"../js/hitbox.png"
 					],
 					"text": [
 						[
