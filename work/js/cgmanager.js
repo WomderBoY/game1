@@ -42,7 +42,7 @@ class CGManager {
 
                 const img = document.createElement("img");
                 img.src = this.images[i];
-                Object.assign(img.style, { maxWidth: "80%", maxHeight: "80%", objectFit: "contain", opacity: "1", transition: "opacity 0.5s" });
+                Object.assign(img.style, { maxWidth: "90%", maxHeight: "90%", objectFit: "contain", opacity: "1", transition: "opacity 0.5s" });
                 this.overlay.appendChild(img);
 
                 if (this.texts[i] && !this.canceled) {

@@ -8,7 +8,7 @@ class game {
     static lst;
     static yingyang = true;
     async init() {
-        this.player = new Rect(0, 0, 30, 40);
+        this.player = new Rect(0, 0, 30, 40);  //初始化玩家
         this.env = "yang";
         this.gameFrame = 0;
         this.lst = 0;
@@ -20,6 +20,9 @@ class game {
         this.changetimes = 0; // 切换环境次数
 
         this.datamanager = new datamanager(this);
+
+        // 添加太极管理器（新增代码）
+        this.taijimanager = new TaijiManager(this);
 
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
@@ -39,13 +42,17 @@ class game {
         let s2 = await this.datamanager.loadSpritesheet('yang-right-0.json');
     //    console.log(s);
         this.animationmachine = new AnimationMachine(this, s1, s2);
-
-        await this.mapmanager.loadMap("bg.json");
-        await this.enemymanager.LoadEnemy("bg.json");
-        await this.baguamanager.LoadBagua("bg.json");
+        
+  //      await this.mapmanager.loadMap("bg.json");
+    //    await this.enemymanager.LoadEnemy("bg.json");
+      //  await this.baguamanager.LoadBagua("bg.json");
+        let begin = await this.datamanager.loadJSON("begin.json");
+        console.log(begin);
+        this.eventmanager.add(begin);
+        this.eventmanager.handle();
         this.mapmanager.draw(this.env);
         this.update();
-        window.addEventListener('resize', () => this.autoScale(this.view));
+    //    window.addEventListener('resize', () => this.autoScale(this.view));
 
     }
 
