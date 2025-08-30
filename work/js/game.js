@@ -248,7 +248,7 @@ class game {
     //    console.log(this.savemanager.data.player.x, this.savemanager.data.player.y);
         // 根据当前游戏状态进行不同处理
   //      console.log(this.changetimes);
-        console.log(this.status, this.canmove);
+//        console.log(this.status, this.canmove);
         switch (this.status) {
             case "running": // 游戏运行状态
                 //

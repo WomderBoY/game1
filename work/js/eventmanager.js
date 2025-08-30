@@ -35,7 +35,7 @@ class eventmanager {
   // 将新事件加入队列
   add(e, force = false) {
     // 如果当前没有事件，直接 set 并马上准备处理
-//    console.warn('ADD', e, force);
+    console.warn('ADD', e, force);
     if (this.game.canmove == false && !force) return;
     console.warn('加入新event', e, this.game.canmove);
     console.log(this.game.canmove);
@@ -53,7 +53,7 @@ class eventmanager {
   // 处理当前事件（主事件处理器）
   // 只有当 progress === 'start' 时才会真正启动处理，避免重复并发执行
   async handle() {
-    console.log('shijian', this.progress);
+//    console.log('shijian', this.progress);
     if (this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
     let e = this.event;
     this.progress = 'processing';

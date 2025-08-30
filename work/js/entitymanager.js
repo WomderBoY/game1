@@ -41,7 +41,7 @@ class entitymanager {
 
     static pre = 'stand'; // 面向方向，1为右，-1为左
     async makesound() {
-        console.warn(this.game.canmove);
+//        console.warn(this.game.canmove);
         if (!this.game.canmove) {
                 this.game.soundmanager.fadeLoop('run', 0.1); 
             return ;

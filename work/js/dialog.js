@@ -94,16 +94,18 @@ class dialog {
     }
 
     async prints(texts) {
+        this.game.canmove = false;
         this.canceled = false;
         this.reloadUsername(); // 重新加载用户名状态
         this.buffer.push(...texts);
         await this.open();
         await this._prints();
         await this.close();
+        this.game.canmove = true;
+
     }
 
     async _prints() {
-        this.game.canmove = false;
         while (this.buffer.length > 0) {
             let text = this.buffer.shift();
 
@@ -171,7 +173,7 @@ class dialog {
             });
         }
 
-        this.game.soundmanager.fadeLoop('typing', 0.5);        
+        await  this.game.soundmanager.fadeLoop('typing', 0.5);        
 
         // 段落显示完成，等待 Enter 再进入下一段
         if (this.canceled) return;
@@ -188,7 +190,6 @@ class dialog {
             this.name.textContent = "";
             this.text.innerHTML = "";
         }
-        this.game.canmove = true;
     }
 
     async handleUsernameInput() {
