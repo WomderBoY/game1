@@ -121,7 +121,7 @@ class game {
 
     // 解锁关卡系统
     unlockNextLevel(currentLevel) {
-        const levelOrder = ['bg.json', 'bg2.json', 'bg-map1.json'];
+        const levelOrder = ['../map/bg.json', '../map/bg2.json', '../map/bg-map1.json'];
         const currentIndex = levelOrder.indexOf(currentLevel);
         
         if (currentIndex >= 0) {
@@ -154,8 +154,8 @@ class game {
     getUnlockedLevels() {
         const unlockedLevels = JSON.parse(localStorage.getItem('unlockedLevels') || '[]');
         // 确保第一关总是解锁的
-        if (!unlockedLevels.includes('bg.json')) {
-            unlockedLevels.push('bg.json');
+        if (!unlockedLevels.includes('../map/bg.json')) {
+            unlockedLevels.push('../map/bg.json');
             localStorage.setItem('unlockedLevels', JSON.stringify(unlockedLevels));
         }
         return unlockedLevels;

@@ -144,19 +144,19 @@
         </div>
 
         <div class="levels-grid">
-            <button class="level-button" data-level="bg.json" onclick="selectLevel('bg.json')">
+            <button class="level-button" data-level="../map/bg.json" onclick="selectLevel('../map/bg.json')">
                 <span class="level-number">1</span>
                 <span class="level-name">图书馆入口</span>
                 <!-- <div class="star-rating">★★★</div> -->
             </button>
             
-            <button class="level-button" data-level="bg2.json" onclick="selectLevel('bg2.json')">
+            <button class="level-button" data-level="../map/bg2.json" onclick="selectLevel('../map/bg2.json')">
                 <span class="level-number">2</span>
                 <span class="level-name">神秘教室</span>
                 <!-- <div class="star-rating">★★★</div> -->
             </button>
             
-            <button class="level-button" data-level="bg-map1.json" onclick="selectLevel('bg-map1.json')">
+            <button class="level-button" data-level="../map/bg-map1.json" onclick="selectLevel('../map/bg-map1.json')">
                 <span class="level-number">3</span>
                 <span class="level-name">图书馆深处</span>
                 <!-- <div class="star-rating">★★★</div> -->
@@ -170,9 +170,9 @@
     <script>
         // 关卡配置
         const levelConfig = {
-            'bg.json': { name: '图书馆入口', unlocked: true },
-            'bg2.json': { name: '神秘教室', unlocked: false },
-            'bg-map1.json': { name: '图书馆深处', unlocked: false }
+            '../map/bg.json': { name: '图书馆入口', unlocked: true },
+            '../map/bg2.json': { name: '神秘教室', unlocked: false },
+            '../map/bg-map1.json': { name: '图书馆深处', unlocked: false }
         };
 
         // 检查存档状态
@@ -181,8 +181,8 @@
             const unlockedLevels = JSON.parse(localStorage.getItem('unlockedLevels') || '[]');
             
             // 确保第一关总是解锁的
-            if (!unlockedLevels.includes('bg.json')) {
-                unlockedLevels.push('bg.json');
+            if (!unlockedLevels.includes('../map/bg.json')) {
+                unlockedLevels.push('../map/bg.json');
                 localStorage.setItem('unlockedLevels', JSON.stringify(unlockedLevels));
             }
             

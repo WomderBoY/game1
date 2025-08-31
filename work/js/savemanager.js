@@ -6,7 +6,7 @@ class SaveManager{
 	}
 	makeEmptyData(){
 		this.data={
-			"room":"bg.json",
+			"room":"../map/bg.json",
             "player":{ x:0, y:0},
             "event":null
 		};
