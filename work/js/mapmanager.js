@@ -11,15 +11,19 @@ class Tile extends Rect {
         this.h = h;
     }
 
-    alive(x) {
+    alive(game) {
         if (!this.hp) return true;
-        //        console.log('hp', this.hp, x);
-        if ((x / 2) < this.hp) return true;
+//        console.warn('hp', this.hp, game.changetimes, game.mapmanager.hurt());
+        if ((game.changetimes / 2) == this.hp && game.mapmanager.hurt()) return true;
+        if ((game.changetimes / 2) < this.hp) return true;
+//        console.warn('damaged!!!');
         return false;
     }
 }
 
 class mapmanager {
+    static lstchange = -100;
+
     constructor(game) {
         this.game = game;
         this.empty();
@@ -32,6 +36,14 @@ class mapmanager {
         this.app = { "yin": [], "yang": [] };
         this.room = "";
         this.background = { "yin": [], "yang": [] };
+    }
+
+    sethurt() {
+        mapmanager.lstchange = this.game.gameFrame;
+    }
+
+    hurt() {
+        return this.game.gameFrame - mapmanager.lstchange <= 80;
     }
 
     async loadMap(src) {
@@ -351,10 +363,15 @@ class mapmanager {
             else {
                 if (i.hp) {
                     console.log('draw image');
-                    let o = i.hp - Math.floor(this.game.changetimes / 2);
-                    if (o > 0) {
-                        let k = o - 1;
-                        ctx.drawImage(i.img[k], x, y, w, h);
+                    if (!this.game.mapmanager.hurt()) {
+                        let o = i.hp - Math.floor(this.game.changetimes / 2);
+                        if (o > 0) {
+                            let k = o - 1;
+                            ctx.drawImage(i.img[k], x, y, w, h);
+                        }
+                    }
+                    else if ((this.game.mapmanager.hurt() && this.game.gameFrame % 2 == 1)) {
+                            ctx.drawImage(i.img[Math.max(0, i.hp - Math.floor(this.game.changetimes / 2))], x, y, w, h);
                     }
                 }
                 else {

@@ -31,8 +31,9 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/hitbox.png"
-				]
+					"../images/hitbox.png", "../images/player.png"
+				],
+				"hp":2
 			},
 			{
 				"hitbox": [
@@ -59,7 +60,7 @@ _jsonCallback({
 					20
 				],
 				"event": {
-					"type": "changemap",
+					"type": "kill",
 					"way": "negative",
 					"x": 100,
 					"y": 350,
