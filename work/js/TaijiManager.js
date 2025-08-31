@@ -10,26 +10,28 @@ class TaijiManager {
     // 初始化太极图元素和加载图片
     async init() {
         // 创建太极图DOM元素
-        this.element = document.createElement('div');
-        this.element.id = 'taiji';
-        this.element.style.position = 'fixed'; // 改为 fixed，相对于视口定位
-        this.element.style.pointerEvents = 'none'; // 不影响鼠标交互
-        this.element.style.opacity = '0';
-        this.element.style.zIndex = '1000'; // 确保在最上层显示
-        this.element.style.overflow = 'hidden'; // 防止内容溢出
+        this.element = document.createElement("div");
+        this.element.id = "taiji";
+        this.element.style.position = "fixed"; // 改为 fixed，相对于视口定位
+        this.element.style.pointerEvents = "none"; // 不影响鼠标交互
+        this.element.style.opacity = "0";
+        this.element.style.zIndex = "1000"; // 确保在最上层显示
+        this.element.style.overflow = "hidden"; // 防止内容溢出
         document.body.appendChild(this.element);
 
         // 加载太极图片
-        this.taijiImg = await this.game.datamanager.loadImg('../images/taiji.png'); // 替换为你的太极图路径
-        const imgElement = document.createElement('img');
+        this.taijiImg = await this.game.datamanager.loadImg(
+            "../images/taiji.png"
+        ); // 替换为你的太极图路径
+        const imgElement = document.createElement("img");
         imgElement.src = this.taijiImg.src;
-        imgElement.style.width = '100px'; // 调整大小
-        imgElement.style.height = '100px';
-        imgElement.style.display = 'block'; // 确保图片正确显示
+        imgElement.style.width = "100px"; // 调整大小
+        imgElement.style.height = "100px";
+        imgElement.style.display = "block"; // 确保图片正确显示
         this.element.appendChild(imgElement);
 
         // 添加动画样式
-        const style = document.createElement('style');
+        const style = document.createElement("style");
         style.textContent = `
             @keyframes taijiFadeOut {
                 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
@@ -57,7 +59,7 @@ class TaijiManager {
 
         const player = this.game.player;
         const canvas = this.game.view;
-        
+
         // 缓存画布位置和缩放信息，避免频繁重新计算
         if (!this._canvasRect || this.game.gameFrame % 30 === 0) {
             try {
@@ -65,7 +67,7 @@ class TaijiManager {
                 this._scaleX = this._canvasRect.width / canvas.width;
                 this._scaleY = this._canvasRect.height / canvas.height;
             } catch (error) {
-                console.warn('获取画布位置失败:', error);
+                console.warn("获取画布位置失败:", error);
                 return;
             }
         }
@@ -87,21 +89,27 @@ class TaijiManager {
         const viewportHeight = window.innerHeight;
 
         // 限制太极图位置在视口范围内
-        const clampedX = Math.max(halfTaijiSize, Math.min(viewportWidth - halfTaijiSize, targetX));
-        const clampedY = Math.max(halfTaijiSize, Math.min(viewportHeight - halfTaijiSize, targetY));
+        const clampedX = Math.max(
+            halfTaijiSize,
+            Math.min(viewportWidth - halfTaijiSize, targetX)
+        );
+        const clampedY = Math.max(
+            halfTaijiSize,
+            Math.min(viewportHeight - halfTaijiSize, targetY)
+        );
 
         // 设置太极图位置（居中于角色，但限制在视口内）
         try {
             this.element.style.left = `${clampedX}px`;
             this.element.style.top = `${clampedY}px`;
-            this.element.style.transform = 'translate(-50%, -50%)';
+            this.element.style.transform = "translate(-50%, -50%)";
 
             // 触发动画
-            this.element.classList.remove('animate');
+            this.element.classList.remove("animate");
             void this.element.offsetWidth; // 强制重绘
-            this.element.classList.add('animate');
+            this.element.classList.add("animate");
         } catch (error) {
-            console.warn('设置太极图位置失败:', error);
+            console.warn("设置太极图位置失败:", error);
         }
     }
 
@@ -111,8 +119,8 @@ class TaijiManager {
             this.element.parentNode.removeChild(this.element);
         }
         // 移除添加的样式
-        const style = document.querySelector('style');
-        if (style && style.textContent.includes('#taiji')) {
+        const style = document.querySelector("style");
+        if (style && style.textContent.includes("#taiji")) {
             style.remove();
         }
     }

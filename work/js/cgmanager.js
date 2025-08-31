@@ -1,7 +1,7 @@
 class CGManager {
     constructor(game) {
         this.game = game;
-        this.queue = [];        // CG 事件队列
+        this.queue = []; // CG 事件队列
         this.isPlaying = false; // 播放锁
         this.overlay = null;
         this.dialog = game.dialog;
@@ -30,7 +30,7 @@ class CGManager {
         document.addEventListener("click", this._clickHandler);
 
         while (this.queue.length > 0) {
-            console.log('cg event start');
+            console.log("cg event start");
             console.log(this.game.canmove);
             const event = this.queue.shift();
             this.images = event.images || [];
@@ -44,11 +44,11 @@ class CGManager {
                 img.src = this.images[i];
 
                 // 公共样式
-                Object.assign(img.style, { 
-                    maxWidth: "80%", 
-                    maxHeight: "80%", 
-                    objectFit: "contain", 
-                    transition: "opacity 0.5s"
+                Object.assign(img.style, {
+                    maxWidth: "80%",
+                    maxHeight: "80%",
+                    objectFit: "contain",
+                    transition: "opacity 0.5s",
                 });
 
                 // 第一张淡入，其余直接显示
@@ -59,33 +59,32 @@ class CGManager {
                     img.style.opacity = "1";
                 });
                 // 等待淡入完成
-                await new Promise(resolve => setTimeout(resolve, 500));
-
+                await new Promise((resolve) => setTimeout(resolve, 500));
 
                 if (this.texts[i] && !this.canceled) {
                     await this.dialog.prints(this.texts[i]);
-                    console.log('cg text done');
+                    console.log("cg text done");
                 }
 
                 if (!this.canceled) {
-                    await new Promise(resolve => {
+                    await new Promise((resolve) => {
                         this._resolveNext = resolve;
                     });
                     this._resolveNext = null;
                 }
             }
-            console.log('cg event end');
+            console.log("cg event end");
         }
 
         // ==== 图片淡出动画 ====
         if (this.overlay && this.overlay.firstChild) {
             const img = this.overlay.firstChild;
             img.style.opacity = "0"; // 开始淡出
-            await new Promise(resolve => setTimeout(resolve, 500)); // 等待 0.5 秒
+            await new Promise((resolve) => setTimeout(resolve, 500)); // 等待 0.5 秒
         }
 
         this.end();
-        console.log('cg end');
+        console.log("cg end");
         this.game.cg = false;
         this.game.canmove = true;
         this.isPlaying = false;
@@ -96,12 +95,15 @@ class CGManager {
             this.overlay = document.createElement("div");
             Object.assign(this.overlay.style, {
                 position: "fixed",
-                top: "0", left: "0", right: "0", bottom: "0",
+                top: "0",
+                left: "0",
+                right: "0",
+                bottom: "0",
                 background: "black",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                zIndex: "998"
+                zIndex: "998",
             });
             document.body.appendChild(this.overlay);
         }

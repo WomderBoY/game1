@@ -2,10 +2,10 @@ class Spritesheet {
     constructor(game, json, img) {
         this.game = game;
         this.scale = new Vector(0.1, 0.1);
-        this.frames = {};   // 新增映射
+        this.frames = {}; // 新增映射
         for (let obj of json.frames) {
             for (let key in obj) {
-                this.frames[key] = obj[key];  // key -> frame 对象
+                this.frames[key] = obj[key]; // key -> frame 对象
             }
         }
         this.animation = json.animation;
@@ -13,7 +13,7 @@ class Spritesheet {
     }
 
     draw(key, pos, inverted = false) {
-        let frame = this.frames[key];  // 使用映射访问
+        let frame = this.frames[key]; // 使用映射访问
         if (!frame) {
             console.warn(`找不到帧: ${key}`);
             return;
@@ -34,9 +34,29 @@ class Spritesheet {
         if (inverted) {
             ctx.translate(pos.x + playerWidth, pos.y);
             ctx.scale(-1, 1);
-            ctx.drawImage(this.img, x, y, w, h, 0, 0, playerWidth, playerHeight);
+            ctx.drawImage(
+                this.img,
+                x,
+                y,
+                w,
+                h,
+                0,
+                0,
+                playerWidth,
+                playerHeight
+            );
         } else {
-            ctx.drawImage(this.img, x, y, w, h, pos.x, pos.y, playerWidth, playerHeight);
+            ctx.drawImage(
+                this.img,
+                x,
+                y,
+                w,
+                h,
+                pos.x,
+                pos.y,
+                playerWidth,
+                playerHeight
+            );
         }
         ctx.restore();
     }

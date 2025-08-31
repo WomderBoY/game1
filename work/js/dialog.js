@@ -3,7 +3,7 @@ class dialog {
         this.buffer = [];
         this.canceled = false;
         this._cancel = null;
-        this.username = localStorage.getItem('yyj_username') || '';
+        this.username = localStorage.getItem("yyj_username") || "";
         this.game = game;
 
         this.createDialog();
@@ -11,7 +11,7 @@ class dialog {
 
     // 重新加载用户名（用于从localStorage更新）
     reloadUsername() {
-        this.username = localStorage.getItem('yyj_username') || '';
+        this.username = localStorage.getItem("yyj_username") || "";
     }
 
     createDialog() {
@@ -33,7 +33,7 @@ class dialog {
             fontFamily: "sans-serif",
             overflow: "hidden",
             display: "none",
-            zIndex: "999"
+            zIndex: "999",
         });
 
         // 名字容器
@@ -41,7 +41,7 @@ class dialog {
         Object.assign(this.name.style, {
             fontWeight: "bold",
             display: "block",
-            marginBottom: "5px"
+            marginBottom: "5px",
         });
 
         // 文本容器
@@ -52,7 +52,7 @@ class dialog {
         this.inputContainer = document.createElement("div");
         Object.assign(this.inputContainer.style, {
             marginTop: "10px",
-            display: "none"
+            display: "none",
         });
 
         this.inputField = document.createElement("input");
@@ -64,7 +64,7 @@ class dialog {
             background: "rgba(255,255,255,0.1)",
             color: "white",
             fontSize: "14px",
-            boxSizing: "border-box"
+            boxSizing: "border-box",
         });
         this.inputField.placeholder = "请输入...";
 
@@ -84,7 +84,7 @@ class dialog {
         for (let i = steps; i >= 0; i--) {
             const scale = i / steps; // 从 1 到 0
             this.dialog.style.transform = `translateX(-50%) scaleY(${scale})`;
-            await new Promise(r => setTimeout(r, interval));
+            await new Promise((r) => setTimeout(r, interval));
         }
         this.dialog.style.display = "none";
         this.dialog.style.transform = "translateX(-50%) scaleY(1)";
@@ -100,7 +100,6 @@ class dialog {
         await this.open();
         await this._prints();
         await this.close();
-
     }
 
     async _prints() {
@@ -112,7 +111,10 @@ class dialog {
                 // 如果已经有用户名，跳过输入提示和欢迎语
                 if (this.username) {
                     // 跳过下一行的欢迎语
-                    if (this.buffer.length > 0 && this.buffer[0].includes("你好：{用户名}")) {
+                    if (
+                        this.buffer.length > 0 &&
+                        this.buffer[0].includes("你好：{用户名}")
+                    ) {
                         this.buffer.shift();
                     }
                     continue;
@@ -138,52 +140,52 @@ class dialog {
                 text = text.slice(end + 1);
             }
 
-        this.text.innerHTML = "";
-        let chars = text.split("");
-        let skip = false;
-        this.game.soundmanager.playLoop('typing', 1, 1);
+            this.text.innerHTML = "";
+            let chars = text.split("");
+            let skip = false;
+            this.game.soundmanager.playLoop("typing", 1, 1);
 
-        // 逐字打印
-        for (let i = 0; i < chars.length; i++) {
-            if (this.canceled) {
-      //          this.game.soundmanager.fadeLoop('typing', 0.5);
-                return ;
+            // 逐字打印
+            for (let i = 0; i < chars.length; i++) {
+                if (this.canceled) {
+                    //          this.game.soundmanager.fadeLoop('typing', 0.5);
+                    return;
+                }
+
+                let span = document.createElement("span");
+                span.textContent = chars[i];
+                this.text.appendChild(span);
+
+                if (skip) continue; // 已按 Enter，直接显示剩余文字
+
+                // 等待 50ms 或 Enter
+                await new Promise((resolve) => {
+                    const timer = setTimeout(resolve, 50);
+                    const handler = (e) => {
+                        if (e.code === "Enter") {
+                            skip = true;
+                            clearTimeout(timer);
+                            document.removeEventListener("keydown", handler);
+                            resolve();
+                        }
+                    };
+                    document.addEventListener("keydown", handler);
+                });
             }
 
-            let span = document.createElement("span");
-            span.textContent = chars[i];
-            this.text.appendChild(span);
+            await this.game.soundmanager.fadeLoop("typing", 0.5);
 
-            if (skip) continue; // 已按 Enter，直接显示剩余文字
-
-            // 等待 50ms 或 Enter
-            await new Promise(resolve => {
-                const timer = setTimeout(resolve, 50);
-                const handler = e => {
+            // 段落显示完成，等待 Enter 再进入下一段
+            if (this.canceled) return;
+            await new Promise((resolve) => {
+                const handler = (e) => {
                     if (e.code === "Enter") {
-                        skip = true;
-                        clearTimeout(timer);
                         document.removeEventListener("keydown", handler);
                         resolve();
                     }
                 };
                 document.addEventListener("keydown", handler);
             });
-        }
-
-        await  this.game.soundmanager.fadeLoop('typing', 0.5);        
-
-        // 段落显示完成，等待 Enter 再进入下一段
-        if (this.canceled) return;
-        await new Promise(resolve => {
-            const handler = e => {
-                if (e.code === "Enter") {
-                    document.removeEventListener("keydown", handler);
-                    resolve();
-                }
-            };
-            document.addEventListener("keydown", handler);
-        });
 
             this.name.textContent = "";
             this.text.innerHTML = "";
@@ -198,12 +200,12 @@ class dialog {
         this.inputField.focus();
 
         // 等待用户输入并确认
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             const handleSubmit = () => {
                 const username = this.inputField.value.trim();
                 if (username) {
                     this.username = username;
-                    localStorage.setItem('yyj_username', username);
+                    localStorage.setItem("yyj_username", username);
                     this.inputContainer.style.display = "none";
                     this.inputField.value = "";
                     document.removeEventListener("keydown", handleKeydown);
@@ -221,10 +223,6 @@ class dialog {
             document.addEventListener("keydown", handleKeydown);
         });
     }
-
-
-
-
 
     cancel() {
         this.canceled = true;
