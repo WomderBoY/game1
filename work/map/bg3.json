@@ -142,12 +142,12 @@ _jsonCallback({
                     "type":"day",
                     "way":"tunnal",
                     "with":{
-                    "type":"dialog",
-                    "way":"negative",
-                    "text":["呼~，终于逃出来了吗…",
-                            "事不宜迟，赶紧继续前进吧。"
-                    ]
-                }
+                        "type":"dialog",
+                        "way":"negative",
+                        "text":["呼~，终于逃出来了吗…",
+                                "事不宜迟，赶紧继续前进吧。"
+                        ]
+                    }
                 },
                 "col":false
 

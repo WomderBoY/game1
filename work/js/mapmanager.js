@@ -64,6 +64,8 @@ class mapmanager {
             return;
         }
 
+        this.game.env = 'yang';
+
         // 设置初始透明度
         let opacity = 1;
 
