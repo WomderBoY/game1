@@ -36,7 +36,7 @@ class mapmanager {
             "../images/portal.png"
         );
     }
-    
+
     empty() {
         this.test = { yin: [], yang: [] };
         this.collidable = { yin: [], yang: [] };
@@ -55,6 +55,7 @@ class mapmanager {
     }
 
     async loadMap(src) {
+        this.game.canmove = false;
         console.log("开始加载地图:", src);
 
         // 如果是第一次加载地图，直接调用 loadNewMap
@@ -65,6 +66,7 @@ class mapmanager {
         }
 
         this.game.env = 'yang';
+        this.game.changetimes = 0;
 
         // 设置初始透明度
         let opacity = 1;
@@ -99,7 +101,8 @@ class mapmanager {
 
         // 等待 fadeOut 完成后再调用 loadNewMap
         fadeOut();
-        this.loadNewMap(src);
+        await this.loadNewMap(src);
+        this.game.canmove = true;
     }
 
     // 加载新地图
@@ -109,7 +112,6 @@ class mapmanager {
         // 重置玩家状态、清空地图和事件
         entitymanager.vx = 0;
         entitymanager.vy = 0;
-        this.game.changetimes = 0;
         this.game.hp.reset();
         this.empty();
 
@@ -307,39 +309,32 @@ class mapmanager {
                     console.error(`图片加载失败：${path}`);
                 }
             }
+        }
+        let tile;
+        if (i.fra) {
+            console.warn('fra');
+            tile = new Fratile(x, y, w, h, img); // 去掉 this.game
+        }
+        else if (i.move) {
+            console.warn('move');
+            const [xmn, xmx, ymn, ymx] = i.area;
+            tile = new Movetile(x, y, w, h, img, xmn, xmx, ymn, ymx, i.vx, i.vy);
+        }
+        else {
+            tile = new Tile(x, y, w, h, i.hp, img, i.event);
+        }
+        // 把 overlayImg 存进去
+        //调试图片是否加载出来
+        console.log("img paths:", i.img);
+        console.log("overlayImg paths:", i.overlayImg);
 
-            // 加载 overlayImg
-            let tile = new Tile(x, y, w, h, i.hp, img, i.event); // 去掉 this.game
-
-            // 把 overlayImg 存进去
-            //调试图片是否加载出来
-            console.log("img paths:", i.img);
-            console.log("overlayImg paths:", i.overlayImg);
-
-            if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 
-            if (i.col != false) this.collidable[type].push(tile);  //可以碰撞
-            this.test[type].push(tile);
-            if (i.event) {
-                //		console.log(i.event);
-                this.events[type].push(tile);
-            }
-            // for (let tile of this.game.mapmanager.events[type]) {
-            //     console.log(tile.event);
-        } else {
-            let tile = new Tile(x, y, w, h, i.hp, img, i.event); // 去掉 this.game
-
-            // 把 overlayImg 存进去
-            //调试图片是否加载出来
-            console.log("img paths:", i.img);
-            console.log("overlayImg paths:", i.overlayImg);
-
-            if (i.event && i.event.type === "kill") this.app[type].push(tile); //这是伤害的方块 不对这里
-            if (i.col != false) this.collidable[type].push(tile);
-            this.test[type].push(tile);
-            if (i.event) {
-                //		console.log(i.event);
-                this.events[type].push(tile);
-            }
+        if (i.event && i.event.type === "kill") this.app[type].push(tile); //这是伤害的方块 不对这里
+        if (i.col != false) this.collidable[type].push(tile);
+        //if (i.app) this.app.push(tile);
+        this.test[type].push(tile);
+        if (i.event) {
+            //		console.log(i.event);
+            this.events[type].push(tile);
         }
     }
 
@@ -371,74 +366,89 @@ class mapmanager {
 
             // 检查是否为实体碰撞区域（根据你的实际属性名调整，比如i.collision或i.solid）
             // 明确判断为true的情况
-            if (i.img.length == 0) { //没有图片的时候的画法
-                // 石板砖块效果
-                ctx.save(); // 保存当前绘图状态
-                // 1. 砖块底色
-                ctx.fillStyle = "#8B8B7A";
-                ctx.fillRect(x, y, w, h);
-                // 2. 砖块边框
-                ctx.strokeStyle = "#6D6D5A";
-                ctx.lineWidth = 3;
-                ctx.strokeRect(x, y, w, h);
-                // 3. 纹理线条
-                ctx.strokeStyle = "#7D7D6A";
-                ctx.lineWidth = 1;
-                const lineSpacing = 25;
-                // 横向纹理
-                for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-                    ctx.beginPath();
-                    ctx.moveTo(x + 2, ly);
-                    ctx.lineTo(x + w - 2, ly);
-                    ctx.stroke();
-                }
-                // 纵向纹理
-                for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-                    ctx.beginPath();
-                    ctx.moveTo(lx, y + 2);
-                    ctx.lineTo(lx, y + h - 2);
-                    ctx.stroke();
-                }
+            //		console.log('进入染色');
+            if (i instanceof Tile) {
+                if (i.img.length == 0) {
+                    // 石板砖块效果
+                    ctx.save(); // 保存当前绘图状态
 
-                // 4. 高光效果
-                ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-                ctx.fillRect(x, y, w, 2); // 顶部边缘
-                ctx.fillRect(x, y, 2, h); // 左侧边缘
+                    // 1. 砖块底色
+                    ctx.fillStyle = "#8B8B7A";
+                    ctx.fillRect(x, y, w, h);
 
-                ctx.restore(); // 恢复绘图状态
-            }
-            // 绘制贴纸/装饰图层（每个碰撞箱都使用同一张贴纸）
-            //现在就是只有用图片画出来的方块有hp效果
-            else {
-                if (i.hp) {
-                    console.log("draw image");
-                    if (!this.game.mapmanager.hurt()) {
-                        let o = i.hp - Math.floor(this.game.changetimes / 2);
-                        if (o > 0) {
-                            let k = o - 1;
-                            ctx.drawImage(i.img[k], x, y, w, h);
-                        }
-                    } else if (
-                        this.game.mapmanager.hurt() &&
-                        this.game.gameFrame % 2 == 1 &&
-                        this.game.changetimes / 2 <= i.hp
-                    ) {
-                        ctx.drawImage(
-                            i.img[
-                                Math.max(
-                                    0,
-                                    i.hp - Math.floor(this.game.changetimes / 2)
-                                )
-                            ],
-                            x,
-                            y,
-                            w,
-                            h
-                        );
+                    // 2. 砖块边框
+                    ctx.strokeStyle = "#6D6D5A";
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(x, y, w, h);
+
+                    // 3. 纹理线条
+                    ctx.strokeStyle = "#7D7D6A";
+                    ctx.lineWidth = 1;
+                    const lineSpacing = 25;
+
+                    // 横向纹理
+                    for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
+                        ctx.beginPath();
+                        ctx.moveTo(x + 2, ly);
+                        ctx.lineTo(x + w - 2, ly);
+                        ctx.stroke();
                     }
-                } else {
-                    ctx.drawImage(i.img[0], x, y, w, h);
+
+                    // 纵向纹理
+                    for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
+                        ctx.beginPath();
+                        ctx.moveTo(lx, y + 2);
+                        ctx.lineTo(lx, y + h - 2);
+                        ctx.stroke();
+                    }
+
+                    // 4. 高光效果
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+                    ctx.fillRect(x, y, w, 2); // 顶部边缘
+                    ctx.fillRect(x, y, 2, h); // 左侧边缘
+
+                    ctx.restore(); // 恢复绘图状态
                 }
+                // 绘制贴纸/装饰图层（每个碰撞箱都使用同一张贴纸）
+                else {
+                    if (i.hp) {
+ //                       console.log("draw image");
+                        if (this.game.changetimes == 0 || !this.game.mapmanager.hurt()) {
+                            let o = i.hp - Math.floor(this.game.changetimes / 2);
+                            if (o > 0) {
+                                let k = o - 1;
+                                ctx.drawImage(i.img[k], x, y, w, h);
+                            }
+                        } else if (
+                            this.game.mapmanager.hurt() &&
+                            this.game.gameFrame % 2 == 1 &&
+                            this.game.changetimes / 2 <= i.hp
+                        ) {
+                            console.warn(i.hp, i.hp - Math.floor(this.game.changetimes / 2));
+                            ctx.drawImage(
+                                i.img[
+                                    Math.max(
+                                        0,
+                                        i.hp - Math.floor(this.game.changetimes / 2)
+                                    )
+                                ],
+                                x,
+                                y,
+                                w,
+                                h
+                            );
+                        }
+                    } else {
+                        ctx.drawImage(i.img[0], x, y, w, h);
+                    }
+                }
+            }
+            else if (i instanceof Fratile) {
+                i.draw(this.game);
+            }
+            else if (i instanceof Movetile) {
+ //               i.update();
+                i.draw(this.game);
             }
         }
         // 非碰撞区域不绘制石板效果，保持原样

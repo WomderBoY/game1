@@ -75,6 +75,8 @@ class BaguaManager {
             if (b.checkInteract(player) && this.game.inputmanager.takeEnter()) {
                 // 切换 game.env（假设只有 'yin'/'yang' 两种）
                 this.game.env = this.game.env == "yin" ? "yang" : "yin";
+                this.game.mapmanager.sethurt();
+                this.game.changetimes++;
             }
         }
     }

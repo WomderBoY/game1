@@ -1,6 +1,8 @@
 class entitymanager {
     static vx = 0;
     static vy = 0;
+    static vxx = 0;
+    static vyy = 0;
     static jump = -12;
     static yingjump = -5;
     static gravity = 0.5;
@@ -149,7 +151,102 @@ class entitymanager {
         let og = entitymanager.onground;
         let isjp = entitymanager.isjp;
         let lstjp = entitymanager.lstjp;
+        let vxx = entitymanager.vxx;
+        let vyy = entitymanager.vyy;
+        entitymanager.vxx = 0;
+        entitymanager.vyy = 0;
 
+        for (let p of ga.mapmanager.collidable[this.game.env]) {
+            //            console.warn("check col", p);
+            if (p.alive(this.game) == false) {
+                console.warn("pass it");
+                continue;
+            }
+            
+            if (p instanceof Movetile) {
+                p.update(this.game)
+            }
+            
+            if (ga.player.containsRect(p)) {
+                let prevX = ga.player.position.x - vx - vxx;
+                let prevY = ga.player.position.y - vy - vyy;
+                console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
+
+                if (p instanceof Movetile) {
+                    prevX += p.vx;
+                    prevY += p.vy;
+                }                
+
+                // 上方碰撞
+                if (prevY + ga.player.size.y <= p.y) {
+                    
+        //            console.warn("up col!!!");
+                    ga.player.position.y = p.y - ga.player.size.y;
+                    vy = 0;
+                    og = true;
+                    isjp = false;
+                    if (p instanceof Movetile) {
+                        entitymanager.vxx = p.vx;
+                        entitymanager.vyy = p.vy;
+                    }
+                }
+                // 下方碰撞
+                else if (prevY >= p.y + p.h) {
+                    
+        //            console.warn("down col!!!");
+                    ga.player.position.y = p.y + p.h;
+                    vy = 0;
+                }
+                // 左侧碰撞
+                else if (prevX + ga.player.size.x <= p.x) {
+                    ga.player.position.x = p.x - ga.player.size.x - 0.5;
+                    vx = 0;
+        //            console.warn("left col!!!");
+                    if (p instanceof Movetile) {
+                        entitymanager.vxx = p.vx;
+                    }
+                }
+                // 右侧碰撞
+                else if (prevX >= p.x + p.w) {
+        //            console.warn("right col!!!");
+                    ga.player.position.x = p.x + p.w + 0.5;
+                    vx = 0;
+                    if (p instanceof Movetile) {
+                        entitymanager.vxx = p.vx;
+                    }
+                }
+                if (p instanceof Fratile)
+                {
+                    console.warn('get', p);
+                    p.update(this.game);
+                }
+            }
+        }
+
+        if (this.game.cg == false) this.drawPlayer();
+
+        ga.player.position.x += vx + vxx;
+
+        // 垂直移动
+        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 5))) {
+            if (og) vy = jp;
+            else
+                vy = -Math.sqrt(
+                    jp * jp +
+                        gravity *
+                            gravity *
+                            (ga.gameFrame - lstjp) *
+                            (ga.gameFrame - lstjp)
+                ); // 控制跳跃高度
+            og = false;
+            isjp = true;
+            lstjp = ga.gameFrame;
+        }
+
+        vy += gravity;
+        ga.player.position.y += vy + vyy;
+
+        
         // 水平移动
         if (ky.left) {
             if (vx < 0) vx -= a;
@@ -172,27 +269,6 @@ class entitymanager {
         if (vx > maxSpeed) vx = maxSpeed;
         if (vx < -maxSpeed) vx = -maxSpeed;
 
-        ga.player.position.x += vx;
-
-        // 垂直移动
-        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 5))) {
-            if (og) vy = jp;
-            else
-                vy = -Math.sqrt(
-                    jp * jp +
-                        gravity *
-                            gravity *
-                            (ga.gameFrame - lstjp) *
-                            (ga.gameFrame - lstjp)
-                ); // 控制跳跃高度
-            og = false;
-            isjp = true;
-            lstjp = ga.gameFrame;
-        }
-
-        vy += gravity;
-        ga.player.position.y += vy;
-
         if (this.keys.up && entitymanager.onground == false) {
             machine.current = "jump";
         } else if (this.keys.left || this.keys.right) {
@@ -204,40 +280,7 @@ class entitymanager {
         //   console.log(ga.player.position.y, ga.player.position.y);
 
         // 平台移动 & 碰撞逻辑
-        for (let p of ga.mapmanager.collidable[this.game.env]) {
-            //            console.warn("check col", p);
-            if (p.alive(this.game) == false) {
-                console.warn("pass it");
-                continue;
-            }
-            if (ga.player.containsRect(p)) {
-                const prevX = ga.player.position.x - vx;
-                const prevY = ga.player.position.y - vy;
-
-                // 上方碰撞
-                if (prevY + ga.player.size.y <= p.y) {
-                    ga.player.position.y = p.y - ga.player.size.y;
-                    vy = 0;
-                    og = true;
-                    isjp = false;
-                }
-                // 下方碰撞
-                else if (prevY >= p.y + p.h) {
-                    ga.player.position.y = p.y + p.h;
-                    vy = 0;
-                }
-                // 左侧碰撞
-                else if (prevX + ga.player.size.x <= p.x) {
-                    ga.player.position.x = p.x - ga.player.size.x;
-                    vx = 0;
-                }
-                // 右侧碰撞
-                else if (prevX >= p.x + p.w) {
-                    ga.player.position.x = p.x + p.w;
-                    vx = 0;
-                }
-            }
-        }
+        
 
         // 边界限制
         if (ga.player.position.x < 0) ga.player.position.x = 0;
