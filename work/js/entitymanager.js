@@ -7,6 +7,7 @@ class entitymanager {
     static yingjump = -5;
     static gravity = 0.5;
     static maxSpeed = 5;
+    static maxspeedy = -15;
     static friction = 0.75;
     static a = 0.8;
     static yinga = 1.5;
@@ -156,6 +157,10 @@ class entitymanager {
         entitymanager.vxx = 0;
         entitymanager.vyy = 0;
         let fl = false;
+        for (let p of ga.mapmanager.collidable[this.game.env])
+            if (p instanceof Movetile) {
+                p.update(this.game)
+            }
         for (let p of ga.mapmanager.tram) {
             let prevX = ga.player.position.x - vx - vxx;
             let prevY = ga.player.position.y - vy - vyy;
@@ -178,13 +183,10 @@ class entitymanager {
                     continue;
                 }
                 
-                if (p instanceof Movetile) {
-                    p.update(this.game)
-                }
                 let prevX = ga.player.position.x - vx - vxx;
                 let prevY = ga.player.position.y - vy - vyy;
                 if (ga.player.containsRect(p)) {
-                    console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
+   //                 console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
 
                     if (p instanceof Movetile) {
                         prevX += p.vx;
@@ -242,20 +244,18 @@ class entitymanager {
 
         ga.player.position.x += vx + vxx;
 
+        if (vy != 0) og = false;
+        else lstjp = ga.gameFrame;
+
         // 垂直移动
-        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 5))) {
-            if (og) vy = jp;
+        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 15))) {
+            if (vy >= 0) vy += gravity * (ga.gameFrame - lstjp); // 控制跳跃高度
+            if (og) vy += jp;
             else
-                vy = -Math.sqrt(
-                    jp * jp +
-                        gravity *
-                            gravity *
-                            (ga.gameFrame - lstjp) *
-                            (ga.gameFrame - lstjp)
-                ); // 控制跳跃高度
+                vy = - Math.sqrt(jp * jp + vy * vy);
             og = false;
             isjp = true;
-            lstjp = ga.gameFrame;
+    //        if (vy < entitymanager.maxspeedy) vy = entitymanager.maxspeedy;
         }
 
         vy += gravity;

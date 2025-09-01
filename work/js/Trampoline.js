@@ -9,7 +9,7 @@ class Trampoline extends Rect {
         if (prevY + ga.player.size.y <= this.y) {
             //            console.warn("up col!!!");
             ga.player.position.y = this.y - ga.player.size.y;
-            entitymanager.vy = vy * (-0.9);
+            entitymanager.vy = vy * (-0.8);
             if (Math.abs(entitymanager.vy) <= 1) {
                 entitymanager.vy = 0;
                 entitymanager.onground = true;
@@ -26,20 +26,20 @@ class Trampoline extends Rect {
         else if (prevY >= this.y + this.h) {
             //            console.warn("down col!!!");
             ga.player.position.y = this.y + this.h;
-            entitymanager.vy = vy * (-0.9);
+            entitymanager.vy = vy * (-0.8);
             entitymanager.onground = false;
             entitymanager.isjp = true;
         }
         // 左侧碰撞
         else if (prevX + ga.player.size.x <= this.x) {
             ga.player.position.x = this.x - ga.player.size.x - 0.5;
-            entitymanager.vx = vx * (-0.9);
+            entitymanager.vx = vx * (-0.8);
         }
         // 右侧碰撞
         else if (prevX >= this.x + this.w) {
             //            console.warn("right col!!!");
             ga.player.position.x = this.x + this.w + 0.5;
-            entitymanager.vx = vx * (-0.9);
+            entitymanager.vx = vx * (-0.8);
         }
     }
 

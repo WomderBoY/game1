@@ -62,20 +62,23 @@ _jsonCallback({
 					20
 				],
 				"event": {
-					"type": "cg",
+					"type": "changemap",
+					"target":"../map/bg-map4.json",
 					"way": "negative",
-					"images": [
-						"../images/black-right2-0.png",
-						"../images/white.png"
-					],
-					"text": [
-						[
-								"这是传送门"
-							],
+					"with":{
+						"images": [
+							"../images/black-right2-0.png",
+							"../images/white.png"
+						],
+						"text": [
 							[
-								"将你传送到下一关"
-							]
-					],
+									"这是传送门"
+								],
+								[
+									"将你传送到下一关"
+								]
+						],
+					}
 				},
 				"col": false
 			},

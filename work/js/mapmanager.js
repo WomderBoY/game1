@@ -14,9 +14,9 @@ class Tile extends Rect {
     alive(game) {
         if (!this.hp) return true;
         //        console.warn('hp', this.hp, game.changetimes, game.mapmanager.hurt());
-        if (game.changetimes / 2 == this.hp && game.mapmanager.hurt())
+        if (Math.floor(game.changetimes / 2) == this.hp && game.mapmanager.hurt())
             return true;
-        if (game.changetimes / 2 < this.hp) return true;
+        if (Math.floor(game.changetimes / 2) < this.hp) return true;
         //        console.warn('damaged!!!');
         return false;
     }
@@ -191,9 +191,11 @@ class mapmanager {
         for (let i of data.yin.tileMap) {
             await this.addTile("yin", i);
         }
+        console.warn('jiazaiwancheng');
         for (let i of data.yang.tileMap) {
             await this.addTile("yang", i);
         }
+
 
         // 加载背景图
         if (data.yang.background) {
@@ -309,6 +311,7 @@ class mapmanager {
         let img = [];
         if (i.img) {
             for (let path of i.img) {
+                console.warn(path);
                 let loadedImage = await this.game.datamanager.loadImg(path);
                 if (loadedImage instanceof Image) {
                     img.push(loadedImage);
@@ -368,7 +371,7 @@ class mapmanager {
 
         //绘制tram
         for (let i of this.tram) {
-            console.warn("start draw tram", i);
+  //          console.warn("start draw tram", i);
             i.draw(this.game);
         }
 
@@ -425,7 +428,7 @@ class mapmanager {
                 // 绘制贴纸/装饰图层（每个碰撞箱都使用同一张贴纸）
                 else {
                     if (i.hp) {
- //                       console.log("draw image");
+    //                    console.warn("draw image", this.game.changetimes, this.game.mapmanager.hurt());
                         if (this.game.changetimes == 0 || !this.game.mapmanager.hurt()) {
                             let o = i.hp - Math.floor(this.game.changetimes / 2);
                             if (o > 0) {
@@ -435,7 +438,7 @@ class mapmanager {
                         } else if (
                             this.game.mapmanager.hurt() &&
                             this.game.gameFrame % 2 == 1 &&
-                            this.game.changetimes / 2 <= i.hp
+                            Math.floor(this.game.changetimes / 2) <= i.hp
                         ) {
                             console.warn(i.hp, i.hp - Math.floor(this.game.changetimes / 2));
                             ctx.drawImage(
