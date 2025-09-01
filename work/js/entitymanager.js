@@ -153,9 +153,75 @@ class entitymanager {
         let lstjp = entitymanager.lstjp;
         let vxx = entitymanager.vxx;
         let vyy = entitymanager.vyy;
-
         entitymanager.vxx = 0;
         entitymanager.vyy = 0;
+
+        for (let p of ga.mapmanager.collidable[this.game.env]) {
+            //            console.warn("check col", p);
+            if (p.alive(this.game) == false) {
+                console.warn("pass it");
+                continue;
+            }
+            
+            if (p instanceof Movetile) {
+                p.update(this.game)
+            }
+            
+            if (ga.player.containsRect(p)) {
+    //            console.warn("col!!!");
+                let prevX = ga.player.position.x - vx - vxx;
+                let prevY = ga.player.position.y - vy - vyy;
+
+                if (p instanceof Movetile) {
+                    prevX += p.vx;
+                    prevY += p.vy;
+                }                
+
+                // 上方碰撞
+                if (prevY + ga.player.size.y <= p.y) {
+                    
+        //            console.warn("up col!!!");
+                    ga.player.position.y = p.y - ga.player.size.y;
+                    vy = 0;
+                    og = true;
+                        isjp = false;
+                    if (p instanceof Movetile) {
+                        entitymanager.vxx = p.vx;
+                        entitymanager.vyy = p.vy;
+                    }
+                }
+                // 下方碰撞
+                else if (prevY >= p.y + p.h) {
+                    
+        //            console.warn("down col!!!");
+                    ga.player.position.y = p.y + p.h;
+                    vy = 0;
+                }
+                // 左侧碰撞
+                else if (prevX + ga.player.size.x <= p.x) {
+                    ga.player.position.x = p.x - ga.player.size.x;
+                    vx = 0;
+        //            console.warn("left col!!!");
+                    if (p instanceof Movetile) {
+                        entitymanager.vxx = p.vx;
+                    }
+                }
+                // 右侧碰撞
+                else if (prevX >= p.x + p.w) {
+        //            console.warn("right col!!!");
+                    ga.player.position.x = p.x + p.w;
+                    vx = 0;
+                    if (p instanceof Movetile) {
+                        entitymanager.vxx = p.vx;
+                    }
+                }
+                if (p instanceof Fratile)
+                {
+                    console.warn('get', p);
+                    p.update(this.game);
+                }
+            }
+        }
 
         ga.player.position.x += vx + vxx;
 
@@ -212,72 +278,7 @@ class entitymanager {
         //   console.log(ga.player.position.y, ga.player.position.y);
 
         // 平台移动 & 碰撞逻辑
-        for (let p of ga.mapmanager.collidable[this.game.env]) {
-            //            console.warn("check col", p);
-            if (p.alive(this.game) == false) {
-                console.warn("pass it");
-                continue;
-            }
-            
-            if (p instanceof Movetile) {
-                p.update(this.game)
-            }
-            
-            if (ga.player.containsRect(p)) {
-    //            console.warn("col!!!");
-                let prevX = ga.player.position.x - vx;
-                let prevY = ga.player.position.y - vy;
-
-                if (p instanceof Movetile) {
-                    prevX += p.vx;
-                    prevY += p.vy;
-                }                
-
-                // 上方碰撞
-                if (prevY + ga.player.size.y <= p.y) {
-                    
-        //            console.warn("up col!!!");
-                    ga.player.position.y = p.y - ga.player.size.y;
-                    vy = 0;
-                    og = true;
-                        isjp = false;
-                    if (p instanceof Movetile) {
-                        entitymanager.vxx = p.vx;
-                        entitymanager.vyy = p.vy;
-                    }
-                }
-                // 下方碰撞
-                else if (prevY >= p.y + p.h) {
-                    
-        //            console.warn("down col!!!");
-                    ga.player.position.y = p.y + p.h;
-                    vy = 0;
-                }
-                // 左侧碰撞
-                else if (prevX + ga.player.size.x <= p.x) {
-                    ga.player.position.x = p.x - ga.player.size.x;
-                    vx = 0;
-        //            console.warn("left col!!!");
-                    if (p instanceof Movetile) {
-                        vx = p.vx;
-                    }
-                }
-                // 右侧碰撞
-                else if (prevX >= p.x + p.w) {
-        //            console.warn("right col!!!");
-                    ga.player.position.x = p.x + p.w;
-                    vx = 0;
-                    if (p instanceof Movetile) {
-                        vx = p.vx;
-                    }
-                }
-                if (p instanceof Fratile)
-                {
-                    console.warn('get', p);
-                    p.update(this.game);
-                }
-            }
-        }
+        
 
         // 边界限制
         if (ga.player.position.x < 0) ga.player.position.x = 0;
