@@ -44,6 +44,7 @@ class mapmanager {
         this.app = { yin: [], yang: [] };
         this.room = "";
         this.background = { yin: [], yang: [] };
+        this.tram = [];
     }
 
     sethurt() {
@@ -147,6 +148,12 @@ class mapmanager {
 
         // 保存当前的地图状态
         await this.game.savemanager.save(src);
+        if (data.Tram) {
+            for (let i of data.Tram) {
+                let [x, y, w, h] = i.hitbox;
+                this.tram.push(new Trampoline(x, y, w, h));
+            }
+        }
         this.room = src;
 
         console.warn("loadmap", data);
@@ -357,6 +364,12 @@ class mapmanager {
                 this.game.width,
                 this.game.height
             );
+        }
+
+        //绘制tram
+        for (let i of this.tram) {
+            console.warn("start draw tram", i);
+            i.draw(this.game);
         }
 
         // 遍历所有元素

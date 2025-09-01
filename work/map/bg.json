@@ -1,5 +1,10 @@
 _jsonCallback({
 	"born":[0, 0],
+	"Tram":[
+		{
+			"hitbox":[760, 650, 30, 30],
+		}
+	],
 	"with":[
 		{
 					"type": "cg",

@@ -155,70 +155,85 @@ class entitymanager {
         let vyy = entitymanager.vyy;
         entitymanager.vxx = 0;
         entitymanager.vyy = 0;
-
-        for (let p of ga.mapmanager.collidable[this.game.env]) {
-            //            console.warn("check col", p);
-            if (p.alive(this.game) == false) {
-                console.warn("pass it");
-                continue;
+        let fl = false;
+        for (let p of ga.mapmanager.tram) {
+            let prevX = ga.player.position.x - vx - vxx;
+            let prevY = ga.player.position.y - vy - vyy;
+            if (ga.player.containsRect(p) && this.game.env != (this.game.yingyang ? 'yang' : 'yin')) {
+                p.update(prevX, prevY, vx, vy, ga);
+                vx = entitymanager.vx;
+                vy = entitymanager.vy;
+                og = entitymanager.onground;
+                isjp = entitymanager.isjp;
+                lstjp = entitymanager.lstjp;
+                fl = true;
+                break;
             }
-            
-            if (p instanceof Movetile) {
-                p.update(this.game)
-            }
-            
-            if (ga.player.containsRect(p)) {
+        }
+        if (!fl) {
+            for (let p of ga.mapmanager.collidable[this.game.env]) {
+                //            console.warn("check col", p);
+                if (p.alive(this.game) == false) {
+                    console.warn("pass it");
+                    continue;
+                }
+                
+                if (p instanceof Movetile) {
+                    p.update(this.game)
+                }
                 let prevX = ga.player.position.x - vx - vxx;
                 let prevY = ga.player.position.y - vy - vyy;
-                console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
+                if (ga.player.containsRect(p)) {
+                    console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
 
-                if (p instanceof Movetile) {
-                    prevX += p.vx;
-                    prevY += p.vy;
-                }                
+                    if (p instanceof Movetile) {
+                        prevX += p.vx;
+                        prevY += p.vy;
+                    }                
 
-                // 上方碰撞
-                if (prevY + ga.player.size.y <= p.y) {
-                    
-        //            console.warn("up col!!!");
-                    ga.player.position.y = p.y - ga.player.size.y;
-                    vy = 0;
-                    og = true;
-                    isjp = false;
-                    if (p instanceof Movetile) {
-                        entitymanager.vxx = p.vx;
-                        entitymanager.vyy = p.vy;
+                    // 上方碰撞
+                    if (prevY + ga.player.size.y <= p.y) {
+                        
+            //            console.warn("up col!!!");
+                        ga.player.position.y = p.y - ga.player.size.y;
+                        vy = 0;
+                        og = true;
+                        isjp = false;
+                        if (p instanceof Movetile) {
+                            entitymanager.vxx = p.vx;
+                            entitymanager.vyy = p.vy;
+                        }
                     }
-                }
-                // 下方碰撞
-                else if (prevY >= p.y + p.h) {
-                    
-        //            console.warn("down col!!!");
-                    ga.player.position.y = p.y + p.h;
-                    vy = 0;
-                }
-                // 左侧碰撞
-                else if (prevX + ga.player.size.x <= p.x) {
-                    ga.player.position.x = p.x - ga.player.size.x - 0.5;
-                    vx = 0;
-        //            console.warn("left col!!!");
-                    if (p instanceof Movetile) {
-                        entitymanager.vxx = p.vx;
+                    // 下方碰撞
+                    else if (prevY >= p.y + p.h) {
+                        
+            //            console.warn("down col!!!");
+                        ga.player.position.y = p.y + p.h;
+                        vy = 0;
                     }
-                }
-                // 右侧碰撞
-                else if (prevX >= p.x + p.w) {
-        //            console.warn("right col!!!");
-                    ga.player.position.x = p.x + p.w + 0.5;
-                    vx = 0;
-                    if (p instanceof Movetile) {
-                        entitymanager.vxx = p.vx;
+                    // 左侧碰撞
+                    else if (prevX + ga.player.size.x <= p.x) {
+                        ga.player.position.x = p.x - ga.player.size.x - 0.5;
+                        vx = 0;
+            //            console.warn("left col!!!");
+                        if (p instanceof Movetile) {
+                            entitymanager.vxx = p.vx;
+                        }
                     }
-                }
-                if (p instanceof Fratile)
-                {
-                    console.warn('get', p);
-                    p.update(this.game);
+                    // 右侧碰撞
+                    else if (prevX >= p.x + p.w) {
+            //            console.warn("right col!!!");
+                        ga.player.position.x = p.x + p.w + 0.5;
+                        vx = 0;
+                        if (p instanceof Movetile) {
+                            entitymanager.vxx = p.vx;
+                        }
+                    }
+                    if (p instanceof Fratile)
+                    {
+                        console.warn('get', p);
+                        p.update(this.game);
+                    }
                 }
             }
         }
