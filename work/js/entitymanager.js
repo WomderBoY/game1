@@ -168,9 +168,9 @@ class entitymanager {
             }
             
             if (ga.player.containsRect(p)) {
-    //            console.warn("col!!!");
                 let prevX = ga.player.position.x - vx - vxx;
                 let prevY = ga.player.position.y - vy - vyy;
+                console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
 
                 if (p instanceof Movetile) {
                     prevX += p.vx;
@@ -184,7 +184,7 @@ class entitymanager {
                     ga.player.position.y = p.y - ga.player.size.y;
                     vy = 0;
                     og = true;
-                        isjp = false;
+                    isjp = false;
                     if (p instanceof Movetile) {
                         entitymanager.vxx = p.vx;
                         entitymanager.vyy = p.vy;
@@ -199,7 +199,7 @@ class entitymanager {
                 }
                 // 左侧碰撞
                 else if (prevX + ga.player.size.x <= p.x) {
-                    ga.player.position.x = p.x - ga.player.size.x;
+                    ga.player.position.x = p.x - ga.player.size.x - 0.5;
                     vx = 0;
         //            console.warn("left col!!!");
                     if (p instanceof Movetile) {
@@ -209,7 +209,7 @@ class entitymanager {
                 // 右侧碰撞
                 else if (prevX >= p.x + p.w) {
         //            console.warn("right col!!!");
-                    ga.player.position.x = p.x + p.w;
+                    ga.player.position.x = p.x + p.w + 0.5;
                     vx = 0;
                     if (p instanceof Movetile) {
                         entitymanager.vxx = p.vx;
