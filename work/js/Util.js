@@ -98,6 +98,13 @@ class Rect extends Shape {
         super(v[0]);
         this.size = v[1].x === null ? null : v[1];
     }
+    setpos(x, y) {
+        this.x = x;
+        this.y = y;
+        // 同时更新父类 Shape 的 position 属性，确保碰撞检测使用正确位置
+        this.position.x = x;
+        this.position.y = y;
+    }
     getVertex(dir) {
         let pos = this.position;
         let size = this.size;
@@ -124,14 +131,26 @@ class Rect extends Shape {
     }
     containsRect(rect) {
         if (this.size === null || rect.size === null) return false;
-        let vert = this.getVertex(Shape.DIR.RB);
-        let vert2 = rect.getVertex(Shape.DIR.RB);
-        return (
-            vert[0].x > vert2[1].x &&
-            vert2[0].x > vert[1].x &&
-            vert[0].y < vert2[1].y &&
-            vert2[0].y < vert[1].y
-        );
+        
+        // 检查两个矩形是否相交
+        // 使用 AABB (Axis-Aligned Bounding Box) 碰撞检测
+        const thisLeft = this.position.x;
+        const thisRight = this.position.x + this.size.x;
+        const thisTop = this.position.y;
+        const thisBottom = this.position.y + this.size.y;
+        
+        const rectLeft = rect.position.x;
+        const rectRight = rect.position.x + rect.size.x;
+        const rectTop = rect.position.y;
+        const rectBottom = rect.position.y + rect.size.y;
+        
+        // 如果两个矩形不相交，返回 false
+        if (thisRight <= rectLeft || thisLeft >= rectRight || 
+            thisBottom <= rectTop || thisTop >= rectBottom) {
+            return false;
+        }
+        
+        return true;
     }
 }
 

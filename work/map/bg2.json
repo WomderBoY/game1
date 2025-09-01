@@ -92,7 +92,25 @@ _jsonCallback({
 					10
 				],
 				//	"hp":1,
+				"fra":true,
 				"col": true,
+				"img": [
+					"../images/test1.png"
+				]
+			},
+			{
+				"hitbox": [
+					500,
+					700,
+					80,
+					10
+				],
+				//	"hp":1,
+				"move":true,
+				"area":[500, 1000, -1, -1],
+				"vx":1,
+				"vy":0,
+				"col":true,
 				"img": [
 					"../images/test1.png"
 				]
