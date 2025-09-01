@@ -99,6 +99,11 @@ class eventmanager {
         }
         if (e.type === "day") {
             this.game.nightmanager.deactivateNight();
+            if (e.with) {
+                this.game.canmove = false;
+                await this.game.dialog.prints(e.with.text);
+                this.game.canmove = true;
+            }
         }
 
         if (e.type === "kill") {
