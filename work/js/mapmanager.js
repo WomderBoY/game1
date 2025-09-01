@@ -253,9 +253,8 @@ class mapmanager {
             console.log('img paths:', i.img);
             console.log('overlayImg paths:', i.overlayImg);
 
-            if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 不对这里
-            if (i.col != false) this.collidable[type].push(tile);
-            //if (i.app) this.app.push(tile);
+            if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 
+            if (i.col != false) this.collidable[type].push(tile);  //可以碰撞
             this.test[type].push(tile);
             if (i.event) {
                 //		console.log(i.event);
@@ -273,7 +272,6 @@ class mapmanager {
 
             if (i.event && i.event.type === 'kill') this.app[type].push(tile);     //这是伤害的方块 不对这里
             if (i.col != false) this.collidable[type].push(tile);
-            //if (i.app) this.app.push(tile);
             this.test[type].push(tile);
             if (i.event) {
                 //		console.log(i.event);
@@ -305,25 +303,20 @@ class mapmanager {
 
             // 检查是否为实体碰撞区域（根据你的实际属性名调整，比如i.collision或i.solid）
             // 明确判断为true的情况
-            //		console.log('进入染色');
-            if (i.img.length == 0) {
+            if (i.img.length == 0) { //没有图片的时候的画法
                 // 石板砖块效果
                 ctx.save(); // 保存当前绘图状态
-
                 // 1. 砖块底色
                 ctx.fillStyle = "#8B8B7A";
                 ctx.fillRect(x, y, w, h);
-
                 // 2. 砖块边框
                 ctx.strokeStyle = "#6D6D5A";
                 ctx.lineWidth = 3;
                 ctx.strokeRect(x, y, w, h);
-
                 // 3. 纹理线条
                 ctx.strokeStyle = "#7D7D6A";
                 ctx.lineWidth = 1;
                 const lineSpacing = 25;
-
                 // 横向纹理
                 for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
                     ctx.beginPath();
@@ -331,7 +324,6 @@ class mapmanager {
                     ctx.lineTo(x + w - 2, ly);
                     ctx.stroke();
                 }
-
                 // 纵向纹理
                 for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
                     ctx.beginPath();
@@ -348,6 +340,7 @@ class mapmanager {
                 ctx.restore(); // 恢复绘图状态
             }
             // 绘制贴纸/装饰图层（每个碰撞箱都使用同一张贴纸）
+            //现在就是只有用图片画出来的方块有hp效果
             else {
                 if (i.hp) {
                     console.log('draw image');
@@ -370,7 +363,7 @@ class mapmanager {
         // console.log('Collidable object:', i);//调试代码
 
 
-        // 遍历所有元素
+        // 遍历所有元素，这里其实只花了那个app类型的
         for (let i of this.app[type]) {
             const ctx = this.game.ctx;
             const { x, y, w, h } = i;

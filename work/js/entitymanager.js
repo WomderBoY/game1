@@ -47,7 +47,7 @@ class entitymanager {
             return ;
         }
   //      console.log(entitymanager.onground);
-        let ky = this.keys, ps = entitymanager.pre;
+        let ky = this.keys, ps = entitymanager.pre; //案件状态和运动状态
         if (this.game.status !== 'running') return;
         if (this.game.canmove == false) return;
         if (ky.up && entitymanager.onground) {
@@ -319,7 +319,7 @@ class entitymanager {
             machine.currentFrame = 0;
         }
 
-		if(machine.timer>10){
+		if(machine.timer>10){ //这里实现了精灵表的动画
 			let animation;
             if (this.game.yingyang) animation=machine.spritesheet1.animation[machine.current];
 			else animation=machine.spritesheet0.animation[machine.current];
@@ -330,9 +330,10 @@ class entitymanager {
             }
             machine.timer -= 10;
 		}
+
 		++machine.timer;
         this.lt = machine.current;
-        let now = Date.now();
+        let now = Date.now(); //这是一个关键字，获取事件
     //    console.log(now, entitymanager.safeUntil);
         if (now > entitymanager.safeUntil) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
         else if (this.game.gameFrame % 2 == 1) machine.draw(this.game.player.position, entitymanager.fw == -1, this.game.yingyang);
@@ -351,8 +352,8 @@ class entitymanager {
         this.game.player.position.x + this.game.player.size.x, // 右上角
         this.game.player.position.y - 10,                     // 悬浮在头顶
         32, 32
-    );
-}
+        );
+        }
 
     }
 
