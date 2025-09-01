@@ -339,14 +339,14 @@ class game {
                     }
                 }
                 await this.enemymanager.update();
-                await this.entitymanager.update();
-                this.entitymanager.checkCollision();
-                await this.entitymanager.chcevent();
-                this.mapmanager.drawPortals();
-                this.baguamanager.draw(this.ctx);
-                this.baguamanager.update(this.player);
-                if (this.cg == false) this.entitymanager.drawPlayer();
+                await this.mapmanager.drawPortals();
+                await this.baguamanager.draw(this.ctx);
+                await this.baguamanager.update(this.player);
                 if (this.cg == false) this.enemymanager.draw(this.ctx);
+                await this.entitymanager.update();
+                await this.entitymanager.checkCollision();
+                await this.entitymanager.chcevent();
+//                if (this.cg == false) this.entitymanager.drawPlayer();
                 this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
@@ -366,10 +366,10 @@ class game {
                     }
                 }
                 this.enemymanager.draw(this.ctx);
-                this.entitymanager.drawPlayer();
-                this.hp.draw(this.ctx, this.width, this.height);
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
+                this.entitymanager.drawPlayer();
+                this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":
                 console.log("游戏结束");

@@ -55,6 +55,7 @@ class mapmanager {
     }
 
     async loadMap(src) {
+        this.game.canmove = false;
         console.log("开始加载地图:", src);
 
         // 如果是第一次加载地图，直接调用 loadNewMap
@@ -65,6 +66,7 @@ class mapmanager {
         }
 
         this.game.env = 'yang';
+        this.game.changetimes = 0;
 
         // 设置初始透明度
         let opacity = 1;
@@ -99,7 +101,8 @@ class mapmanager {
 
         // 等待 fadeOut 完成后再调用 loadNewMap
         fadeOut();
-        this.loadNewMap(src);
+        await this.loadNewMap(src);
+        this.game.canmove = true;
     }
 
     // 加载新地图
@@ -109,7 +112,6 @@ class mapmanager {
         // 重置玩家状态、清空地图和事件
         entitymanager.vx = 0;
         entitymanager.vy = 0;
-        this.game.changetimes = 0;
         this.game.hp.reset();
         this.empty();
 
@@ -411,7 +413,7 @@ class mapmanager {
                 else {
                     if (i.hp) {
  //                       console.log("draw image");
-                        if (!this.game.mapmanager.hurt()) {
+                        if (this.game.changetimes == 0 || !this.game.mapmanager.hurt()) {
                             let o = i.hp - Math.floor(this.game.changetimes / 2);
                             if (o > 0) {
                                 let k = o - 1;
@@ -422,6 +424,7 @@ class mapmanager {
                             this.game.gameFrame % 2 == 1 &&
                             this.game.changetimes / 2 <= i.hp
                         ) {
+                            console.warn(i.hp, i.hp - Math.floor(this.game.changetimes / 2));
                             ctx.drawImage(
                                 i.img[
                                     Math.max(

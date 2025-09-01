@@ -223,6 +223,8 @@ class entitymanager {
             }
         }
 
+        if (this.game.cg == false) this.drawPlayer();
+
         ga.player.position.x += vx + vxx;
 
         // 垂直移动
