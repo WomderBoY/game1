@@ -63,7 +63,7 @@ _jsonCallback({
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "black-right2-0.png",
+	"image": "../images/black-right2-0.png",
 	"format": "RGBA8888",
 	"size": {"w":1221,"h":1058},
 	"scale": "1",

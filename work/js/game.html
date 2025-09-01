@@ -1,76 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>阴阳劫 - 游戏</title>
+        <link rel="stylesheet" href="game-style.css">
+    </head>
     <body>
-    <div id="game"></div>
-    <div id="resource" style="display:none"></div>
-    <div id="pauseMenu" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 9999;">
-        <div style="background: #1e1e1e; color: #fff; padding: 24px 28px; border-radius: 8px; min-width: 280px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); text-align: center;">
-            <div style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">暂停</div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button id="btnResume" style="padding: 10px 12px; border: none; border-radius: 6px; background: #4caf50; color: #fff; cursor: pointer;">继续游戏 (Enter)</button>
-                <button id="btnRestart" style="padding: 10px 12px; border: none; border-radius: 6px; background: #2196f3; color: #fff; cursor: pointer;">重新开始当前关卡</button>
-                <button id="btnMenu" style="padding: 10px 12px; border: none; border-radius: 6px; background: #f44336; color: #fff; cursor: pointer;">重新选择关卡</button>
+        <div id="game"></div>
+        <div id="resource" style="display: none"></div>
+        
+        <!-- 暂停菜单 -->
+        <div id="pauseMenu">
+            <div class="pause-container">
+                <div class="pause-title">暂停</div>
+                <div class="pause-buttons">
+                    <button id="btnResume" class="pause-btn">
+                        继续游戏 (Enter)
+                    </button>
+                    <button id="btnRestart" class="pause-btn">
+                        重新开始当前关卡
+                    </button>
+                    <button id="btnMenu" class="pause-btn">
+                        重新选择关卡
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="achievement-toast" style="position: fixed; right: 16px; bottom: 16px; background: rgba(30,30,30,0.92); color: #fff; border-radius: 8px; padding: 10px 12px; display:none; opacity:0; transform: translateY(10px); transition: opacity .25s ease, transform .25s ease; z-index: 10001; min-width: 220px; box-shadow: 0 6px 16px rgba(0,0,0,0.35);">
-        <div class="t-title" style="font-weight:700; font-size:14px; margin-bottom:4px;">成就解锁</div>
-        <div class="t-desc" style="font-size:12px; opacity:0.9;">描述</div>
-    </div>
-    <script src="Util.js"></script>
-    <script src="enemy.js"></script>
-    <script src="eventmanager.js"></script>
-    <script src="Sprite.js"></script>
-    <script src="animationmanager.js"></script>
-    <script src="cgmanager.js"></script>
-    <script src="inputmanager.js"></script>
-    <script src="dialog.js"></script>
-    <script src="nightmanager.js"></script>
-    <script src="savemanager.js"></script>
-    <script src="datamanager.js"></script>
-    <script src="soundmanager.js"></script>
-    <script src="mapmanager.js"></script>
-    <script src="hp.js"></script>
-    <script src="bgmmanager.js"></script>
-    <script src="TaijiManager.js"></script>
+        
+        <!-- 成就提示 -->
+        <div id="achievement-toast">
+            <div class="t-title">成就解锁</div>
+            <div class="t-desc">描述</div>
+        </div>
+            <script src="Util.js"></script>
+            <script src="enemy.js"></script>
+            <script src="eventmanager.js"></script>
+            <script src="Sprite.js"></script>
+            <script src="animationmanager.js"></script>
+            <script src="cgmanager.js"></script>
+            <script src="inputmanager.js"></script>
+            <script src="dialog.js"></script>
+            <script src="nightmanager.js"></script>
+            <script src="savemanager.js"></script>
+            <script src="datamanager.js"></script>
+            <script src="soundmanager.js"></script>
+            <script src="mapmanager.js"></script>
+            <script src="hp.js"></script>
+            <script src="bgmmanager.js"></script>
+            <script src="TaijiManager.js"></script>
 
-    <script src="bagua.js"></script>
-    <script src="entitymanager.js"></script>
-    <script src="achievements.js"></script>
-    <script>
-  //    console.log('inputmanager:', typeof inputmanager);
-    </script>
-    <script src="game.js"></script>
-    <script>
-     window.onload = function() {
-            window.game = new game();
-            document.addEventListener('keydown', function(e) {
-                if (e.code === 'Escape') {
-                    if (window.game && window.game.status !== 'paused' && window.game.status !== 'over') {
-                        window.game.pauseGame();
-                    } else if (window.game && window.game.status === 'paused') {
-                        window.game.resumeGame();
-                    }
-                }
-                if (e.code === 'Enter') {
-                    if (window.game && window.game.status === 'paused') {
-                        window.game.resumeGame();
-                    }
-                }
-            });
-            const resumeBtn = document.getElementById('btnResume');
-            const restartBtn = document.getElementById('btnRestart');
-            const menuBtn = document.getElementById('btnMenu');
-            if (resumeBtn) resumeBtn.addEventListener('click', () => window.game && window.game.resumeGame());
-            if (restartBtn) restartBtn.addEventListener('click', () => window.game && window.game.restartLevel());
-            if (menuBtn) menuBtn.addEventListener('click', () => window.game && window.game.returnToMainMenu());
-     }</script>
-</body>
-</body>
-</html>
+            <script src="bagua.js"></script>
+            <script src="entitymanager.js"></script>
+            <script src="achievements.js"></script>
+            <script src="game.js"></script>
+            <script src="game-ui.js"></script>
+        </body>
+    </html>

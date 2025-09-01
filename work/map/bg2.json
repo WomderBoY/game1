@@ -5,8 +5,8 @@ _jsonCallback({
 					"type": "cg",
 					"way": "negative",
 					"images": [
-						"../js/black-right2-0.png",
-						"../js/white.png"
+						"../images/black-right2-0.png",
+						"../images/white.png"
 					],
 					"text": [
 						[
@@ -31,8 +31,9 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/hitbox.png"
-				]
+					"../images/hitbox.png", "../images/player.png"
+				],
+				"hp":2
 			},
 			{
 				"hitbox": [
@@ -59,11 +60,11 @@ _jsonCallback({
 					20
 				],
 				"event": {
-					"type": "changemap",
+					"type": "kill",
 					"way": "negative",
 					"x": 100,
 					"y": 350,
-					"target": "bg.json"
+					"target": "../map/bg.json"
 				},
 				"col": false
 			},
@@ -79,7 +80,7 @@ _jsonCallback({
 					"way": "tunnal",
 					"x": 256,
 					"y": 500,
-					"target": "bg-map1.json"
+					"target": "../map/bg-map1.json"
 				},
 				"col": false
 			},

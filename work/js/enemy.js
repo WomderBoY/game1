@@ -1,5 +1,5 @@
 class Enemy {
-    constructor(game, x, y, width, height, speed = 2, type=true) {
+    constructor(game, x, y, width, height, speed = 2, type = true) {
         // 敌人矩形
         this.game = game;
         this.rect = new Rect(x, y, width, height);
@@ -22,8 +22,12 @@ class Enemy {
         //是否死亡
         this.dead = false;
         (async () => {
-            this.imgYin = await this.game.datamanager.loadImg("../images/enemy-black.png");
-            this.imgYang = await this.game.datamanager.loadImg("../images/enemy-white.png");
+            this.imgYin = await this.game.datamanager.loadImg(
+                "../images/enemy-black.png"
+            );
+            this.imgYang = await this.game.datamanager.loadImg(
+                "../images/enemy-white.png"
+            );
         })();
     }
 
@@ -47,7 +51,7 @@ class Enemy {
         this.onGround = false;
 
         for (let box of colliders) {
-            if (!box.alive(this.game.changetimes)) continue;
+            if (!box.alive(this.game)) continue;
             if (this.rect.containsRect(box)) {
                 // 碰到地面
                 this.rect.position.y -= this.vy; // 回退
@@ -58,13 +62,14 @@ class Enemy {
         }
 
         // === 悬空检测（边缘掉落转向）===
-       if (this.onGround) {
+        if (this.onGround) {
             const direction = this.speed > 0 ? 1 : -1;
             // 探测前方脚底下的小矩形
             const frontFoot = new Rect(
-                this.rect.position.x + (direction * this.rect.size.x * 0.5), // 稍微往前探
+                this.rect.position.x + direction * this.rect.size.x * 0.5, // 稍微往前探
                 this.rect.position.y + this.rect.size.y + 1, // 脚底下
-                this.rect.size.x * 0.5, 2 // 探测宽度更宽
+                this.rect.size.x * 0.5,
+                2 // 探测宽度更宽
             );
 
             let groundFound = false;
@@ -82,15 +87,19 @@ class Enemy {
         }
     }
 
-    
-
     /**
      * 绘制敌人
      */
     draw(ctx) {
         const img = this.type ? this.imgYang : this.imgYin;
         if (!img) return; // 还没加载完
-        ctx.drawImage(img, this.rect.position.x, this.rect.position.y, this.rect.size.x, this.rect.size.y);
+        ctx.drawImage(
+            img,
+            this.rect.position.x,
+            this.rect.position.y,
+            this.rect.size.x,
+            this.rect.size.y
+        );
     }
 }
 
@@ -132,8 +141,8 @@ class EnemyManager {
         }
         // 过滤掉死亡的敌人
         for (let i = this.enemies.length - 1; i >= 0; i--) {
-          if (this.enemies[i].dead) {
-               this.enemies.splice(i, 1); // 删除死亡敌人
+            if (this.enemies[i].dead) {
+                this.enemies.splice(i, 1); // 删除死亡敌人
             }
         }
     }

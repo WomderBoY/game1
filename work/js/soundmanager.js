@@ -1,8 +1,8 @@
 class SoundManager {
     constructor() {
-        this.buffers = {};        // 已加载的音效
-        this.instances = {};      // 正在播放的实例列表
-        this.loopSources = {};    // 循环音效单独存储
+        this.buffers = {}; // 已加载的音效
+        this.instances = {}; // 正在播放的实例列表
+        this.loopSources = {}; // 循环音效单独存储
     }
 
     async init() {
@@ -11,13 +11,13 @@ class SoundManager {
         await this.load("land", "../sound/fallog.mp3");
         await this.load("typing", "../sound/typing.mp3");
         await this.load("death", "../sound/death.mp3");
-        await this.load('enemydeath', "../sound/enemydeath.mp3");
+        await this.load("enemydeath", "../sound/enemydeath.mp3");
     }
 
     /** 加载音效 */
     async load(name, url) {
         const audio = new Audio(url);
-        audio.preload = 'auto';  // 预加载音频
+        audio.preload = "auto"; // 预加载音频
 
         this.buffers[name] = audio;
         this.instances[name] = [];
@@ -30,15 +30,20 @@ class SoundManager {
 
         // 验证音量参数
         if (volume < 0 || volume > 1) {
-            console.warn(`警告：音量值 ${volume} 超出有效范围 [0,1]，已调整为 ${Math.max(0, Math.min(1, volume))}`);
+            console.warn(
+                `警告：音量值 ${volume} 超出有效范围 [0,1]，已调整为 ${Math.max(
+                    0,
+                    Math.min(1, volume)
+                )}`
+            );
             volume = Math.max(0, Math.min(1, volume));
         }
 
-        const audio = this.buffers[name].cloneNode();  // 克隆一个新的音频元素
+        const audio = this.buffers[name].cloneNode(); // 克隆一个新的音频元素
         audio.volume = volume;
         audio.playbackRate = playbackRate;
 
-        audio.play().catch(e => console.error('音效播放失败', e));
+        audio.play().catch((e) => console.error("音效播放失败", e));
 
         const instance = { audio };
         this.instances[name].push(instance);
@@ -60,16 +65,21 @@ class SoundManager {
 
         // 验证音量参数
         if (volume < 0 || volume > 1) {
-            console.warn(`警告：音量值 ${volume} 超出有效范围 [0,1]，已调整为 ${Math.max(0, Math.min(1, volume))}`);
+            console.warn(
+                `警告：音量值 ${volume} 超出有效范围 [0,1]，已调整为 ${Math.max(
+                    0,
+                    Math.min(1, volume)
+                )}`
+            );
             volume = Math.max(0, Math.min(1, volume));
         }
 
-        const audio = this.buffers[name].cloneNode();  // 克隆一个新的音频元素
+        const audio = this.buffers[name].cloneNode(); // 克隆一个新的音频元素
         audio.loop = true;
         audio.volume = volume;
         audio.playbackRate = playbackRate;
 
-        audio.play().catch(e => console.error('音效播放失败', e));
+        audio.play().catch((e) => console.error("音效播放失败", e));
 
         this.loopSources[name] = audio;
     }
@@ -80,7 +90,7 @@ class SoundManager {
 
         const audio = this.loopSources[name];
         audio.pause();
-        audio.currentTime = 0;  // 重置播放位置
+        audio.currentTime = 0; // 重置播放位置
         delete this.loopSources[name];
     }
 
@@ -97,14 +107,18 @@ class SoundManager {
                 // 修复：确保音量不会变成负数
                 const decreaseAmount = initialVolume / (duration * 10);
                 const newVolume = Math.max(0, audio.volume - decreaseAmount);
-                
+
                 // 监控音量变化
                 if (newVolume !== audio.volume) {
-                    console.log(`音效 ${name} 音量变化: ${audio.volume.toFixed(3)} -> ${newVolume.toFixed(3)}`);
+                    console.log(
+                        `音效 ${name} 音量变化: ${audio.volume.toFixed(
+                            3
+                        )} -> ${newVolume.toFixed(3)}`
+                    );
                 }
-                
+
                 audio.volume = newVolume;
-                
+
                 // 如果音量已经接近0，直接停止
                 if (audio.volume <= 0.01) {
                     clearInterval(fadeInterval);
@@ -114,13 +128,16 @@ class SoundManager {
                 clearInterval(fadeInterval);
                 this.stopLoop(name);
             }
-        }, 100);  // 每100ms减少音量
+        }, 100); // 每100ms减少音量
 
-        this.loopSources[name] = audio;  // 保证播放中的音频持续管理
+        this.loopSources[name] = audio; // 保证播放中的音频持续管理
     }
 
     /** 判断音效是否在播放 */
     isPlay(name) {
-        return (this.instances[name] && this.instances[name].length > 0) || !!this.loopSources[name];
+        return (
+            (this.instances[name] && this.instances[name].length > 0) ||
+            !!this.loopSources[name]
+        );
     }
 }

@@ -12,14 +12,20 @@ class Bagua {
         const centerX = this.rect.position.x + this.rect.size.x / 2;
         const centerY = this.rect.position.y + this.rect.size.y / 2;
 
-        ctx.save();                        // 保存当前状态
-        ctx.translate(centerX, centerY);   // 将画布原点移动到中心
-        ctx.rotate(this.angle);            // 按当前角度旋转
+        ctx.save(); // 保存当前状态
+        ctx.translate(centerX, centerY); // 将画布原点移动到中心
+        ctx.rotate(this.angle); // 按当前角度旋转
 
         // 由于中心点已经平移，这里画图需要从中心的左上角往左上偏移一半
-        ctx.drawImage(img, -this.rect.size.x / 2, -this.rect.size.y / 2, this.rect.size.x, this.rect.size.y);
+        ctx.drawImage(
+            img,
+            -this.rect.size.x / 2,
+            -this.rect.size.y / 2,
+            this.rect.size.x,
+            this.rect.size.y
+        );
 
-        ctx.restore();                     // 恢复状态
+        ctx.restore(); // 恢复状态
 
         // 每次绘制后增加角度，形成旋转效果
         this.angle += this.rotateSpeed;
@@ -32,20 +38,19 @@ class Bagua {
     }
 }
 
-
 // ------------------ 八卦阵管理类 ------------------
 class BaguaManager {
     constructor(game) {
         this.baguas = [];
         this.game = game;
-        this.init()
+        this.init();
     }
 
-    async init(){
+    async init() {
         this.img = await this.game.datamanager.loadImg("../images/bagua.png");
     }
 
-    empty(){
+    empty() {
         this.baguas = [];
     }
 
@@ -69,7 +74,7 @@ class BaguaManager {
             // 如果和玩家重叠，并且按下Enter，就切换环境
             if (b.checkInteract(player) && this.game.inputmanager.takeEnter()) {
                 // 切换 game.env（假设只有 'yin'/'yang' 两种）
-                this.game.env = this.game.env == 'yin' ? 'yang' :"yin";
+                this.game.env = this.game.env == "yin" ? "yang" : "yin";
             }
         }
     }
