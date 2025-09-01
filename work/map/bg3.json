@@ -1,9 +1,150 @@
 _jsonCallback({
+    "born":[0, 0],
+    "with":[
+       {
+            "type":"dialog",
+            "way":"negative",
+            "text":[
+                "可恶",
+                "诅咒生效了吗",
+                "看下接下来只能凭借刚才的记忆走出这里了"
+            ]
+        },
+        {
+            "type":"night",
+            "way":"tunnal",
+        },
+        {
+            "type":"dialog",
+            "way":"negative",
+            "text":[
+                "a",
+                "b",
+                "c",
+                "d"
+            ],
+        }
+    ],
     "yang":{
-        
+        "tileMap":[
+            {
+                "hitbox":[
+                   0,
+                   100,
+                   200,
+                   70
+                ],
+                "col":true,
+                "img": [
+					"../images/test1.png"
+				]
+            },
+            {
+                "hitbox":[
+                    338,
+                    660,
+                    50,
+                    60
+                ],
+                "col":true,
+                "img": [
+					"../images/test1.png"
+				]
+            },
+            {
+                "hitbox":[
+                    528,
+                    563,
+                    100,
+                    60,
+                ],
+                "col":true,
+                "img": [
+					"../images/test1.png"
+				]
+            },
+            {
+                "hitbox":[
+                    486,
+                    50,
+                    30,
+                    350,
+                ],
+                "col":true,
+                "img": [
+					"../images/test1.png"
+				]
+            },
+            {
+                "hitbox":[
+                    890,
+                    450,
+                    80,
+                    50
+                ],
+                "col":true,
+                "img": [
+					"../images/test1.png"
+				]
+            },
+            {
+                "hitbox":[
+                    700,
+                    320,
+                    100,
+                    50
+                ],
+                "col":true,
+                "img": [
+					"../images/test1.png"
+				]
+            },
+            {
+                "hitbox":[
+                    990,
+                    195,
+                    300,
+                    59,
+                ],
+                 "col":true,
+                "img": [
+					"../images/test1.png"
+				]
+            },
+            {
+                "hitbox":[
+                    1050,
+                    0,
+                    50,
+                    195
+                ],
+                "event":{
+                    "type":"day",
+                    "way":"tunnal",
+                    "with":{
+                    "type":"dialog",
+                    "way":"negative",
+                    "text":["呼~，终于逃出来了吗…",
+                            "事不宜迟，赶紧继续前进吧。"
+                    ]
+                }
+                },
+                "col":false
+
+            }
+        ],
+        "enemy": [],
+        "bagua": [],
+        "background":""
 
 
-    }
+    },
+   "yin": {
+		"tileMap": [],
+		"enemy": [],
+		"bagua": [],
+		"background": ""
+	}
 
 
 

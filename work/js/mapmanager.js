@@ -152,9 +152,11 @@ class mapmanager {
             console.log("发现 data.with:", data.with);
             if (Array.isArray(data.with)) {
                 console.log("data.with 是数组，遍历播放");
+                console.warn(data.with);
                 // 如果是数组，遍历每个元素
-                for (let i of data.with) {
-                    console.warn("addmap", i);
+                for (let j = 0; j < data.with.length; ++j) {
+                    let i = data.with[j];
+                    console.warn("addmap", j, i);
                     this.game.eventmanager.add(i, true);
                 }
             } else if (typeof data.with === "object") {

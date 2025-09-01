@@ -86,7 +86,7 @@ _jsonCallback({
 					"way": "negative",
 					"x": 100,
 					"y": 350,
-					"target": "../map/bg2.json",
+					"target": "../map/bg3.json",
 					"with": {
 						"type": "cg",
 						"way": "negative",

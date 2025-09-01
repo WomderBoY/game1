@@ -86,8 +86,8 @@ _jsonCallback({
 				"event": {
 					"type": "changemap",
 					"way": "tunnal",
-					"x": 256,
-					"y": 500,
+					// "x": 256,
+					// "y": 500,
 					"target": "../map/bg3.json"
 				},
 				"col":false,
