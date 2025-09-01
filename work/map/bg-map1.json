@@ -116,9 +116,9 @@ _jsonCallback({
 				"event": {
 					"type": "changemap",
 					"way": "tunnal",
-					// "x": 256,
-					// "y": 500,
-					"target": "../map/bg3.json"
+					"x": 50,
+					"y": 90,
+					"target": "../map/bg-map3.json"
 				},
 				"col":false,
 				"img": [
