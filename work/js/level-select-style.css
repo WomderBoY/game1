@@ -95,11 +95,62 @@ h1::after {
     font-weight: 700;
 }
 
-.levels-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 24px;
+/* 滑动关卡选择器容器 */
+.level-slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 36px 0;
+    gap: 16px;
+}
+
+.level-slider {
+    width: 660px; /* 3个关卡按钮的宽度 + 间距 */
+    overflow: hidden;
+    position: relative;
+    border-radius: 16px;
+    padding: 8px 0;
+}
+
+.level-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+/* 导航按钮 */
+.nav-button {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.nav-button:hover:not(:disabled) {
+    background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.nav-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+}
+
+.nav-button span {
+    line-height: 1;
 }
 
 .level-button {
@@ -118,6 +169,8 @@ h1::after {
     position: relative;
     overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.2);
+    min-width: 200px;
+    flex-shrink: 0; /* 防止在flex布局中被压缩 */
 }
 
 .level-button::before {
@@ -222,6 +275,39 @@ h1::after {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* 关卡指示器 */
+.level-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.indicator.active {
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.2);
+}
+
+.indicator.visible {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.indicator:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.1);
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
     .level-select-container {
@@ -229,23 +315,29 @@ h1::after {
         margin: 20px;
     }
 
-    .levels-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    h1 {
-        font-size: 2.2em;
-        letter-spacing: 2px;
+    .level-slider {
+        width: 440px; /* 2个关卡按钮的宽度 + 间距 */
     }
 
     .level-button {
         padding: 24px 16px;
         font-size: 1.1em;
+        min-width: 180px;
     }
 
     .level-number {
         font-size: 2.2em;
+    }
+
+    .nav-button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    h1 {
+        font-size: 2.2em;
+        letter-spacing: 2px;
     }
 
     .back-button {
@@ -260,6 +352,30 @@ h1::after {
         padding: 24px 20px;
     }
 
+    .level-slider {
+        width: 220px; /* 1个关卡按钮的宽度 */
+    }
+
+    .level-slider-container {
+        gap: 12px;
+    }
+
+    .level-button {
+        padding: 20px 12px;
+        min-width: 160px;
+        font-size: 1em;
+    }
+
+    .level-number {
+        font-size: 2em;
+    }
+
+    .nav-button {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+
     h1 {
         font-size: 1.8em;
         margin-bottom: 24px;
@@ -270,12 +386,13 @@ h1::after {
         margin-bottom: 24px;
     }
 
-    .level-button {
-        padding: 20px 12px;
-    }
-
     .back-button {
         padding: 14px 24px;
         font-size: 1em;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
     }
 }
