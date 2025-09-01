@@ -108,8 +108,8 @@ class entitymanager {
             if (this.game.inputmanager.askD() == true) this.keys.right = true;
             if (this.game.inputmanager.askW() == true) this.keys.up = true;
             if (this.game.inputmanager.askJ() == true) this.keys.change = true;
-            if (this.game.inputmanager.askK() == true)
-                this.keys.envchange = true;
+            //if (this.game.inputmanager.askK() == true)
+                //this.keys.envchange = true;
         }
         let machine = this.game.animationmachine;
 

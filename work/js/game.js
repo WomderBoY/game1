@@ -126,14 +126,23 @@ class game {
             "../map/bg.json",
             "../map/bg2.json",
             "../map/bg-map1.json",
+            "../map/bg-map3.json",
+            "../map/bg3.json",
         ];
         const currentIndex = levelOrder.indexOf(currentLevel);
+
+        console.log(`=== 关卡解锁调试 ===`);
+        console.log(`当前关卡: ${currentLevel}`);
+        console.log(`关卡索引: ${currentIndex}`);
+        console.log(`关卡顺序:`, levelOrder);
 
         if (currentIndex >= 0) {
             // 解锁当前关卡和之前的所有关卡
             const unlockedLevels = JSON.parse(
                 localStorage.getItem("unlockedLevels") || "[]"
             );
+
+            console.log(`解锁前的关卡列表:`, unlockedLevels);
 
             // 确保当前关卡和之前的所有关卡都被解锁
             for (let i = 0; i <= currentIndex; i++) {
@@ -153,10 +162,14 @@ class game {
             //     }
             // }
 
+            console.log(`解锁后的关卡列表:`, unlockedLevels);
+
             localStorage.setItem(
                 "unlockedLevels",
                 JSON.stringify(unlockedLevels)
             );
+        } else {
+            console.warn(`关卡 ${currentLevel} 不在关卡顺序列表中！`);
         }
     }
 
