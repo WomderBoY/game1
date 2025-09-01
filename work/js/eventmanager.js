@@ -16,19 +16,15 @@ class eventmanager {
         //   next: [...]            // 链式事件数组（处理完当前后执行）
         // }
         this.game = game;
-        this.event = null;
+        this.event = [];
 
         // 当前事件处理进度标识：null/'start'/'processing'/'end'
         // 'start' 表示事件已设置但尚未开始执行（handle 会接管）
-        this.progress = null;
+        this.progress = 'start';
+        this.front = 1, this.rear = 0;
     }
 
     // 直接设置当前事件并将进度置为开始
-    set(e) {
-        //  if (this.game.canmove == false) return;
-        this.event = e;
-        this.progress = "start";
-    }
 
     // 将新事件加入队列
     add(e, force = false) {
@@ -37,23 +33,20 @@ class eventmanager {
         if (this.game.canmove == false && !force) return;
         console.warn("加入新event", e, this.game.canmove);
         console.log(this.game.canmove);
-        if (!this.event) {
-            this.set(e);
-            return;
-        }
+        this.event[++this.rear] = e;
         // 如果已有事件，将新的事件插入到当前事件的 next 队列（作为下一个要执行的事件）
-        if (!this.event.next) this.event.next = [];
-        // 使用 unshift 将新的事件放到数组前端（意味着新加入的事件会被优先执行）
-        // （注意：这种策略会使得后加入的事件优先于之前加入的事件执行）
-        this.event.next.unshift(e);
+        console.warn('now first = ', this.event[this.front]);
     }
 
     // 处理当前事件（主事件处理器）
     // 只有当 progress === 'start' 时才会真正启动处理，避免重复并发执行
     async handle() {
-        //    console.log('shijian', this.game.canmove);
-        if (this.progress != "start") return; // 如果不在 start 状态，直接返回（已在处理或已结束）
-        let e = this.event;
+        //console.log('shijian', this.game.canmove);\
+//        console.warn(this.front, this.rear);
+        if (this.front > this.rear || this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
+        
+        let e = this.event[this.front];
+        ++this.front;
         this.progress = "processing";
         console.warn("handle", e);
         //    this.game.status = 'event'; // 切换游戏状态到事件处理态
@@ -113,20 +106,14 @@ class eventmanager {
         }
 
         // 如果当前事件有链式 next 事件（数组），取出一个继续处理
-        if (e.next && e.next.length > 0) {
-            console.warn("fuck");
-            // 从 e.next 队列中取出下一个事件（shift 从数组前端取出）
-            let next = e.next.shift();
-            // 把剩余的 next 继续传递下去（维持链式关系）
-            next.next = e.next;
-            // 设置为当前事件并置入 start 状态，下次 handle 会处理它
-            this.set(next);
-        } else {
+        if (this.front > this.rear){
             // 没有后续事件，清空当前事件并标记结束
-            this.event = null;
+            this.event = [];
+            this.front = 1,  this.rear = 0;
             this.progress = "end";
             //     this.game.status = 'running'; // 恢复游戏运行态
             this.game.canmove = true; // 允许玩家移动
         }
+        this.progress = 'start';
     }
 }

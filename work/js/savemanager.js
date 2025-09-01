@@ -44,6 +44,7 @@ class SaveManager {
     async load() {
         console.log("=== 开始加载存档 ===");
         console.log("加载前的 this.data:", this.data);
+        this.game.nightmanager.deactivateNight();
 
         let data = localStorage.getItem("saveData1");
         if (!data) {

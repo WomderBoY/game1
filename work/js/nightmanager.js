@@ -19,7 +19,7 @@ class NightManager {
     // 取消夜晚模式
     deactivateNight() {
         this.game.night = false; // 设置夜晚状态为 false
-        console.log("Night mode deactivated");
+        console.warn("Night mode deactivated");
     }
 }
 

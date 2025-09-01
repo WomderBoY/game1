@@ -1,19 +1,7 @@
 _jsonCallback({
     "born":[0, 0],
     "with":[
-       {
-            "type":"dialog",
-            "way":"negative",
-            "text":[
-                "可恶",
-                "诅咒生效了吗",
-                "看下接下来只能凭借刚才的记忆走出这里了"
-            ]
-        },
-        {
-            "type":"night",
-            "way":"tunnal",
-        },
+       
         {
             "type":"dialog",
             "way":"negative",
@@ -23,6 +11,19 @@ _jsonCallback({
                 "c",
                 "d"
             ],
+        },
+        {
+            "type":"night",
+            "way":"tunnal",
+        },
+        {
+            "type":"dialog",
+            "way":"negative",
+            "text":[
+                "可恶",
+                "诅咒生效了吗",
+                "看下接下来只能凭借刚才的记忆走出这里了"
+            ]
         }
     ],
     "yang":{
