@@ -423,7 +423,8 @@ class mapmanager {
                         }
                     } else if (
                         this.game.mapmanager.hurt() &&
-                        this.game.gameFrame % 2 == 1
+                        this.game.gameFrame % 2 == 1 &&
+                        this.game.changetimes / 2 <= i.hp
                     ) {
                         ctx.drawImage(
                             i.img[
