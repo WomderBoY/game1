@@ -122,17 +122,27 @@ _jsonCallback({
                 "event":{
                     "type":"day",
                     "way":"tunnal",
-                    "with":{
+                   
+                },
+                "col":false
+
+            },
+              {
+                "hitbox":[
+                    1050,
+                    0,
+                    50,
+                    195
+                ],
+                "event":{
                         "type":"dialog",
                         "way":"negative",
                         "text":["呼~，终于逃出来了吗…",
                                 "事不宜迟，赶紧继续前进吧。"
                         ]
-                    }
+                    },
+                    "col":false
                 },
-                "col":false
-
-            }
         ],
         "enemy": [],
         "bagua": [],
@@ -146,11 +156,5 @@ _jsonCallback({
 		"bagua": [],
 		"background": ""
 	}
-
-
-
-
-
-
 }
 )
