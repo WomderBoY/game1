@@ -17,12 +17,12 @@ _jsonCallback({
             },
             {
                 "hitbox":[182, 30, 49, 215],
-                "img":["../images/vine1.png", "../images/vine2.png", "../images/vine3.png", "../images/vine4.png", "../images/vine5.png"],
+                "img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
                 "hp":4,
             },
             {
                 "hitbox":[550, 88, 64, 181],
-                "img":["../images/vine1.png", "../images/vine2.png", "../images/vine3.png", "../images/vine4.png", "../images/vine5.png"],
+                "img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
                 "hp":3,
             },
             {
@@ -125,7 +125,7 @@ _jsonCallback({
             {
                 "hitbox":[748, 480, 170, 62],
                 "col":true,
-                "img":["../images/vine1.png", "../images/vine2.png", "../images/vine3.png", "../images/vine4.png", "../images/vine5.png"],
+                "img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
                 "hp":3,
             }
         ],
