@@ -118,7 +118,7 @@ _jsonCallback({
 					"way": "tunnal",
 					"x": 50,
 					"y": 90,
-					"target": "../map/bg-map3.json"
+					"target": "../map/bg3.json"
 				},
 				"col":false,
 				"img": [
