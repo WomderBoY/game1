@@ -64,6 +64,8 @@ class mapmanager {
             return;
         }
 
+        this.game.env = 'yang';
+
         // 设置初始透明度
         let opacity = 1;
 
@@ -152,9 +154,11 @@ class mapmanager {
             console.log("发现 data.with:", data.with);
             if (Array.isArray(data.with)) {
                 console.log("data.with 是数组，遍历播放");
+                console.warn(data.with);
                 // 如果是数组，遍历每个元素
-                for (let i of data.with) {
-                    console.warn("addmap", i);
+                for (let j = 0; j < data.with.length; ++j) {
+                    let i = data.with[j];
+                    console.warn("addmap", j, i);
                     this.game.eventmanager.add(i, true);
                 }
             } else if (typeof data.with === "object") {
@@ -451,7 +455,8 @@ class mapmanager {
         // }
         // console.log('Collidable object:', i);//调试代码
 
-        // 遍历所有元素
+
+        // 遍历所有元素，这里其实只花了那个app类型的
         for (let i of this.app[type]) {
             const ctx = this.game.ctx;
             const { x, y, w, h } = i;
