@@ -355,8 +355,16 @@ class game {
                 break;
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
-                // 仍然绘制当前画面（如需要也可不绘制）
-                this.mapmanager.draw(this.env);
+                // 仍然绘制当前画面（如需要也可不绘制
+                if (this.cg == false) {
+                    if (this.night == false) {
+                        //                console.log('Night state before drawing:', this.night);  // 打印 night 状态
+                        this.mapmanager.draw(this.env);
+                    } else {
+                        this.ctx.fillStyle = "#484848ff";
+                        this.ctx.fillRect(0, 0, this.width, this.height);
+                    }
+                }
                 this.enemymanager.draw(this.ctx);
                 this.entitymanager.drawPlayer();
                 this.hp.draw(this.ctx, this.width, this.height);
@@ -404,7 +412,6 @@ class game {
                 if (this.inputmanager.takeEnter()) {
                     await this.savemanager.load();
                     this.hp.reset();
-                    this.nightmanager.deactivateNight();
                 }
                 break;
             //load...
