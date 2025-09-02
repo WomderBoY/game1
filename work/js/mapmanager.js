@@ -29,6 +29,9 @@ class mapmanager {
         this.game = game;
         this.empty();
         this.init();
+        
+        // 创建绘制管理器
+        this.drawManager = new DrawManager(game);
     }
 
     async init() {
@@ -273,49 +276,9 @@ class mapmanager {
         console.warn('mapmanager fadein over', this.game.canmove);
     }
 
-    // 假设你有一个绘制背景的方法
+    // 绘制背景方法
     drawBackground() {
-        // 清空画布并绘制背景（如果背景存在）
-        if (
-            this.background["yang"] &&
-            this.background["yang"] instanceof Image
-        ) {
-            this.game.ctx.drawImage(
-                this.background["yang"],
-                0,
-                0,
-                this.game.view.width,
-                this.game.view.height
-            );
-        } else if (this.background["yang"] === "") {
-            // 如果没有背景图，绘制默认背景色
-            this.game.ctx.fillStyle = "#87cefa";
-            this.game.ctx.fillRect(
-                0,
-                0,
-                this.game.view.width,
-                this.game.view.height
-            );
-        }
-
-        if (this.background["yin"] && this.background["yin"] instanceof Image) {
-            this.game.ctx.drawImage(
-                this.background["yin"],
-                0,
-                0,
-                this.game.view.width,
-                this.game.view.height
-            );
-        } else if (this.background["yin"] === "") {
-            // 如果没有背景图，绘制默认背景色
-            this.game.ctx.fillStyle = "#87cefa";
-            this.game.ctx.fillRect(
-                0,
-                0,
-                this.game.view.width,
-                this.game.view.height
-            );
-        }
+        this.drawManager.drawBackground(this.background, this.game.view.width, this.game.view.height);
     }
 
     async addTile(type, i) {
@@ -369,280 +332,25 @@ class mapmanager {
     }
 
     draw(type = "yin") {
-        let detype = type == 'yang' ? 'yin' : 'yang';
-        // 绘制背景
-        //    console.log(type);
-        //    console.log(this.background);
-        if (this.background[type] == "") {
-            this.game.ctx.fillStyle = "#87cefa";
-            this.game.ctx.fillRect(0, 0, this.game.width, this.game.height);
-        } else {
-            this.game.ctx.drawImage(
-                this.background[type],
-                0,
-                0,
-                this.game.width,
-                this.game.height
-            );
-        }
-
-        //绘制tram
-        for (let i of this.tram) {
-  //          console.warn("start draw tram", i);
-            i.draw(this.game);
-        }
-
+        // 使用绘制管理器绘制地图
+        this.drawManager.drawMap(
+            type, 
+            this.background, 
+            this.collidable, 
+            this.tram, 
+            this.app, 
+            this.events
+        );
+        
+        // 绘制血条
         this.drawhp();
-
-        // 绘制相反属性的虚化砖块
-        for (let i of this.collidable[detype]) {
-            if (i instanceof Tile && i.img.length == 0) {
-                const ctx = this.game.ctx;
-                const { x, y, w, h } = i;
-                
-                // 虚化砖块效果
-                ctx.save();
-                
-                // 设置透明度
-                ctx.globalAlpha = 0.8;
-                
-                // 1. 虚化底色（半透明）
-                ctx.fillStyle = "rgba(139, 139, 122, 0.5)";
-                ctx.fillRect(x, y, w, h);
-                
-                // 2. 虚化边框（半透明）
-                ctx.strokeStyle = "rgba(109, 109, 90, 0.5)";
-                ctx.lineWidth = 2;
-                ctx.strokeRect(x, y, w, h);
-                
-                // 3. 虚化纹理线条（半透明）
-                ctx.strokeStyle = "rgba(125, 125, 106, 0.4)";
-                ctx.lineWidth = 1;
-                const lineSpacing = 25;
-                
-                // 横向纹理
-                for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-                    ctx.beginPath();
-                    ctx.moveTo(x + 2, ly);
-                    ctx.lineTo(x + w - 2, ly);
-                    ctx.stroke();
-                }
-                
-                // 纵向纹理
-                for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-                    ctx.beginPath();
-                    ctx.moveTo(lx, y + 2);
-                    ctx.lineTo(lx, y + h - 2);
-                    ctx.stroke();
-                }
-                
-                // 4. 虚化高光效果
-                ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-                ctx.fillRect(x, y, w, 2); // 顶部边缘
-                ctx.fillRect(x, y, 2, h); // 左侧边缘
-                
-                ctx.restore();
-            }
-        }
-
-        // 遍历所有元素
-        for (let i of this.collidable[type]) {
-            const ctx = this.game.ctx;
-            const { x, y, w, h } = i;
-
-            // 检查是否为实体碰撞区域（根据你的实际属性名调整，比如i.collision或i.solid）
-            // 明确判断为true的情况
-            //		console.log('进入染色');
-            if (i instanceof Tile) {
-                if (i.img.length == 0) {
-                    // 石板砖块效果
-                    ctx.save(); // 保存当前绘图状态
-
-                    // 1. 砖块底色
-                    ctx.fillStyle = "#8B8B7A";
-                    ctx.fillRect(x, y, w, h);
-
-                    // 2. 砖块边框
-                    ctx.strokeStyle = "#6D6D5A";
-                    ctx.lineWidth = 3;
-                    ctx.strokeRect(x, y, w, h);
-
-                    // 3. 纹理线条
-                    ctx.strokeStyle = "#7D7D6A";
-                    ctx.lineWidth = 1;
-                    const lineSpacing = 25;
-
-                    // 横向纹理
-                    for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-                        ctx.beginPath();
-                        ctx.moveTo(x + 2, ly);
-                        ctx.lineTo(x + w - 2, ly);
-                        ctx.stroke();
-                    }
-
-                    // 纵向纹理
-                    for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-                        ctx.beginPath();
-                        ctx.moveTo(lx, y + 2);
-                        ctx.lineTo(lx, y + h - 2);
-                        ctx.stroke();
-                    }
-
-                    // 4. 高光效果
-                    ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-                    ctx.fillRect(x, y, w, 2); // 顶部边缘
-                    ctx.fillRect(x, y, 2, h); // 左侧边缘
-
-                    ctx.restore(); // 恢复绘图状态
-                }
-                // 绘制贴纸/装饰图层（每个碰撞箱都使用同一张贴纸）
-                else {
-                    if (i.hp) {
-    //                    console.warn("draw image", this.game.changetimes, this.game.mapmanager.hurt());
-                        if (this.game.changetimes == 0 || !this.game.mapmanager.hurt()) {
-                            let o = i.hp - Math.floor(this.game.changetimes / 2);
-                            if (o > 0) {
-                                let k = o - 1;
-                                ctx.drawImage(i.img[k], x, y, w, h);
-                            }
-                        } else if (
-                            this.game.mapmanager.hurt() &&
-                            this.game.gameFrame % 2 == 1 &&
-                            Math.floor(this.game.changetimes / 2) <= i.hp
-                        ) {
-                            console.warn(i.hp, i.hp - Math.floor(this.game.changetimes / 2));
-                            ctx.drawImage(
-                                i.img[
-                                    Math.max(
-                                        0,
-                                        i.hp - Math.floor(this.game.changetimes / 2)
-                                    )
-                                ],
-                                x,
-                                y,
-                                w,
-                                h
-                            );
-                        }
-                    } else {
-                        ctx.drawImage(i.img[0], x, y, w, h);
-                    }
-                }
-            }
-            else if (i instanceof Fratile) {
-                i.draw(this.game);
-            }
-            else if (i instanceof Movetile) {
- //               i.update();
-                i.draw(this.game);
-            }
-        }
-        
-
-        
-        // 非碰撞区域不绘制石板效果，保持原样
-        // 如果你需要绘制非碰撞区域的其他样式，可以在这里添加
-        // else {
-        //   // 非碰撞区域的绘制代码
-        // }
-        // console.log('Collidable object:', i);//调试代码
-
-
-        // 遍历所有元素，这里其实只花了那个app类型的
-        for (let i of this.app[type]) {
-            const ctx = this.game.ctx;
-            const { x, y, w, h } = i;
-
-            //   console.log('进入岩浆绘制');
-
-            ctx.save();
-
-            // 1. 岩浆底色（深红）
-            const lavaGradient = ctx.createLinearGradient(x, y, x, y + h);
-            lavaGradient.addColorStop(0, "#8B0000"); // 深红
-            lavaGradient.addColorStop(0.5, "#FF4500"); // 橙红
-            lavaGradient.addColorStop(1, "#FF6347"); // 番茄红
-            ctx.fillStyle = lavaGradient;
-            ctx.fillRect(x, y, w, h);
-
-            // 2. 岩浆裂纹（亮橙/黄色）
-            ctx.strokeStyle = "#FFD700"; // 金黄
-            ctx.lineWidth = 2;
-
-            // 横向裂纹
-            for (let ly = y + 10; ly < y + h; ly += 20) {
-                ctx.beginPath();
-                ctx.moveTo(x, ly);
-                ctx.lineTo(x + w, ly + Math.sin(ly * 0.3) * 5); // 不规则波动
-                ctx.stroke();
-            }
-
-            // 纵向裂纹
-            for (let lx = x + 10; lx < x + w; lx += 20) {
-                ctx.beginPath();
-                ctx.moveTo(lx, y);
-                ctx.lineTo(lx + Math.sin(lx * 0.3) * 5, y + h);
-                ctx.stroke();
-            }
-
-            // 3. 熔岩高光（模拟发光边缘）
-            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-            ctx.fillRect(x, y, w, 3); // 顶部高光
-            ctx.fillRect(x, y, 3, h); // 左侧高光
-
-            // 4. 发光外晕（危险感）
-            ctx.shadowColor = "rgba(255, 69, 0, 0.8)";
-            ctx.shadowBlur = 20;
-            ctx.fillStyle = "rgba(255, 69, 0, 0.2)";
-            ctx.fillRect(x, y, w, h);
-
-            ctx.restore();
-        }
     }
     
     async drawhp() {
-        const type = this.game.env;
-        for (let j = 0; j < this.collidable[type].length; ++j) {
-            let p = this.collidable[type][j];
-            if (!p.hp || !p.alive(this.game)) continue;
-            if (!this.game.inputmanager.isOver(p.x, p.y, p.w, p.h)) {
-                continue;
-            }
-            let o = p.hp - Math.floor(this.game.changetimes / 2);
-            console.warn('drawhp p = ', p, 'HP = ', this.HP[type][j]);
-            this.HP[type][j].sethp(o);
-            this.HP[type][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
-        }
+        this.drawManager.drawHP(this.collidable, this.HP, this.game.env);
     }
 
     drawPortals() {
-        if (!this.portalImg) return;
-
-        for (let e of this.game.mapmanager.events[this.game.env]) {
-            if (e.event && e.event.type === "changemap") {
-                // 计算传送门位置（居中显示在事件区域）
-                const portalX = e.x + (e.w - this.portalImg.width) / 2;
-                const portalY = e.y + (e.h - this.portalImg.height) / 2;
-
-                // 添加简单的呼吸动画效果
-                const scale = 1 + 0.1 * Math.sin(this.game.gameFrame * 0.1);
-                const scaledWidth = this.portalImg.width * scale;
-                const scaledHeight = this.portalImg.height * scale;
-                const offsetX = (scaledWidth - this.portalImg.width) / 2;
-                const offsetY = (scaledHeight - this.portalImg.height) / 2;
-
-                this.game.ctx.save();
-                this.game.ctx.globalAlpha =
-                    0.8 + 0.2 * Math.sin(this.game.gameFrame * 0.15);
-                this.game.ctx.drawImage(
-                    this.portalImg,
-                    portalX - offsetX,
-                    portalY - offsetY,
-                    scaledWidth,
-                    scaledHeight
-                );
-                this.game.ctx.restore();
-            }
-        }
+        this.drawManager.drawPortals(this.portalImg, this.events, this.game.env);
     }
 }
