@@ -173,6 +173,6 @@ _jsonCallback({
 		],
 		"background": "../images/lib2.png"
 	},
-    "boss":true,
+    "Boss":true,
 }
 )
