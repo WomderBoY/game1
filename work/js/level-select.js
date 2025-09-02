@@ -7,6 +7,7 @@ const levelConfig = {
     "../map/bg-map1.json": { name: "图书馆深处", unlocked: false },
     "../map/bg-map3.json": { name: "待定", unlocked: false },
     "../map/bg3.json": { name: "待定", unlocked: false },
+    "../map/bg-map4.json": { name: "待定", unlocked: false },
 };
 
 // 滑动相关变量
@@ -48,18 +49,23 @@ function checkSaveData() {
             levelConfig[level].unlocked = true;
         }
     });
+    
+    // 调试：打印当前解锁状态
+    // console.log("=== 关卡解锁状态调试 ===");
+    // console.log("localStorage中的unlockedLevels:", unlockedLevels);
+    // console.log("更新后的levelConfig:", levelConfig);
 
     if (saveData) {
         const data = JSON.parse(saveData);
         const currentLevel = data.room;
 
-        // 更新进度显示
-        document.getElementById("current-progress").textContent =
-            levelConfig[currentLevel]?.name || "第1关";
-    } else {
-        // 没有存档时，只解锁第一关
-        document.getElementById("current-progress").textContent = "第1关";
+        // 更新进度显示（如果元素存在的话）
+        const progressElement = document.getElementById("current-progress");
+        if (progressElement) {
+            progressElement.textContent = levelConfig[currentLevel]?.name || "第1关";
+        }
     }
+    // 注释掉进度显示相关代码，因为HTML中该元素已被注释
 
     // 更新解锁状态显示
     updateLevelButtons();
@@ -69,13 +75,21 @@ function checkSaveData() {
 // 更新关卡按钮状态
 function updateLevelButtons() {
     const buttons = document.querySelectorAll(".level-button");
-    buttons.forEach((button) => {
+    // console.log(`找到 ${buttons.length} 个关卡按钮`);
+    
+    buttons.forEach((button, index) => {
         const level = button.getAttribute("data-level");
+        const isUnlocked = levelConfig[level] && levelConfig[level].unlocked;
+        
+        // console.log(`按钮 ${index + 1}: ${level}, 解锁状态: ${isUnlocked}`);
+        
         if (levelConfig[level] && !levelConfig[level].unlocked) {
             button.classList.add("locked");
             button.onclick = null;
+            // console.log(`关卡 ${level} 已锁定，添加locked样式，当前classList:`, button.classList.toString());
         } else {
             button.classList.remove("locked");
+            // console.log(`关卡 ${level} 已解锁，移除locked样式，当前classList:`, button.classList.toString());
         }
     });
 }
@@ -85,7 +99,7 @@ function updateUnlockedCount() {
     const unlockedCount = Object.values(levelConfig).filter(
         (level) => level.unlocked
     ).length;
-    document.getElementById("unlocked-levels").textContent = `${unlockedCount}/5`;
+    document.getElementById("unlocked-levels").textContent = `${unlockedCount}/6`;
 }
 
 // 选择关卡
@@ -208,8 +222,37 @@ function unlockAllLevels() {
     location.reload(); // 重新加载页面以更新界面
 }
 
+// 强制重置为只解锁第一关（调试用）
+function resetToFirstLevel() {
+    localStorage.setItem("unlockedLevels", JSON.stringify(["../map/bg.json"]));
+    console.log("已重置为只解锁第一关");
+    location.reload(); // 重新加载页面以更新界面
+}
+
+// 测试CSS样式是否正确加载
+function testCSSLoading() {
+    console.log("=== CSS样式测试 ===");
+    
+    // 测试locked样式是否存在
+    const testButton = document.querySelector('.level-button');
+    if (testButton) {
+        console.log("找到关卡按钮，测试添加locked样式");
+        testButton.classList.add("locked");
+        console.log("添加locked后，classList:", testButton.classList.toString());
+        console.log("计算后的样式:", window.getComputedStyle(testButton).background);
+        
+        // 移除测试样式
+        testButton.classList.remove("locked");
+        console.log("移除locked后，classList:", testButton.classList.toString());
+    } else {
+        console.log("未找到关卡按钮");
+    }
+}
+
 // 将解锁函数暴露到全局作用域，方便调试
 window.unlockAllLevels = unlockAllLevels;
+window.resetToFirstLevel = resetToFirstLevel;
+window.testCSSLoading = testCSSLoading;
 
 // 添加键盘快捷键支持
 document.addEventListener("keydown", function(e) {
