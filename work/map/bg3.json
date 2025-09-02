@@ -179,7 +179,8 @@ _jsonCallback({
         ],
         "enemy": [],
         "bagua": [],
-        "background":""
+        "background":"",
+        "enemy2":[],
 
 
     },
