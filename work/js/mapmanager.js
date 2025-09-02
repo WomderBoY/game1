@@ -72,6 +72,10 @@ class mapmanager {
         mapmanager.lstchange = this.game.gameFrame;
     }
 
+    loadingatk() {
+        return this.game.gameFrame - mapmanager.lstchange <= 100;
+    }
+
     hurt() {
         return this.game.gameFrame - mapmanager.lstchange <= 80;
     }
@@ -378,7 +382,8 @@ class mapmanager {
             this.collidable, 
             this.tram, 
             this.app, 
-            this.events
+            this.events,
+            this.atk,
         );
         
         // 绘制血条
