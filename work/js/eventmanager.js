@@ -66,6 +66,7 @@ class eventmanager {
             this.game.player.position.y = e.y;
             await this.game.mapmanager.loadMap(e.target);
             await this.game.enemymanager.LoadEnemy(e.target);
+            await this.enemy2manager.LoadEnemy2(e.target); //新加的敌人类型
             await this.game.baguamanager.LoadBagua(e.target);
             // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
             this.game.status = "running";

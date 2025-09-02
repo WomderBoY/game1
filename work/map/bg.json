@@ -107,6 +107,7 @@ _jsonCallback({
 				"col": false
 			}
 		],
+
 		"enemy": [
 			{
 				"x": 600,
@@ -114,6 +115,17 @@ _jsonCallback({
 				"w": 30,
 				"h": 30,
 				"speed": 2
+			}
+		],
+		"enemy2": [
+			{
+				"x": 500,
+				"y": 300,
+				"w": 30,
+				"h": 30,
+				"speed": 2,
+				"attackRange":150, 
+				"dashSpeed":10
 			}
 		],
 		"bagua": [

@@ -62,6 +62,10 @@ class entitymanager {
         } else if (!entitymanager.onground) {
             ps = "onjump";
         }
+
+        
+
+
         if (ps == "run") {
             //          console.log('run sound', this.game.soundmanager.isPlay('run'));
             if (entitymanager.pre == "onjump") {
@@ -126,6 +130,7 @@ class entitymanager {
             if (this.game.achievements)
                 this.game.achievements.unlock("first_toggle");
             this.game.taijimanager.trigger(); // 触发太极动画切换效果
+            this.game.soundmanager.playOnce("change", 1, 1); //触发太极音效
         }
 
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {

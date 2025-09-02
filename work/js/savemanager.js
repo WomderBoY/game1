@@ -80,6 +80,7 @@ class SaveManager {
                 this.game.yingyang = dt.player.yingyang;
                 this.game.mapmanager.loadMap(dt.room);
                 this.game.enemymanager.LoadEnemy(dt.room);
+                this.game.enemy2manager.LoadEnemy2(dt.room);
                 this.game.status = "running";
 
                 // 只有当 event 不为 null 时才添加到事件管理器

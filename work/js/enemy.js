@@ -122,7 +122,7 @@ class EnemyManager {
 
         this.empty();
 
-        for (let i of data.yang.enemy) {
+        for (let i of data.yang.enemy) {  //这里为啥只加载了阳的
             await this.addEnemy(i.x, i.y, i.w, i.h, i.speed);
         }
     }

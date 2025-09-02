@@ -152,6 +152,37 @@ _jsonCallback({
 				"img": [
 					"../images/test1.png"
 				]
+			},
+			{
+				"hitbox": [
+					777,
+					551,
+					250,
+					80
+				],
+				//	"hp":1,
+				"fra":true,
+				"col": true,
+				"img": [
+					"../images/vine1.png"
+				]
+			},
+			{
+				"hitbox": [
+					1000,
+					200,
+					80,
+					10
+				],
+				//	"hp":1,
+				"move":true,
+				"area":[500, 1000, -1, -1],
+				"vx":1,
+				"vy":0,
+				"col":true,
+				"img": [
+					"../images/test1.png"
+				]
 			}
 		],
 		"enemy": [],

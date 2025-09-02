@@ -36,6 +36,7 @@ class game {
         this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
+        this.enemy2manager = new Enemy2Manager(this)
         this.cgmanager = new CGManager(this);
         this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
@@ -60,6 +61,7 @@ class game {
 
             await this.mapmanager.loadMap(selectedLevel);
             await this.enemymanager.LoadEnemy(selectedLevel);
+            await this.enemy2manager.LoadEnemy2(selectedLevel);
             await this.baguamanager.LoadBagua(selectedLevel);
             this.mapmanager.draw(this.env);
         }
@@ -339,10 +341,14 @@ class game {
                     }
                 }
                 await this.enemymanager.update();
+                await this.enemy2manager.update();
                 await this.mapmanager.drawPortals();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
-                if (this.cg == false) this.enemymanager.draw(this.ctx);
+                if (this.cg == false){
+                    this.enemymanager.draw(this.ctx);
+                    this.enemy2manager.draw(this.ctx);
+                } 
                 await this.entitymanager.update();
                 await this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();
@@ -366,6 +372,7 @@ class game {
                     }
                 }
                 this.enemymanager.draw(this.ctx);
+                this.enemy2manager.draw(this.ctx);
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 this.entitymanager.drawPlayer();
@@ -384,6 +391,7 @@ class game {
                     }
                 }
                 this.enemymanager.draw(this.ctx);
+                this.enemy2manager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
 
                 // 绘制死亡状态的玩家（在地图和敌人之上）
