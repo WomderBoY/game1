@@ -31,6 +31,8 @@ class Movetile extends Rect {
         // 更新位置
         this.x += this.vx;
         this.y += this.vy;
+
+        
         
         // 边界检测和反弹
         if ((this.xmx != -1 && this.x + this.w >= this.xmx) || (this.xmn != -1 && this.x <= this.xmn)) {

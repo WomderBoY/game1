@@ -1,5 +1,10 @@
 _jsonCallback({
 	"born":[0, 0],
+	"Tram":[
+		{
+			"hitbox":[760, 650, 30, 30],
+		}
+	],
 	"with":[
 		{
 					"type": "cg",
@@ -57,20 +62,23 @@ _jsonCallback({
 					20
 				],
 				"event": {
-					"type": "cg",
+					"type": "changemap",
+					"target":"../map/bgtest.json",
 					"way": "negative",
-					"images": [
-						"../images/black-right2-0.png",
-						"../images/white.png"
-					],
-					"text": [
-						[
-								"这是传送门"
-							],
+					"with":{
+						"images": [
+							"../images/black-right2-0.png",
+							"../images/white.png"
+						],
+						"text": [
 							[
-								"将你传送到下一关"
-							]
-					],
+									"这是传送门"
+								],
+								[
+									"将你传送到下一关"
+								]
+						],
+					}
 				},
 				"col": false
 			},

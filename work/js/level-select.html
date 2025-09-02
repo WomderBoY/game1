@@ -11,40 +11,87 @@
             <h1>选择关卡</h1>
 
             <div class="progress-info">
-                <div>当前进度：<span id="current-progress">第1关</span></div>
-                <div>已解锁关卡：<span id="unlocked-levels">1/3</span></div>
+                <!-- <div>当前进度：<span id="current-progress">第1关</span></div> -->
+                <div>已解锁关卡：<span id="unlocked-levels">1/6</span></div>
             </div>
 
-            <div class="levels-grid">
-                <button
-                    class="level-button"
-                    data-level="../map/bg.json"
-                    onclick="selectLevel('../map/bg.json')"
-                >
-                    <span class="level-number">1</span>
-                    <span class="level-name">图书馆入口</span>
-                    <!-- <div class="star-rating">★★★</div> -->
+            <!-- 滑动关卡选择器 -->
+            <div class="level-slider-container">
+                <button class="nav-button prev-button" onclick="previousLevel()" disabled>
+                    <span>‹</span>
                 </button>
+                
+                <div class="level-slider">
+                    <div class="level-track" id="levelTrack">
+                        <button
+                            class="level-button"
+                            data-level="../map/bg.json"
+                            onclick="selectLevel('../map/bg.json')"
+                        >
+                            <span class="level-number">1</span>
+                            <span class="level-name">图书馆入口</span>
+                        </button>
 
-                <button
-                    class="level-button"
-                    data-level="../map/bg2.json"
-                    onclick="selectLevel('../map/bg2.json')"
-                >
-                    <span class="level-number">2</span>
-                    <span class="level-name">神秘教室</span>
-                    <!-- <div class="star-rating">★★★</div> -->
-                </button>
+                        <button
+                            class="level-button"
+                            data-level="../map/bg2.json"
+                            onclick="selectLevel('../map/bg2.json')"
+                        >
+                            <span class="level-number">2</span>
+                            <span class="level-name">神秘教室</span>
+                        </button>
 
-                <button
-                    class="level-button"
-                    data-level="../map/bg-map1.json"
-                    onclick="selectLevel('../map/bg-map1.json')"
-                >
-                    <span class="level-number">3</span>
-                    <span class="level-name">图书馆深处</span>
-                    <!-- <div class="star-rating">★★★</div> -->
+                        <button
+                            class="level-button"
+                            data-level="../map/bg-map1.json"
+                            onclick="selectLevel('../map/bg-map1.json')"
+                        >
+                            <span class="level-number">3</span>
+                            <span class="level-name">图书馆深处</span>
+                        </button>
+
+                        <button
+                            class="level-button"
+                            data-level="../map/bg-map3.json"
+                            onclick="selectLevel('../map/bg-map3.json')"
+                        >
+                            <span class="level-number">4</span>
+                            <span class="level-name">待定</span>
+                        </button>
+
+                        <button
+                            class="level-button"
+                            data-level="../map/bg3.json"
+                            onclick="selectLevel('../map/bg3.json')"
+                        >
+                            <span class="level-number">5</span>
+                            <span class="level-name">待定</span>
+                        </button>
+
+                        <button
+                            class="level-button"
+                            data-level="../map/bg-map4.json"
+                            onclick="selectLevel('../map/bg-map4.json')"
+                        >
+                            <span class="level-number">6</span>
+                            <span class="level-name">待定</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="nav-button next-button" onclick="nextLevel()">
+                    <span>›</span>
                 </button>
+            </div>
+
+            <!-- 关卡指示器 -->
+            <div class="level-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
+                <span class="indicator" data-index="2"></span>
+                <span class="indicator" data-index="3"></span>
+                <span class="indicator" data-index="4"></span>
+                <span class="indicator" data-index="5"></span>
             </div>
 
             <button class="back-button" onclick="goBack()">返回主菜单</button>

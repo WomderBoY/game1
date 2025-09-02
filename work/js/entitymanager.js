@@ -7,6 +7,7 @@ class entitymanager {
     static yingjump = -5;
     static gravity = 0.5;
     static maxSpeed = 5;
+    static maxspeedy = -15;
     static friction = 0.75;
     static a = 0.8;
     static yinga = 1.5;
@@ -97,6 +98,14 @@ class entitymanager {
         entitymanager.pre = ps;
     }
 
+    gethurt() {
+        let now = Date.now();
+        if (now >= entitymanager.safeUntil) {
+            if (this.game.hp) this.game.hp.decrease();
+                entitymanager.safeUntil = now + 3000; // 3秒无敌
+        }
+    }
+
     // 更新逻辑优化
     async update() {
         this.keys = {
@@ -160,70 +169,89 @@ class entitymanager {
         let vyy = entitymanager.vyy;
         entitymanager.vxx = 0;
         entitymanager.vyy = 0;
-
-        for (let p of ga.mapmanager.collidable[this.game.env]) {
-            //            console.warn("check col", p);
-            if (p.alive(this.game) == false) {
-                console.warn("pass it");
-                continue;
-            }
-            
+        let fl = false;
+        for (let p of ga.mapmanager.collidable[this.game.env])
             if (p instanceof Movetile) {
                 p.update(this.game)
             }
-            
-            if (ga.player.containsRect(p)) {
+        for (let p of ga.mapmanager.tram) {
+            let prevX = ga.player.position.x - vx - vxx;
+            let prevY = ga.player.position.y - vy - vyy;
+            if (ga.player.containsRect(p) && this.game.env != (this.game.yingyang ? 'yang' : 'yin')) {
+                p.update(prevX, prevY, vx, vy, ga);
+                vx = entitymanager.vx;
+                vy = entitymanager.vy;
+                og = entitymanager.onground;
+                isjp = entitymanager.isjp;
+                lstjp = entitymanager.lstjp;
+                fl = true;
+                break;
+            }
+        }
+        if (!fl) {
+            for (let j = 0; j < ga.mapmanager.collidable[this.game.env].length; ++j) {
+                let p =  ga.mapmanager.collidable[this.game.env][j];
+                //            console.warn("check col", p);
+                if (p.alive(this.game) == false) {
+                    console.warn("pass it");
+                    continue;
+                }
+                
                 let prevX = ga.player.position.x - vx - vxx;
                 let prevY = ga.player.position.y - vy - vyy;
-                console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
+                if (ga.player.containsRect(p)) {
+   //                 console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
+                    if (ga.mapmanager.atk[ga.env][j] && !ga.mapmanager.loadingatk()) {
+                        this.gethurt();
+                    }
+                    if (p instanceof Movetile) {
+                        prevX += p.vx;
+                        prevY += p.vy;
+                    }                
 
-                if (p instanceof Movetile) {
-                    prevX += p.vx;
-                    prevY += p.vy;
-                }                
-
-                // 上方碰撞
-                if (prevY + ga.player.size.y <= p.y) {
-                    
-        //            console.warn("up col!!!");
-                    ga.player.position.y = p.y - ga.player.size.y;
-                    vy = 0;
-                    og = true;
-                    isjp = false;
-                    if (p instanceof Movetile) {
-                        entitymanager.vxx = p.vx;
-                        entitymanager.vyy = p.vy;
+                    // 上方碰撞
+                    if (prevY + ga.player.size.y <= p.y) {
+                        
+            //            console.warn("up col!!!");
+                        ga.player.position.y = p.y - ga.player.size.y;
+                        vy = 0;
+                        og = true;
+                        isjp = false;
+                        if (p instanceof Movetile) {
+                            entitymanager.vxx = p.vx;
+                            entitymanager.vyy = p.vy;
+                        }
                     }
-                }
-                // 下方碰撞
-                else if (prevY >= p.y + p.h) {
-                    
-        //            console.warn("down col!!!");
-                    ga.player.position.y = p.y + p.h;
-                    vy = 0;
-                }
-                // 左侧碰撞
-                else if (prevX + ga.player.size.x <= p.x) {
-                    ga.player.position.x = p.x - ga.player.size.x - 0.5;
-                    vx = 0;
-        //            console.warn("left col!!!");
-                    if (p instanceof Movetile) {
-                        entitymanager.vxx = p.vx;
+                    // 下方碰撞
+                    else if (prevY >= p.y + p.h) {
+                        
+            //            console.warn("down col!!!");
+                        ga.player.position.y = p.y + p.h;
+                        vy = 0;
                     }
-                }
-                // 右侧碰撞
-                else if (prevX >= p.x + p.w) {
-        //            console.warn("right col!!!");
-                    ga.player.position.x = p.x + p.w + 0.5;
-                    vx = 0;
-                    if (p instanceof Movetile) {
-                        entitymanager.vxx = p.vx;
+                    // 左侧碰撞
+                    else if (prevX + ga.player.size.x <= p.x) {
+                        ga.player.position.x = p.x - ga.player.size.x - 0.5;
+                        vx = 0;
+            //            console.warn("left col!!!");
+                        if (p instanceof Movetile) {
+                            entitymanager.vxx = p.vx;
+                        }
                     }
-                }
-                if (p instanceof Fratile)
-                {
-                    console.warn('get', p);
-                    p.update(this.game);
+                    // 右侧碰撞
+                    else if (prevX >= p.x + p.w) {
+            //            console.warn("right col!!!");
+                        ga.player.position.x = p.x + p.w + 0.5;
+                        vx = 0;
+                        if (p instanceof Movetile) {
+                            entitymanager.vxx = p.vx;
+                        }
+                    }
+                    if (p instanceof Fratile)
+                    {
+                        console.warn('get', p);
+                        p.update(this.game);
+                    }
                 }
             }
         }
@@ -232,26 +260,23 @@ class entitymanager {
 
         ga.player.position.x += vx + vxx;
 
+        if (vy != 0) og = false;
+        else lstjp = ga.gameFrame;
+
         // 垂直移动
-        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 5))) {
-            if (og) vy = jp;
+        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 10))) {
+            if (vy >= 0) vy -= gravity * (ga.gameFrame - lstjp); // 控制跳跃高度
+            if (og) vy += jp;
             else
-                vy = -Math.sqrt(
-                    jp * jp +
-                        gravity *
-                            gravity *
-                            (ga.gameFrame - lstjp) *
-                            (ga.gameFrame - lstjp)
-                ); // 控制跳跃高度
+                vy = - Math.sqrt(jp * jp + vy * vy);
             og = false;
             isjp = true;
-            lstjp = ga.gameFrame;
+    //        if (vy < entitymanager.maxspeedy) vy = entitymanager.maxspeedy;
         }
 
         vy += gravity;
         ga.player.position.y += vy + vyy;
 
-        
         // 水平移动
         if (ky.left) {
             if (vx < 0) vx -= a;
@@ -359,16 +384,14 @@ class entitymanager {
             if (this.game.yingyang !== enemy.type && isHead) {
                 // 阴阳不同踩头 → 敌人死亡
                 enemy.dead = true;
+                this.game.boss.HP.decrease(3);
                 this.game.soundmanager.playOnce("enemydeath");
                 entitymanager.vy = -10;
                 if (this.game.achievements)
                     this.game.achievements.unlock("first_kill");
             } else {
                 // 扣血条件：阴阳相同 或 阴阳不同非踩头
-                if (now >= entitymanager.safeUntil) {
-                    if (this.game.hp) this.game.hp.decrease();
-                    entitymanager.safeUntil = now + 3000; // 3秒无敌
-                }
+                this.gethurt();
             }
         }
     }

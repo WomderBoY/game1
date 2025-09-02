@@ -1,5 +1,15 @@
 _jsonCallback({
 	"born":[100, 350],
+	"Tram":[
+			{
+				"hitbox": [
+					550,
+					670,
+					10,
+					10
+				],
+			}
+	],
 	"with":[
 		{
 					"type": "cg",
@@ -108,7 +118,7 @@ _jsonCallback({
 				//	"hp":1,
 				"move":true,
 				"area":[500, 1000, -1, -1],
-				"vx":1,
+				"vx":20,
 				"vy":0,
 				"col":true,
 				"img": [
