@@ -222,7 +222,7 @@ class mapmanager {
             console.log("没有 data.with 字段");
         }
 
-        if (data.boss) {
+        if (data.Boss) {
             console.warn("there is a boss");
             this.game.boss = new Boss(this.game);
         } else {

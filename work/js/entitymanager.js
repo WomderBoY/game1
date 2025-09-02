@@ -98,10 +98,10 @@ class entitymanager {
         entitymanager.pre = ps;
     }
 
-    gethurt() {
+    gethurt(x = 1) {
         let now = Date.now();
         if (now >= entitymanager.safeUntil) {
-            if (this.game.hp) this.game.hp.decrease();
+            if (this.game.hp) this.game.hp.decrease(x);
                 entitymanager.safeUntil = now + 3000; // 3秒无敌
         }
     }

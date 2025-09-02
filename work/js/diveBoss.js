@@ -3,70 +3,71 @@
 //         this.game = game;
 //         this.rect = new Rect(x, y, width, height);
 
-//         this.state = "LEFT_IDLE"; 
+//         this.state = "LEFT_IDLE";
 //         this.stateTimer = 0;
 
-//         this.speed = 4;        // 冲击/水平移动速度
-//         this.idleSpeed = 1.5;  // 巡逻时速度
+//         this.speed = this.baseSpeed;       // 冲击/水平移动速度
+//         this.idleSpeed = 1.5; // 巡逻时速度
 
 //         this.vx = 0;
 //         this.vy = 0;
 
 //         this.hp = new hp(maxHP, game);
 //         this.dead = false;
+//          this.randomSpeedInitialized = false;
+//         this.hasChangedSpeed = false;
+//         this.changePoint = null;
 
-//         (async () => {
-//             this.img = await this.game.datamanager.loadImg(
-//                 "../images/enemy-white.png"
-//             );
-//         })();
+
+//         // 图片加载
+//         this.img = new Image();
+//         this.img.src = "../images/enemy-white.png";
+//         this.imgLoaded = false;
+
+//         // 图片加载完成标记
+//         this.img.onload = () => {
+//             this.imgLoaded = true;
+//         };
 //     }
 
 //     update(player, deltaTime) {
 //         if (this.dead) return;
 
-//         // 根据状态移动
+//         // 状态机逻辑（保持原有）
 //         switch (this.state) {
 //             case "LEFT_IDLE":
-//                 this.patrol(-50, 200, -50, 300, deltaTime);
+//                 this.patrol(0, 200, 0, 300);
 //                 this.stateTimer += deltaTime;
 //                 if (this.stateTimer > 3000) this.changeState("CHARGE_TO_LEFT_PLATFORM");
 //                 break;
-
 //             case "CHARGE_TO_LEFT_PLATFORM":
-//                 this.moveTo(300, 650, deltaTime);
-//                 if (this.reached(300, 650)) this.changeState("MOVE_RIGHT");
+//                 this.moveTo(300, 580);
+//                 if (this.reached(300, 580)) this.changeState("MOVE_RIGHT");
 //                 break;
-
 //             case "MOVE_RIGHT":
-//                 this.moveTo(980, 650, deltaTime);
-//                 if (this.reached(980, 650)) this.changeState("RISE_TO_RIGHT_IDLE");
+//                 this.moveTo(980, 580);
+//                 if (this.reached(980, 580)) this.changeState("RISE_TO_RIGHT_IDLE");
 //                 break;
-
 //             case "RISE_TO_RIGHT_IDLE":
-//                 this.moveTo(1100, 200, deltaTime);
-//                 if (this.rect.position.x >= 1050 && this.rect.position.y <= 300) 
+//                 this.moveTo(1100, 200);
+//                 if (this.rect.position.x >= 1050 && this.rect.position.y <= 300)
 //                     this.changeState("RIGHT_IDLE");
 //                 break;
-
 //             case "RIGHT_IDLE":
-//                 this.patrol(1050, 1300, -50, 300, deltaTime);
+//                 this.patrol(1050, 1200, 0, 300);
 //                 this.stateTimer += deltaTime;
 //                 if (this.stateTimer > 3000) this.changeState("CHARGE_TO_RIGHT_PLATFORM");
 //                 break;
-
 //             case "CHARGE_TO_RIGHT_PLATFORM":
-//                 this.moveTo(980, 650, deltaTime);
-//                 if (this.reached(980, 650)) this.changeState("MOVE_LEFT");
+//                 this.moveTo(980, 580);
+//                 if (this.reached(980, 580)) this.changeState("MOVE_LEFT");
 //                 break;
-
 //             case "MOVE_LEFT":
-//                 this.moveTo(300, 650, deltaTime);
-//                 if (this.reached(300, 650)) this.changeState("RISE_TO_LEFT_IDLE");
+//                 this.moveTo(300, 580);
+//                 if (this.reached(300, 580)) this.changeState("RISE_TO_LEFT_IDLE");
 //                 break;
-
 //             case "RISE_TO_LEFT_IDLE":
-//                 this.moveTo(100, 200, deltaTime);
+//                 this.moveTo(100, 200);
 //                 if (this.rect.position.x <= 200 && this.rect.position.y <= 300)
 //                     this.changeState("LEFT_IDLE");
 //                 break;
@@ -75,7 +76,6 @@
 //         // 更新位置
 //         this.rect.position.x += this.vx * deltaTime / 16;
 //         this.rect.position.y += this.vy * deltaTime / 16;
-
 
 //         // 踩头/碰撞判定
 //         this.handlePlayerCollision(player);
@@ -88,97 +88,72 @@
 //         this.vy = 0;
 //     }
 
-//     patrol(xMin, xMax, yMin, yMax, deltaTime) {
+//     patrol(xMin, xMax, yMin, yMax) {
 //         if (Math.random() < 0.02) {
-//             this.vx = (Math.random() - 0.5) * this.idleSpeed * deltaTime / 16;
-//             this.vy = (Math.random() - 0.5) * this.idleSpeed * deltaTime / 16;
+//             this.vx = (Math.random() - 0.5) * this.idleSpeed;
+//             this.vy = (Math.random() - 0.5) * this.idleSpeed;
 //         }
-//         // 限制在范围内
-//         if (this.rect.position.x < xMin) this.vx = this.idleSpeed * deltaTime / 16;
-//         if (this.rect.position.x > xMax) this.vx = -this.idleSpeed * deltaTime / 16;
-//         if (this.rect.position.y < yMin) this.vy = this.idleSpeed * deltaTime / 16;
-//         if (this.rect.position.y > yMax) this.vy = -this.idleSpeed * deltaTime / 16;
+//         if (this.rect.position.x < xMin) this.vx = this.idleSpeed;
+//         if (this.rect.position.x > xMax) this.vx = -this.idleSpeed;
+//         if (this.rect.position.y < yMin) this.vy = this.idleSpeed;
+//         if (this.rect.position.y > yMax) this.vy = -this.idleSpeed;
 //     }
 
-//     // moveTo(tx, ty, deltaTime) {
-//     //     const dx = tx - this.rect.position.x;
-//     //     const dy = ty - this.rect.position.y;
-//     //     const dist = Math.sqrt(dx * dx + dy * dy);
-//     //     if (dist === 0) {
-//     //         this.vx = 0;
-//     //         this.vy = 0;
-//     //         return;
-//     //     }
-
-//     //     const moveDist = Math.min(this.speed * deltaTime / 16, dist);
-//     //     this.vx = (dx / dist) * moveDist;
-//     //     this.vy = (dy / dist) * moveDist;
-
-//     //     // 防止越过目标点
-//     //     if (Math.abs(dx) <= Math.abs(this.vx)) {
-//     //         this.rect.position.x = tx;
-//     //         this.vx = 0;
-//     //     }
-//     //     if (Math.abs(dy) <= Math.abs(this.vy)) {
-//     //         this.rect.position.y = ty;
-//     //         this.vy = 0;
-//     //     }
-//     // }
 //     moveTo(tx, ty) {
-//     const dx = tx - this.rect.position.x;
-//     const dy = ty - this.rect.position.y;
-//     const dist = Math.sqrt(dx * dx + dy * dy);
+//         const dx = tx - this.rect.position.x;
+//         const dy = ty - this.rect.position.y;
+//         const dist = Math.sqrt(dx * dx + dy * dy);
+//         if (dist === 0) {
+//             this.vx = 0;
+//             this.vy = 0;
+//             return;
+//         }
+//         this.vx = (dx / dist) * this.speed;
+//         this.vy = (dy / dist) * this.speed;
 
-//     if (dist === 0) {
-//         this.vx = 0;
-//         this.vy = 0;
-//         return;
+//         if (Math.abs(dx) <= Math.abs(this.vx)) {
+//             this.rect.position.x = tx;
+//             this.vx = 0;
+//         }
+//         if (Math.abs(dy) <= Math.abs(this.vy)) {
+//             this.rect.position.y = ty;
+//             this.vy = 0;
+//         }
 //     }
 
-//     this.vx = (dx / dist) * this.speed;
-//     this.vy = (dy / dist) * this.speed;
-// }
-
-// // // update 更新位置
-// // this.rect.position.x += this.vx * deltaTime / 16;
-// // this.rect.position.y += this.vy * deltaTime / 16;
-
-
-//     reached(tx, ty, tolerance = 5) {
+//     reached(tx, ty, tolerance = 10) {
 //         return Math.abs(this.rect.position.x - tx) <= tolerance &&
 //                Math.abs(this.rect.position.y - ty) <= tolerance;
 //     }
 
 //     handlePlayerCollision(player) {
+//         if (!player.containsRect(this.rect)) return ;
 //         const playerBottom = player.position.y + player.size.y;
-//         const playerPrevY = player.position.y - (player.vy || 0);
+//         const playerPrevY = player.position.y - (entitymanager.vy || 0);
 //         const rect = this.rect;
-
-//         const fromTop = playerPrevY + player.size.y <= rect.position.y;
-//         const isHead = fromTop && playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10;
-
+        
 //         const now = performance.now();
 
-//         if (isHead) {
+//         if (playerPrevY + player.size.y <= rect.position.y
+//             && player.position.x + player.size.x >= this.rect.position.x
+//             && player.position.x <= this.rect.position.x + this.rect.size.x
+//         ) {
 //             this.hp.decrease();
-//             if (player.rebound) player.rebound();
+//             entitymanager.vy = -10;
 //             if (this.hp.isDead()) {
-//                 this.state = "dead";
+//       //          this.state = "dead";
 //                 this.dead = true;
 //             } else {
-//                 this.state = "hurt";
+//        //         this.state = "hurt";
 //                 this.stateTimer = 0;
 //             }
 //         } else {
-//             if (now >= (player.safeUntil || 0)) {
-//                 if (this.game.hp) this.game.hp.decrease();
-//                 player.safeUntil = now + 3000;
-//             }
+//             this.game.entitymanager.gethurt()
 //         }
 //     }
 
 //     draw(ctx) {
-//         if (!this.img || this.dead) return;
+//         if (!this.imgLoaded || this.dead) return;  // 确保图片加载完成
 //         ctx.drawImage(
 //             this.img,
 //             this.rect.position.x,
@@ -187,7 +162,7 @@
 //             this.rect.size.y
 //         );
 
-//         // Boss 血条在头顶
+//         // 绘制血条
 //         this.hp.draw2(
 //             ctx,
 //             this.rect.position.x + this.rect.size.x / 2,
@@ -195,6 +170,7 @@
 //         );
 //     }
 // }
+
 // class BossManager {
 //     constructor(game) {
 //         this.game = game;
@@ -232,183 +208,6 @@
 //     }
 // }
 
-// class DiveBoss {
-//     constructor(game, x = 100, y = 100, width = 80, height = 80, maxHP = 10) {
-//         this.game = game;
-//         this.rect = new Rect(x, y, width, height);
-
-//         this.state = "LEFT_IDLE";
-//         this.stateTimer = 0;
-
-//         this.speed = 4;       // 冲击/水平移动速度
-//         this.idleSpeed = 1.5; // 巡逻时速度
-
-//         this.vx = 0;
-//         this.vy = 0;
-
-//         this.hp = new hp(maxHP, game);
-//         this.dead = false;
-
-//         // 加载图片
-//         (async () => {
-//             this.img = await this.game.datamanager.loadImg("../images/enemy-white.png");
-//         })();
-//     }
-
-//     update(player, deltaTime) {
-//         if (this.dead) return;
-
-//         switch (this.state) {
-//             case "LEFT_IDLE":
-//                 this.patrol(-50, 200, -50, 300);
-//                 this.stateTimer += deltaTime;
-//                 if (this.stateTimer > 3000) this.changeState("CHARGE_TO_LEFT_PLATFORM");
-//                 break;
-
-//             case "CHARGE_TO_LEFT_PLATFORM":
-//                 this.moveTo(300, 650);
-//                 if (this.reached(300, 650)) this.changeState("MOVE_RIGHT");
-//                 break;
-
-//             case "MOVE_RIGHT":
-//                 this.moveTo(980, 650);
-//                 if (this.reached(980, 650)) this.changeState("RISE_TO_RIGHT_IDLE");
-//                 break;
-
-//             case "RISE_TO_RIGHT_IDLE":
-//                 this.moveTo(1100, 200);
-//                 if (this.rect.position.x >= 1050 && this.rect.position.y <= 300)
-//                     this.changeState("RIGHT_IDLE");
-//                 break;
-
-//             case "RIGHT_IDLE":
-//                 this.patrol(1050, 1300, -50, 300);
-//                 this.stateTimer += deltaTime;
-//                 if (this.stateTimer > 3000) this.changeState("CHARGE_TO_RIGHT_PLATFORM");
-//                 break;
-
-//             case "CHARGE_TO_RIGHT_PLATFORM":
-//                 this.moveTo(980, 650);
-//                 if (this.reached(980, 650)) this.changeState("MOVE_LEFT");
-//                 break;
-
-//             case "MOVE_LEFT":
-//                 this.moveTo(300, 650);
-//                 if (this.reached(300, 650)) this.changeState("RISE_TO_LEFT_IDLE");
-//                 break;
-
-//             case "RISE_TO_LEFT_IDLE":
-//                 this.moveTo(100, 200);
-//                 if (this.rect.position.x <= 200 && this.rect.position.y <= 300)
-//                     this.changeState("LEFT_IDLE");
-//                 break;
-//         }
-
-//         // 更新位置（乘 deltaTime 缩放）
-//         this.rect.position.x += this.vx * deltaTime / 16;
-//         this.rect.position.y += this.vy * deltaTime / 16;
-
-//         // 踩头/碰撞判定
-//         this.handlePlayerCollision(player);
-//     }
-
-//     changeState(newState) {
-//         this.state = newState;
-//         this.stateTimer = 0;
-//         this.vx = 0;
-//         this.vy = 0;
-//     }
-
-//     patrol(xMin, xMax, yMin, yMax) {
-//         // 随机轻微抖动
-//         if (Math.random() < 0.02) {
-//             this.vx = (Math.random() - 0.5) * this.idleSpeed;
-//             this.vy = (Math.random() - 0.5) * this.idleSpeed;
-//         }
-
-//         // 限制范围
-//         if (this.rect.position.x < xMin) this.vx = this.idleSpeed;
-//         if (this.rect.position.x > xMax) this.vx = -this.idleSpeed;
-//         if (this.rect.position.y < yMin) this.vy = this.idleSpeed;
-//         if (this.rect.position.y > yMax) this.vy = -this.idleSpeed;
-//     }
-
-//     moveTo(tx, ty) {
-//         const dx = tx - this.rect.position.x;
-//         const dy = ty - this.rect.position.y;
-//         const dist = Math.sqrt(dx * dx + dy * dy);
-
-//         if (dist === 0) {
-//             this.vx = 0;
-//             this.vy = 0;
-//             return;
-//         }
-
-//         // 速度直接按单位方向
-//         this.vx = (dx / dist) * this.speed;
-//         this.vy = (dy / dist) * this.speed;
-
-//         // 防止越过目标点
-//         if (Math.abs(dx) <= Math.abs(this.vx)) {
-//             this.rect.position.x = tx;
-//             this.vx = 0;
-//         }
-//         if (Math.abs(dy) <= Math.abs(this.vy)) {
-//             this.rect.position.y = ty;
-//             this.vy = 0;
-//         }
-//     }
-
-//     reached(tx, ty, tolerance = 5) {
-//         return Math.abs(this.rect.position.x - tx) <= tolerance &&
-//                Math.abs(this.rect.position.y - ty) <= tolerance;
-//     }
-
-//     handlePlayerCollision(player) {
-//         const playerBottom = player.position.y + player.size.y;
-//         const playerPrevY = player.position.y - (player.vy || 0);
-//         const rect = this.rect;
-
-//         const fromTop = playerPrevY + player.size.y <= rect.position.y;
-//         const isHead = fromTop && playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10;
-
-//         const now = performance.now();
-
-//         if (isHead) {
-//             this.hp.decrease();
-//             if (player.rebound) player.rebound();
-//             if (this.hp.isDead()) {
-//                 this.state = "dead";
-//                 this.dead = true;
-//             } else {
-//                 this.state = "hurt";
-//                 this.stateTimer = 0;
-//             }
-//         } else {
-//             if (now >= (player.safeUntil || 0)) {
-//                 if (this.game.hp) this.game.hp.decrease();
-//                 player.safeUntil = now + 3000;
-//             }
-//         }
-//     }
-
-//     draw(ctx) {
-//         if (!this.img || this.dead) return;
-//         ctx.drawImage(
-//             this.img,
-//             this.rect.position.x,
-//             this.rect.position.y,
-//             this.rect.size.x,
-//             this.rect.size.y
-//         );
-
-//         this.hp.draw2(
-//             ctx,
-//             this.rect.position.x + this.rect.size.x / 2,
-//             this.rect.position.y - 20
-//         );
-//     }
-// }
 class DiveBoss {
     constructor(game, x = 100, y = 100, width = 80, height = 80, maxHP = 10) {
         this.game = game;
@@ -417,8 +216,9 @@ class DiveBoss {
         this.state = "LEFT_IDLE";
         this.stateTimer = 0;
 
-        this.speed = 4;       // 冲击/水平移动速度
-        this.idleSpeed = 1.5; // 巡逻时速度
+        this.baseSpeed = 10;     // 默认速度
+        this.speed = this.baseSpeed;
+        this.idleSpeed = 1.5;   // 巡逻时速度
 
         this.vx = 0;
         this.vy = 0;
@@ -426,12 +226,15 @@ class DiveBoss {
         this.hp = new hp(maxHP, game);
         this.dead = false;
 
+        // 移动区间内的速度调整逻辑
+        this.randomSpeedInitialized = false;
+        this.hasChangedSpeed = false;
+        this.changePoint = null;
+
         // 图片加载
         this.img = new Image();
         this.img.src = "../images/enemy-white.png";
         this.imgLoaded = false;
-
-        // 图片加载完成标记
         this.img.onload = () => {
             this.imgLoaded = true;
         };
@@ -440,7 +243,30 @@ class DiveBoss {
     update(player, deltaTime) {
         if (this.dead) return;
 
-        // 状态机逻辑（保持原有）
+        // 横向移动时的动态速度逻辑
+        switch (this.state) {
+            case "MOVE_RIGHT":
+                this.handleDynamicSpeed(300, 980, true);  // 左→右
+                this.moveTo(980, 580);
+                if (this.reached(980, 580)) {
+                    this.resetSpeed();
+                    this.changeState("RISE_TO_RIGHT_IDLE");
+                }
+                break;
+            case "MOVE_LEFT":
+                this.handleDynamicSpeed(980, 300, false); // 右→左
+                this.moveTo(300, 580);
+                if (this.reached(300, 580)) {
+                    this.resetSpeed();
+                    this.changeState("RISE_TO_LEFT_IDLE");
+                }
+                break;
+            default:
+                this.resetSpeed();
+                break;
+        }
+
+        // 原有状态机
         switch (this.state) {
             case "LEFT_IDLE":
                 this.patrol(0, 200, 0, 300);
@@ -448,12 +274,8 @@ class DiveBoss {
                 if (this.stateTimer > 3000) this.changeState("CHARGE_TO_LEFT_PLATFORM");
                 break;
             case "CHARGE_TO_LEFT_PLATFORM":
-                this.moveTo(300, 650);
-                if (this.reached(300, 650)) this.changeState("MOVE_RIGHT");
-                break;
-            case "MOVE_RIGHT":
-                this.moveTo(980, 650);
-                if (this.reached(980, 650)) this.changeState("RISE_TO_RIGHT_IDLE");
+                this.moveTo(300, 580);
+                if (this.reached(300, 580)) this.changeState("MOVE_RIGHT");
                 break;
             case "RISE_TO_RIGHT_IDLE":
                 this.moveTo(1100, 200);
@@ -466,12 +288,8 @@ class DiveBoss {
                 if (this.stateTimer > 3000) this.changeState("CHARGE_TO_RIGHT_PLATFORM");
                 break;
             case "CHARGE_TO_RIGHT_PLATFORM":
-                this.moveTo(980, 650);
-                if (this.reached(980, 650)) this.changeState("MOVE_LEFT");
-                break;
-            case "MOVE_LEFT":
-                this.moveTo(300, 650);
-                if (this.reached(300, 650)) this.changeState("RISE_TO_LEFT_IDLE");
+                this.moveTo(980, 580);
+                if (this.reached(980, 580)) this.changeState("MOVE_LEFT");
                 break;
             case "RISE_TO_LEFT_IDLE":
                 this.moveTo(100, 200);
@@ -486,6 +304,36 @@ class DiveBoss {
 
         // 踩头/碰撞判定
         this.handlePlayerCollision(player);
+    }
+
+    // 区间运动时的随机速度逻辑
+    handleDynamicSpeed(startX, endX, movingRight) {
+        if (!this.randomSpeedInitialized) {
+            this.speed = 13+ Math.random() * 8; // 13-21
+            this.changePoint = startX + Math.random() * (endX - startX); // 随机变速点
+            this.randomSpeedInitialized = true;
+            this.hasChangedSpeed = false;
+            console.log("初始速度:", this.speed.toFixed(2), " 变速点:", this.changePoint.toFixed(2));
+        }
+
+        if (!this.hasChangedSpeed) {
+            if (movingRight && this.rect.position.x >= this.changePoint) {
+                this.speed = 13 + Math.random() * 8; // 13-21
+                this.hasChangedSpeed = true;
+                console.log("变速后速度:", this.speed.toFixed(2));
+            } else if (!movingRight && this.rect.position.x <= this.changePoint) {
+                this.speed = 13 + Math.random() * 8;
+                this.hasChangedSpeed = true;
+                console.log("变速后速度:", this.speed.toFixed(2));
+            }
+        }
+    }
+
+    resetSpeed() {
+        this.speed = this.baseSpeed;
+        this.randomSpeedInitialized = false;
+        this.hasChangedSpeed = false;
+        this.changePoint = null;
     }
 
     changeState(newState) {
@@ -536,27 +384,22 @@ class DiveBoss {
     handlePlayerCollision(player) {
         if (!player.containsRect(this.rect)) return ;
         const playerBottom = player.position.y + player.size.y;
-        const playerPrevY = player.position.y - (player.vy || 0);
+        const playerPrevY = player.position.y - (entitymanager.vy || 0);
         const rect = this.rect;
-
-        const fromTop = playerPrevY + player.size.y <= rect.position.y;
-        const isHead = fromTop && playerBottom >= rect.position.y && playerBottom <= rect.position.y + 10;
-
-        const now = performance.now();
-
-        if (isHead) {
+        
+        if (playerPrevY + player.size.y <= rect.position.y
+            && player.position.x + player.size.x >= this.rect.position.x
+            && player.position.x <= this.rect.position.x + this.rect.size.x
+        ) {
+            this.hp.decrease();
+            entitymanager.vy = -10;
             if (this.hp.isDead()) {
-                this.state = "dead";
                 this.dead = true;
             } else {
-                this.state = "hurt";
                 this.stateTimer = 0;
             }
         } else {
-            if (now >= (player.safeUntil || 0)) {
-                if (this.game.hp) this.game.hp.decrease();
-                player.safeUntil = now + 3000;
-            }
+            this.game.entitymanager.gethurt()
         }
     }
 
@@ -602,7 +445,6 @@ class BossManager {
     }
 
     update(player, deltaTime) {
-        console.warn('update');
         for (let boss of this.bosses) {
             boss.update(player, deltaTime);
         }
@@ -615,4 +457,3 @@ class BossManager {
         }
     }
 }
-
