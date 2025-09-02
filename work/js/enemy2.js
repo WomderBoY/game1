@@ -142,7 +142,7 @@ class Enemy2Manager {
 
         this.empty();
 
-        if (data.yang.enemy2) {
+        if (data.yang.enemy2 && Array.isArray(data.yang.enemy2)) {
             for (let i of data.yang.enemy2) {
                 await this.addEnemy2(i.x, i.y, i.w, i.h, i.speed, i.attackRange, i.dashSpeed);
             }
