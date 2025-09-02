@@ -14,7 +14,10 @@ class Tile extends Rect {
     alive(game) {
         if (!this.hp) return true;
         //        console.warn('hp', this.hp, game.changetimes, game.mapmanager.hurt());
-        if (Math.floor(game.changetimes / 2) == this.hp && game.mapmanager.hurt())
+        if (
+            Math.floor(game.changetimes / 2) == this.hp &&
+            game.mapmanager.hurt()
+        )
             return true;
         if (Math.floor(game.changetimes / 2) < this.hp) return true;
         //        console.warn('damaged!!!');
@@ -40,12 +43,26 @@ class mapmanager {
     empty() {
         this.test = { yin: [], yang: [] };
         this.collidable = { yin: [], yang: [] };
-        this.HP = {yin:[], yang:[]}
+        this.HP = { yin: [], yang: [] };
         this.events = { yin: [], yang: [] };
         this.app = { yin: [], yang: [] };
         this.room = "";
         this.background = { yin: [], yang: [] };
+        this.atk = { yin: [], yang: [] };
+        this.atkti = 0;
         this.tram = [];
+    }
+
+    cl_attack(type) {
+        this.atk[type] = [];
+        let len = this.collidable[type].length;
+        for (let i = 0; i < len; ++i) this.atk[type].push(0);
+    }
+
+    set_attack(type, x) {
+        console.warn('set attack', type, x);
+        this.atkti = this.game.gameFrame;
+        this.atk[type][x] = 1;
     }
 
     sethurt() {
@@ -67,7 +84,7 @@ class mapmanager {
             return;
         }
 
-        this.game.env = 'yang';
+        this.game.env = "yang";
         this.game.changetimes = 0;
 
         // 设置初始透明度
@@ -187,16 +204,22 @@ class mapmanager {
             console.log("没有 data.with 字段");
         }
 
+        if (data.boss) {
+            console.warn("there is a boss");
+            this.game.boss = new Boss(this.game);
+        } else {
+            this.game.boss = null;
+        }
+
         console.log("hahaha");
         // 加载 yin 和 yang 区域的瓦片
         for (let i of data.yin.tileMap) {
             await this.addTile("yin", i);
         }
-        console.warn('jiazaiwancheng');
+        console.warn("jiazaiwancheng");
         for (let i of data.yang.tileMap) {
             await this.addTile("yang", i);
         }
-
 
         // 加载背景图
         if (data.yang.background) {
@@ -229,6 +252,7 @@ class mapmanager {
 
         // 加载完成后，执行淡入效果
         this.fadeIn();
+        this.cl_attack('yin'), this.cl_attack('yang');
     }
 
     // 渐变淡入效果
@@ -260,6 +284,10 @@ class mapmanager {
         };
 
         animate(); // 启动淡入效果
+    }
+
+    loadingatk() {
+        return this.game.gameFrame - this.atkti <= 300;
     }
 
     // 假设你有一个绘制背景的方法
@@ -323,15 +351,25 @@ class mapmanager {
         }
         let tile;
         if (i.fra) {
-            console.warn('fra');
+            console.warn("fra");
             tile = new Fratile(x, y, w, h, img); // 去掉 this.game
-        }
-        else if (i.move) {
-            console.warn('move');
+        } else if (i.move) {
+            console.warn("move");
             const [xmn, xmx, ymn, ymx] = i.area;
-            tile = new Movetile(x, y, w, h, img, xmn, xmx, ymn, ymx, i.vx, i.vy);
-        }
-        else {
+            tile = new Movetile(
+                x,
+                y,
+                w,
+                h,
+                img,
+                xmn,
+                xmx,
+                ymn,
+                ymx,
+                i.vx,
+                i.vy
+            );
+        } else {
             tile = new Tile(x, y, w, h, i.hp, img, i.event);
         }
         // 把 overlayImg 存进去
@@ -357,6 +395,48 @@ class mapmanager {
         return this.collidable[type];
     }
 
+    drawstone(x, y, w, h) {
+        const ctx = this.game.ctx; // 石板砖块效果
+        ctx.save(); // 保存当前绘图状态
+
+        // 1. 砖块底色
+        ctx.fillStyle = "#8B8B7A";
+        ctx.fillRect(x, y, w, h);
+
+        // 2. 砖块边框
+        ctx.strokeStyle = "#6D6D5A";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(x, y, w, h);
+
+        // 3. 纹理线条
+        ctx.strokeStyle = "#7D7D6A";
+        ctx.lineWidth = 1;
+        const lineSpacing = 25;
+
+        // 横向纹理
+        for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
+            ctx.beginPath();
+            ctx.moveTo(x + 2, ly);
+            ctx.lineTo(x + w - 2, ly);
+            ctx.stroke();
+        }
+
+        // 纵向纹理
+        for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
+            ctx.beginPath();
+            ctx.moveTo(lx, y + 2);
+            ctx.lineTo(lx, y + h - 2);
+            ctx.stroke();
+        }
+
+        // 4. 高光效果
+        ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+        ctx.fillRect(x, y, w, 2); // 顶部边缘
+        ctx.fillRect(x, y, 2, h); // 左侧边缘
+
+        ctx.restore(); // 恢复绘图状态
+    }
+
     draw(type = "yin") {
         // 绘制背景
         //    console.log(type);
@@ -376,14 +456,15 @@ class mapmanager {
 
         //绘制tram
         for (let i of this.tram) {
-  //          console.warn("start draw tram", i);
+            //          console.warn("start draw tram", i);
             i.draw(this.game);
         }
 
         this.drawhp();
 
         // 遍历所有元素
-        for (let i of this.collidable[type]) {
+        for (let j = 0; j < this.collidable[type].length; ++j) {
+            let i = this.collidable[type][j];
             const ctx = this.game.ctx;
             const { x, y, w, h } = i;
 
@@ -392,52 +473,23 @@ class mapmanager {
             //		console.log('进入染色');
             if (i instanceof Tile) {
                 if (i.img.length == 0) {
-                    // 石板砖块效果
-                    ctx.save(); // 保存当前绘图状态
-
-                    // 1. 砖块底色
-                    ctx.fillStyle = "#8B8B7A";
-                    ctx.fillRect(x, y, w, h);
-
-                    // 2. 砖块边框
-                    ctx.strokeStyle = "#6D6D5A";
-                    ctx.lineWidth = 3;
-                    ctx.strokeRect(x, y, w, h);
-
-                    // 3. 纹理线条
-                    ctx.strokeStyle = "#7D7D6A";
-                    ctx.lineWidth = 1;
-                    const lineSpacing = 25;
-
-                    // 横向纹理
-                    for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-                        ctx.beginPath();
-                        ctx.moveTo(x + 2, ly);
-                        ctx.lineTo(x + w - 2, ly);
-                        ctx.stroke();
-                    }
-
-                    // 纵向纹理
-                    for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-                        ctx.beginPath();
-                        ctx.moveTo(lx, y + 2);
-                        ctx.lineTo(lx, y + h - 2);
-                        ctx.stroke();
-                    }
-
-                    // 4. 高光效果
-                    ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-                    ctx.fillRect(x, y, w, 2); // 顶部边缘
-                    ctx.fillRect(x, y, 2, h); // 左侧边缘
-
-                    ctx.restore(); // 恢复绘图状态
+                    if (
+                        this.atk[type][j] &&
+                        this.loadingatk() &&
+                        this.game.gameFrame % 2 == 1
+                    ) {
+                    } else this.drawstone(x, y, w, h);
                 }
                 // 绘制贴纸/装饰图层（每个碰撞箱都使用同一张贴纸）
                 else {
                     if (i.hp) {
-    //                    console.warn("draw image", this.game.changetimes, this.game.mapmanager.hurt());
-                        if (this.game.changetimes == 0 || !this.game.mapmanager.hurt()) {
-                            let o = i.hp - Math.floor(this.game.changetimes / 2);
+                        //                    console.warn("draw image", this.game.changetimes, this.game.mapmanager.hurt());
+                        if (
+                            this.game.changetimes == 0 ||
+                            !this.game.mapmanager.hurt()
+                        ) {
+                            let o =
+                                i.hp - Math.floor(this.game.changetimes / 2);
                             if (o > 0) {
                                 let k = o - 1;
                                 ctx.drawImage(i.img[k], x, y, w, h);
@@ -447,12 +499,18 @@ class mapmanager {
                             this.game.gameFrame % 2 == 1 &&
                             Math.floor(this.game.changetimes / 2) <= i.hp
                         ) {
-                            console.warn(i.hp, i.hp - Math.floor(this.game.changetimes / 2));
+                            console.warn(
+                                i.hp,
+                                i.hp - Math.floor(this.game.changetimes / 2)
+                            );
                             ctx.drawImage(
                                 i.img[
                                     Math.max(
                                         0,
-                                        i.hp - Math.floor(this.game.changetimes / 2)
+                                        i.hp -
+                                            Math.floor(
+                                                this.game.changetimes / 2
+                                            )
                                     )
                                 ],
                                 x,
@@ -462,15 +520,18 @@ class mapmanager {
                             );
                         }
                     } else {
-                        ctx.drawImage(i.img[0], x, y, w, h);
+                        if (
+                            this.atk[type][j] &&
+                            this.loadingatk() &&
+                            this.game.gameFrame % 2 == 1
+                        ) {
+                        } else ctx.drawImage(i.img[0], x, y, w, h);
                     }
                 }
-            }
-            else if (i instanceof Fratile) {
+            } else if (i instanceof Fratile) {
                 i.draw(this.game);
-            }
-            else if (i instanceof Movetile) {
- //               i.update();
+            } else if (i instanceof Movetile) {
+                //               i.update();
                 i.draw(this.game);
             }
         }
@@ -480,7 +541,6 @@ class mapmanager {
         //   // 非碰撞区域的绘制代码
         // }
         // console.log('Collidable object:', i);//调试代码
-
 
         // 遍历所有元素，这里其实只花了那个app类型的
         for (let i of this.app[type]) {
@@ -533,7 +593,7 @@ class mapmanager {
             ctx.restore();
         }
     }
-    
+
     async drawhp() {
         const type = this.game.env;
         for (let j = 0; j < this.collidable[type].length; ++j) {
@@ -543,7 +603,7 @@ class mapmanager {
                 continue;
             }
             let o = p.hp - Math.floor(this.game.changetimes / 2);
-            console.warn('drawhp p = ', p, 'HP = ', this.HP[type][j]);
+            console.warn("drawhp p = ", p, "HP = ", this.HP[type][j]);
             this.HP[type][j].sethp(o);
             this.HP[type][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
         }
