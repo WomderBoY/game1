@@ -123,7 +123,8 @@ class EnemyManager {
         this.empty();
 
         for (let i of data.yang.enemy) {
-            await this.addEnemy(i.x, i.y, i.w, i.h, i.speed);
+            if (i.type) await this.addEnemy(i.x, i.y, i.w, i.h, i.speed, i.type);
+            else await this.addEnemy(i.x, i.y, i.w, i.h, i.speed);
         }
     }
 
@@ -145,6 +146,16 @@ class EnemyManager {
                 this.enemies.splice(i, 1); // 删除死亡敌人
             }
         }
+    }
+
+    cl_enemy() {
+        this.empty();
+    }
+
+    set_enemy(type, x) {
+        let p = this.game.mapmanager.collidable[type][x];
+        let sp = this.game.random(1, 3), tp = this.game.random(0, 1) ? false : true;
+        this.enemies.push(new Enemy(this.game, p.x, p.y - 50, 50, 50, sp));
     }
 
     /**

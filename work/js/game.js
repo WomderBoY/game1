@@ -3,6 +3,10 @@ class game {
         this.init();
     }
 
+    random(l, r) {
+        return Math.floor(Math.random() * (r - l + 1)) + l;
+    }
+
     static lst;
     static yingyang = true;
     async init() {
@@ -366,6 +370,11 @@ class game {
                 if (this.cg == false) this.enemymanager.draw(this.ctx);
                 await this.entitymanager.update();
                 await this.entitymanager.checkCollision();
+                if (this.boss) {
+                    console.log('boss!!!');
+                    this.boss.move();
+                    this.boss.draw();
+                }
                 await this.entitymanager.chcevent();
 //                if (this.cg == false) this.entitymanager.drawPlayer();
                 this.eventmanager.handle();

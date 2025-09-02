@@ -14,7 +14,10 @@ class Tile extends Rect {
     alive(game) {
         if (!this.hp) return true;
         //        console.warn('hp', this.hp, game.changetimes, game.mapmanager.hurt());
-        if (Math.floor(game.changetimes / 2) == this.hp && game.mapmanager.hurt())
+        if (
+            Math.floor(game.changetimes / 2) == this.hp &&
+            game.mapmanager.hurt()
+        )
             return true;
         if (Math.floor(game.changetimes / 2) < this.hp) return true;
         //        console.warn('damaged!!!');
@@ -43,12 +46,26 @@ class mapmanager {
     empty() {
         this.test = { yin: [], yang: [] };
         this.collidable = { yin: [], yang: [] };
-        this.HP = {yin:[], yang:[]}
+        this.HP = { yin: [], yang: [] };
         this.events = { yin: [], yang: [] };
         this.app = { yin: [], yang: [] };
         this.room = "";
         this.background = { yin: [], yang: [] };
+        this.atk = { yin: [], yang: [] };
+        this.atkti = 0;
         this.tram = [];
+    }
+
+    cl_attack(type) {
+        this.atk[type] = [];
+        let len = this.collidable[type].length;
+        for (let i = 0; i < len; ++i) this.atk[type].push(0);
+    }
+
+    set_attack(type, x) {
+        console.warn('set attack', type, x);
+        this.atkti = this.game.gameFrame;
+        this.atk[type][x] = 1;
     }
 
     sethurt() {
@@ -71,7 +88,7 @@ class mapmanager {
             return;
         }
 
-        this.game.env = 'yang';
+        this.game.env = "yang";
         this.game.changetimes = 0;
 
         // 设置初始透明度
@@ -185,10 +202,14 @@ class mapmanager {
                 console.log("data.with 是对象，检查 event 字段");
                 if (data.with.event) {
                     console.log("播放 data.with.event:", data.with.event);
-                    this.cgmanager.play(data.with.event);
+                    if (this.game.cgmanager) {
+                        this.game.cgmanager.play(data.with.event);
+                    }
                 } else {
                     console.log("直接播放 data.with:", data.with);
-                    this.cgmanager.play(data.with);
+                    if (this.game.cgmanager) {
+                        this.game.cgmanager.play(data.with);
+                    }
                 }
             } else {
                 console.warn("data.with 既不是数组也不是对象:", data.with);
@@ -197,16 +218,22 @@ class mapmanager {
             console.log("没有 data.with 字段");
         }
 
+        if (data.boss) {
+            console.warn("there is a boss");
+            this.game.boss = new Boss(this.game);
+        } else {
+            this.game.boss = null;
+        }
+
         console.log("hahaha");
         // 加载 yin 和 yang 区域的瓦片
         for (let i of data.yin.tileMap) {
             await this.addTile("yin", i);
         }
-        console.warn('jiazaiwancheng');
+        console.warn("jiazaiwancheng");
         for (let i of data.yang.tileMap) {
             await this.addTile("yang", i);
         }
-
 
         // 加载背景图
         if (data.yang.background) {
@@ -238,10 +265,8 @@ class mapmanager {
         console.log("events", this.collidable);
 
         // 加载完成后，执行淡入效果
-    //    console.warn('mapmanager fadein start', this.game.canmove);
-        await this.fadeIn();
-    //    console.warn('mapmanager fadein over', this.game.canmove);
-    //    await this.resetcanmove();
+        this.fadeIn();
+        this.cl_attack('yin'), this.cl_attack('yang');
     }
 
     // 渐变淡入效果
@@ -276,6 +301,10 @@ class mapmanager {
         console.warn('mapmanager fadein over', this.game.canmove);
     }
 
+    loadingatk() {
+        return this.game.gameFrame - this.atkti <= 300;
+    }
+
     // 绘制背景方法
     drawBackground() {
         this.drawManager.drawBackground(this.background, this.game.view.width, this.game.view.height);
@@ -297,15 +326,25 @@ class mapmanager {
         }
         let tile;
         if (i.fra) {
-            console.warn('fra');
+            console.warn("fra");
             tile = new Fratile(x, y, w, h, img); // 去掉 this.game
-        }
-        else if (i.move) {
-            console.warn('move');
+        } else if (i.move) {
+            console.warn("move");
             const [xmn, xmx, ymn, ymx] = i.area;
-            tile = new Movetile(x, y, w, h, img, xmn, xmx, ymn, ymx, i.vx, i.vy);
-        }
-        else {
+            tile = new Movetile(
+                x,
+                y,
+                w,
+                h,
+                img,
+                xmn,
+                xmx,
+                ymn,
+                ymx,
+                i.vx,
+                i.vy
+            );
+        } else {
             tile = new Tile(x, y, w, h, i.hp, img, i.event);
         }
         // 把 overlayImg 存进去
@@ -345,8 +384,9 @@ class mapmanager {
         // 绘制血条
         this.drawhp();
     }
-    
+
     async drawhp() {
+        // 使用绘制管理器绘制血条
         this.drawManager.drawHP(this.collidable, this.HP, this.game.env);
     }
 

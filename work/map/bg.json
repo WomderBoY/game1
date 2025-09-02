@@ -63,7 +63,7 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "changemap",
-					"target":"../map/bg-map4.json",
+					"target":"../map/bgtest.json",
 					"way": "negative",
 					"with":{
 						"images": [
