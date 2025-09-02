@@ -33,6 +33,7 @@ class game {
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
+        this.bossmanager = new BossManager(this);
         this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
@@ -61,7 +62,10 @@ class game {
             await this.mapmanager.loadMap(selectedLevel);
             await this.enemymanager.LoadEnemy(selectedLevel);
             await this.baguamanager.LoadBagua(selectedLevel);
+            await this.bossmanager.loadBoss(selectedLevel);
             this.mapmanager.draw(this.env);
+            // 加载 Boss
+           
         }
         this.bgmmanager = new BGMManager(); // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
@@ -361,6 +365,10 @@ class game {
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
                 if (this.cg == false) this.enemymanager.draw(this.ctx);
+                // 更新和绘制 Boss
+                await this.bossmanager.update(this.player, 16.6667); // deltaTime 可按需调整
+                if (this.cg == false) this.bossmanager.draw(this.ctx);
+        
                 await this.entitymanager.update();
                 await this.entitymanager.checkCollision();
                 await this.entitymanager.chcevent();

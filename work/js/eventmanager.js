@@ -67,6 +67,7 @@ class eventmanager {
             await this.game.mapmanager.loadMap(e.target);
             await this.game.enemymanager.LoadEnemy(e.target);
             await this.game.baguamanager.LoadBagua(e.target);
+            await this.game.bossmanager.loadBoss(e.target);
             // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
             this.game.status = "running";
             console.log(
