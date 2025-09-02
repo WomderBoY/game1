@@ -162,6 +162,20 @@ _jsonCallback({
                     },
                     "col":false
                 },
+                {
+                    "hitbox":[
+                        1200,
+                        140,
+                        30,
+                        30
+                    ],
+                    "event":{
+                        "type":"changemap",
+                        "way":"negative",
+                        "target":"../map/bg-map4.json"
+                    },
+                    "col":false
+                }
         ],
         "enemy": [],
         "bagua": [],

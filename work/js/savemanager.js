@@ -18,6 +18,7 @@ class SaveManager {
         this.data.room = src;
         this.data.player.x = this.game.player.position.x;
         this.data.player.y = this.game.player.position.y;
+        console.warn('savemanager save', this.game.player.position.x, this.game.player.position.y);
 
         // 确保 yingyang 字段正确设置
         if (this.game.yingyang !== undefined) {

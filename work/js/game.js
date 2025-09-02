@@ -63,6 +63,7 @@ class game {
             this.unlockNextLevel(selectedLevel);
 
             await this.mapmanager.loadMap(selectedLevel);
+            console.warn('game init over', this.canmove);
             await this.enemymanager.LoadEnemy(selectedLevel);
             await this.baguamanager.LoadBagua(selectedLevel);
             this.mapmanager.draw(this.env);
@@ -76,6 +77,7 @@ class game {
             },
             { once: true }
         );
+        console.warn('game init over', this.canmove);
         this.update();
         //    window.addEventListener('resize', () => this.autoScale(this.view));
     }
@@ -132,6 +134,7 @@ class game {
             "../map/bg-map1.json",
             "../map/bg-map3.json",
             "../map/bg3.json",
+            "../map/bg-map4.json",
         ];
         const currentIndex = levelOrder.indexOf(currentLevel);
 

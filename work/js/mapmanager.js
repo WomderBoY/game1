@@ -81,6 +81,7 @@ class mapmanager {
         if (this.room === "") {
             console.log("首次加载地图，跳过淡出效果");
             await this.loadNewMap(src);
+            await this.resetcanmove();
             return;
         }
 
@@ -119,9 +120,14 @@ class mapmanager {
         };
 
         // 等待 fadeOut 完成后再调用 loadNewMap
-        fadeOut();
+        await fadeOut();
         await this.loadNewMap(src);
+        await this.resetcanmove();
+    }
+
+    async resetcanmove() {
         this.game.canmove = true;
+        console.warn('mapmanager loadmap over', this.game.canmove);
     }
 
     // 加载新地图
@@ -162,6 +168,7 @@ class mapmanager {
         if (data.born) {
             [this.game.player.position.x, this.game.player.position.y] =
                 data.born;
+            console.warn('loadmap born', this.game.player.position.x, this.game.player.position.y);
         }
 
         // 保存当前的地图状态
@@ -256,7 +263,7 @@ class mapmanager {
     }
 
     // 渐变淡入效果
-    fadeIn() {
+    async fadeIn() {
         let opacity = 0;
 
         // 渐变淡入
@@ -284,6 +291,11 @@ class mapmanager {
         };
 
         animate(); // 启动淡入效果
+        console.warn('mapmanager fadein over', this.game.canmove);
+    }
+
+    loadingatk() {
+        return this.game.gameFrame - this.atkti <= 300;
     }
 
     loadingatk() {
@@ -395,9 +407,95 @@ class mapmanager {
         return this.collidable[type];
     }
 
-    drawstone(x, y, w, h) {
-        const ctx = this.game.ctx; // 石板砖块效果
-        ctx.save(); // 保存当前绘图状态
+    draw(type = "yin") {
+        let detype = type == 'yang' ? 'yin' : 'yang';
+        // 绘制背景
+        //    console.log(type);
+        //    console.log(this.background);
+        if (this.background[type] == "") {
+            this.game.ctx.fillStyle = "#87cefa";
+            this.game.ctx.fillRect(0, 0, this.game.width, this.game.height);
+        } else {
+            this.game.ctx.drawImage(
+                this.background[type],
+                0,
+                0,
+                this.game.width,
+                this.game.height
+            );
+        }
+
+        //绘制tram
+        for (let i of this.tram) {
+  //          console.warn("start draw tram", i);
+            i.draw(this.game);
+        }
+
+        this.drawhp();
+
+        // 绘制相反属性的虚化砖块
+        for (let i of this.collidable[detype]) {
+            if (i instanceof Tile && i.img.length == 0) {
+                const ctx = this.game.ctx;
+                const { x, y, w, h } = i;
+                
+                // 虚化砖块效果
+                ctx.save();
+                
+                // 设置透明度
+                ctx.globalAlpha = 0.8;
+                
+                // 1. 虚化底色（半透明）
+                ctx.fillStyle = "rgba(139, 139, 122, 0.5)";
+                ctx.fillRect(x, y, w, h);
+                
+                // 2. 虚化边框（半透明）
+                ctx.strokeStyle = "rgba(109, 109, 90, 0.5)";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y, w, h);
+                
+                // 3. 虚化纹理线条（半透明）
+                ctx.strokeStyle = "rgba(125, 125, 106, 0.4)";
+                ctx.lineWidth = 1;
+                const lineSpacing = 25;
+                
+                // 横向纹理
+                for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
+                    ctx.beginPath();
+                    ctx.moveTo(x + 2, ly);
+                    ctx.lineTo(x + w - 2, ly);
+                    ctx.stroke();
+                }
+                
+                // 纵向纹理
+                for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
+                    ctx.beginPath();
+                    ctx.moveTo(lx, y + 2);
+                    ctx.lineTo(lx, y + h - 2);
+                    ctx.stroke();
+                }
+                
+                // 4. 虚化高光效果
+                ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+                ctx.fillRect(x, y, w, 2); // 顶部边缘
+                ctx.fillRect(x, y, 2, h); // 左侧边缘
+                
+                ctx.restore();
+            }
+        }
+
+        // 遍历所有元素
+        for (let i of this.collidable[type]) {
+            const ctx = this.game.ctx;
+            const { x, y, w, h } = i;
+
+            // 检查是否为实体碰撞区域（根据你的实际属性名调整，比如i.collision或i.solid）
+            // 明确判断为true的情况
+            //		console.log('进入染色');
+            if (i instanceof Tile) {
+                if (i.img.length == 0) {
+                    // 石板砖块效果
+                    ctx.save(); // 保存当前绘图状态
 
         // 1. 砖块底色
         ctx.fillStyle = "#8B8B7A";
@@ -535,6 +633,9 @@ class mapmanager {
                 i.draw(this.game);
             }
         }
+        
+
+        
         // 非碰撞区域不绘制石板效果，保持原样
         // 如果你需要绘制非碰撞区域的其他样式，可以在这里添加
         // else {
