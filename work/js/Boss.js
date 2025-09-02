@@ -36,7 +36,7 @@ class Boss {
     }
 
     gethurt(x = 10) {
-        this.hp -= x;
+        this.HP.gethurt(x);
     }
 
     async move() {
