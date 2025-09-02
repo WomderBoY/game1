@@ -63,6 +63,10 @@ class entitymanager {
         } else if (!entitymanager.onground) {
             ps = "onjump";
         }
+
+        
+
+
         if (ps == "run") {
             //          console.log('run sound', this.game.soundmanager.isPlay('run'));
             if (entitymanager.pre == "onjump") {
@@ -92,6 +96,14 @@ class entitymanager {
                 this.game.soundmanager.fadeLoop("run", 0.1);
         }
         entitymanager.pre = ps;
+    }
+
+    gethurt() {
+        let now = Date.now();
+        if (now >= entitymanager.safeUntil) {
+            if (this.game.hp) this.game.hp.decrease();
+                entitymanager.safeUntil = now + 3000; // 3秒无敌
+        }
     }
 
     // 更新逻辑优化
@@ -127,6 +139,7 @@ class entitymanager {
             if (this.game.achievements)
                 this.game.achievements.unlock("first_toggle");
             this.game.taijimanager.trigger(); // 触发太极动画切换效果
+            this.game.soundmanager.playOnce("change", 1, 1); //触发太极音效
         }
 
         if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
@@ -176,7 +189,8 @@ class entitymanager {
             }
         }
         if (!fl) {
-            for (let p of ga.mapmanager.collidable[this.game.env]) {
+            for (let j = 0; j < ga.mapmanager.collidable[this.game.env].length; ++j) {
+                let p =  ga.mapmanager.collidable[this.game.env][j];
                 //            console.warn("check col", p);
                 if (p.alive(this.game) == false) {
                     console.warn("pass it");
@@ -187,7 +201,9 @@ class entitymanager {
                 let prevY = ga.player.position.y - vy - vyy;
                 if (ga.player.containsRect(p)) {
    //                 console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
-
+                    if (ga.mapmanager.atk[ga.env][j] && !ga.mapmanager.loadingatk()) {
+                        this.gethurt();
+                    }
                     if (p instanceof Movetile) {
                         prevX += p.vx;
                         prevY += p.vy;
@@ -261,7 +277,6 @@ class entitymanager {
         vy += gravity;
         ga.player.position.y += vy + vyy;
 
-        
         // 水平移动
         if (ky.left) {
             if (vx < 0) vx -= a;
@@ -369,16 +384,16 @@ class entitymanager {
             if (this.game.yingyang !== enemy.type && isHead) {
                 // 阴阳不同踩头 → 敌人死亡
                 enemy.dead = true;
+                if (this.boss) {
+                    this.game.boss.HP.decrease(3);
+                }
                 this.game.soundmanager.playOnce("enemydeath");
                 entitymanager.vy = -10;
                 if (this.game.achievements)
                     this.game.achievements.unlock("first_kill");
             } else {
                 // 扣血条件：阴阳相同 或 阴阳不同非踩头
-                if (now >= entitymanager.safeUntil) {
-                    if (this.game.hp) this.game.hp.decrease();
-                    entitymanager.safeUntil = now + 3000; // 3秒无敌
-                }
+                this.gethurt();
             }
         }
     }

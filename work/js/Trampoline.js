@@ -3,6 +3,25 @@ class Trampoline extends Rect {
         super(x, y, w, h);
         (this.x = x), (this.y = y);
         (this.w = w), (this.h = h);
+        
+        // 预加载弹跳箱图片
+        this.whiteImage = null;
+        this.blackImage = null;
+        this.loadImages();
+    }
+    
+    async loadImages() {
+        try {
+            // 加载白色弹跳箱图片
+            this.whiteImage = new Image();
+            this.whiteImage.src = "../images/trampoline_white.png";
+            
+            // 加载黑色弹跳箱图片
+            this.blackImage = new Image();
+            this.blackImage.src = "../images/trampoline_black.png";
+        } catch (error) {
+            console.warn("弹跳箱图片加载失败:", error);
+        }
     }
 
     async update(prevX, prevY, vx, vy, ga) {
@@ -45,15 +64,25 @@ class Trampoline extends Rect {
 
     async draw(game) {
         const ctx = game.ctx;
+        
         if (game.env == 'yang') {
-            // 画白色方块
-            ctx.fillStyle = "white";
-            ctx.fillRect(this.x, this.y, this.w, this.h); // (x, y, 宽, 高)
-        }
-        else {
-            // 画黑色方块
-            ctx.fillStyle = "black";
-            ctx.fillRect(this.x, this.y, this.w, this.h); // (x, y, 宽, 高)
+            // 阳属性：绘制白色弹跳箱图片
+            if (this.whiteImage && this.whiteImage.complete) {
+                ctx.drawImage(this.whiteImage, this.x, this.y, this.w, this.h);
+            } else {
+                // 如果图片未加载完成，使用白色方块作为备用
+                ctx.fillStyle = "white";
+                ctx.fillRect(this.x, this.y, this.w, this.h);
+            }
+        } else {
+            // 阴属性：绘制黑色弹跳箱图片
+            if (this.blackImage && this.blackImage.complete) {
+                ctx.drawImage(this.blackImage, this.x, this.y, this.w, this.h);
+            } else {
+                // 如果图片未加载完成，使用黑色方块作为备用
+                ctx.fillStyle = "black";
+                ctx.fillRect(this.x, this.y, this.w, this.h);
+            }
         }
     }
 }

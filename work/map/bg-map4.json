@@ -110,7 +110,7 @@ _jsonCallback({
 			}
 		],
         "enemy":[],
-        "bachground":"../images/baguazhen.png",
+        "background":"../images/baguazhen.png",
     },
     "yin":{
         "tileMap":[
@@ -172,7 +172,7 @@ _jsonCallback({
 			}
 		],
         "enemy":[],
-        "bachground":"../images/baguazhen.png",
+        "background":"../images/baguazhen.png",
     },
     "Tram":[
         {

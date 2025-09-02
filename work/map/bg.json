@@ -63,7 +63,7 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "changemap",
-					"target":"../map/bg-map4.json",
+					"target":"../map/bgtest.json",
 					"way": "negative",
 					"with":{
 						"images": [
@@ -115,6 +115,7 @@ _jsonCallback({
 				"col": false
 			}
 		],
+
 		"enemy": [
 			{
 				"x": 600,
@@ -122,6 +123,17 @@ _jsonCallback({
 				"w": 30,
 				"h": 30,
 				"speed": 2
+			}
+		],
+		"enemy2": [
+			{
+				"x": 500,
+				"y": 300,
+				"w": 30,
+				"h": 30,
+				"speed": 2,
+				"attackRange":150, 
+				"dashSpeed":10
 			}
 		],
 		"bagua": [

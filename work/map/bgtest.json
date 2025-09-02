@@ -1,5 +1,5 @@
 _jsonCallback({
-	"born":[0, 0],
+    "born":[0, 0],
 	"with":[],
 	"yang": {
 		"tileMap": [
@@ -65,10 +65,6 @@ _jsonCallback({
 					2000,
 					75
 				],
-				"event": {
-					"type": "kill", //
-					"way": "tunnal", //x和y不知道要不要保留
-				},
 				"col": false
 			},
 			{
@@ -116,10 +112,6 @@ _jsonCallback({
 					2000,
 					75
 				],
-				"event": {
-					"type": "kill", //
-					"way": "tunnal", //x和y不知道要不要保留
-				},
 				"col": false
 			},
             {
@@ -180,6 +172,7 @@ _jsonCallback({
 			}
 		],
 		"background": "../images/lib2.png"
-	}
+	},
+    "boss":true,
 }
 )

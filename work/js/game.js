@@ -3,6 +3,10 @@ class game {
         this.init();
     }
 
+    random(l, r) {
+        return Math.floor(Math.random() * (r - l + 1)) + l;
+    }
+
     static lst;
     static yingyang = true;
     async init() {
@@ -37,6 +41,7 @@ class game {
         this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
+        this.enemy2manager = new Enemy2Manager(this)
         this.cgmanager = new CGManager(this);
         this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
@@ -60,7 +65,9 @@ class game {
             this.unlockNextLevel(selectedLevel);
 
             await this.mapmanager.loadMap(selectedLevel);
+            console.warn('game init over', this.canmove);
             await this.enemymanager.LoadEnemy(selectedLevel);
+            await this.enemy2manager.LoadEnemy2(selectedLevel);
             await this.baguamanager.LoadBagua(selectedLevel);
             await this.bossmanager.loadBoss(selectedLevel);
             this.mapmanager.draw(this.env);
@@ -76,6 +83,7 @@ class game {
             },
             { once: true }
         );
+        console.warn('game init over', this.canmove);
         this.update();
         //    window.addEventListener('resize', () => this.autoScale(this.view));
     }
@@ -132,6 +140,7 @@ class game {
             "../map/bg-map1.json",
             "../map/bg-map3.json",
             "../map/bg3.json",
+            "../map/bg-map4.json",
         ];
         const currentIndex = levelOrder.indexOf(currentLevel);
 
@@ -360,10 +369,15 @@ class game {
                     }
                 }
                 await this.enemymanager.update();
+                await this.enemy2manager.update();
                 await this.mapmanager.drawPortals();
                 await this.mapmanager.drawhp();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
+                if (this.cg == false){
+                    this.enemymanager.draw(this.ctx);
+                    this.enemy2manager.draw(this.ctx);
+                } 
                 if (this.cg == false) this.enemymanager.draw(this.ctx);
                 // 更新和绘制 Boss
                 await this.bossmanager.update(this.player, 16.6667); // deltaTime 可按需调整
@@ -371,6 +385,11 @@ class game {
         
                 await this.entitymanager.update();
                 await this.entitymanager.checkCollision();
+                if (this.boss) {
+                    console.log('boss!!!');
+                    this.boss.move();
+                    this.boss.draw();
+                }
                 await this.entitymanager.chcevent();
 //                if (this.cg == false) this.entitymanager.drawPlayer();
                 this.eventmanager.handle();
@@ -392,6 +411,7 @@ class game {
                     }
                 }
                 this.enemymanager.draw(this.ctx);
+                this.enemy2manager.draw(this.ctx);
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 this.entitymanager.drawPlayer();
@@ -410,6 +430,7 @@ class game {
                     }
                 }
                 this.enemymanager.draw(this.ctx);
+                this.enemy2manager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
 
                 // 绘制死亡状态的玩家（在地图和敌人之上）
