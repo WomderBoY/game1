@@ -337,6 +337,10 @@ class game {
         // 根据当前游戏状态进行不同处理
         //      console.log(this.changetimes);
         //        console.log(this.status, this.canmove);
+        if (this.hp.isDead() && this.status == 'running') {
+            this.status = 'over';
+            this.soundmanager.playOnce("death");
+        }
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
@@ -353,6 +357,7 @@ class game {
                 }
                 await this.enemymanager.update();
                 await this.mapmanager.drawPortals();
+                await this.mapmanager.drawhp();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
                 if (this.cg == false) this.enemymanager.draw(this.ctx);

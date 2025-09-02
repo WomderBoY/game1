@@ -40,6 +40,7 @@ class mapmanager {
     empty() {
         this.test = { yin: [], yang: [] };
         this.collidable = { yin: [], yang: [] };
+        this.HP = {yin:[], yang:[]}
         this.events = { yin: [], yang: [] };
         this.app = { yin: [], yang: [] };
         this.room = "";
@@ -339,7 +340,11 @@ class mapmanager {
         console.log("overlayImg paths:", i.overlayImg);
 
         if (i.event && i.event.type === "kill") this.app[type].push(tile); //这是伤害的方块 不对这里
-        if (i.col != false) this.collidable[type].push(tile);
+        if (i.col != false) {
+            this.collidable[type].push(tile);
+            if (i.hp) this.HP[type].push(new hp(i.hp));
+            else this.HP[type].push(-1);
+        }
         //if (i.app) this.app.push(tile);
         this.test[type].push(tile);
         if (i.event) {
@@ -374,6 +379,8 @@ class mapmanager {
   //          console.warn("start draw tram", i);
             i.draw(this.game);
         }
+
+        this.drawhp();
 
         // 遍历所有元素
         for (let i of this.collidable[type]) {
@@ -524,6 +531,21 @@ class mapmanager {
             ctx.fillRect(x, y, w, h);
 
             ctx.restore();
+        }
+    }
+    
+    async drawhp() {
+        const type = this.game.env;
+        for (let j = 0; j < this.collidable[type].length; ++j) {
+            let p = this.collidable[type][j];
+            if (!p.hp || !p.alive(this.game)) continue;
+            if (!this.game.inputmanager.isOver(p.x, p.y, p.w, p.h)) {
+                continue;
+            }
+            let o = p.hp - Math.floor(this.game.changetimes / 2);
+            console.warn('drawhp p = ', p, 'HP = ', this.HP[type][j]);
+            this.HP[type][j].sethp(o);
+            this.HP[type][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
         }
     }
 

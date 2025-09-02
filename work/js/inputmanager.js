@@ -1,8 +1,10 @@
 class inputmanager {
-    constructor() {
+    constructor(game) {
         this.keys = new Set();
+        this.game = game;
         this.lastEnterTime = 0; // 记录上次按下 Enter 的时间
         this.cooldown = 300; // 冷却时间 300 毫秒
+        this.mouseX = 0, this.mouseY = 0;
 
         // 监听按键按下（暂停时忽略输入）
         window.addEventListener("keydown", (e) => {
@@ -15,6 +17,25 @@ class inputmanager {
             if (window.game && window.game.status === "paused") return;
             this.keys.delete(e.code);
         });
+        
+        // 鼠标监听
+        this.game.view.addEventListener("mousemove", (e) => {
+            const rect = this.game.view.getBoundingClientRect();
+            const scaleX = this.game.view.width / rect.width;
+            const scaleY = this.game.view.height / rect.height;
+
+            this.mouseX = (e.clientX - rect.left) * scaleX;
+            this.mouseY = (e.clientY - rect.top) * scaleY;
+        });
+    }
+
+    isOver(x, y, w, h) {
+        return (
+            this.mouseX >= x &&
+            this.mouseX <= x + w &&
+            this.mouseY >= y &&
+            this.mouseY <= y + h
+        );
     }
 
     /** 检查某个按键是否正在被按下 */

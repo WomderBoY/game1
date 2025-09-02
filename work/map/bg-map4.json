@@ -21,7 +21,7 @@ _jsonCallback({
                 "hp":4,
             },
             {
-                "hitbox":[550, 88, 64, 181],
+                "hitbox":[550, 38, 64, 181],
                 "img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
                 "hp":3,
             },
@@ -57,6 +57,14 @@ _jsonCallback({
             {
                 "hitbox":[1079, 62, 40, 530],
                 "col":true,
+            },
+            {
+                "hitbox":[939, 66, 40, 40],
+                "event":{
+                    "type":"changemap",
+                    "target":"../map/bg-map5.json",
+                },
+                "col":false,
             }
         ],
         "bagua": [
@@ -168,10 +176,10 @@ _jsonCallback({
     },
     "Tram":[
         {
-            "hitbox":[422, 500, 50, 50],
+            "hitbox":[450, 500, 50, 50],
         },
         {
-            "hitbox":[1136, 618, 50, 50],
+            "hitbox":[1136, 418, 50, 50],
         }
     ]
 })

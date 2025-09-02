@@ -248,8 +248,8 @@ class entitymanager {
         else lstjp = ga.gameFrame;
 
         // 垂直移动
-        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 15))) {
-            if (vy >= 0) vy += gravity * (ga.gameFrame - lstjp); // 控制跳跃高度
+        if (ky.up && (og || (!isjp && ga.gameFrame - lstjp <= 10))) {
+            if (vy >= 0) vy -= gravity * (ga.gameFrame - lstjp); // 控制跳跃高度
             if (og) vy += jp;
             else
                 vy = - Math.sqrt(jp * jp + vy * vy);
