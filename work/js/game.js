@@ -21,7 +21,7 @@ class game {
         this.env = "yang"; // 默认环境为阳
         this.changetimes = 0; // 切换环境次数
         this.yingyang = true;
-
+        
         this.datamanager = new datamanager(this);
 
         // 添加太极管理器（新增代码）
@@ -446,6 +446,7 @@ class game {
                         this.ctx.fillRect(0, 0, this.width, this.height);
                     }
                 }
+                await this.enemy2manager.update();
                 this.enemymanager.draw(this.ctx);
                 this.enemy2manager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
