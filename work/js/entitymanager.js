@@ -396,6 +396,10 @@ class entitymanager {
             } else {
                 // 扣血条件：阴阳相同 或 阴阳不同非踩头
                 this.gethurt();
+                entitymanager.vx = this.game.player.position.x < rect.position.x ? -3 : 3;
+                entitymanager.vy = -6;
+                entitymanager.isjp = true;
+                entitymanager.lstjp = 0;
             }
         }
     }
