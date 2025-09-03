@@ -1,9 +1,10 @@
 class Tile extends Rect {
-    constructor(x, y, w, h, hp, img, event) {
+    constructor(x, y, w, h, hp, img, event, tiling = false) {
         super(x, y, w, h);
         this.img = img;
         this.hp = hp;
         this.event = event;
+        this.tiling = tiling;
         // 兼容直接访问
         this.x = x;
         this.y = y;
@@ -343,7 +344,7 @@ class mapmanager {
         let tile;
         if (i.fra) {
             console.warn("fra");
-            tile = new Fratile(x, y, w, h, img); // 去掉 this.game
+            tile = new Fratile(x, y, w, h, img, i.tiling); // 去掉 this.game
         } else if (i.move) {
             console.warn("move");
             const [xmn, xmx, ymn, ymx] = i.area;
@@ -358,10 +359,11 @@ class mapmanager {
                 ymn,
                 ymx,
                 i.vx,
-                i.vy
+                i.vy,
+                i.tiling
             );
         } else {
-            tile = new Tile(x, y, w, h, i.hp, img, i.event);
+            tile = new Tile(x, y, w, h, i.hp, img, i.event, i.tiling);
         }
         // 把 overlayImg 存进去
         //调试图片是否加载出来
