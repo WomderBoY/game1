@@ -1,185 +1,299 @@
 _jsonCallback({
-    "born":[0, 0],
-    "with":[
+    "born": [
+        0,
+        0
+    ],
+    "with": [
         {
-            "type":"dialog",
-            "text":[
+            "type": "dialog",
+            "text": [
                 "来到了新地图",
                 "尝试制作"
             ]
         }
     ],
-    "yang":{
-        "tileMap":[
+    "yang": {
+        "tileMap": [
             {
-                "hitbox":[23, 231, 98, 43],
-                "col":true,
+                "hitbox": [
+                    23,
+                    231,
+                    98,
+                    43
+                ],
+                "col": true,
             },
             {
-                "hitbox":[182, 30, 49, 215],
-                "img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
-                "hp":4,
+                "hitbox": [
+                    182,
+                    30,
+                    49,
+                    215
+                ],
+                "img": [
+                    "../images/vine5.png",
+                    "../images/vine4.png",
+                    "../images/vine3.png",
+                    "../images/vine2.png",
+                    "../images/vine1.png"
+                ],
+                "hp": 4,
+                "tiling": true,
             },
             {
-                "hitbox":[550, 38, 64, 181],
-                "img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
-                "hp":3,
+                "hitbox": [
+                    550,
+                    38,
+                    64,
+                    181
+                ],
+                "img": [
+                    "../images/vine5.png",
+                    "../images/vine4.png",
+                    "../images/vine3.png",
+                    "../images/vine2.png",
+                    "../images/vine1.png"
+                ],
+                "hp": 3,
+                "tiling": true,
             },
             {
-                "hitbox":[334, 198, 81, 30],
-                "move":true,
-                "img":["../images/hitbox.png"],
-                "area":[250, 820, -1, -1],
-                "vx":2,
-                "vy":0,
-                "col":true,
+                "hitbox": [
+                    334,
+                    198,
+                    81,
+                    30
+                ],
+                "move": true,
+                "img": [
+                    "../images/hitbox.png"
+                ],
+                "area": [
+                    250,
+                    820,
+                    -1,
+                    -1
+                ],
+                "vx": 2,
+                "vy": 0,
+                "col": true,
+                "tiling": true,
             },
             {
-                "hitbox":[155, 614, 81, 15],
-                "col":true,
+                "hitbox": [
+                    155,
+                    614,
+                    81,
+                    15
+                ],
+                "col": true,
             },
             {
-                "hitbox":[272, 397, 30, 221],
-                "col":true,
+                "hitbox": [
+                    272,
+                    397,
+                    30,
+                    221
+                ],
+                "col": true,
             },
             {
-                "hitbox":[844, 48, 90, 241],
-                "col":true,
+                "hitbox": [
+                    844,
+                    48,
+                    90,
+                    241
+                ],
+                "col": true,
             },
             {
-                "hitbox":[906, 365, 160, 33],
-                "col":true,
-                "fra":true,
-				"img": [
-					"../images/test1.png"
-				]
+                "hitbox": [
+                    906,
+                    365,
+                    160,
+                    33
+                ],
+                "col": true,
+                "fra": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true,
             },
             {
-                "hitbox":[1079, 62, 40, 530],
-                "col":true,
+                "hitbox": [
+                    1079,
+                    62,
+                    40,
+                    530
+                ],
+                "col": true,
             },
             {
-                "hitbox":[939, 66, 40, 40],
-                "event":{
-                    "type":"changemap",
-                    "target":"../map/bg-map5.json",
+                "hitbox": [
+                    939,
+                    66,
+                    40,
+                    40
+                ],
+                "event": {
+                    "type": "changemap",
+                    "target": "../map/bg-map5.json",
                 },
-                "col":false,
+                "col": false,
             }
         ],
         "bagua": [
-			{
-				"hitbox": [
-					202,
-					548,
-					50,
-					50
-				],
-			},
-			{
-				"hitbox": [
-					325,
-					379,
-					50,
-					50
-				],
-			},
-			{
-				"hitbox": [
-					756,
-					352,
-					50,
-					50
-				],
-			},
             {
-				"hitbox": [
-					1020,
-					190,
-					50,
-					50
-				],
-			},
+                "hitbox": [
+                    202,
+                    548,
+                    50,
+                    50
+                ],
+            },
             {
-				"hitbox": [
-					391,
-					323,
-					50,
-					50
-				],
-			}
-		],
-        "enemy":[],
-        "background":"../images/baguazhen.png",
+                "hitbox": [
+                    325,
+                    379,
+                    50,
+                    50
+                ],
+            },
+            {
+                "hitbox": [
+                    756,
+                    352,
+                    50,
+                    50
+                ],
+            },
+            {
+                "hitbox": [
+                    1020,
+                    190,
+                    50,
+                    50
+                ],
+            },
+            {
+                "hitbox": [
+                    391,
+                    323,
+                    50,
+                    50
+                ],
+            }
+        ],
+        "enemy": [],
+        "background": "../images/baguazhen.png",
     },
-    "yin":{
-        "tileMap":[
+    "yin": {
+        "tileMap": [
             {
-                "hitbox":[252, 482, 130, 20],
-                "col":true,
-                "fra":true,
-				"img": [
-					"../images/test1.png"
-				]
+                "hitbox": [
+                    252,
+                    482,
+                    130,
+                    20
+                ],
+                "col": true,
+                "fra": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true,
             },
             {
-                "hitbox":[225, 226, 140, 20],
-                "col":true,
+                "hitbox": [
+                    225,
+                    226,
+                    140,
+                    20
+                ],
+                "col": true,
             },
             {
-                "hitbox":[637, 48, 20, 312],
-                "col":true,
+                "hitbox": [
+                    637,
+                    48,
+                    20,
+                    312
+                ],
+                "col": true,
             },
             {
-                "hitbox":[748, 480, 170, 62],
-                "col":true,
-                "img":["../images/vine5.png", "../images/vine4.png", "../images/vine3.png", "../images/vine2.png", "../images/vine1.png"],
-                "hp":3,
+                "hitbox": [
+                    748,
+                    480,
+                    170,
+                    62
+                ],
+                "col": true,
+                "img": [
+                    "../images/vine5.png",
+                    "../images/vine4.png",
+                    "../images/vine3.png",
+                    "../images/vine2.png",
+                    "../images/vine1.png"
+                ],
+                "hp": 3,
+                "tiling": true,
             }
         ],
         "bagua": [
-			{
-				"hitbox": [
-					202,
-					548,
-					50,
-					50
-				],
-			},
-			{
-				"hitbox": [
-					325,
-					379,
-					50,
-					50
-				],
-			},
-			{
-				"hitbox": [
-					756,
-					352,
-					50,
-					50
-				],
-			},
             {
-				"hitbox": [
-					344,
-					284,
-					50,
-					50
-				],
-			}
-		],
-        "enemy":[],
-        "background":"../images/baguazhen.png",
+                "hitbox": [
+                    202,
+                    548,
+                    50,
+                    50
+                ],
+            },
+            {
+                "hitbox": [
+                    325,
+                    379,
+                    50,
+                    50
+                ],
+            },
+            {
+                "hitbox": [
+                    756,
+                    352,
+                    50,
+                    50
+                ],
+            },
+            {
+                "hitbox": [
+                    344,
+                    284,
+                    50,
+                    50
+                ],
+            }
+        ],
+        "enemy": [],
+        "background": "../images/baguazhen.png",
     },
-    "Tram":[
+    "Tram": [
         {
-            "hitbox":[450, 500, 50, 50],
+            "hitbox": [
+                450,
+                500,
+                50,
+                50
+            ],
         },
         {
-            "hitbox":[1136, 418, 50, 50],
+            "hitbox": [
+                1136,
+                418,
+                50,
+                50
+            ],
         }
     ]
 })

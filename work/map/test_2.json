@@ -47,7 +47,8 @@ _jsonCallback({
 					"../images/hitbox.png",
 					"../images/player.png"
 				],
-				"hp": 2
+				"hp": 2,
+				"tiling": true
 			},
 			{
 				"hitbox": [
@@ -110,7 +111,8 @@ _jsonCallback({
 				"col": true,
 				"img": [
 					"../images/vine1.png"
-				]
+				],
+				"tiling": true
 			},
 			{
 				"hitbox": [
@@ -132,7 +134,8 @@ _jsonCallback({
 				"col": true,
 				"img": [
 					"../images/test1.png"
-				]
+				],
+				"tiling": true
 			}
 		],
 		"enemy": [

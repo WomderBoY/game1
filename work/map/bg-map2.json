@@ -1,6 +1,9 @@
 _jsonCallback({
-	"born":[0, 0],
-	"with":[],
+	"born": [
+		0,
+		0
+	],
+	"with": [],
 	"yang": {
 		"tileMap": [
 			{
@@ -12,7 +15,7 @@ _jsonCallback({
 				],
 				"col": true
 			},
-            {
+			{
 				"hitbox": [
 					1200,
 					70,
@@ -21,7 +24,7 @@ _jsonCallback({
 				],
 				"col": true
 			},
-            {
+			{
 				"hitbox": [
 					950,
 					170,
@@ -39,8 +42,8 @@ _jsonCallback({
 				],
 				"col": true
 			},
-            {
-				"hitbox":[
+			{
+				"hitbox": [
 					1220,
 					30,
 					30,
@@ -49,14 +52,15 @@ _jsonCallback({
 				"event": {
 					"type": "changemap",
 					"way": "tunnal",
-					 "x": 256,
+					"x": 256,
 					"y": 500,
 					"target": "../map/bg-map3.json"
 				},
-				"col":false,
+				"col": false,
 				"img": [
 					"../images/test1.png"
-				]
+				],
+				"tiling": true
 			},
 			{
 				"hitbox": [
@@ -80,7 +84,7 @@ _jsonCallback({
 				],
 				"col": true
 			},
-            {
+			{
 				"hitbox": [
 					1120,
 					0,
@@ -90,8 +94,9 @@ _jsonCallback({
 				"col": true,
 				"img": [
 					"../images/hitbox.png"
-                ],
-				"hp":1
+				],
+				"hp": 1,
+				"tiling": true
 			}
 		],
 		"enemy": [],
@@ -122,7 +127,7 @@ _jsonCallback({
 				},
 				"col": false
 			},
-            {
+			{
 				"hitbox": [
 					1000,
 					470,
@@ -131,7 +136,7 @@ _jsonCallback({
 				],
 				"col": true
 			},
-            {
+			{
 				"hitbox": [
 					1000,
 					270,
@@ -140,7 +145,7 @@ _jsonCallback({
 				],
 				"col": true
 			},
-            {
+			{
 				"hitbox": [
 					630,
 					170,
@@ -149,7 +154,7 @@ _jsonCallback({
 				],
 				"col": true
 			},
-            {
+			{
 				"hitbox": [
 					1200,
 					370,

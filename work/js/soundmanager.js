@@ -18,11 +18,25 @@ class SoundManager {
 
     /** 加载音效 */
     async load(name, url) {
-        const audio = new Audio(url);
-        audio.preload = "auto"; // 预加载音频
+        return new Promise((resolve, reject) => {
+            const audio = new Audio(url);
+            audio.preload = "auto"; // 预加载音频
 
-        this.buffers[name] = audio;
-        this.instances[name] = [];
+            audio.oncanplaythrough = () => {
+                console.log(`音效加载成功: ${name}`);
+                this.buffers[name] = audio;
+                this.instances[name] = [];
+                resolve();
+            };
+
+            audio.onerror = (error) => {
+                console.error(`音效加载失败: ${name}`, error);
+                reject(error);
+            };
+
+            // 开始加载
+            audio.load();
+        });
     }
 
     /** 播放一次性音效 */

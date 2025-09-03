@@ -22,7 +22,7 @@ class Fratile extends Rect {
     }
 
     draw(game) {
-//        console.log(this.img[0], this.x, this.y, this.w, this.h);
+        //        console.log(this.img[0], this.x, this.y, this.w, this.h);
         if (this.alive(game) && !this.hurt(game)) {
             game.ctx.drawImage(this.img[0], this.x, this.y, this.w, this.h);
         }
@@ -34,14 +34,21 @@ class Fratile extends Rect {
     }
 
     update(game) {
-        if (this.lst) return ;
-        console.log(game.player);
+        if (this.lst) return;
+        console.log("Fratile被踩踏，玩家位置:", game.player);
         this.lst = game.gameFrame;
-        
+
         // 播放木头断裂音效
         if (game.soundmanager) {
-            game.soundmanager.playOnce("wood_snap", 0.8, 1);
-            console.log("播放木头断裂音效");
+            console.log("尝试播放木头断裂音效...");
+            const result = game.soundmanager.playOnce("wood_snap", 1.0, 1);
+            if (result) {
+                console.log("✅ 木头断裂音效播放成功");
+            } else {
+                console.error("❌ 木头断裂音效播放失败");
+            }
+        } else {
+            console.error("❌ 音效管理器不存在");
         }
     }
 }
