@@ -20,6 +20,7 @@ class game {
         this.createStage();
         this.env = "yang"; // 默认环境为阳
         this.changetimes = 0; // 切换环境次数
+        this.yingyang = true;
 
         this.datamanager = new datamanager(this);
 
