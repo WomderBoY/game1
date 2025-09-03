@@ -48,7 +48,7 @@ class DrawManager {
         }
 
         // 绘制相反属性的虚化砖块
-        this.drawPhantomBlocks(collidable[detype], atk[type]);
+        this.drawPhantomBlocks(collidable[detype], atk[detype]);
 
         // 绘制当前属性的碰撞元素
         this.drawCollidableElements(collidable[type], atk[type]);
