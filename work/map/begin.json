@@ -5,7 +5,7 @@ _jsonCallback({
         "way": "negative",
         "x": 0,
         "y": 0,
-        "target": "../map/bg.json", //目标的地图
+        "target": "../map/test_1.json", //目标的地图
         "withcg": {
             "type": "cg",
             "way": "negative",

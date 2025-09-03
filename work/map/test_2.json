@@ -74,7 +74,7 @@ _jsonCallback({
 					"way": "negative",
 					"x": 100,
 					"y": 350,
-					"target": "../map/bg.json"
+					"target": "../map/test_1.json"
 				},
 				"col": false
 			},

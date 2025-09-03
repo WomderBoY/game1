@@ -51,9 +51,9 @@ class game {
         //    console.log(s);
         this.animationmachine = new AnimationMachine(this, s1, s2);
 
-        //      await this.mapmanager.loadMap("bg.json");
-        //    await this.enemymanager.LoadEnemy("bg.json");
-        //  await this.baguamanager.LoadBagua("bg.json");
+        //      await this.mapmanager.loadMap("test_1.json");
+        //    await this.enemymanager.LoadEnemy("test_1.json");
+        //  await this.baguamanager.LoadBagua("test_1.json");
         // 检查是否有选择的关卡
         const selectedLevel = localStorage.getItem("selectedLevel");
 
@@ -135,11 +135,11 @@ class game {
     // 解锁关卡系统
     unlockNextLevel(currentLevel) {
         const levelOrder = [
-            "../map/bg.json",
-            "../map/bg2.json",
+            "../map/test_1.json",
+            "../map/test_2.json",
             "../map/bg-map1.json",
+            "../map/bg-map2.json",
             "../map/bg-map3.json",
-            "../map/bg3.json",
             "../map/bg-map4.json",
         ];
         const currentIndex = levelOrder.indexOf(currentLevel);
@@ -192,8 +192,8 @@ class game {
             localStorage.getItem("unlockedLevels") || "[]"
         );
         // 确保第一关总是解锁的
-        if (!unlockedLevels.includes("../map/bg.json")) {
-            unlockedLevels.push("../map/bg.json");
+        if (!unlockedLevels.includes("../map/test_1.json")) {
+            unlockedLevels.push("../map/test_1.json");
             localStorage.setItem(
                 "unlockedLevels",
                 JSON.stringify(unlockedLevels)

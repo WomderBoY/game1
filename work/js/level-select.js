@@ -2,11 +2,11 @@
 
 // 关卡配置
 const levelConfig = {
-    "../map/bg.json": { name: "图书馆入口", unlocked: true },
-    "../map/bg2.json": { name: "神秘教室", unlocked: false },
-    "../map/bg-map1.json": { name: "图书馆深处", unlocked: false },
+    "../map/test_1.json": { name: "待定", unlocked: true },
+    "../map/test_2.json": { name: "待定", unlocked: false },
+    "../map/bg-map1.json": { name: "待定", unlocked: false },
+    "../map/bg-map2.json": { name: "待定", unlocked: false },
     "../map/bg-map3.json": { name: "待定", unlocked: false },
-    "../map/bg3.json": { name: "待定", unlocked: false },
     "../map/bg-map4.json": { name: "待定", unlocked: false },
 };
 
@@ -35,8 +35,8 @@ function checkSaveData() {
     );
 
     // 确保第一关总是解锁的
-    if (!unlockedLevels.includes("../map/bg.json")) {
-        unlockedLevels.push("../map/bg.json");
+    if (!unlockedLevels.includes("../map/test_1.json")) {
+        unlockedLevels.push("../map/test_1.json");
         localStorage.setItem(
             "unlockedLevels",
             JSON.stringify(unlockedLevels)
@@ -224,7 +224,7 @@ function unlockAllLevels() {
 
 // 强制重置为只解锁第一关（调试用）
 function resetToFirstLevel() {
-    localStorage.setItem("unlockedLevels", JSON.stringify(["../map/bg.json"]));
+    localStorage.setItem("unlockedLevels", JSON.stringify(["../map/test_1.json"]));
     console.log("已重置为只解锁第一关");
     location.reload(); // 重新加载页面以更新界面
 }
