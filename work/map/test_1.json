@@ -71,11 +71,7 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "changemap",
-<<<<<<< HEAD:work/map/bg.json
-					"target":"../map/jiaoxue2.json",
-=======
 					"target": "../map/bgtest.json",
->>>>>>> fddeb566ca1ae066c18cdf0e931090ca7ddee017:work/map/test_1.json
 					"way": "negative",
 					"with": {
 						"images": [
@@ -106,11 +102,7 @@ _jsonCallback({
 					"way": "negative",
 					"x": 50,
 					"y": 90,
-<<<<<<< HEAD:work/map/bg.json
-					"target": "../map/jiaoxue2.json",
-=======
 					"target": "../map/bg-map1.json",
->>>>>>> fddeb566ca1ae066c18cdf0e931090ca7ddee017:work/map/test_1.json
 					"with": {
 						"type": "cg",
 						"way": "negative",
