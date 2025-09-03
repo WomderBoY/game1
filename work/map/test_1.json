@@ -1,30 +1,38 @@
 _jsonCallback({
-	"born":[0, 0],
-	"Tram":[
+	"born": [
+		0,
+		0
+	],
+	"Tram": [
 		{
-			"hitbox":[760, 650, 30, 30],
+			"hitbox": [
+				760,
+				650,
+				30,
+				30
+			],
 		}
 	],
-	"with":[
+	"with": [
 		{
-					"type": "cg",
-					"way": "negative",
-					"images": [
-						"../images/black-right2-0.png",
-						"../images/white.png"
-					],
-					"text": [
-						[
-							"我是一名北理工大学生。因为对古代哲学颇有兴趣，所以这学期课余都在研究一本残破的古籍《周易注疏》。某天，我在图书馆查资料时趴在桌上睡着了。",
-							"某天，我在图书馆查资料时趴在桌上睡着了。"
-						],
-						[
-							"这是一个光怪陆离的梦。",
-							"梦中，悬浮在星空中的巨大八卦台上，一位仙风道骨的祖师正在与一个身披玄黑长袍、面容被阴影笼罩的天机叟对峙。"
-						]
-					],
-				}
+			"type": "cg",
+			"way": "negative",
+			"images": [
+				"../images/black-right2-0.png",
+				"../images/white.png"
 			],
+			"text": [
+				[
+					"【玩家】我是一名北理工大学生。因为对古代哲学颇有兴趣，所以这学期课余都在研究一本残破的古籍《周易注疏》。某天，我在图书馆查资料时趴在桌上睡着了。",
+					"【旁白】某天，我在图书馆查资料时趴在桌上睡着了。"
+				],
+				[
+					"【旁白】这是一个光怪陆离的梦。",
+					"【旁白】梦中，悬浮在星空中的巨大八卦台上，一位仙风道骨的祖师正在与一个身披玄黑长袍、面容被阴影笼罩的天机叟对峙。"
+				]
+			],
+		}
+	],
 	"yang": {
 		"tileMap": [
 			{
@@ -63,20 +71,24 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "changemap",
+<<<<<<< HEAD:work/map/bg.json
 					"target":"../map/jiaoxue2.json",
+=======
+					"target": "../map/bgtest.json",
+>>>>>>> fddeb566ca1ae066c18cdf0e931090ca7ddee017:work/map/test_1.json
 					"way": "negative",
-					"with":{
+					"with": {
 						"images": [
 							"../images/black-right2-0.png",
 							"../images/white.png"
 						],
 						"text": [
 							[
-									"这是传送门"
-								],
-								[
-									"将你传送到下一关"
-								]
+								"这是传送门"
+							],
+							[
+								"将你传送到下一关"
+							]
 						],
 					}
 				},
@@ -94,7 +106,11 @@ _jsonCallback({
 					"way": "negative",
 					"x": 50,
 					"y": 90,
+<<<<<<< HEAD:work/map/bg.json
 					"target": "../map/jiaoxue2.json",
+=======
+					"target": "../map/bg-map1.json",
+>>>>>>> fddeb566ca1ae066c18cdf0e931090ca7ddee017:work/map/test_1.json
 					"with": {
 						"type": "cg",
 						"way": "negative",
@@ -102,20 +118,19 @@ _jsonCallback({
 							"../images/black-right2-0.png",
 							"../images/white.png"
 						],
-						"text":[
-						[
+						"text": [
+							[
 								"这是传送门"
 							],
 							[
 								"将你传送到下一关"
 							]
-					],
+						],
 					}
 				},
 				"col": false
 			}
 		],
-
 		"enemy": [
 			{
 				"x": 600,
@@ -133,7 +148,7 @@ _jsonCallback({
 				"h": 30,
 				"speed": 2,
 				"attackRange":150, 
-				"dashSpeed":10
+				"dashSpeed":5
 			}
 		],
 		"bagua": [
@@ -161,10 +176,9 @@ _jsonCallback({
 					"type": "dialog",
 					"way": "negative",
 					"text": [
-						"请输入用户名：",
+						"【系统】请输入用户名：",
 						"【系统】你好：{用户名}，欢迎来到阴阳劫的世界！",
-						"你好，你好，你好你好你好"
-						
+						"【旁白】这是一个充满神秘力量的世界，阴阳相生相克，万物皆有平衡。"
 					]
 				},
 				"col": false

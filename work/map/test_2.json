@@ -1,35 +1,38 @@
 _jsonCallback({
-	"born":[100, 350],
-	"Tram":[
-			{
-				"hitbox": [
-					550,
-					670,
-					10,
-					10
-				],
-			}
+	"born": [
+		100,
+		350
 	],
-	"with":[
+	"Tram": [
 		{
-					"type": "cg",
-					"way": "negative",
-					"images": [
-						"../images/black-right2-0.png",
-						"../images/white.png"
-					],
-					"text": [
-						[
-							"天机叟手持罗盘，口念卦辞，引动天地之力。",
-							"他从八卦台中央夺走一块通体漆黑、散发着寒气的阴石。"
-						],
-						[
-							"瞬间，世界开始崩塌，星辰陨落。",
-							"祖师手持另一块散发着温润白光的阳石，发动禁术，以自身精血为引，画出一道巨大的符咒封印了天机叟大部分的力量，但自己也元神涣散，濒临消亡。"
-						]
-					],
-				}
+			"hitbox": [
+				550,
+				670,
+				10,
+				10
 			],
+		}
+	],
+	"with": [
+		{
+			"type": "cg",
+			"way": "negative",
+			"images": [
+				"../images/black-right2-0.png",
+				"../images/white.png"
+			],
+			"text": [
+				[
+					"天机叟手持罗盘，口念卦辞，引动天地之力。",
+					"他从八卦台中央夺走一块通体漆黑、散发着寒气的阴石。"
+				],
+				[
+					"瞬间，世界开始崩塌，星辰陨落。",
+					"祖师手持另一块散发着温润白光的阳石，发动禁术，以自身精血为引，画出一道巨大的符咒封印了天机叟大部分的力量，但自己也元神涣散，濒临消亡。"
+				]
+			],
+		}
+	],
 	"yang": {
 		"tileMap": [
 			{
@@ -41,9 +44,10 @@ _jsonCallback({
 				],
 				"col": true,
 				"img": [
-					"../images/hitbox.png", "../images/player.png"
+					"../images/hitbox.png",
+					"../images/player.png"
 				],
-				"hp":2
+				"hp": 2
 			},
 			{
 				"hitbox": [
@@ -56,8 +60,8 @@ _jsonCallback({
 					"type": "dialog",
 					"way": "negative",
 					"text": [
-						"【test】这是一条测试",
-						"【test】这是第二条测试"
+						"【旁白】年轻人，你准备好接受古老的智慧了吗？",
+						"【导师】阴阳之道，深不可测，需要用心去领悟。"
 					]
 				},
 				"col": false
@@ -74,7 +78,7 @@ _jsonCallback({
 					"way": "negative",
 					"x": 100,
 					"y": 350,
-					"target": "../map/bg.json"
+					"target": "../map/test_1.json"
 				},
 				"col": false
 			},
@@ -102,7 +106,7 @@ _jsonCallback({
 					10
 				],
 				//	"hp":1,
-				"fra":true,
+				"fra": true,
 				"col": true,
 				"img": [
 					"../images/vine1.png"
@@ -116,11 +120,16 @@ _jsonCallback({
 					10
 				],
 				//	"hp":1,
-				"move":true,
-				"area":[500, 1000, -1, -1],
-				"vx":20,
-				"vy":0,
-				"col":true,
+				"move": true,
+				"area": [
+					500,
+					1000,
+					-1,
+					-1
+				],
+				"vx": 20,
+				"vy": 0,
+				"col": true,
 				"img": [
 					"../images/test1.png"
 				]
@@ -160,8 +169,8 @@ _jsonCallback({
 					"type": "dialog",
 					"way": "negative",
 					"text": [
-						"【test】这是一条测试",
-						"【test】这是第二条测试"
+						"【Boss】哈哈哈！又一个不知天高地厚的挑战者！",
+						"【Boss】让我看看你有什么本事！"
 					]
 				},
 				"col": false

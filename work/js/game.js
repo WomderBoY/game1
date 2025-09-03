@@ -38,6 +38,7 @@ class game {
 
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
+        this.bossmanager = new BossManager(this);
         this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
@@ -51,9 +52,9 @@ class game {
         //    console.log(s);
         this.animationmachine = new AnimationMachine(this, s1, s2);
 
-        //      await this.mapmanager.loadMap("bg.json");
-        //    await this.enemymanager.LoadEnemy("bg.json");
-        //  await this.baguamanager.LoadBagua("bg.json");
+        //      await this.mapmanager.loadMap("test_1.json");
+        //    await this.enemymanager.LoadEnemy("test_1.json");
+        //  await this.baguamanager.LoadBagua("test_1.json");
         // 检查是否有选择的关卡
         const selectedLevel = localStorage.getItem("selectedLevel");
 
@@ -69,7 +70,10 @@ class game {
             await this.enemymanager.LoadEnemy(selectedLevel);
             await this.enemy2manager.LoadEnemy2(selectedLevel);
             await this.baguamanager.LoadBagua(selectedLevel);
+            await this.bossmanager.loadBoss(selectedLevel);
             this.mapmanager.draw(this.env);
+            // 加载 Boss
+           
         }
         this.bgmmanager = new BGMManager(); // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
@@ -132,11 +136,11 @@ class game {
     // 解锁关卡系统
     unlockNextLevel(currentLevel) {
         const levelOrder = [
-            "../map/bg.json",
-            "../map/bg2.json",
+            "../map/test_1.json",
+            "../map/test_2.json",
             "../map/bg-map1.json",
+            "../map/bg-map2.json",
             "../map/bg-map3.json",
-            "../map/bg3.json",
             "../map/bg-map4.json",
         ];
         const currentIndex = levelOrder.indexOf(currentLevel);
@@ -189,8 +193,8 @@ class game {
             localStorage.getItem("unlockedLevels") || "[]"
         );
         // 确保第一关总是解锁的
-        if (!unlockedLevels.includes("../map/bg.json")) {
-            unlockedLevels.push("../map/bg.json");
+        if (!unlockedLevels.includes("../map/test_1.json")) {
+            unlockedLevels.push("../map/test_1.json");
             localStorage.setItem(
                 "unlockedLevels",
                 JSON.stringify(unlockedLevels)
@@ -375,6 +379,20 @@ class game {
                     this.enemymanager.draw(this.ctx);
                     this.enemy2manager.draw(this.ctx);
                 } 
+                if (this.cg == false) this.enemymanager.draw(this.ctx);
+                // 更新和绘制 Boss
+                await this.bossmanager.update(this.player, 16.6667); // deltaTime 可按需调整
+                if (this.cg == false) this.bossmanager.draw(this.ctx);
+                
+                // 更新Boss HP系统（如果存在）
+                if (this.boss && this.boss.HP) {
+                    this.boss.HP.update(16.6667);
+                } else if (this.boss) {
+                    console.log('⚠️ Boss存在但HP系统未初始化:', this.boss);
+                } else {
+                    console.log('ℹ️ 当前关卡没有Boss');
+                }
+        
                 await this.entitymanager.update();
                 await this.entitymanager.checkCollision();
                 if (this.boss) {
@@ -387,6 +405,9 @@ class game {
                 this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
+                // 更新HP系统（包括动画和粒子）
+                this.hp.update(16.6667);
+                
                 // 绘制血条，放在最后，保证在最上层
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
@@ -407,6 +428,10 @@ class game {
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 this.entitymanager.drawPlayer();
+                
+                // 更新HP系统（暂停时也需要更新动画）
+                this.hp.update(16.6667);
+                
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":
@@ -451,6 +476,7 @@ class game {
                 if (this.inputmanager.takeEnter()) {
                     await this.savemanager.load();
                     this.hp.reset();
+                    console.log('游戏重新开始，HP已重置');
                 }
                 break;
             //load...

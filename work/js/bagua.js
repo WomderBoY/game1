@@ -59,7 +59,7 @@ class BaguaManager {
 
         this.empty();
 
-        for (let i of data[this.game.env].bagua) {
+        for (let i of data['yang'].bagua) {
             let [x, y, w, h] = i.hitbox;
             await this.addBagua(x, y, w, h);
         }

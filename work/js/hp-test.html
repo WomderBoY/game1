@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HP系统测试</title>
+    <style>
+        body { 
+            background: #333; 
+            color: white; 
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        canvas { 
+            border: 2px solid #666; 
+            margin: 20px auto;
+            display: block;
+        }
+        .controls {
+            margin: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .damage { background: #ff4444; color: white; }
+        .heal { background: #44ff44; color: black; }
+        .reset { background: #4444ff; color: white; }
+    </style>
+</head>
+<body>
+    <h1>HP系统测试</h1>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    
+    <div class="controls">
+        <button class="damage" onclick="damage()">扣血 (-1)</button>
+        <button class="damage" onclick="damage2()">扣血 (-2)</button>
+        <button class="heal" onclick="heal()">回血 (+1)</button>
+        <button class="reset" onclick="reset()">重置血量</button>
+        <button onclick="debug()">调试信息</button>
+    </div>
+
+    <script src="hp.js"></script>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 创建HP实例
+        const playerHP = new hp(5, null);
+        
+        // 游戏循环
+        function gameLoop() {
+            // 清空画布
+            ctx.fillStyle = '#222';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 更新HP系统
+            playerHP.update();
+            
+            // 绘制HP - 修复参数问题
+            playerHP.draw(ctx, 800, 600);
+            
+            // 继续循环
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // 扣血函数
+        function damage() {
+            playerHP.decrease(1);
+            console.log('扣血1点');
+        }
+        
+        function damage2() {
+            playerHP.decrease(2);
+            console.log('扣血2点');
+        }
+        
+        // 回血函数
+        function heal() {
+            playerHP.increase(1);
+            console.log('回血1点');
+        }
+        
+        // 重置函数
+        function reset() {
+            playerHP.reset();
+            console.log('重置血量');
+        }
+        
+        // 调试函数
+        function debug() {
+            playerHP.debug();
+        }
+        
+        // 启动游戏循环
+        gameLoop();
+        
+        console.log('HP测试页面已启动');
+        console.log('点击按钮测试各种功能');
+    </script>
+</body>
+</html>

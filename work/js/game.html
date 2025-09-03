@@ -1,65 +1,70 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>阴阳劫 - 游戏</title>
-        <link rel="stylesheet" href="game-style.css">
-    </head>
-    <body>
-        <div id="game"></div>
-        <div id="resource" style="display: none"></div>
-        
-        <!-- 暂停菜单 -->
-        <div id="pauseMenu">
-            <div class="pause-container">
-                <div class="pause-title">暂停</div>
-                <div class="pause-buttons">
-                    <button id="btnResume" class="pause-btn">
-                        继续游戏 (Enter)
-                    </button>
-                    <button id="btnRestart" class="pause-btn">
-                        重新开始当前关卡
-                    </button>
-                    <button id="btnMenu" class="pause-btn">
-                        重新选择关卡
-                    </button>
-                </div>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>阴阳劫 - 游戏</title>
+    <link rel="stylesheet" href="game-style.css">
+    <link rel="stylesheet" href="dialog-style.css">
+</head>
+
+<body>
+    <div id="game"></div>
+    <div id="resource" style="display: none"></div>
+
+    <!-- 暂停菜单 -->
+    <div id="pauseMenu">
+        <div class="pause-container">
+            <div class="pause-title">暂停</div>
+            <div class="pause-buttons">
+                <button id="btnResume" class="pause-btn">
+                    继续游戏 (Enter)
+                </button>
+                <button id="btnRestart" class="pause-btn">
+                    重新开始当前关卡
+                </button>
+                <button id="btnMenu" class="pause-btn">
+                    重新选择关卡
+                </button>
             </div>
         </div>
-        
-        <!-- 成就提示 -->
-        <div id="achievement-toast">
-            <div class="t-title">成就解锁</div>
-            <div class="t-desc">描述</div>
-        </div>
-            <script src="Util.js"></script>
-            <script src="enemy.js"></script>
-            <script src="enemy2.js"></script>
-            <script src="eventmanager.js"></script>
-            <script src="Sprite.js"></script>
-            <script src="animationmanager.js"></script>
-            <script src="cgmanager.js"></script>
-            <script src="inputmanager.js"></script>
-            <script src="dialog.js"></script>
-            <script src="nightmanager.js"></script>
-            <script src="savemanager.js"></script>
-            <script src="datamanager.js"></script>
-            <script src="Fratile.js"></script>
-            <script src="Movetile.js"></script>
-            <script src="soundmanager.js"></script>
-            <script src="draw.js"></script>
-            <script src="Boss.js"></script>
-            <script src="mapmanager.js"></script>
-            <script src="Trampoline.js"></script>
-            <script src="hp.js"></script>
-            <script src="bgmmanager.js"></script>
-            <script src="TaijiManager.js"></script>
+    </div>
 
-            <script src="bagua.js"></script>
-            <script src="entitymanager.js"></script>
-            <script src="achievements.js"></script>
-            <script src="game.js"></script>
-            <script src="game-ui.js"></script>
-        </body>
-    </html>
+    <!-- 成就提示 -->
+    <div id="achievement-toast">
+        <div class="t-title">成就解锁</div>
+        <div class="t-desc">描述</div>
+    </div>
+    <script src="Util.js"></script>
+    <script src="enemy.js"></script>
+    <script src="enemy2.js"></script>
+    <script src="eventmanager.js"></script>
+    <script src="Sprite.js"></script>
+    <script src="animationmanager.js"></script>
+    <script src="cgmanager.js"></script>
+    <script src="diveBoss.js"></script>
+    <script src="inputmanager.js"></script>
+    <script src="dialog.js"></script>
+    <script src="nightmanager.js"></script>
+    <script src="savemanager.js"></script>
+    <script src="datamanager.js"></script>
+    <script src="Fratile.js"></script>
+    <script src="Movetile.js"></script>
+    <script src="soundmanager.js"></script>
+    <script src="draw.js"></script>
+    <script src="Boss.js"></script>
+    <script src="mapmanager.js"></script>
+    <script src="Trampoline.js"></script>
+    <script src="hp.js"></script>
+    <script src="bgmmanager.js"></script>
+    <script src="TaijiManager.js"></script>
+
+    <script src="bagua.js"></script>
+    <script src="entitymanager.js"></script>
+    <script src="achievements.js"></script>
+    <script src="game.js"></script>
+    <script src="game-ui.js"></script>
+</body>
+
+</html>

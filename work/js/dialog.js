@@ -17,80 +17,141 @@ class dialog {
     createDialog() {
         // 创建对话框容器
         this.dialog = document.createElement("div");
-        Object.assign(this.dialog.style, {
-            position: "absolute",
-            bottom: "20px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "400px",
-            minHeight: "100px",
-            padding: "10px",
-            background: "rgba(0,0,0,0.7)",
-            color: "white",
-            border: "2px solid white",
-            borderRadius: "8px",
-            boxSizing: "border-box",
-            fontFamily: "sans-serif",
-            overflow: "hidden",
-            display: "none",
-            zIndex: "999",
-        });
+        this.dialog.className = "dialog-container";
 
-        // 名字容器
-        this.name = document.createElement("span");
-        Object.assign(this.name.style, {
-            fontWeight: "bold",
-            display: "block",
-            marginBottom: "5px",
-        });
+        // 创建内容区域
+        this.content = document.createElement("div");
+        this.content.className = "dialog-content";
 
-        // 文本容器
+        // 创建对话人信息区域
+        this.speaker = document.createElement("div");
+        this.speaker.className = "dialog-speaker";
+
+        // 创建头像
+        this.avatar = document.createElement("div");
+        this.avatar.className = "dialog-avatar";
+        this.avatar.textContent = "?";
+
+        // 创建名字容器
+        this.name = document.createElement("h3");
+        this.name.className = "dialog-name";
+
+        // 创建文本容器
         this.text = document.createElement("p");
-        this.text.style.margin = "0";
+        this.text.className = "dialog-text";
 
         // 输入框容器（默认隐藏）
         this.inputContainer = document.createElement("div");
-        Object.assign(this.inputContainer.style, {
-            marginTop: "10px",
-            display: "none",
-        });
+        this.inputContainer.className = "dialog-input-container";
 
         this.inputField = document.createElement("input");
-        Object.assign(this.inputField.style, {
-            width: "100%",
-            padding: "8px",
-            border: "1px solid white",
-            borderRadius: "4px",
-            background: "rgba(255,255,255,0.1)",
-            color: "white",
-            fontSize: "14px",
-            boxSizing: "border-box",
-        });
+        this.inputField.className = "dialog-input";
         this.inputField.placeholder = "请输入...";
 
         this.inputContainer.appendChild(this.inputField);
 
-        this.dialog.appendChild(this.name);
-        this.dialog.appendChild(this.text);
-        this.dialog.appendChild(this.inputContainer);
+        // 组装结构
+        this.speaker.appendChild(this.avatar);
+        this.speaker.appendChild(this.name);
+        this.content.appendChild(this.speaker);
+        this.content.appendChild(this.text);
+        this.content.appendChild(this.inputContainer);
+        this.dialog.appendChild(this.content);
 
         document.getElementById("game").appendChild(this.dialog);
-    }
-    async close(duration = 500) {
-        // duration 单位是毫秒，表示关闭动画总时间
-        const steps = 20; // 动画分成多少步
-        const interval = duration / steps;
 
-        for (let i = steps; i >= 0; i--) {
-            const scale = i / steps; // 从 1 到 0
-            this.dialog.style.transform = `translateX(-50%) scaleY(${scale})`;
-            await new Promise((r) => setTimeout(r, interval));
-        }
-        this.dialog.style.display = "none";
-        this.dialog.style.transform = "translateX(-50%) scaleY(1)";
+        // 默认设置为系统样式
+        this.setDialogTheme("system");
     }
+
+    // 设置对话框主题
+    setDialogTheme(theme) {
+        // 移除所有主题类
+        this.dialog.classList.remove("system", "player", "npc", "boss", "mysterious");
+        // 添加新主题类
+        this.dialog.classList.add(theme);
+
+        // 根据主题设置头像和样式
+        this.updateAvatar(theme);
+    }
+
+    // 更新头像显示
+    updateAvatar(theme, customAvatar = null) {
+        if (customAvatar) {
+            // 使用自定义头像图片
+            this.avatar.style.backgroundImage = `url(${customAvatar})`;
+            this.avatar.classList.add("has-bg");
+            this.avatar.innerHTML = '<span class="avatar-text"></span>';
+        } else {
+            // 使用默认表情符号
+            const avatarMap = {
+                "system": "⚙",
+                "player": "👤",
+                "npc": "🗣",
+                "boss": "👹",
+                "mysterious": "🔮"
+            };
+
+            this.avatar.style.backgroundImage = "";
+            this.avatar.classList.remove("has-bg");
+            this.avatar.textContent = avatarMap[theme] || "?";
+        }
+    }
+
+    // 设置对话框背景图片
+    setDialogBackground(imageUrl) {
+        if (imageUrl) {
+            this.dialog.style.backgroundImage = `url(${imageUrl})`;
+            this.dialog.classList.add("has-bg");
+        } else {
+            this.dialog.style.backgroundImage = "";
+            this.dialog.classList.remove("has-bg");
+        }
+    }
+
+    // 根据对话人名称设置主题
+    setDialogThemeBySpeaker(speakerName) {
+        const speakerConfig = {
+            "系统": { theme: "system", avatar: null, background: null },
+            "玩家": { theme: "player", avatar: null, background: null },
+            "旅行者": { theme: "player", avatar: null, background: null },
+            "主角": { theme: "player", avatar: null, background: null },
+            "Boss": { theme: "boss", avatar: "../images/enemy-black.png", background: null },
+            "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png" }
+        };
+
+        // 检查是否匹配已知的对话人
+        let config = { theme: "mysterious", avatar: null, background: null }; // 默认为NPC主题
+
+        for (let [key, value] of Object.entries(speakerConfig)) {
+            if (speakerName.includes(key)) {
+                config = value;
+                break;
+            }
+        }
+
+        this.setDialogTheme(config.theme);
+        this.updateAvatar(config.theme, config.avatar);
+        this.setDialogBackground(config.background);
+    }
+    async close(duration = 300) {
+        // 使用CSS动画关闭
+        this.dialog.classList.add("hide");
+        this.dialog.classList.remove("show");
+
+        // 等待动画完成
+        await new Promise((resolve) => setTimeout(resolve, duration));
+
+        this.dialog.style.display = "none";
+        this.dialog.classList.remove("hide");
+    }
+
     async open() {
         this.dialog.style.display = "block";
+        // 强制重绘
+        this.dialog.offsetHeight;
+        // 添加显示动画
+        this.dialog.classList.add("show");
     }
 
     async prints(texts) {
@@ -105,7 +166,6 @@ class dialog {
     async _prints() {
         while (this.buffer.length > 0) {
             let text = this.buffer.shift();
-
             // 检查是否是输入提示
             if (text.includes("请输入用户名：")) {
                 // 如果已经有用户名，跳过输入提示和欢迎语
@@ -133,11 +193,15 @@ class dialog {
                 text = text.replace(/{用户名}/g, this.username || "旅行者");
             }
 
-            // 解析名字
+            // 解析名字和主题
             if (text[0] === "【") {
                 let end = text.indexOf("】");
-                this.name.textContent = text.slice(0, end + 1);
+                let speakerName = text.slice(1, end); // 去掉【】
+                this.name.textContent = speakerName;
                 text = text.slice(end + 1);
+
+                // 根据对话人设置主题
+                this.setDialogThemeBySpeaker(speakerName);
             }
 
             this.text.innerHTML = "";
@@ -194,8 +258,9 @@ class dialog {
 
     async handleUsernameInput() {
         // 显示输入提示
-        this.name.textContent = "【系统】";
+        this.name.textContent = "系统";
         this.text.textContent = "请输入用户名：";
+        this.setDialogTheme("system");
         this.inputContainer.style.display = "block";
         this.inputField.focus();
 

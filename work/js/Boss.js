@@ -2,7 +2,8 @@ class Boss {
     constructor(game) {
         this.game = game;
         this.lstmove = -20000;
-        this.HP = new hp(10);
+        this.HP = new hp(10, this.game);  // 添加game参数
+        console.log('Boss HP系统初始化完成:', this.HP);
     }
 
     end() {
@@ -36,7 +37,13 @@ class Boss {
     }
 
     gethurt(x = 10) {
-        this.HP.gethurt(x);
+        // 使用新的HP系统方法
+        if (this.HP && typeof this.HP.decrease === 'function') {
+            console.log(`Boss受到伤害: ${x}点`);
+            this.HP.decrease(x, 640, 690);
+        } else {
+            console.error('Boss HP系统未正确初始化!');
+        }
     }
 
     async move() {

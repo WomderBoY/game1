@@ -155,7 +155,7 @@ class EnemyManager {
     set_enemy(type, x) {
         let p = this.game.mapmanager.collidable[type][x];
         let sp = this.game.random(1, 3), tp = this.game.random(0, 1) ? false : true;
-        this.enemies.push(new Enemy(this.game, p.x, p.y - 50, 50, 50, sp));
+        this.enemies.push(new Enemy(this.game, p.x, p.y - 50, 50, 50, sp, tp));
     }
 
     /**
