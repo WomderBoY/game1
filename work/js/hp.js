@@ -19,7 +19,7 @@ class hp {
     }
 
     // 减少血量
-    decrease(amount = 1) {
+    decrease(amount = 1, x, y) {
         const oldHP = this.currentHP;
         this.currentHP -= amount;
         if (this.currentHP < 0) this.currentHP = 0;
@@ -30,7 +30,7 @@ class hp {
             console.log(`扣血触发: 从${oldHP}减少到${this.currentHP}, 动画计时器=${this.damageEffectTimer}`);
             
             // 立即创建一些血液粒子
-            this.createBloodParticles(amount);
+            this.createBloodParticles(amount, x, y);
         }
         return this.isDead();
     }
@@ -55,13 +55,13 @@ class hp {
     }
     
     // 创建血液粒子
-    createBloodParticles(damageAmount) {
+    createBloodParticles(damageAmount, x, y) {
         const particleCount = Math.min(damageAmount * 3, 10); // 每次扣血生成最多10个粒子
         
         for (let i = 0; i < particleCount; i++) {
             // 粒子生成位置在血条附近
-            const particleX = 20 + Math.random() * 100;
-            const particleY = 20 + Math.random() * 20;
+            const particleX = x + Math.random() * 100;
+            const particleY = y + Math.random() * 20;
             this.particles.push(new BloodParticle(particleX, particleY));
         }
         

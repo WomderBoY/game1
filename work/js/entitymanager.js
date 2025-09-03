@@ -101,8 +101,9 @@ class entitymanager {
     gethurt(x = 1) {
         let now = Date.now();
         if (now >= entitymanager.safeUntil) {
-            if (this.game.hp) this.game.hp.decrease(x);
-                entitymanager.safeUntil = now + 3000; // 3秒无敌
+            if (this.game.hp) this.game.hp.decrease(x, 20, 20);
+            entitymanager.safeUntil = now + 3000; // 3秒无敌
+            this.game.hp.createBloodParticles(10, this.game.player.position.x, this.game.player.position.y);
         }
     }
 
