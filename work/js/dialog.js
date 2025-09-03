@@ -121,7 +121,7 @@ class dialog {
         };
 
         // 检查是否匹配已知的对话人
-        let config = { theme: "mysterious", avatar: null, background: null }; // 默认为NPC主题
+        let config = { theme: "mysterious", avatar: null, background: null }; // 默认为mysterious主题
 
         for (let [key, value] of Object.entries(speakerConfig)) {
             if (speakerName.includes(key)) {

@@ -144,23 +144,23 @@ class DrawManager {
     drawPhantomTile(tile) {
         const ctx = this.game.ctx;
         ctx.save();
-        
+
         // 设置透明度
         ctx.globalAlpha = 0.6;
-        
+
         if (tile.hp) {
             // 有生命值的方块，根据当前状态选择对应图片
-    //         if (this.game.changetimes == 0
-    //            || !this.game.mapmanager.hurt()
-    //         ) {
-                let o = tile.hp - Math.floor(this.game.changetimes / 2);
-                if (o > 0) {
-                    let k = o - 1;
-                    if (this.game.changetimes % 2 == 0) ++k;
-                    if (tile.img[k]) {
-                        ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
-                    }
+            //         if (this.game.changetimes == 0
+            //            || !this.game.mapmanager.hurt()
+            //         ) {
+            let o = tile.hp - Math.floor(this.game.changetimes / 2);
+            if (o > 0) {
+                let k = o - 1;
+                if (this.game.changetimes % 2 == 0) ++k;
+                if (tile.img[k]) {
+                    ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
                 }
+            }
             // }
             // else if (
             //     this.game.mapmanager.hurt() &&
@@ -186,9 +186,9 @@ class DrawManager {
         //         ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
         //     }
         // }
-        
+
         // 移除虚化边框，保持完全透明的效果
-        
+
         ctx.restore();
     }
 
@@ -198,25 +198,25 @@ class DrawManager {
         if (!fratile.alive(this.game)) {
             return;
         }
-        
+
         const ctx = this.game.ctx;
         ctx.save();
-        
+
         // 设置透明度
         ctx.globalAlpha = 0.6;
-        
+
         // 绘制原始图片作为虚化效果
         if (fratile.img && fratile.img[0]) {
             ctx.drawImage(fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
         }
-        
+
         // 移除虚化边框，保持完全透明的效果
-        
+
         // 添加虚化纹理
         ctx.strokeStyle = "rgba(125, 125, 106, 0.6)";
         ctx.lineWidth = 1;
         const lineSpacing = 20;
-        
+
         // 横向纹理
         for (let ly = fratile.y + lineSpacing; ly < fratile.y + fratile.h; ly += lineSpacing) {
             ctx.beginPath();
@@ -224,7 +224,7 @@ class DrawManager {
             ctx.lineTo(fratile.x + fratile.w - 2, ly);
             ctx.stroke();
         }
-        
+
         // 纵向纹理
         for (let lx = fratile.x + lineSpacing; lx < fratile.x + fratile.w; lx += lineSpacing) {
             ctx.beginPath();
@@ -232,7 +232,7 @@ class DrawManager {
             ctx.lineTo(lx, fratile.y + fratile.h - 2);
             ctx.stroke();
         }
-        
+
         ctx.restore();
     }
 
@@ -240,23 +240,23 @@ class DrawManager {
     drawPhantomMovetile(movetile) {
         const ctx = this.game.ctx;
         ctx.save();
-        
+
         // 设置透明度
         ctx.globalAlpha = 0.6;
-        
+
         // 绘制原始图片作为虚化效果
         if (movetile.img && movetile.img[0]) {
             ctx.drawImage(movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
         }
-        
+
         // 移除虚化边框，保持完全透明的效果
-        
+
         // 添加移动指示箭头（表示这是移动的砖块）
         ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
         ctx.lineWidth = 2;
         const centerX = movetile.x + movetile.w / 2;
         const centerY = movetile.y + movetile.h / 2;
-        
+
         // 绘制移动方向指示器
         if (movetile.vx !== 0) {
             // 水平移动
@@ -264,44 +264,44 @@ class DrawManager {
             ctx.beginPath();
             if (movetile.vx > 0) {
                 // 向右移动
-                ctx.moveTo(centerX - arrowLength/2, centerY);
-                ctx.lineTo(centerX + arrowLength/2, centerY);
-                ctx.lineTo(centerX + arrowLength/2 - 5, centerY - 5);
-                ctx.moveTo(centerX + arrowLength/2, centerY);
-                ctx.lineTo(centerX + arrowLength/2 - 5, centerY + 5);
+                ctx.moveTo(centerX - arrowLength / 2, centerY);
+                ctx.lineTo(centerX + arrowLength / 2, centerY);
+                ctx.lineTo(centerX + arrowLength / 2 - 5, centerY - 5);
+                ctx.moveTo(centerX + arrowLength / 2, centerY);
+                ctx.lineTo(centerX + arrowLength / 2 - 5, centerY + 5);
             } else {
                 // 向左移动
-                ctx.moveTo(centerX + arrowLength/2, centerY);
-                ctx.lineTo(centerX - arrowLength/2, centerY);
-                ctx.lineTo(centerX - arrowLength/2 + 5, centerY - 5);
-                ctx.moveTo(centerX - arrowLength/2, centerY);
-                ctx.lineTo(centerX - arrowLength/2 + 5, centerY + 5);
+                ctx.moveTo(centerX + arrowLength / 2, centerY);
+                ctx.lineTo(centerX - arrowLength / 2, centerY);
+                ctx.lineTo(centerX - arrowLength / 2 + 5, centerY - 5);
+                ctx.moveTo(centerX - arrowLength / 2, centerY);
+                ctx.lineTo(centerX - arrowLength / 2 + 5, centerY + 5);
             }
             ctx.stroke();
         }
-        
+
         if (movetile.vy !== 0) {
             // 垂直移动
             const arrowLength = Math.min(movetile.w, movetile.h) / 3;
             ctx.beginPath();
             if (movetile.vy > 0) {
                 // 向下移动
-                ctx.moveTo(centerX, centerY - arrowLength/2);
-                ctx.lineTo(centerX, centerY + arrowLength/2);
-                ctx.lineTo(centerX - 5, centerY + arrowLength/2 - 5);
-                ctx.moveTo(centerX, centerY + arrowLength/2);
-                ctx.lineTo(centerX + 5, centerY + arrowLength/2 - 5);
+                ctx.moveTo(centerX, centerY - arrowLength / 2);
+                ctx.lineTo(centerX, centerY + arrowLength / 2);
+                ctx.lineTo(centerX - 5, centerY + arrowLength / 2 - 5);
+                ctx.moveTo(centerX, centerY + arrowLength / 2);
+                ctx.lineTo(centerX + 5, centerY + arrowLength / 2 - 5);
             } else {
                 // 向上移动
-                ctx.moveTo(centerX, centerY + arrowLength/2);
-                ctx.lineTo(centerX, centerY - arrowLength/2);
-                ctx.lineTo(centerX - 5, centerY - arrowLength/2 + 5);
-                ctx.moveTo(centerX, centerY - arrowLength/2);
-                ctx.lineTo(centerX + 5, centerY - arrowLength/2 + 5);
+                ctx.moveTo(centerX, centerY + arrowLength / 2);
+                ctx.lineTo(centerX, centerY - arrowLength / 2);
+                ctx.lineTo(centerX - 5, centerY - arrowLength / 2 + 5);
+                ctx.moveTo(centerX, centerY - arrowLength / 2);
+                ctx.lineTo(centerX + 5, centerY - arrowLength / 2 + 5);
             }
             ctx.stroke();
         }
-        
+
         ctx.restore();
     }
 
@@ -399,7 +399,7 @@ class DrawManager {
                 let o = tile.hp - Math.floor(this.game.changetimes / 2);
                 if (o > 0) {
                     let k = o - 1;
-                    ctx.drawImage(tile.img[k], x, y, w, h);
+                    this.drawNinePatch(ctx, tile.img[k], x, y, w, h);
                 }
             } else if (
                 this.game.mapmanager.hurt() &&
@@ -410,12 +410,13 @@ class DrawManager {
                     tile.hp,
                     tile.hp - Math.floor(this.game.changetimes / 2)
                 );
-                ctx.drawImage(
+                this.drawNinePatch(
+                    ctx,
                     tile.img[
-                        Math.max(
-                            0,
-                            tile.hp - Math.floor(this.game.changetimes / 2)
-                        )
+                    Math.max(
+                        0,
+                        tile.hp - Math.floor(this.game.changetimes / 2)
+                    )
                     ],
                     x,
                     y,
@@ -426,7 +427,51 @@ class DrawManager {
         } else {
             if (atk && this.game.mapmanager.loadingatk()) {
                 this.drawunstable(tile.img[0], x, y, w, h);
-            } else ctx.drawImage(tile.img[0], x, y, w, h);
+            } else this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
+        }
+    }
+
+    // 平铺贴图绘制函数
+    drawNinePatch(ctx, img, x, y, w, h) {
+        if (!img || !img.complete) {
+            // 如果图片未加载，使用默认绘制
+            ctx.drawImage(img, x, y, w, h);
+            return;
+        }
+
+        const imgW = img.width;
+        const imgH = img.height;
+
+        // 如果目标区域太小，直接使用原始绘制
+        if (w < 10 || h < 10) {
+            ctx.drawImage(img, x, y, w, h);
+            return;
+        }
+
+        // 计算合适的贴图尺寸（缩小图片以适应碰撞箱）
+        // 使用碰撞箱尺寸的1到1/8作为贴图大小，确保有足够的重复
+        const tileSize = Math.min(w, h); // 贴图大小为碰撞箱最小边宽度
+
+        // 计算需要平铺的次数
+        const tilesX = Math.ceil(w / tileSize);
+        const tilesY = Math.ceil(h / tileSize);
+
+        // 平铺绘制
+        for (let ty = 0; ty < tilesY; ty++) {
+            for (let tx = 0; tx < tilesX; tx++) {
+                const currentX = x + tx * tileSize;
+                const currentY = y + ty * tileSize;
+                const currentW = Math.min(tileSize, x + w - currentX);
+                const currentH = Math.min(tileSize, y + h - currentY);
+
+                if (currentW > 0 && currentH > 0) {
+                    ctx.drawImage(
+                        img,
+                        0, 0, imgW, imgH,  // 使用完整的源图片
+                        currentX, currentY, currentW, currentH  // 缩放到目标区域
+                    );
+                }
+            }
         }
     }
 
@@ -549,7 +594,7 @@ class DrawManager {
             HP[env][j].sethp(o);
             HP[env][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
         }
-        
+
         // 绘制相反环境的虚化血量条
         // let oppositeEnv = env === "yang" ? "yin" : "yang";
         // if (collidable[oppositeEnv] && HP[oppositeEnv]) {
