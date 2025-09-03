@@ -40,7 +40,7 @@ class Boss {
         // 使用新的HP系统方法
         if (this.HP && typeof this.HP.decrease === 'function') {
             console.log(`Boss受到伤害: ${x}点`);
-            this.HP.decrease(x);
+            this.HP.decrease(x, 640, 690);
         } else {
             console.error('Boss HP系统未正确初始化!');
         }

@@ -139,8 +139,8 @@ _jsonCallback({
 				"w": 30,
 				"h": 30,
 				"speed": 2,
-				"attackRange": 150,
-				"dashSpeed": 10
+				"attackRange":150, 
+				"dashSpeed":5
 			}
 		],
 		"bagua": [

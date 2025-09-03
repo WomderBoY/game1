@@ -123,13 +123,13 @@ class EnemyManager {
         this.empty();
 
         for (let i of data.yang.enemy) {
-            if (i.type) await this.addEnemy(i.x, i.y, i.w, i.h, i.speed, i.type);
+            if (i.type == true) await this.addEnemy(i.x, i.y, i.w, i.h, i.speed, true);
             else await this.addEnemy(i.x, i.y, i.w, i.h, i.speed);
         }
     }
 
-    addEnemy(x, y, width, height, speed = 2) {
-        this.enemies.push(new Enemy(this.game, x, y, width, height, speed));
+    addEnemy(x, y, width, height, speed = 2, tp = false) {
+        this.enemies.push(new Enemy(this.game, x, y, width, height, speed, tp));
     }
 
     /**
