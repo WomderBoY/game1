@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阴阳劫</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
+
 <body>
 
     <!-- 场景1: 认证界面 (登录/注册) -->
@@ -21,7 +23,10 @@
                     <div style="position:relative;">
                         <input type="password" id="login-password" placeholder="密码">
                         <div class="show-pass-btn" onclick="togglePassword('login-password')">
-                            <svg viewBox="0 0 64 64"><path d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>
+                            <svg viewBox="0 0 64 64">
+                                <path
+                                    d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z" />
+                            </svg>
                         </div>
                     </div>
                     <button onclick="login(transitionToMainMenu)">登录</button>
@@ -32,9 +37,13 @@
                     <h2>注册</h2>
                     <input type="text" id="register-username" placeholder="账号">
                     <div style="position:relative;">
-                        <input type="password" id="register-password" placeholder="密码" oninput="checkPasswordStrength()">
+                        <input type="password" id="register-password" placeholder="密码"
+                            oninput="checkPasswordStrength()">
                         <div class="show-pass-btn" onclick="togglePassword('register-password')">
-                            <svg viewBox="0 0 64 64"><path d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>
+                            <svg viewBox="0 0 64 64">
+                                <path
+                                    d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z" />
+                            </svg>
                         </div>
                     </div>
                     <div class="strength" id="password-strength"></div>
@@ -42,7 +51,10 @@
                     <div style="position:relative;">
                         <input type="password" id="register-confirm-password" placeholder="确认密码">
                         <div class="show-pass-btn" onclick="togglePassword('register-confirm-password')">
-                             <svg viewBox="0 0 64 64"><path d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z"/></svg>
+                            <svg viewBox="0 0 64 64">
+                                <path
+                                    d="M32 16C18 16 6 32 6 32s12 16 26 16 26-16 26-16S46 16 32 16zm0 26a10 10 0 1 1 0-20 10 10 0 0 1 0 20z" />
+                            </svg>
                         </div>
                     </div>
                     <button onclick="register()">注册</button>
@@ -55,18 +67,18 @@
 
     <!-- 场景2: 游戏主菜单 (默认隐藏) -->
     <div id="main-menu-screen" class="hidden">
-    <a id="goto-main-menu" name="goto-main-menu"></a>
+        <a id="goto-main-menu" name="goto-main-menu"></a>
         <svg class="taijitu-bg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <!-- 第1步: 绘制一个完整的黑色背景圆，作为“阴”的基础 -->
-    <circle cx="50" cy="50" r="50" fill="#000"/>
-    
-    <!-- 第2步: 在黑色圆上方绘制白色的“阳”鱼 -->
-    <path d="M50,0 A50,50 0 0,0 50,100 A25,25 0 0,1 50,50 A25,25 0 0,0 50,0 Z" fill="#fff"/>
-    
-    <!-- 第3步: 绘制两个“鱼眼” -->
-    <circle cx="50" cy="25" r="3" fill="#000"/> <!-- 阳鱼中的阴眼 (黑) -->
-    <circle cx="50" cy="75" r="3" fill="#fff"/> <!-- 阴鱼中的阳眼 (白) -->
-</svg>
+            <!-- 第1步: 绘制一个完整的黑色背景圆，作为“阴”的基础 -->
+            <circle cx="50" cy="50" r="50" fill="#000" />
+
+            <!-- 第2步: 在黑色圆上方绘制白色的“阳”鱼 -->
+            <path d="M50,0 A50,50 0 0,0 50,100 A25,25 0 0,1 50,50 A25,25 0 0,0 50,0 Z" fill="#fff" />
+
+            <!-- 第3步: 绘制两个“鱼眼” -->
+            <circle cx="50" cy="25" r="3" fill="#000" /> <!-- 阳鱼中的阴眼 (黑) -->
+            <circle cx="50" cy="75" r="3" fill="#fff" /> <!-- 阴鱼中的阳眼 (白) -->
+        </svg>
         <div class="menu-panel">
             <h1>阴阳劫</h1>
             <div id="username-display" style="margin-bottom: 20px; font-size: 16px; opacity: 0.8;"></div>
@@ -78,7 +90,7 @@
         </div>
     </div>
 
-    
+
 
     <!-- 成就系统弹窗 (默认隐藏) -->
     <div id="achievement-modal" class="hidden">
@@ -98,9 +110,10 @@
             document.getElementById('main-menu-screen').classList.remove('hidden');
             // 如果有主菜单初始化函数，调用它
             if (typeof transitionToMainMenu === 'function') {
-            transitionToMainMenu();
+                transitionToMainMenu();
             }
         }
     </script>
 </body>
+
 </html>
