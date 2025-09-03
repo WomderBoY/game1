@@ -32,7 +32,7 @@ class mapmanager {
         this.game = game;
         this.empty();
         this.init();
-        
+
         // 创建绘制管理器
         this.drawManager = new DrawManager(game);
     }
@@ -146,6 +146,15 @@ class mapmanager {
         entitymanager.vy = 0;
         this.game.hp.reset();
         this.empty();
+
+        // 重置对话框样式，确保关卡切换后对话框显示正常
+        if (this.game.dialog) {
+            this.game.dialog.setDialogTheme("mysterious");
+            this.game.dialog.setDialogBackground("../images/diagbg1.png");
+            this.game.dialog.name.textContent = "旁白";
+            this.game.dialog.avatar.textContent = "🔮";
+            this.game.dialog.forceApplyStyles();
+        }
 
         console.warn("LOAD NEW MAP", src);
         console.log("准备调用 datamanager.loadJSON...");
@@ -380,15 +389,15 @@ class mapmanager {
     draw(type = "yin") {
         // 使用绘制管理器绘制地图
         this.drawManager.drawMap(
-            type, 
-            this.background, 
-            this.collidable, 
-            this.tram, 
-            this.app, 
+            type,
+            this.background,
+            this.collidable,
+            this.tram,
+            this.app,
             this.events,
             this.atk,
         );
-        
+
         // 绘制血条
         this.drawhp();
     }

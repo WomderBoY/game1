@@ -37,5 +37,11 @@ class Fratile extends Rect {
         if (this.lst) return ;
         console.log(game.player);
         this.lst = game.gameFrame;
+        
+        // 播放木头断裂音效
+        if (game.soundmanager) {
+            game.soundmanager.playOnce("wood_snap", 0.8, 1);
+            console.log("播放木头断裂音效");
+        }
     }
 }

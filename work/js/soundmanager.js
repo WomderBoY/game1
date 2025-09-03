@@ -12,7 +12,8 @@ class SoundManager {
         await this.load("typing", "../sound/typing.mp3");
         await this.load("death", "../sound/death.mp3");
         await this.load("enemydeath", "../sound/enemydeath.mp3");
-        await this.load("change", "../sound/change.mp3")
+        await this.load("change", "../sound/change.mp3");
+        await this.load("wood_snap", "../sound/wood_snap.wav");
     }
 
     /** 加载音效 */

@@ -62,7 +62,11 @@ class CGManager {
                 await new Promise((resolve) => setTimeout(resolve, 500));
 
                 if (this.texts[i] && !this.canceled) {
-                    await this.dialog.prints(this.texts[i]);
+                    // 确保传递正确的文本格式
+                    const textArray = Array.isArray(this.texts[i]) ? this.texts[i] : [this.texts[i]];
+                    console.log("CGManager 调用对话框，文本:", textArray);
+                    console.log("对话框对象:", this.game.dialog);
+                    await this.game.dialog.prints(textArray);
                     console.log("cg text done");
                 }
 

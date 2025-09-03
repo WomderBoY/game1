@@ -1,6 +1,6 @@
 class game {
     constructor() {
-        this.init();
+        // 不在这里调用init，让外部调用者控制初始化时机
     }
 
     random(l, r) {
@@ -21,7 +21,7 @@ class game {
         this.env = "yang"; // 默认环境为阳
         this.changetimes = 0; // 切换环境次数
         this.yingyang = true;
-        
+
         this.datamanager = new datamanager(this);
 
         // 添加太极管理器（新增代码）
@@ -73,7 +73,7 @@ class game {
             await this.bossmanager.loadBoss(selectedLevel);
             this.mapmanager.draw(this.env);
             // 加载 Boss
-           
+
         }
         this.bgmmanager = new BGMManager(); // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
@@ -375,15 +375,15 @@ class game {
                 await this.mapmanager.drawhp();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
-                if (this.cg == false){
+                if (this.cg == false) {
                     this.enemymanager.draw(this.ctx);
                     this.enemy2manager.draw(this.ctx);
-                } 
+                }
                 if (this.cg == false) this.enemymanager.draw(this.ctx);
                 // 更新和绘制 Boss
                 await this.bossmanager.update(this.player, 16.6667); // deltaTime 可按需调整
                 if (this.cg == false) this.bossmanager.draw(this.ctx);
-                
+
                 // 更新Boss HP系统（如果存在）
                 if (this.boss && this.boss.HP) {
                     this.boss.HP.update(16.6667);
@@ -392,7 +392,7 @@ class game {
                 } else {
                     console.log('ℹ️ 当前关卡没有Boss');
                 }
-        
+
                 await this.entitymanager.update();
                 await this.entitymanager.checkCollision();
                 if (this.boss) {
@@ -401,13 +401,13 @@ class game {
                     this.boss.draw();
                 }
                 await this.entitymanager.chcevent();
-//                if (this.cg == false) this.entitymanager.drawPlayer();
+                //                if (this.cg == false) this.entitymanager.drawPlayer();
                 this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
                 // 更新HP系统（包括动画和粒子）
                 this.hp.update(16.6667);
-                
+
                 // 绘制血条，放在最后，保证在最上层
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
@@ -428,10 +428,10 @@ class game {
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 this.entitymanager.drawPlayer();
-                
+
                 // 更新HP系统（暂停时也需要更新动画）
                 this.hp.update(16.6667);
-                
+
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":
