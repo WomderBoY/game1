@@ -382,6 +382,15 @@ class game {
                 // 更新和绘制 Boss
                 await this.bossmanager.update(this.player, 16.6667); // deltaTime 可按需调整
                 if (this.cg == false) this.bossmanager.draw(this.ctx);
+                
+                // 更新Boss HP系统（如果存在）
+                if (this.boss && this.boss.HP) {
+                    this.boss.HP.update(16.6667);
+                } else if (this.boss) {
+                    console.log('⚠️ Boss存在但HP系统未初始化:', this.boss);
+                } else {
+                    console.log('ℹ️ 当前关卡没有Boss');
+                }
         
                 await this.entitymanager.update();
                 await this.entitymanager.checkCollision();
@@ -395,6 +404,9 @@ class game {
                 this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
+                // 更新HP系统（包括动画和粒子）
+                this.hp.update(16.6667);
+                
                 // 绘制血条，放在最后，保证在最上层
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
@@ -415,6 +427,10 @@ class game {
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 this.entitymanager.drawPlayer();
+                
+                // 更新HP系统（暂停时也需要更新动画）
+                this.hp.update(16.6667);
+                
                 this.hp.draw(this.ctx, this.width, this.height);
                 break;
             case "over":
@@ -459,6 +475,7 @@ class game {
                 if (this.inputmanager.takeEnter()) {
                     await this.savemanager.load();
                     this.hp.reset();
+                    console.log('游戏重新开始，HP已重置');
                 }
                 break;
             //load...

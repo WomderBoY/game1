@@ -384,8 +384,9 @@ class entitymanager {
             if (this.game.yingyang !== enemy.type && isHead) {
                 // 阴阳不同踩头 → 敌人死亡
                 enemy.dead = true;
-                if (this.boss) {
-                    this.game.boss.HP.decrease(3);
+                if (this.game.boss) {
+                    this.game.boss.gethurt(3);
+                    this.game.boss.HP.update();
                 }
                 this.game.soundmanager.playOnce("enemydeath");
                 entitymanager.vy = -10;

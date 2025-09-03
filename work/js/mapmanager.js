@@ -223,9 +223,12 @@ class mapmanager {
         }
 
         if (data.Boss) {
-            console.warn("there is a boss");
+            console.warn("🎮 关卡包含Boss，正在创建...");
             this.game.boss = new Boss(this.game);
+            console.log('✅ Boss创建完成:', this.game.boss);
+            console.log('✅ Boss HP系统:', this.game.boss.HP);
         } else {
+            console.log("ℹ️ 当前关卡不包含Boss");
             this.game.boss = null;
         }
 
