@@ -134,17 +134,22 @@ class dialog {
         this.updateAvatar(config.theme, config.avatar);
         this.setDialogBackground(config.background);
     }
+
     async close(duration = 300) {
-        // 使用CSS动画关闭
         this.dialog.classList.add("hide");
         this.dialog.classList.remove("show");
 
-        // 等待动画完成
+        // 立即清空内容，防止显示空对话框
+
         await new Promise((resolve) => setTimeout(resolve, duration));
 
+        this.name.textContent = "";
+        this.text.innerHTML = "";
+        this.inputContainer.style.display = "none";
         this.dialog.style.display = "none";
         this.dialog.classList.remove("hide");
     }
+
 
     async open() {
         this.dialog.style.display = "block";
@@ -250,7 +255,6 @@ class dialog {
                 };
                 document.addEventListener("keydown", handler);
             });
-
             this.name.textContent = "";
             this.text.innerHTML = "";
         }

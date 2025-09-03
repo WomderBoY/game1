@@ -2,7 +2,7 @@
 
 /* 对话框容器 */
 .dialog-container {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
@@ -277,6 +277,16 @@
 
 .dialog-container.hide {
     animation: dialogSlideOut 0.3s ease-in;
+}
+
+.dialog-container.show,
+.dialog-container.hide {
+  animation-fill-mode: both; /* 等同 forwards+backwards，更稳 */
+}
+
+/* 提前让浏览器为动画做优化，减少闪烁 */
+.dialog-container {
+  will-change: opacity, transform;
 }
 
 @keyframes dialogSlideIn {
