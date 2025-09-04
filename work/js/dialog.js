@@ -60,8 +60,8 @@ class dialog {
 
         document.getElementById("game").appendChild(this.dialog);
 
-        // 默认设置为系统样式
-        this.setDialogTheme("system");
+        // 默认设置为旁白样式
+        this.setDialogTheme("mysterious");
     }
 
     // 设置对话框主题
@@ -85,7 +85,7 @@ class dialog {
         } else {
             // 使用默认表情符号
             const avatarMap = {
-                "system": "⚙",
+                "system": "🔮",
                 "player": "👤",
                 "npc": "🗣",
                 "boss": "👹",
@@ -103,36 +103,89 @@ class dialog {
         if (imageUrl) {
             this.dialog.style.backgroundImage = `url(${imageUrl})`;
             this.dialog.classList.add("has-bg");
+            console.log("背景图片设置:", imageUrl);
         } else {
             this.dialog.style.backgroundImage = "";
             this.dialog.classList.remove("has-bg");
         }
     }
 
+    // 强制应用样式
+    forceApplyStyles() {
+        console.log("强制应用样式...");
+
+        // 强制设置背景图片
+        if (this.dialog.classList.contains("has-bg")) {
+            this.dialog.style.backgroundImage = "url(../images/diagbg1.png)";
+            this.dialog.style.backgroundSize = "cover";
+            this.dialog.style.backgroundPosition = "center";
+            this.dialog.style.backgroundRepeat = "no-repeat";
+            console.log("强制设置背景图片样式");
+        }
+
+        // 强制设置名称样式
+        if (this.name.textContent === "旁白") {
+            this.name.style.color = "#330066";
+            this.name.style.fontSize = "22px";
+            this.name.style.fontWeight = "bold";
+            console.log("强制设置名称样式");
+        }
+
+        // 强制设置头像样式
+        if (this.dialog.classList.contains("mysterious")) {
+            this.avatar.textContent = "🔮";
+            this.avatar.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
+            this.avatar.style.border = "2px solid rgba(150, 100, 255, 0.6)";
+            console.log("强制设置头像样式");
+        }
+
+        console.log("强制应用样式完成");
+    }
+
     // 根据对话人名称设置主题
     setDialogThemeBySpeaker(speakerName) {
+        console.log("设置对话人主题:", speakerName);
+
         const speakerConfig = {
-            "系统": { theme: "system", avatar: null, background: null },
-            "玩家": { theme: "player", avatar: null, background: null },
-            "旅行者": { theme: "player", avatar: null, background: null },
-            "主角": { theme: "player", avatar: null, background: null },
-            "Boss": { theme: "boss", avatar: "../images/enemy-black.png", background: null },
-            "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png" }
+            "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
+            "玩家": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
+            "Boss": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
+            "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" }
         };
 
         // 检查是否匹配已知的对话人
-        let config = { theme: "mysterious", avatar: null, background: null }; // 默认为NPC主题
+        let config = { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" }; // 默认为mysterious主题
 
         for (let [key, value] of Object.entries(speakerConfig)) {
             if (speakerName.includes(key)) {
                 config = value;
+                console.log("匹配到配置:", key, config);
                 break;
             }
         }
 
+        console.log("应用配置:", config);
+
+        // 设置主题
         this.setDialogTheme(config.theme);
+        console.log("主题设置完成:", config.theme);
+
+        // 设置头像
         this.updateAvatar(config.theme, config.avatar);
+        console.log("头像设置完成");
+
+        // 设置背景
         this.setDialogBackground(config.background);
+        console.log("背景设置完成:", config.background);
+
+        // 设置显示名称
+        if (config.displayName) {
+            this.name.textContent = config.displayName;
+            console.log("显示名称设置完成:", config.displayName);
+        }
+
+        // 强制应用样式
+        this.forceApplyStyles();
     }
 
     async close(duration = 300) {
@@ -143,11 +196,13 @@ class dialog {
 
         await new Promise((resolve) => setTimeout(resolve, duration));
 
-        this.name.textContent = "";
         this.text.innerHTML = "";
         this.inputContainer.style.display = "none";
         this.dialog.style.display = "none";
         this.dialog.classList.remove("hide");
+
+        // 不要清空name.textContent，保持样式设置
+        // this.name.textContent = "";
     }
 
 
@@ -157,6 +212,9 @@ class dialog {
         this.dialog.offsetHeight;
         // 添加显示动画
         this.dialog.classList.add("show");
+
+        // 确保样式正确应用
+        this.forceApplyStyles();
     }
 
     async prints(texts) {
@@ -202,11 +260,17 @@ class dialog {
             if (text[0] === "【") {
                 let end = text.indexOf("】");
                 let speakerName = text.slice(1, end); // 去掉【】
-                this.name.textContent = speakerName;
                 text = text.slice(end + 1);
 
-                // 根据对话人设置主题
+                console.log("解析到对话人:", speakerName);
+
+                // 根据对话人设置主题（这会自动设置正确的显示名称）
                 this.setDialogThemeBySpeaker(speakerName);
+
+                // 延迟一点时间确保样式应用
+                setTimeout(() => {
+                    this.forceApplyStyles();
+                }, 100);
             }
 
             this.text.innerHTML = "";
@@ -262,9 +326,10 @@ class dialog {
 
     async handleUsernameInput() {
         // 显示输入提示
-        this.name.textContent = "系统";
+        this.name.textContent = "旁白";
         this.text.textContent = "请输入用户名：";
-        this.setDialogTheme("system");
+        this.setDialogTheme("mysterious");
+        this.setDialogBackground("../images/diagbg1.png");
         this.inputContainer.style.display = "block";
         this.inputField.focus();
 

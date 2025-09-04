@@ -129,7 +129,11 @@ class Enemy2 {
                 this.rect.position.y + this.rect.size.y >= this.game.height
             ) {
                 this.dying = true;
-                this.deathTimer = 60;
+                this.deathTimer = 60; // 死亡动画持续时间
+                // 播放爆破音效
+                if (this.game.soundmanager) {
+                    this.game.soundmanager.playOnce("explode", 2.0, 1);
+                }
             }
 
             // 碰撞检测
@@ -139,6 +143,10 @@ class Enemy2 {
                     this.lockedDirection = null;
                     this.dying = true;
                     this.deathTimer = 30;
+                    // 播放爆破音效
+                    if (this.game.soundmanager) {
+                        this.game.soundmanager.playOnce("explode", 1.0, 1);
+                    }
                 }
             }
 
@@ -154,6 +162,10 @@ class Enemy2 {
                     this.dying = true;
                     this.deathTimer = 30;
                     this.game.hp.decrease(10);
+                    // 播放爆破音效
+                    if (this.game.soundmanager) {
+                        this.game.soundmanager.playOnce("explode", 1.0, 1);
+                    }
                 }
             }
         } else {

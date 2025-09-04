@@ -89,6 +89,8 @@ function updateLevelButtons() {
             // console.log(`关卡 ${level} 已锁定，添加locked样式，当前classList:`, button.classList.toString());
         } else {
             button.classList.remove("locked");
+            // 重新绑定点击事件
+            button.onclick = () => selectLevel(level);
             // console.log(`关卡 ${level} 已解锁，移除locked样式，当前classList:`, button.classList.toString());
         }
     });
@@ -214,12 +216,30 @@ function debugUnlockStatus() {
     });
 }
 
-// 手动解锁所有关卡（调试用）
+// 一键解锁所有关卡
 function unlockAllLevels() {
-    const allLevels = Object.keys(levelConfig);
-    localStorage.setItem("unlockedLevels", JSON.stringify(allLevels));
-    console.log("已解锁所有关卡:", allLevels);
-    location.reload(); // 重新加载页面以更新界面
+    if (confirm("确定要解锁所有关卡吗？这将跳过游戏进度直接解锁所有关卡。")) {
+        const allLevels = Object.keys(levelConfig);
+        
+        // 更新localStorage
+        localStorage.setItem("unlockedLevels", JSON.stringify(allLevels));
+        
+        // 更新当前配置
+        allLevels.forEach(level => {
+            if (levelConfig[level]) {
+                levelConfig[level].unlocked = true;
+            }
+        });
+        
+        // 显示成功消息
+        showMessage("所有关卡已解锁！", "success");
+        
+        // 更新界面显示
+        updateLevelButtons();
+        updateUnlockedCount();
+        
+        console.log("已解锁所有关卡:", allLevels);
+    }
 }
 
 // 强制重置为只解锁第一关（调试用）
@@ -249,8 +269,7 @@ function testCSSLoading() {
     }
 }
 
-// 将解锁函数暴露到全局作用域，方便调试
-window.unlockAllLevels = unlockAllLevels;
+// 将调试函数暴露到全局作用域，方便调试
 window.resetToFirstLevel = resetToFirstLevel;
 window.testCSSLoading = testCSSLoading;
 

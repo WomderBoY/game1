@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对话框测试页面</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .test-btn {
+            padding: 10px 20px;
+            background: linear-gradient(145deg, #9666ff, #7744ff);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(150, 100, 255, 0.4);
+        }
+
+        .test-btn:active {
+            transform: translateY(0);
+        }
+
+        .status {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .dialog-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            background: linear-gradient(145deg, rgba(150, 100, 255, 0.9), rgba(120, 80, 200, 0.9));
+            border: 2px solid rgba(150, 100, 255, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(150, 100, 255, 0.3);
+            backdrop-filter: blur(10px);
+            display: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .dialog-container.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        .dialog-container.hide {
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateX(-50%) translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(-50%) translateY(100%);
+                opacity: 0;
+            }
+        }
+
+        .dialog-container.has-bg {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .dialog-container.has-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 18px;
+            z-index: -1;
+        }
+
+        .dialog-container.mysterious {
+            background: linear-gradient(145deg, rgba(150, 100, 255, 0.9), rgba(120, 80, 200, 0.9));
+        }
+
+        .dialog-container.mysterious .dialog-name {
+            color: #330066;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .dialog-container.player {
+            background: linear-gradient(145deg, rgba(100, 200, 255, 0.9), rgba(80, 160, 200, 0.9));
+        }
+
+        .dialog-container.boss {
+            background: linear-gradient(145deg, rgba(255, 100, 100, 0.9), rgba(200, 80, 80, 0.9));
+        }
+
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .dialog-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #9666ff, #7744ff);
+            border: 2px solid rgba(150, 100, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .dialog-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .dialog-text {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .close-btn:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🎭 对话框测试页面</h1>
+        <p>这个页面用于独立测试对话框的背景图片切换功能</p>
+
+        <div class="test-buttons">
+            <button class="test-btn" onclick="testSystemDialog()">测试系统对话框</button>
+            <button class="test-btn" onclick="testPlayerDialog()">测试玩家对话框</button>
+            <button class="test-btn" onclick="testBossDialog()">测试Boss对话框</button>
+            <button class="test-btn" onclick="testNarrationDialog()">测试旁白对话框</button>
+            <button class="test-btn" onclick="testBackgroundImage()">测试背景图片</button>
+            <button class="test-btn" onclick="clearDialog()">关闭对话框</button>
+            <button class="test-btn" onclick="clearStatus()">清空状态</button>
+        </div>
+
+        <div class="status" id="status">
+            <div>状态日志：</div>
+        </div>
+    </div>
+
+    <div class="dialog-container" id="dialog">
+        <button class="close-btn" onclick="clearDialog()">×</button>
+        <div class="dialog-header">
+            <div class="dialog-avatar" id="avatar">🔮</div>
+            <h3 class="dialog-name" id="name">旁白</h3>
+        </div>
+        <p class="dialog-text" id="text">这是一个测试对话框</p>
+    </div>
+
+    <script>
+        // 简化的对话框类
+        class TestDialog {
+            constructor() {
+                this.dialog = document.getElementById('dialog');
+                this.name = document.getElementById('name');
+                this.text = document.getElementById('text');
+                this.avatar = document.getElementById('avatar');
+                this.status = document.getElementById('status');
+            }
+
+            log(message) {
+                const timestamp = new Date().toLocaleTimeString();
+                this.status.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+                this.status.scrollTop = this.status.scrollHeight;
+                console.log(message);
+            }
+
+            setDialogTheme(theme) {
+                // 移除所有主题类
+                this.dialog.classList.remove('mysterious', 'player', 'boss');
+                // 添加新主题类
+                this.dialog.classList.add(theme);
+                this.log(`✅ 设置主题: ${theme}`);
+            }
+
+            setDialogBackground(imageUrl) {
+                if (imageUrl) {
+                    this.dialog.style.backgroundImage = `url(${imageUrl})`;
+                    this.dialog.classList.add('has-bg');
+                    this.log(`✅ 设置背景图片: ${imageUrl}`);
+                } else {
+                    this.dialog.style.backgroundImage = '';
+                    this.dialog.classList.remove('has-bg');
+                    this.log(`✅ 移除背景图片`);
+                }
+            }
+
+            updateAvatar(theme, customAvatar) {
+                const avatarMap = {
+                    mysterious: "🔮",
+                    player: "👤",
+                    boss: "👹"
+                };
+
+                if (customAvatar) {
+                    this.avatar.textContent = customAvatar;
+                    this.log(`✅ 设置自定义头像: ${customAvatar}`);
+                } else {
+                    this.avatar.textContent = avatarMap[theme] || "?";
+                    this.log(`✅ 设置主题头像: ${avatarMap[theme] || "?"}`);
+                }
+            }
+
+            setDialogThemeBySpeaker(speakerName) {
+                this.log(`🔧 设置对话人主题: ${speakerName}`);
+
+                const speakerConfig = {
+                    "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
+                    "玩家": { theme: "player", avatar: null, background: null, displayName: "玩家" },
+                    "Boss": { theme: "boss", avatar: "👹", background: null, displayName: "Boss" },
+                    "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" }
+                };
+
+                // 检查是否匹配已知的对话人
+                let config = { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" };
+
+                for (let [key, value] of Object.entries(speakerConfig)) {
+                    if (speakerName.includes(key)) {
+                        config = value;
+                        this.log(`✅ 匹配到配置: ${key}`);
+                        break;
+                    }
+                }
+
+                this.log(`📋 应用配置: ${JSON.stringify(config)}`);
+
+                // 设置主题
+                this.setDialogTheme(config.theme);
+
+                // 设置头像
+                this.updateAvatar(config.theme, config.avatar);
+
+                // 设置背景
+                this.setDialogBackground(config.background);
+
+                // 设置显示名称
+                if (config.displayName) {
+                    this.name.textContent = config.displayName;
+                    this.log(`✅ 设置显示名称: ${config.displayName}`);
+                }
+
+                // 强制应用样式
+                this.forceApplyStyles();
+            }
+
+            forceApplyStyles() {
+                this.log("🔧 强制应用样式...");
+
+                // 强制设置背景图片
+                if (this.dialog.classList.contains("has-bg")) {
+                    this.dialog.style.backgroundImage = "url(../images/diagbg1.png)";
+                    this.dialog.style.backgroundSize = "cover";
+                    this.dialog.style.backgroundPosition = "center";
+                    this.dialog.style.backgroundRepeat = "no-repeat";
+                    this.log("✅ 强制设置背景图片样式");
+                }
+
+                // 强制设置名称样式
+                if (this.name.textContent === "旁白") {
+                    this.name.style.color = "#330066";
+                    this.name.style.fontSize = "22px";
+                    this.name.style.fontWeight = "bold";
+                    this.log("✅ 强制设置名称样式");
+                }
+
+                // 强制设置头像样式
+                if (this.dialog.classList.contains("mysterious")) {
+                    this.avatar.textContent = "🔮";
+                    this.avatar.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
+                    this.avatar.style.border = "2px solid rgba(150, 100, 255, 0.6)";
+                    this.log("✅ 强制设置头像样式");
+                }
+
+                this.log("✅ 强制应用样式完成");
+            }
+
+            showDialog(text, speakerName = null) {
+                this.text.textContent = text;
+
+                if (speakerName) {
+                    this.setDialogThemeBySpeaker(speakerName);
+                }
+
+                this.dialog.style.display = 'block';
+                this.dialog.classList.add('show');
+                this.dialog.classList.remove('hide');
+
+                this.log(`📢 显示对话框: ${text}`);
+            }
+
+            hideDialog() {
+                this.dialog.classList.add('hide');
+                this.dialog.classList.remove('show');
+
+                setTimeout(() => {
+                    this.dialog.style.display = 'none';
+                    this.dialog.classList.remove('hide');
+                }, 300);
+
+                this.log("❌ 隐藏对话框");
+            }
+        }
+
+        // 创建测试对话框实例
+        const testDialog = new TestDialog();
+
+        // 测试函数
+        function testSystemDialog() {
+            testDialog.showDialog("这是一个系统对话框，应该显示为旁白样式", "系统");
+        }
+
+        function testPlayerDialog() {
+            testDialog.showDialog("这是玩家对话框", "玩家");
+        }
+
+        function testBossDialog() {
+            testDialog.showDialog("这是Boss对话框", "Boss");
+        }
+
+        function testNarrationDialog() {
+            testDialog.showDialog("这是旁白对话框", "旁白");
+        }
+
+        function testBackgroundImage() {
+            testDialog.log("🧪 测试背景图片路径...");
+
+            // 测试图片是否存在
+            const img = new Image();
+            img.onload = function () {
+                testDialog.log("✅ 背景图片加载成功: ../images/diagbg1.png");
+                testDialog.setDialogBackground("../images/diagbg1.png");
+                testDialog.showDialog("背景图片测试成功！", "系统");
+            };
+            img.onerror = function () {
+                testDialog.log("❌ 背景图片加载失败: ../images/diagbg1.png");
+                testDialog.log("请检查图片路径是否正确");
+            };
+            img.src = "../images/diagbg1.png";
+        }
+
+        function clearDialog() {
+            testDialog.hideDialog();
+        }
+
+        function clearStatus() {
+            document.getElementById('status').innerHTML = '<div>状态日志：</div>';
+        }
+
+        // 页面加载完成后的初始化
+        window.addEventListener('load', function () {
+            testDialog.log("🎉 对话框测试页面加载完成");
+            testDialog.log("💡 点击按钮测试不同的对话框样式");
+        });
+    </script>
+</body>
+
+</html>

@@ -1,9 +1,10 @@
 class Tile extends Rect {
-    constructor(x, y, w, h, hp, img, event) {
+    constructor(x, y, w, h, hp, img, event, tiling = false) {
         super(x, y, w, h);
         this.img = img;
         this.hp = hp;
         this.event = event;
+        this.tiling = tiling;
         // 兼容直接访问
         this.x = x;
         this.y = y;
@@ -32,7 +33,7 @@ class mapmanager {
         this.game = game;
         this.empty();
         this.init();
-        
+
         // 创建绘制管理器
         this.drawManager = new DrawManager(game);
     }
@@ -146,6 +147,15 @@ class mapmanager {
         entitymanager.vy = 0;
         this.game.hp.reset();
         this.empty();
+
+        // 重置对话框样式，确保关卡切换后对话框显示正常
+        if (this.game.dialog) {
+            this.game.dialog.setDialogTheme("mysterious");
+            this.game.dialog.setDialogBackground("../images/diagbg1.png");
+            this.game.dialog.name.textContent = "旁白";
+            this.game.dialog.avatar.textContent = "🔮";
+            this.game.dialog.forceApplyStyles();
+        }
 
         console.warn("LOAD NEW MAP", src);
         console.log("准备调用 datamanager.loadJSON...");
@@ -334,7 +344,7 @@ class mapmanager {
         let tile;
         if (i.fra) {
             console.warn("fra");
-            tile = new Fratile(x, y, w, h, img); // 去掉 this.game
+            tile = new Fratile(x, y, w, h, img, i.tiling); // 去掉 this.game
         } else if (i.move) {
             console.warn("move");
             const [xmn, xmx, ymn, ymx] = i.area;
@@ -349,10 +359,11 @@ class mapmanager {
                 ymn,
                 ymx,
                 i.vx,
-                i.vy
+                i.vy,
+                i.tiling
             );
         } else {
-            tile = new Tile(x, y, w, h, i.hp, img, i.event);
+            tile = new Tile(x, y, w, h, i.hp, img, i.event, i.tiling);
         }
         // 把 overlayImg 存进去
         //调试图片是否加载出来
@@ -380,15 +391,15 @@ class mapmanager {
     draw(type = "yin") {
         // 使用绘制管理器绘制地图
         this.drawManager.drawMap(
-            type, 
-            this.background, 
-            this.collidable, 
-            this.tram, 
-            this.app, 
+            type,
+            this.background,
+            this.collidable,
+            this.tram,
+            this.app,
             this.events,
             this.atk,
         );
-        
+
         // 绘制血条
         this.drawhp();
     }

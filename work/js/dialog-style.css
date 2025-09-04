@@ -183,17 +183,24 @@
 
 /* 系统对话 */
 .dialog-container.system {
-    border-color: rgba(100, 100, 100, 0.4);
-    background: linear-gradient(145deg, rgba(30, 30, 30, 0.95), rgba(50, 50, 50, 0.95));
+    border-color: rgba(150, 100, 255, 0.6);
+    background: linear-gradient(145deg, rgba(30, 20, 40, 0.95), rgba(50, 30, 60, 0.95));
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(150, 100, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .dialog-container.system .dialog-avatar {
-    background: linear-gradient(145deg, #666, #888);
-    border-color: rgba(150, 150, 150, 0.4);
+    background: linear-gradient(145deg, #9666ff, #7744ff);
+    border-color: rgba(150, 100, 255, 0.6);
+    box-shadow: 0 4px 8px rgba(150, 100, 255, 0.3);
 }
 
 .dialog-container.system .dialog-name {
-    color: #cccccc;
+    color: #330066;
+    font-size: 22px;
+    text-shadow: 0 2px 4px rgba(150, 100, 255, 0.3);
 }
 
 /* 玩家对话 */
@@ -281,12 +288,13 @@
 
 .dialog-container.show,
 .dialog-container.hide {
-  animation-fill-mode: both; /* 等同 forwards+backwards，更稳 */
+    animation-fill-mode: both;
+    /* 等同 forwards+backwards，更稳 */
 }
 
 /* 提前让浏览器为动画做优化，减少闪烁 */
 .dialog-container {
-  will-change: opacity, transform;
+    will-change: opacity, transform;
 }
 
 @keyframes dialogSlideIn {

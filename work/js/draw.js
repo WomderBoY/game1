@@ -144,23 +144,23 @@ class DrawManager {
     drawPhantomTile(tile) {
         const ctx = this.game.ctx;
         ctx.save();
-        
+
         // 设置透明度
         ctx.globalAlpha = 0.6;
-        
+
         if (tile.hp) {
             // 有生命值的方块，根据当前状态选择对应图片
-    //         if (this.game.changetimes == 0
-    //            || !this.game.mapmanager.hurt()
-    //         ) {
-                let o = tile.hp - Math.floor(this.game.changetimes / 2);
-                if (o > 0) {
-                    let k = o - 1;
-                    if (this.game.changetimes % 2 == 0) ++k;
-                    if (tile.img[k]) {
-                        ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
-                    }
+            //         if (this.game.changetimes == 0
+            //            || !this.game.mapmanager.hurt()
+            //         ) {
+            let o = tile.hp - Math.floor(this.game.changetimes / 2);
+            if (o > 0) {
+                let k = o - 1;
+                if (this.game.changetimes % 2 == 0) ++k;
+                if (tile.img[k]) {
+                    ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
                 }
+            }
             // }
             // else if (
             //     this.game.mapmanager.hurt() &&
@@ -186,9 +186,9 @@ class DrawManager {
         //         ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
         //     }
         // }
-        
+
         // 移除虚化边框，保持完全透明的效果
-        
+
         ctx.restore();
     }
 
@@ -198,25 +198,29 @@ class DrawManager {
         if (!fratile.alive(this.game)) {
             return;
         }
-        
+
         const ctx = this.game.ctx;
         ctx.save();
-        
+
         // 设置透明度
         ctx.globalAlpha = 0.6;
-        
+
         // 绘制原始图片作为虚化效果
         if (fratile.img && fratile.img[0]) {
-            ctx.drawImage(fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
+            if (fratile.tiling) {
+                this.drawNinePatch(ctx, fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
+            } else {
+                ctx.drawImage(fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
+            }
         }
-        
+
         // 移除虚化边框，保持完全透明的效果
-        
+
         // 添加虚化纹理
         ctx.strokeStyle = "rgba(125, 125, 106, 0.6)";
         ctx.lineWidth = 1;
         const lineSpacing = 20;
-        
+
         // 横向纹理
         for (let ly = fratile.y + lineSpacing; ly < fratile.y + fratile.h; ly += lineSpacing) {
             ctx.beginPath();
@@ -224,7 +228,7 @@ class DrawManager {
             ctx.lineTo(fratile.x + fratile.w - 2, ly);
             ctx.stroke();
         }
-        
+
         // 纵向纹理
         for (let lx = fratile.x + lineSpacing; lx < fratile.x + fratile.w; lx += lineSpacing) {
             ctx.beginPath();
@@ -232,7 +236,7 @@ class DrawManager {
             ctx.lineTo(lx, fratile.y + fratile.h - 2);
             ctx.stroke();
         }
-        
+
         ctx.restore();
     }
 
@@ -240,23 +244,27 @@ class DrawManager {
     drawPhantomMovetile(movetile) {
         const ctx = this.game.ctx;
         ctx.save();
-        
+
         // 设置透明度
         ctx.globalAlpha = 0.6;
-        
+
         // 绘制原始图片作为虚化效果
         if (movetile.img && movetile.img[0]) {
-            ctx.drawImage(movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
+            if (movetile.tiling) {
+                this.drawNinePatch(ctx, movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
+            } else {
+                ctx.drawImage(movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
+            }
         }
-        
+
         // 移除虚化边框，保持完全透明的效果
-        
+
         // 添加移动指示箭头（表示这是移动的砖块）
         ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
         ctx.lineWidth = 2;
         const centerX = movetile.x + movetile.w / 2;
         const centerY = movetile.y + movetile.h / 2;
-        
+
         // 绘制移动方向指示器
         if (movetile.vx !== 0) {
             // 水平移动
@@ -264,44 +272,44 @@ class DrawManager {
             ctx.beginPath();
             if (movetile.vx > 0) {
                 // 向右移动
-                ctx.moveTo(centerX - arrowLength/2, centerY);
-                ctx.lineTo(centerX + arrowLength/2, centerY);
-                ctx.lineTo(centerX + arrowLength/2 - 5, centerY - 5);
-                ctx.moveTo(centerX + arrowLength/2, centerY);
-                ctx.lineTo(centerX + arrowLength/2 - 5, centerY + 5);
+                ctx.moveTo(centerX - arrowLength / 2, centerY);
+                ctx.lineTo(centerX + arrowLength / 2, centerY);
+                ctx.lineTo(centerX + arrowLength / 2 - 5, centerY - 5);
+                ctx.moveTo(centerX + arrowLength / 2, centerY);
+                ctx.lineTo(centerX + arrowLength / 2 - 5, centerY + 5);
             } else {
                 // 向左移动
-                ctx.moveTo(centerX + arrowLength/2, centerY);
-                ctx.lineTo(centerX - arrowLength/2, centerY);
-                ctx.lineTo(centerX - arrowLength/2 + 5, centerY - 5);
-                ctx.moveTo(centerX - arrowLength/2, centerY);
-                ctx.lineTo(centerX - arrowLength/2 + 5, centerY + 5);
+                ctx.moveTo(centerX + arrowLength / 2, centerY);
+                ctx.lineTo(centerX - arrowLength / 2, centerY);
+                ctx.lineTo(centerX - arrowLength / 2 + 5, centerY - 5);
+                ctx.moveTo(centerX - arrowLength / 2, centerY);
+                ctx.lineTo(centerX - arrowLength / 2 + 5, centerY + 5);
             }
             ctx.stroke();
         }
-        
+
         if (movetile.vy !== 0) {
             // 垂直移动
             const arrowLength = Math.min(movetile.w, movetile.h) / 3;
             ctx.beginPath();
             if (movetile.vy > 0) {
                 // 向下移动
-                ctx.moveTo(centerX, centerY - arrowLength/2);
-                ctx.lineTo(centerX, centerY + arrowLength/2);
-                ctx.lineTo(centerX - 5, centerY + arrowLength/2 - 5);
-                ctx.moveTo(centerX, centerY + arrowLength/2);
-                ctx.lineTo(centerX + 5, centerY + arrowLength/2 - 5);
+                ctx.moveTo(centerX, centerY - arrowLength / 2);
+                ctx.lineTo(centerX, centerY + arrowLength / 2);
+                ctx.lineTo(centerX - 5, centerY + arrowLength / 2 - 5);
+                ctx.moveTo(centerX, centerY + arrowLength / 2);
+                ctx.lineTo(centerX + 5, centerY + arrowLength / 2 - 5);
             } else {
                 // 向上移动
-                ctx.moveTo(centerX, centerY + arrowLength/2);
-                ctx.lineTo(centerX, centerY - arrowLength/2);
-                ctx.lineTo(centerX - 5, centerY - arrowLength/2 + 5);
-                ctx.moveTo(centerX, centerY - arrowLength/2);
-                ctx.lineTo(centerX + 5, centerY - arrowLength/2 + 5);
+                ctx.moveTo(centerX, centerY + arrowLength / 2);
+                ctx.lineTo(centerX, centerY - arrowLength / 2);
+                ctx.lineTo(centerX - 5, centerY - arrowLength / 2 + 5);
+                ctx.moveTo(centerX, centerY - arrowLength / 2);
+                ctx.lineTo(centerX + 5, centerY - arrowLength / 2 + 5);
             }
             ctx.stroke();
         }
-        
+
         ctx.restore();
     }
 
@@ -399,7 +407,11 @@ class DrawManager {
                 let o = tile.hp - Math.floor(this.game.changetimes / 2);
                 if (o > 0) {
                     let k = o - 1;
-                    ctx.drawImage(tile.img[k], x, y, w, h);
+                    if (tile.tiling) {
+                        this.drawNinePatch(ctx, tile.img[k], x, y, w, h);
+                    } else {
+                        ctx.drawImage(tile.img[k], x, y, w, h);
+                    }
                 }
             } else if (
                 this.game.mapmanager.hurt() &&
@@ -410,23 +422,70 @@ class DrawManager {
                     tile.hp,
                     tile.hp - Math.floor(this.game.changetimes / 2)
                 );
-                ctx.drawImage(
-                    tile.img[
-                        Math.max(
-                            0,
-                            tile.hp - Math.floor(this.game.changetimes / 2)
-                        )
-                    ],
-                    x,
-                    y,
-                    w,
-                    h
+                const imgIndex = Math.max(
+                    0,
+                    tile.hp - Math.floor(this.game.changetimes / 2)
                 );
+                if (tile.tiling) {
+                    this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
+                } else {
+                    ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+                }
             }
         } else {
             if (atk && this.game.mapmanager.loadingatk()) {
                 this.drawunstable(tile.img[0], x, y, w, h);
-            } else ctx.drawImage(tile.img[0], x, y, w, h);
+            } else if (tile.tiling) {
+                this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
+            } else {
+                ctx.drawImage(tile.img[0], x, y, w, h);
+            }
+        }
+    }
+
+    // 平铺贴图绘制函数 - 先缩小再平铺
+    drawNinePatch(ctx, img, x, y, w, h) {
+        if (!img || !img.complete) {
+            // 如果图片未加载，使用默认绘制
+            ctx.drawImage(img, x, y, w, h);
+            return;
+        }
+
+        const imgW = img.width;
+        const imgH = img.height;
+
+        // 如果目标区域太小，直接使用原始绘制
+        if (w < 10 || h < 10) {
+            ctx.drawImage(img, x, y, w, h);
+            return;
+        }
+
+        // 计算合适的贴图尺寸（先缩小图片）
+        // 使用碰撞箱尺寸的1/4到1/8作为贴图大小，确保有足够的重复
+        const scaleFactor = Math.min(w / imgW, h / imgH); // 缩小到碰撞箱短边
+        const tileW = Math.max(8, Math.floor(imgW * scaleFactor)); // 最小8像素
+        const tileH = Math.max(8, Math.floor(imgH * scaleFactor)); // 最小8像素
+
+        // 计算需要平铺的次数
+        const tilesX = Math.ceil(w / tileW);
+        const tilesY = Math.ceil(h / tileH);
+
+        // 平铺绘制
+        for (let ty = 0; ty < tilesY; ty++) {
+            for (let tx = 0; tx < tilesX; tx++) {
+                const currentX = x + tx * tileW;
+                const currentY = y + ty * tileH;
+                const currentW = Math.min(tileW, x + w - currentX);
+                const currentH = Math.min(tileH, y + h - currentY);
+
+                if (currentW > 0 && currentH > 0) {
+                    ctx.drawImage(
+                        img,
+                        0, 0, imgW, imgH,  // 使用完整的源图片
+                        currentX, currentY, currentW, currentH  // 缩放到目标区域
+                    );
+                }
+            }
         }
     }
 
@@ -434,46 +493,122 @@ class DrawManager {
         const ctx = this.game.ctx;
         ctx.save();
 
-        // 1. 岩浆底色（深红）
-        const lavaGradient = ctx.createLinearGradient(x, y, x, y + h);
-        lavaGradient.addColorStop(0, "#8B0000"); // 深红
-        lavaGradient.addColorStop(0.5, "#FF4500"); // 橙红
-        lavaGradient.addColorStop(1, "#FF6347"); // 番茄红
-        ctx.fillStyle = lavaGradient;
-        ctx.fillRect(x, y, w, h);
-
-        // 2. 岩浆裂纹（亮橙/黄色）
-        ctx.strokeStyle = "#FFD700"; // 金黄
-        ctx.lineWidth = 2;
-
-        // 横向裂纹
-        for (let ly = y + 10; ly < y + h; ly += 20) {
-            ctx.beginPath();
-            ctx.moveTo(x, ly);
-            ctx.lineTo(x + w, ly + Math.sin(ly * 0.3) * 5); // 不规则波动
-            ctx.stroke();
-        }
-
-        // 纵向裂纹
-        for (let lx = x + 10; lx < x + w; lx += 20) {
-            ctx.beginPath();
-            ctx.moveTo(lx, y);
-            ctx.lineTo(lx + Math.sin(lx * 0.3) * 5, y + h);
-            ctx.stroke();
-        }
-
-        // 3. 熔岩高光（模拟发光边缘）
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-        ctx.fillRect(x, y, w, 3); // 顶部高光
-        ctx.fillRect(x, y, 3, h); // 左侧高光
-
-        // 4. 发光外晕（危险感）
-        ctx.shadowColor = "rgba(255, 69, 0, 0.8)";
-        ctx.shadowBlur = 20;
-        ctx.fillStyle = "rgba(255, 69, 0, 0.2)";
-        ctx.fillRect(x, y, w, h);
+        // 像素风岩浆绘制
+        this.drawPixelLava(ctx, x, y, w, h);
 
         ctx.restore();
+    }
+
+    // 像素风岩浆绘制函数 - 改进版
+    drawPixelLava(ctx, x, y, w, h) {
+        // 更美观的像素风配色方案
+        const colors = {
+            deep: "#1A0A0A",    // 深黑红
+            dark: "#2D0F0F",    // 深红
+            medium: "#5C1A1A",  // 中深红
+            bright: "#8B2C2C",  // 中红
+            hot: "#CD5C5C",     // 亮红
+            orange: "#FF6347",  // 橙红
+            yellow: "#FFD700",  // 金黄
+            white: "#FFF8DC"    // 米白
+        };
+
+        // 1. 基础岩浆层 - 渐变背景
+        const gradient = ctx.createLinearGradient(x, y, x, y + h);
+        gradient.addColorStop(0, colors.deep);
+        gradient.addColorStop(0.3, colors.dark);
+        gradient.addColorStop(0.7, colors.medium);
+        gradient.addColorStop(1, colors.bright);
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, y, w, h);
+
+        // 2. 像素化的岩浆纹理 - 使用更大的像素块，更清晰的像素风
+        const pixelSize = 4; // 4x4像素块，更清晰的像素风
+        for (let py = y; py < y + h; py += pixelSize) {
+            for (let px = x; px < x + w; px += pixelSize) {
+                // 使用更复杂的噪声函数创建流动效果
+                const noise1 = Math.sin(px * 0.05 + this.game.gameFrame * 0.02) +
+                    Math.cos(py * 0.05 + this.game.gameFrame * 0.015);
+                const noise2 = Math.sin(px * 0.1 + py * 0.08 + this.game.gameFrame * 0.01);
+                const noise3 = Math.sin(px * 0.03) * Math.cos(py * 0.03);
+                const wave = (noise1 + noise2 * 0.5 + noise3 * 0.3) / 1.8;
+
+                // 更细致的颜色分层，创造更丰富的视觉效果
+                if (wave > 0.7) {
+                    ctx.fillStyle = colors.white;
+                } else if (wave > 0.5) {
+                    ctx.fillStyle = colors.yellow;
+                } else if (wave > 0.3) {
+                    ctx.fillStyle = colors.orange;
+                } else if (wave > 0.1) {
+                    ctx.fillStyle = colors.hot;
+                } else if (wave > -0.1) {
+                    ctx.fillStyle = colors.bright;
+                } else if (wave > -0.3) {
+                    ctx.fillStyle = colors.medium;
+                } else if (wave > -0.5) {
+                    ctx.fillStyle = colors.dark;
+                } else {
+                    ctx.fillStyle = colors.deep;
+                }
+
+                ctx.fillRect(px, py, pixelSize, pixelSize);
+            }
+        }
+
+        // 3. 添加像素风格的裂纹和纹理
+        ctx.fillStyle = colors.yellow;
+        const crackWidth = 2; // 更粗的裂纹，更明显
+
+        // 横向裂纹（像素化）
+        for (let ly = y + 8; ly < y + h - 8; ly += 16) {
+            const crackLength = w * (0.3 + Math.sin(ly * 0.05 + this.game.gameFrame * 0.01) * 0.2);
+            const startX = x + (w - crackLength) / 2;
+            ctx.fillRect(Math.floor(startX), ly, Math.floor(crackLength), crackWidth);
+        }
+
+        // 纵向裂纹（像素化）
+        for (let lx = x + 8; lx < x + w - 8; lx += 16) {
+            const crackLength = h * (0.25 + Math.sin(lx * 0.05 + this.game.gameFrame * 0.008) * 0.15);
+            const startY = y + (h - crackLength) / 2;
+            ctx.fillRect(lx, Math.floor(startY), crackWidth, Math.floor(crackLength));
+        }
+
+        // 4. 像素风格的高光边缘 - 更明显
+        ctx.fillStyle = colors.white;
+        ctx.fillRect(x, y, w, 2); // 顶部
+        ctx.fillRect(x, y, 2, h); // 左侧
+        ctx.fillRect(x + w - 2, y, 2, h); // 右侧
+        ctx.fillRect(x, y + h - 2, w, 2); // 底部
+
+        // 5. 添加一些随机的亮点和火花
+        ctx.fillStyle = colors.white;
+        for (let i = 0; i < 5; i++) {
+            const spotX = x + Math.random() * w;
+            const spotY = y + Math.random() * h;
+            ctx.fillRect(Math.floor(spotX), Math.floor(spotY), 2, 2);
+        }
+
+        // 6. 添加一些橙色的火花
+        ctx.fillStyle = colors.orange;
+        for (let i = 0; i < 3; i++) {
+            const spotX = x + Math.random() * w;
+            const spotY = y + Math.random() * h;
+            ctx.fillRect(Math.floor(spotX), Math.floor(spotY), 1, 1);
+        }
+
+        // 7. 像素风格的发光效果 - 更明显
+        ctx.fillStyle = "rgba(255, 100, 0, 0.1)";
+        ctx.fillRect(x - 2, y - 2, w + 4, h + 4);
+
+        // 8. 添加一些流动的岩浆效果
+        ctx.fillStyle = colors.hot;
+        for (let i = 0; i < 2; i++) {
+            const flowX = x + Math.sin(this.game.gameFrame * 0.02 + i) * (w * 0.1);
+            const flowY = y + i * (h / 3);
+            ctx.fillRect(Math.floor(flowX), Math.floor(flowY), 3, 1);
+        }
     }
 
     drawpdg(x, y, w, h, alpha = 0.3) {
@@ -484,44 +619,8 @@ class DrawManager {
         // 设置整体透明度（0 ~ 1）
         ctx.globalAlpha = alpha;
 
-        // 1. 岩浆底色（深红）
-        const lavaGradient = ctx.createLinearGradient(x, y, x, y + h);
-        lavaGradient.addColorStop(0, "#8B0000"); // 深红
-        lavaGradient.addColorStop(0.5, "#FF4500"); // 橙红
-        lavaGradient.addColorStop(1, "#FF6347"); // 番茄红
-        ctx.fillStyle = lavaGradient;
-        ctx.fillRect(x, y, w, h);
-
-        // 2. 岩浆裂纹（亮橙/黄色）
-        ctx.strokeStyle = "#FFD700"; // 金黄
-        ctx.lineWidth = 2;
-
-        // 横向裂纹
-        for (let ly = y + 10; ly < y + h; ly += 20) {
-            ctx.beginPath();
-            ctx.moveTo(x, ly);
-            ctx.lineTo(x + w, ly + Math.sin(ly * 0.3) * 5);
-            ctx.stroke();
-        }
-
-        // 纵向裂纹
-        for (let lx = x + 10; lx < x + w; lx += 20) {
-            ctx.beginPath();
-            ctx.moveTo(lx, y);
-            ctx.lineTo(lx + Math.sin(lx * 0.3) * 5, y + h);
-            ctx.stroke();
-        }
-
-        // 3. 熔岩高光（模拟发光边缘）
-        ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-        ctx.fillRect(x, y, w, 3);
-        ctx.fillRect(x, y, 3, h);
-
-        // 4. 发光外晕（危险感）
-        ctx.shadowColor = "rgba(255, 69, 0, 0.8)";
-        ctx.shadowBlur = 20;
-        ctx.fillStyle = "rgba(255, 69, 0, 0.2)";
-        ctx.fillRect(x, y, w, h);
+        // 使用像素风岩浆绘制
+        this.drawPixelLava(ctx, x, y, w, h);
 
         ctx.restore();
     }
@@ -549,7 +648,7 @@ class DrawManager {
             HP[env][j].sethp(o);
             HP[env][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
         }
-        
+
         // 绘制相反环境的虚化血量条
         // let oppositeEnv = env === "yang" ? "yin" : "yang";
         // if (collidable[oppositeEnv] && HP[oppositeEnv]) {
