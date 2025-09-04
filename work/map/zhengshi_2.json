@@ -1,0 +1,219 @@
+_jsonCallback({
+    "born": [
+        0,
+        0
+    ],
+    "yang": {
+        "tileMap": [
+             {
+                "hitbox": [
+                    780,
+                    150,
+                    100,
+                    30
+                ],
+                "col": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox": [
+                    516,
+                    270,
+                    120,
+                    30
+                ],
+                "col": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox": [
+                    160,
+                    350,
+                    100,
+                    30
+                ],
+                "col": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox": [
+                    0,
+                    100,
+                    100,
+                    30
+                ],
+                "col": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox": [
+                    0,
+                    450,
+                    900,
+                    30
+                ],
+                "col": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox": [
+                    0,
+                    480,
+                    900,
+                    40
+                ],
+                "col": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox": [
+                    0,
+                    670,
+                    1000,
+                    50
+                ],
+                "col": true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox":[
+                    150,
+                    570,
+                    50,
+                    100
+                ],
+                "col":true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                 "tiling": true
+            },
+             {
+                "hitbox":[
+                    350,
+                    570,
+                    50,
+                    100
+                ],
+                "col":true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                 "tiling": true
+            },
+            {
+                "hitbox":[
+                    550,
+                    570,
+                    50,
+                    100
+                ],
+                "col":true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                 "tiling": true
+            },
+             {
+                "hitbox":[
+                    750,
+                    570,
+                    50,
+                    100
+                ],
+                "col":true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                 "tiling": true
+            },
+        ],
+        "enemy2": [
+            {
+				"x": 1080,
+				"y": 325,
+				"w": 30,
+				"h": 30,
+				"attackRange":250, 
+				"dashSpeed":10
+			},
+            {
+				"x": 1080,
+				"y": 125,
+				"w": 30,
+				"h": 30,
+				"attackRange":200, 
+				"dashSpeed":10
+			},
+			{
+				"x": 360,
+				"y": 120,
+				"w": 30,
+				"h": 30,
+				"attackRange":180, 
+				"dashSpeed":10
+			},
+            {
+				"x": 750,
+				"y": 80,
+				"w": 30,
+				"h": 30,
+				"attackRange":220, 
+				"dashSpeed":8
+			}
+		],
+        "enemy": [
+            {
+				"x": 600,
+				"y": 630,
+				"w": 30,
+				"h": 30,
+				"speed": 2
+			},
+            {
+				"x": 500,
+				"y": 630,
+				"w": 30,
+				"h": 30,
+				"speed": 2
+			},
+            {
+				"x": 320,
+				"y": 630,
+				"w": 30,
+				"h": 30,
+				"speed": 2
+			}
+        ],
+        "bagua": [],
+        "background": ""
+    },
+    "yin": {
+        "tileMap": [],
+        "enemy": [],
+        "bagua": [],
+        "background": ""
+    },
+}
+)

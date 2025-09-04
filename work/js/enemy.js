@@ -32,6 +32,7 @@ class Enemy {
     }
 
     update(colliders) {
+        if (this.game.mapmanager.status == 'loading') return ;
         // === 水平方向运动 ===
         this.rect.position.x += this.speed;
 
