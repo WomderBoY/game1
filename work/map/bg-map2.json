@@ -57,9 +57,9 @@ _jsonCallback({
 					"target": "../map/bg-map3.json"
 				},
 				"col": false,
-				"img": [
-					"../images/test1.png"
-				],
+				// "img": [
+				// 	"../images/test1.png"
+				// ],
 				"tiling": true
 			},
 			{
