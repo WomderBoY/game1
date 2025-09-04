@@ -14,7 +14,7 @@ function transitionToMainMenu() {
         sliderWrapper.style.display = 'none';
         mainMenuScreen.classList.remove('hidden');
         requestAnimationFrame(() => { mainMenuScreen.style.opacity = '1'; });
-        requestAnimationFrame(() => { 
+        requestAnimationFrame(() => {
             mainMenuScreen.style.opacity = '1';
             updateUsernameDisplay();
         });
@@ -42,14 +42,14 @@ function transitionToGame() {
 
     // 在淡出动画结束后 (大约半秒)，执行页面跳转
     setTimeout(() => {
-        
+
         window.location.href = 'work/js/level-select.html'; // 跳转到关卡选择页面
     }, 500); // 500毫秒对应CSS中的淡出动画时间
 }
 
 /* ================== 弹窗 & 登出逻辑 ================== */
 
-function getSavedAchievements(){
+function getSavedAchievements() {
     try {
         const raw = localStorage.getItem('yyj_achievements_v1');
         if (!raw) return null;
@@ -57,7 +57,7 @@ function getSavedAchievements(){
     } catch (_) { return null; }
 }
 
-function renderAchievementsList(){
+function renderAchievementsList() {
     const list = document.getElementById('achievement-list');
     if (!list) return;
     list.innerHTML = '';
@@ -90,7 +90,7 @@ function renderAchievementsList(){
 }
 
 
-function transitionTous(){
+function transitionTous() {
     // 获取主菜单元素，让它优雅地淡出
     /*const mainMenuScreen = document.getElementById('main-menu-screen');
     if (mainMenuScreen) {
@@ -116,6 +116,82 @@ function hideAchievements() {
     const modal = document.getElementById('achievement-modal');
     modal.classList.remove('show');
     setTimeout(() => { modal.classList.add('hidden'); }, 300); // 等待动画结束
+}
+
+function showSettings() {
+    const modal = document.getElementById('settings-modal');
+    initSettingsControls();
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => { modal.classList.add('show'); });
+}
+
+function hideSettings() {
+    const modal = document.getElementById('settings-modal');
+    modal.classList.remove('show');
+    setTimeout(() => { modal.classList.add('hidden'); }, 300); // 等待动画结束
+}
+
+// 初始化设置控件
+function initSettingsControls() {
+    // 初始化BGM音量控制
+    const bgmSlider = document.getElementById('main-bgm-volume-slider');
+    const bgmValue = document.getElementById('main-bgm-volume-value');
+
+    if (bgmSlider && bgmValue) {
+        // 从本地存储加载BGM音量设置
+        const savedBgmVolume = localStorage.getItem('bgmVolume');
+        if (savedBgmVolume !== null) {
+            const volume = parseFloat(savedBgmVolume);
+            const volumePercent = Math.round(volume * 100);
+            bgmSlider.value = volumePercent;
+            bgmValue.textContent = volumePercent + '%';
+        }
+
+        // 监听BGM音量滑块变化
+        bgmSlider.addEventListener('input', function () {
+            const volumePercent = parseInt(this.value);
+            const volume = volumePercent / 100;
+
+            // 更新显示
+            bgmValue.textContent = volumePercent + '%';
+
+            // 更新BGM音量
+            if (window.bgmmanager) {
+                window.bgmmanager.setVolume(volume);
+            }
+        });
+    }
+
+    // 初始化音效音量控制
+    const sfxSlider = document.getElementById('sfx-volume-slider');
+    const sfxValue = document.getElementById('sfx-volume-value');
+
+    if (sfxSlider && sfxValue) {
+        // 从本地存储加载音效音量设置
+        const savedSfxVolume = localStorage.getItem('sfxVolume');
+        if (savedSfxVolume !== null) {
+            const volume = parseFloat(savedSfxVolume);
+            const volumePercent = Math.round(volume * 100);
+            sfxSlider.value = volumePercent;
+            sfxValue.textContent = volumePercent + '%';
+        } else {
+            // 默认音效音量为50%
+            sfxSlider.value = 50;
+            sfxValue.textContent = '50%';
+        }
+
+        // 监听音效音量滑块变化
+        sfxSlider.addEventListener('input', function () {
+            const volumePercent = parseInt(this.value);
+            const volume = volumePercent / 100;
+
+            // 更新显示
+            sfxValue.textContent = volumePercent + '%';
+
+            // 保存音效音量设置
+            localStorage.setItem('sfxVolume', volume.toString());
+        });
+    }
 }
 
 function logout() {
@@ -167,20 +243,20 @@ function register() {
 
 /* ================== 其他UI逻辑 ================== */
 
-function toggleForm(){
+function toggleForm() {
     const slider = document.getElementById('slider');
     slider.style.transform = showLogin ? 'rotateY(180deg)' : 'rotateY(0deg)';
     showLogin = !showLogin;
-    
+
     blackMode = !blackMode;
     document.body.style.background = blackMode ? '#000' : '#fff';
 
     const panels = document.querySelectorAll('.panel');
-    panels.forEach(p=>{
+    panels.forEach(p => {
         p.style.background = blackMode ? 'rgba(30,30,30,0.85)' : 'rgba(230,230,230,0.85)';
         p.style.color = blackMode ? '#fff' : '#000';
     });
-    
+
     // 新增：动态改变链接颜色
     const toggleLinks = document.querySelectorAll('.toggle-link');
     toggleLinks.forEach(link => {
@@ -188,58 +264,58 @@ function toggleForm(){
     });
 
     const wave = document.getElementById('switch-wave');
-    wave.style.width='0'; wave.style.height='0';
-    wave.style.background=blackMode?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.15)';
-    wave.style.transition='none';
-    requestAnimationFrame(()=>{
-        wave.style.transition='width 0.6s ease-out, height 0.6s ease-out';
-        wave.style.width='2000px'; wave.style.height='2000px';
-        setTimeout(()=>{ wave.style.width='0'; wave.style.height='0'; },600);
+    wave.style.width = '0'; wave.style.height = '0';
+    wave.style.background = blackMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)';
+    wave.style.transition = 'none';
+    requestAnimationFrame(() => {
+        wave.style.transition = 'width 0.6s ease-out, height 0.6s ease-out';
+        wave.style.width = '2000px'; wave.style.height = '2000px';
+        setTimeout(() => { wave.style.width = '0'; wave.style.height = '0'; }, 600);
     });
-    particles.forEach(p=>p.color=blackMode?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.5)');
-    waves.forEach(w=>w.color=blackMode?'rgba(255,255,255,0.3)':'rgba(0,0,0,0.3)');
+    particles.forEach(p => p.color = blackMode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)');
+    waves.forEach(w => w.color = blackMode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)');
 }
 
-function togglePassword(inputId){
+function togglePassword(inputId) {
     const input = document.getElementById(inputId);
-    input.type = input.type==='password'?'text':'password';
+    input.type = input.type === 'password' ? 'text' : 'password';
 }
 
-function checkPasswordStrength(){
+function checkPasswordStrength() {
     const pwd = document.getElementById('register-password').value;
     const strength = document.getElementById('password-strength');
-    let score=0;
-    if(pwd.length>=6) score++; if(/[A-Z]/.test(pwd)) score++; if(/[0-9]/.test(pwd)) score++; if(/[\W]/.test(pwd)) score++;
+    let score = 0;
+    if (pwd.length >= 6) score++; if (/[A-Z]/.test(pwd)) score++; if (/[0-9]/.test(pwd)) score++; if (/[\W]/.test(pwd)) score++;
     const strengths = { 0: "太短", 1: "弱", 2: "中", 3: "强", 4: "非常强" };
     const colors = { 0: "#ff4d4d", 1: "#ff4d4d", 2: "#ffa500", 3: "#9acd32", 4: "#2ecc71" };
     strength.textContent = strengths[score] || "弱";
     strength.style.color = colors[score] || "#fff";
 }
 
-function showPopup(msg){
-    const popup=document.getElementById('popup');
-    popup.textContent=msg;
+function showPopup(msg) {
+    const popup = document.getElementById('popup');
+    popup.textContent = msg;
     popup.classList.add('show');
-    setTimeout(()=>popup.classList.remove('show'),1500);
+    setTimeout(() => popup.classList.remove('show'), 1500);
 }
 
 /* ================== 背景动画 (代码不变) ================== */
-const canvas=document.getElementById('bg');
-const ctx=canvas.getContext('2d');
-canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-let waveTime=0, particles=[], waves=[];
-for(let i=0;i<10;i++){ waves.push({ y:Math.random()*canvas.height, amplitude:20+Math.random()*80, speed:0.001+Math.random()*0.003, phase:Math.random()*Math.PI*2, type:Math.floor(Math.random()*2), color:'rgba(255,255,255,0.3)' }); }
-for(let i=0;i<150;i++){ particles.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*1.5+0.5, dx:(Math.random()-0.5)*0.6, dy:(Math.random()-0.5)*0.6, color:'rgba(255,255,255,0.5)' }); }
-function drawBackground(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    waveTime+=0.01;
-    waves.forEach(w=>{ ctx.beginPath(); for(let x=0;x<canvas.width;x+=3){ let t=x*0.01+waveTime*100*w.speed+w.phase; let yOffset=w.type===0?Math.sin(t)*w.amplitude:Math.cos(t)*w.amplitude; ctx.lineTo(x,w.y+yOffset); } ctx.strokeStyle=w.color; ctx.lineWidth=2; ctx.shadowBlur=10; ctx.shadowColor=w.color; ctx.stroke(); });
-    particles.forEach(p=>{ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=p.color; ctx.shadowBlur=5; ctx.shadowColor=p.color; ctx.fill(); p.x+=p.dx; p.y+=p.dy; if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0; if(p.y<0)p.y=canvas.height; if(p.y>canvas.height)p.y=0; });
-    backgroundAnimationId=requestAnimationFrame(drawBackground);
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+let waveTime = 0, particles = [], waves = [];
+for (let i = 0; i < 10; i++) { waves.push({ y: Math.random() * canvas.height, amplitude: 20 + Math.random() * 80, speed: 0.001 + Math.random() * 0.003, phase: Math.random() * Math.PI * 2, type: Math.floor(Math.random() * 2), color: 'rgba(255,255,255,0.3)' }); }
+for (let i = 0; i < 150; i++) { particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.5, dx: (Math.random() - 0.5) * 0.6, dy: (Math.random() - 0.5) * 0.6, color: 'rgba(255,255,255,0.5)' }); }
+function drawBackground() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    waveTime += 0.01;
+    waves.forEach(w => { ctx.beginPath(); for (let x = 0; x < canvas.width; x += 3) { let t = x * 0.01 + waveTime * 100 * w.speed + w.phase; let yOffset = w.type === 0 ? Math.sin(t) * w.amplitude : Math.cos(t) * w.amplitude; ctx.lineTo(x, w.y + yOffset); } ctx.strokeStyle = w.color; ctx.lineWidth = 2; ctx.shadowBlur = 10; ctx.shadowColor = w.color; ctx.stroke(); });
+    particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.shadowBlur = 5; ctx.shadowColor = p.color; ctx.fill(); p.x += p.dx; p.y += p.dy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; });
+    backgroundAnimationId = requestAnimationFrame(drawBackground);
 }
 
 /* ================== 事件监听 (代码不变) ================== */
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
     drawBackground();
     // 初始化 BGM 音轨（索引 0 = 登录，索引 1 = 游戏）
     bgmmanager.add("./work/bgms/bg1.mp3"); // 索引 0
@@ -247,9 +323,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     document.getElementById('start-game-btn').addEventListener('click', transitionToGame);
     document.getElementById('achievements-btn').addEventListener('click', showAchievements);
-    document.getElementById('options-btn').addEventListener('click', ()=>showPopup("游戏设置功能待开发"));
+    document.getElementById('options-btn').addEventListener('click', showSettings);
     document.getElementById('logout-btn').addEventListener('click', logout);
     document.querySelector('.modal-close-btn').addEventListener('click', hideAchievements);
+    document.getElementById('settings-close-btn').addEventListener('click', hideSettings);
     document.getElementById('about-us').addEventListener('click', transitionTous);
 
     // 如果 URL 带有 #menu，直接展示主菜单界面
@@ -269,7 +346,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             updateUsernameDisplay();
         }
     }
-     // 如果是从游戏返回，直接播放 BGM
+    // 如果是从游戏返回，直接播放 BGM
     if (window.location.hash.includes('fromGame=true')) {
         bgmmanager.play(0);
     }
@@ -285,7 +362,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         document.addEventListener('keydown', play);
     }
 });
-window.addEventListener('resize',()=>{
+window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
