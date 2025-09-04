@@ -34,12 +34,8 @@ class Enemy {
     }
 
     update(colliders) {
-<<<<<<< HEAD
-        if (this.game.mapmanager.status == 'loading') return ;
-=======
         let now = Date.now();
-        if (now <= this.born) return ;
->>>>>>> 2b3411f9d17b6c4ed3c858dea468352662943fa8
+        if (now <= this.born) return;
         // === 水平方向运动 ===
         this.rect.position.x += this.speed;
 

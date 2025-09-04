@@ -79,16 +79,10 @@ class SaveManager {
                 entitymanager.vx = 0;
                 entitymanager.vy = 0;
                 this.game.yingyang = dt.player.yingyang;
-<<<<<<< HEAD
                 await this.game.mapmanager.loadMap(dt.room);
                 await this.game.enemymanager.LoadEnemy(dt.room);
                 await this.game.enemy2manager.LoadEnemy2(dt.room);
-=======
-                this.game.mapmanager.loadMap(dt.room);
-                this.game.enemymanager.LoadEnemy(dt.room);
-                this.game.enemy2manager.LoadEnemy2(dt.room);
-                this.game.baguamanager.LoadBagua(dt.room);
->>>>>>> 2b3411f9d17b6c4ed3c858dea468352662943fa8
+                await this.game.baguamanager.LoadBagua(dt.room);
                 this.game.status = "running";
 
                 // 只有当 event 不为 null 时才添加到事件管理器

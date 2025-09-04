@@ -359,9 +359,6 @@ class game {
         this.exclamationPrompt.y = y;
         this.exclamationPrompt.timer = 0;
         this.exclamationPrompt.animationPhase = 0;
-
-        // 添加回车键监听事件
-        this.addEnterKeyListener();
     }
 
     // 隐藏感叹号提示
