@@ -58,9 +58,7 @@ _jsonCallback({
                     70
                 ],
                 "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                
                 "tiling": true
             },
             {
@@ -71,9 +69,7 @@ _jsonCallback({
                     60
                 ],
                 "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                
                 "tiling": true
             },
             {
@@ -84,9 +80,7 @@ _jsonCallback({
                     60,
                 ],
                 "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                
                 "tiling": true
             },
             {
@@ -97,9 +91,7 @@ _jsonCallback({
                     350,
                 ],
                 "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                
                 "tiling": true
             },
             {
@@ -110,9 +102,7 @@ _jsonCallback({
                     50
                 ],
                 "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                
                 "tiling": true
             },
             {
@@ -123,9 +113,7 @@ _jsonCallback({
                     50
                 ],
                 "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                
                 "tiling": true
             },
             {
@@ -136,9 +124,7 @@ _jsonCallback({
                     59,
                 ],
                 "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                
                 "tiling": true
             },
             {

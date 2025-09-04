@@ -57,52 +57,6 @@ class DrawManager {
         this.drawDangerElements(app[type]);
     }
 
-    drawpblock(x, y, w, h) {
-        const ctx = this.game.ctx;
-        // 虚化砖块效果
-        ctx.save();
-
-        // 设置透明度
-        ctx.globalAlpha = 0.8;
-
-        // 1. 虚化底色（半透明）
-        ctx.fillStyle = "rgba(139, 139, 122, 0.5)";
-        ctx.fillRect(x, y, w, h);
-
-        // 2. 虚化边框（半透明）
-        // ctx.strokeStyle = "rgba(109, 109, 90, 0.5)";
-        // ctx.lineWidth = 2;
-        // ctx.strokeRect(x, y, w, h);
-
-        // 3. 虚化纹理线条（半透明）
-        ctx.strokeStyle = "rgba(125, 125, 106, 0.4)";
-        ctx.lineWidth = 1;
-        const lineSpacing = 25;
-
-        // 横向纹理
-        for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(x + 2, ly);
-            ctx.lineTo(x + w - 2, ly);
-            ctx.stroke();
-        }
-
-        // 纵向纹理
-        for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(lx, y + 2);
-            ctx.lineTo(lx, y + h - 2);
-            ctx.stroke();
-        }
-
-        // 4. 虚化高光效果
-        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-        ctx.fillRect(x, y, w, 2); // 顶部边缘
-        ctx.fillRect(x, y, 2, h); // 左侧边缘
-
-        ctx.restore();
-    }
-
     // 绘制虚化砖块（相反属性的碰撞箱）
     drawPhantomBlocks(phantomCollidable, atk) {
         for (let j = 0; j < phantomCollidable.length; ++j) {
@@ -112,21 +66,7 @@ class DrawManager {
                 w = i.size.x,
                 h = i.size.y;
             if (i instanceof Tile) {
-                if (i.img.length == 0) {
-                    // 无图片的砖块
-                    if (atk[j]) {
-                        if (this.game.mapmanager.loadingatk()) {
-                            this.drawunstable(x, y, w, h);
-                        } else {
-                            this.drawpdg(x, y, w, h);
-                        }
-                    } else {
-                        this.drawpblock(x, y, w, h);
-                    }
-                } else {
-                    // 有图片的砖块（包括有血量的方块）
-                    this.drawPhantomTile(i);
-                }
+                this.drawPhantomTile(i, atk[j]);
             } else if (i instanceof Fratile) {
                 // 绘制虚化的可破坏砖块
                 this.drawPhantomFratile(i);
@@ -141,7 +81,7 @@ class DrawManager {
     }
 
     // 绘制虚化的有血量方块
-    drawPhantomTile(tile) {
+    drawPhantomTile(tile, atk) {
         const ctx = this.game.ctx;
         ctx.save();
 
@@ -154,10 +94,14 @@ class DrawManager {
             //            || !this.game.mapmanager.hurt()
             //         ) {
             let o = tile.hp - Math.floor(this.game.changetimes / 2);
-            if (o > 0) {
-                let k = o - 1;
-                if (this.game.changetimes % 2 == 0) ++k;
-                if (tile.img[k]) {
+            let k = o - 1;
+            if (this.game.changetimes % 2 == 0) ++k;
+            if (k >= 0) {
+                // 支持平铺模式，默认启用平铺
+                const defaultTiling = tile.tiling !== false;
+                if (defaultTiling) {
+                    this.drawNinePatch(ctx, tile.img[k], tile.x, tile.y, tile.w, tile.h);
+                } else {
                     ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
                 }
             }
@@ -173,21 +117,36 @@ class DrawManager {
             //         ctx.drawImage(tile.img[imgIndex], tile.x, tile.y, tile.w, tile.h);
             //     }
             // }
+        } else {
+            // 无生命值的普通图片方块
+            if (tile.img && tile.img[0]) {
+                if (atk) {
+                    if (this.game.mapmanager.loadingatk()) {
+                        if (this.game.gameFrame % 2 == 1) {
+                            if (tile.tiling) {
+                                this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                            } else {
+                                ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                            }
+                        }
+                    }
+                    else {
+                        if (this.game.mapmanager.startatk()) {
+                            this.game.expmanager.addexp(tile.x, tile.y, tile.w, tile.h);
+                        }
+                        this.drawdg(tile.x, tile.y, tile.w, tile.h);
+                    }
+                }
+                else {
+                    // 绘制图片作为虚化效果
+                    if (tile.tiling) {
+                        this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                    } else {
+                        ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                    }
+                }
+            }
         }
-        // else {
-        //     // 无生命值的普通图片方块
-        //     if (atk && this.game.mapmanager.loadingatk()) {
-        //         // 攻击状态下的不稳定效果
-        //         if (this.game.gameFrame % 2 == 1 && tile.img[0]) {
-        //             ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
-        //         }
-        //     } else if (tile.img[0]) {
-        //         // 正常状态
-        //         ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
-        //     }
-        // }
-
-        // 移除虚化边框，保持完全透明的效果
 
         ctx.restore();
     }
@@ -205,9 +164,11 @@ class DrawManager {
         // 设置透明度
         ctx.globalAlpha = 0.6;
 
-        // 绘制原始图片作为虚化效果
+        // 绘制原始图片作为虚化效果，支持默认平铺模式
         if (fratile.img && fratile.img[0]) {
-            if (fratile.tiling) {
+            // 默认启用平铺模式，除非明确设置为 false
+            const defaultTiling = fratile.tiling !== false;
+            if (defaultTiling) {
                 this.drawNinePatch(ctx, fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
             } else {
                 ctx.drawImage(fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
@@ -248,9 +209,11 @@ class DrawManager {
         // 设置透明度
         ctx.globalAlpha = 0.6;
 
-        // 绘制原始图片作为虚化效果
+        // 绘制原始图片作为虚化效果，支持默认平铺模式
         if (movetile.img && movetile.img[0]) {
-            if (movetile.tiling) {
+            // 默认启用平铺模式，除非明确设置为 false
+            const defaultTiling = movetile.tiling !== false;
+            if (defaultTiling) {
                 this.drawNinePatch(ctx, movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
             } else {
                 ctx.drawImage(movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
@@ -313,17 +276,17 @@ class DrawManager {
         ctx.restore();
     }
 
-    drawunstable(x, y, w, h) {
-        if (this.game.gameFrame % 2 == 1) {
-            this.drawStoneTile(x, y, w, h);
-        }
-    }
+    // drawunstable(img, x, y, w, h) {
+    //     if (this.game.gameFrame % 2 == 1) {
+    //         this.drawImage(img, x, y, w, h);
+    //     }
+    // }
 
-    drawpunstable(x, y, w, h, img = null) {
-        if (this.game.gameFrame % 2 == 1) {
-            this.drawpblock(x, y, w, h);
-        }
-    }
+    // drawpunstable(x, y, w, h, img = null) {
+    //     if (this.game.gameFrame % 2 == 1) {
+    //         this.drawpblock(x, y, w, h);
+    //     }
+    // }
 
     // 绘制碰撞元素
     drawCollidableElements(collidable, atk) {
@@ -336,68 +299,14 @@ class DrawManager {
                 h = i.size.y;
 
             if (i instanceof Tile) {
-                if (i.img.length == 0) {
-                    // 石板砖块效果
-                    if (atk[j]) {
-                        if (this.game.mapmanager.loadingatk()) {
-                            this.drawunstable(x, y, w, h);
-                        } else {
-                            this.drawdg(x, y, w, h);
-                        }
-                    } else this.drawStoneTile(x, y, w, h);
-                } else {
-                    // 绘制贴纸/装饰图层
-                    this.drawImageTile(ctx, i, x, y, w, h, atk[j]);
-                }
-            } else if (i instanceof Fratile) {
+                this.drawImageTile(this.game.ctx, i, x, y, w, h, atk[j]);
+            }
+            else if (i instanceof Fratile) {
                 i.draw(this.game);
             } else if (i instanceof Movetile) {
                 i.draw(this.game);
             }
         }
-    }
-
-    // 绘制石板砖块
-    drawStoneTile(x, y, w, h) {
-        const ctx = this.game.ctx;
-        ctx.save(); // 保存当前绘图状态
-
-        // 1. 砖块底色
-        ctx.fillStyle = "#8B8B7A";
-        ctx.fillRect(x, y, w, h);
-
-        // 2. 砖块边框
-        ctx.strokeStyle = "#6D6D5A";
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x, y, w, h);
-
-        // 3. 纹理线条
-        ctx.strokeStyle = "#7D7D6A";
-        ctx.lineWidth = 1;
-        const lineSpacing = 25;
-
-        // 横向纹理
-        for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(x + 2, ly);
-            ctx.lineTo(x + w - 2, ly);
-            ctx.stroke();
-        }
-
-        // 纵向纹理
-        for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(lx, y + 2);
-            ctx.lineTo(lx, y + h - 2);
-            ctx.stroke();
-        }
-
-        // 4. 高光效果
-        ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-        ctx.fillRect(x, y, w, 2); // 顶部边缘
-        ctx.fillRect(x, y, 2, h); // 左侧边缘
-
-        ctx.restore(); // 恢复绘图状态
     }
 
     // 绘制图片砖块
@@ -407,38 +316,72 @@ class DrawManager {
                 let o = tile.hp - Math.floor(this.game.changetimes / 2);
                 if (o > 0) {
                     let k = o - 1;
-                    if (tile.tiling) {
+                    if (tile.tiling == true) {
                         this.drawNinePatch(ctx, tile.img[k], x, y, w, h);
                     } else {
                         ctx.drawImage(tile.img[k], x, y, w, h);
                     }
                 }
-            } else if (
-                this.game.mapmanager.hurt() &&
-                this.game.gameFrame % 2 == 1 &&
-                Math.floor(this.game.changetimes / 2) <= tile.hp
-            ) {
-                console.warn(
-                    tile.hp,
-                    tile.hp - Math.floor(this.game.changetimes / 2)
-                );
-                const imgIndex = Math.max(
-                    0,
-                    tile.hp - Math.floor(this.game.changetimes / 2)
-                );
-                if (tile.tiling) {
-                    this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
-                } else {
-                    ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+                // } else if (
+                //     this.game.mapmanager.hurt() &&
+                //     Math.floor(this.game.changetimes / 2) < tile.hp
+                // ) {
+                //     console.warn(
+                //         tile.hp,
+                //         tile.hp - Math.floor(this.game.changetimes / 2)
+                //     );
+                //     const imgIndex = Math.max(
+                //         0,
+                //         tile.hp - Math.floor(this.game.changetimes / 2)
+                //     );
+                //     if (this.game.mapmanager.starthurt()) {
+                //         this.game.expmanager.addexp(x, y, w, h);
+                //     }
+                //     if (tile.tiling) {
+                //         this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
+                //     } else {
+                //         ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+                //     }
+            } else if (Math.floor(this.game.changetimes / 2) <= tile.hp
+                && this.game.mapmanager.hurt()) {
+                if (this.game.mapmanager.starthurt()) {
+                    this.game.expmanager.addexp(x, y, w, h);
+                }
+                if (this.game.gameFrame % 2 == 1) {
+                    const imgIndex = Math.max(
+                        0,
+                        tile.hp - Math.floor(this.game.changetimes / 2)
+                    );
+                    if (tile.tiling == true) {
+                        this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
+                    } else {
+                        ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+                    }
                 }
             }
         } else {
-            if (atk && this.game.mapmanager.loadingatk()) {
-                this.drawunstable(tile.img[0], x, y, w, h);
-            } else if (tile.tiling) {
-                this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
+            if (atk) {
+                if (this.game.mapmanager.loadingatk()) {
+                    if (this.game.gameFrame % 2 == 1) {
+                        if (tile.tiling) {
+                            this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                        } else {
+                            ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                        }
+                    }
+                }
+                else {
+                    if (this.game.mapmanager.startatk()) {
+                        this.game.expmanager.addexp(x, y, w, h);
+                    }
+                    this.drawdg(x, y, w, h);
+                }
             } else {
-                ctx.drawImage(tile.img[0], x, y, w, h);
+                if (tile.tiling == true) {
+                    this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
+                } else {
+                    ctx.drawImage(tile.img[0], x, y, w, h);
+                }
             }
         }
     }
@@ -503,9 +446,9 @@ class DrawManager {
     drawPixelLava(ctx, x, y, w, h) {
         // 更美观的像素风配色方案
         const colors = {
-            deep: "#1A0A0A",    // 深黑红
-            dark: "#2D0F0F",    // 深红
-            medium: "#5C1A1A",  // 中深红
+            deep: "#FF6347",    // 深黑红
+            dark: "#CD5C5C",    // 深红
+            medium: "#FFD700",  // 中深红
             bright: "#8B2C2C",  // 中红
             hot: "#CD5C5C",     // 亮红
             orange: "#FF6347",  // 橙红

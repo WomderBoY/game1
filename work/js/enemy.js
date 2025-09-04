@@ -1,5 +1,5 @@
 class Enemy {
-    constructor(game, x, y, width, height, speed = 2, type = true) {
+    constructor(game, x, y, width, height, speed = 2, type = true, born = 0) {
         // 敌人矩形
         this.game = game;
         this.rect = new Rect(x, y, width, height);
@@ -19,6 +19,8 @@ class Enemy {
         //true为阴
         this.type = type;
 
+        this.born = born;
+
         //是否死亡
         this.dead = false;
         (async () => {
@@ -32,7 +34,12 @@ class Enemy {
     }
 
     update(colliders) {
+<<<<<<< HEAD
         if (this.game.mapmanager.status == 'loading') return ;
+=======
+        let now = Date.now();
+        if (now <= this.born) return ;
+>>>>>>> 2b3411f9d17b6c4ed3c858dea468352662943fa8
         // === 水平方向运动 ===
         this.rect.position.x += this.speed;
 
@@ -92,15 +99,32 @@ class Enemy {
      * 绘制敌人
      */
     draw(ctx) {
-        const img = this.type ? this.imgYang : this.imgYin;
+        const img = this.type ? this.imgYang : this.imgYin, now = Date.now();
         if (!img) return; // 还没加载完
-        ctx.drawImage(
-            img,
-            this.rect.position.x,
-            this.rect.position.y,
-            this.rect.size.x,
-            this.rect.size.y
-        );
+        if (now > this.born) {
+            ctx.drawImage(
+                img,
+                this.rect.position.x,
+                this.rect.position.y,
+                this.rect.size.x,
+                this.rect.size.y
+            );
+        }
+        else {
+            if (this.game.gameFrame % 2 == 1) return ;
+            ctx.save();
+
+            // 设置透明度
+            ctx.globalAlpha = 0.6;
+            ctx.drawImage(
+                img,
+                this.rect.position.x,
+                this.rect.position.y,
+                this.rect.size.x,
+                this.rect.size.y
+            );
+            ctx.restore();
+        }
     }
 }
 
@@ -156,7 +180,7 @@ class EnemyManager {
     set_enemy(type, x) {
         let p = this.game.mapmanager.collidable[type][x];
         let sp = this.game.random(1, 3), tp = this.game.random(0, 1) ? false : true;
-        this.enemies.push(new Enemy(this.game, p.x, p.y - 50, 50, 50, sp, tp));
+        this.enemies.push(new Enemy(this.game, p.x, p.y - 50, 50, 50, sp, tp, Date.now() + 3000));
     }
 
     /**

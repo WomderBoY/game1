@@ -21,7 +21,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
         radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
     pointer-events: none;
@@ -31,7 +31,7 @@ body::before {
     background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
     border-radius: 24px;
     padding: 48px;
-    box-shadow: 
+    box-shadow:
         0 32px 64px rgba(0, 0, 0, 0.5),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     text-align: center;
@@ -105,11 +105,21 @@ h1::after {
 }
 
 .level-slider {
-    width: 660px; /* 3个关卡按钮的宽度 + 间距 */
+    width: 660px;
+    /* 3个关卡按钮的宽度 + 间距 */
     overflow: hidden;
     position: relative;
     border-radius: 16px;
     padding: 8px 0;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.level-slider:active {
+    cursor: grabbing;
 }
 
 .level-track {
@@ -117,6 +127,41 @@ h1::after {
     gap: 20px;
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     will-change: transform;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.level-track:active {
+    cursor: grabbing;
+}
+
+/* 拖动时的视觉反馈 */
+.level-slider.dragging .level-track {
+    transition: none;
+}
+
+.level-slider.dragging .level-button {
+    transform: scale(0.98);
+    opacity: 0.9;
+    filter: brightness(0.95);
+}
+
+/* 拖动时的阴影效果 */
+.level-slider.dragging {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* 平滑的过渡动画 */
+.level-button {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 拖动时的卡片效果 */
+.level-slider.dragging .level-button:hover {
+    transform: scale(0.98) translateY(-4px);
 }
 
 /* 导航按钮 */
@@ -163,14 +208,15 @@ h1::after {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.4s ease;
-    box-shadow: 
+    box-shadow:
         0 12px 24px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.8);
     position: relative;
     overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.2);
     min-width: 200px;
-    flex-shrink: 0; /* 防止在flex布局中被压缩 */
+    flex-shrink: 0;
+    /* 防止在flex布局中被压缩 */
 }
 
 .level-button::before {
@@ -190,7 +236,7 @@ h1::after {
 
 .level-button:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 
+    box-shadow:
         0 20px 40px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
     background: linear-gradient(145deg, #f0f0f0, #ffffff);
@@ -330,7 +376,8 @@ h1::after {
     }
 
     .level-slider {
-        width: 440px; /* 2个关卡按钮的宽度 + 间距 */
+        width: 440px;
+        /* 2个关卡按钮的宽度 + 间距 */
     }
 
     .level-button {
@@ -367,7 +414,8 @@ h1::after {
     }
 
     .level-slider {
-        width: 220px; /* 1个关卡按钮的宽度 */
+        width: 220px;
+        /* 1个关卡按钮的宽度 */
     }
 
     .level-slider-container {

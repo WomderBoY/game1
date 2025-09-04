@@ -43,6 +43,7 @@ class mapmanager {
         this.portalImg = await this.game.datamanager.loadImg(
             "../images/portal.png"
         );
+        this.defaultImg = [await this.game.datamanager.loadImg("../images/tile.png")];
     }
 
     empty() {
@@ -60,6 +61,12 @@ class mapmanager {
     }
 
     cl_attack(type) {
+        for (let j = 0; j < this.atk[type].length; ++j) {
+            let i = this.collidable[type][j];
+            if (this.atk[type][j]) {
+                this.game.expmanager.addexp(i.x, i.y, i.w, i.h);
+            }
+        }
         this.atk[type] = [];
         let len = this.collidable[type].length;
         for (let i = 0; i < len; ++i) this.atk[type].push(0);
@@ -92,6 +99,11 @@ class mapmanager {
             }
         }
         
+        return isHurt;
+    }
+
+    starthurt() {
+        const isHurt = this.game.gameFrame - mapmanager.lstchange <= 1;
         return isHurt;
     }
 
@@ -338,6 +350,10 @@ class mapmanager {
         return this.game.gameFrame - this.atkti <= 300;
     }
 
+    startatk() {
+        return this.game.gameFrame - this.atkti == 301;
+    }
+
     // 绘制背景方法
     drawBackground() {
         this.drawManager.drawBackground(this.background, this.game.view.width, this.game.view.height);
@@ -379,7 +395,13 @@ class mapmanager {
                 i.tiling
             );
         } else {
-            tile = new Tile(x, y, w, h, i.hp, img, i.event, i.tiling);
+            const defaultTiling = i.tiling !== false; // 如果未设置或设置为 true，则默认为 true
+            // 如果没有指定图片，使用默认的 test1.png
+            if (!img || img.length === 0) {
+                img = this.defaultImg;
+            }
+            
+            tile = new Tile(x, y, w, h, i.hp, img, i.event, defaultTiling);
         }
         // 把 overlayImg 存进去
         //调试图片是否加载出来
@@ -417,10 +439,10 @@ class mapmanager {
         );
 
         // 绘制血条
-        this.drawhp();
+        this.drawhp(type);
     }
 
-    async drawhp() {
+    async drawhp(type) {
         // 使用绘制管理器绘制血条
         this.drawManager.drawHP(this.collidable, this.HP, this.game.env);
     }

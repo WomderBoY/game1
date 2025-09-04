@@ -57,8 +57,8 @@ class Boss {
             await this.change_hitbox('yang', 1);
         }
         else if (o == 2) {
-            await this.get_enemy('yin', 1);
-            await this.get_enemy('yang', 1);
+            await this.get_enemy(this.game.env, 1);
+//            await this.get_enemy('yang', 1);
         }
         this.lstmove = now;
     }

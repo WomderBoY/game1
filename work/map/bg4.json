@@ -35,7 +35,8 @@ _jsonCallback({
             "y": 100,
             "w": 80,
             "h": 80,
-            "maxHP": 15
+            "maxHP": 1
+                
         }
     ]
 }
