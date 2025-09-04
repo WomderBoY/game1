@@ -8,7 +8,7 @@
     background: rgba(0, 0, 0, 0.7);
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 10001;
     backdrop-filter: blur(4px);
 }
 
@@ -18,7 +18,7 @@
     padding: 32px 36px;
     border-radius: 16px;
     min-width: 320px;
-    box-shadow: 
+    box-shadow:
         0 20px 40px rgba(0, 0, 0, 0.6),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     text-align: center;
@@ -141,7 +141,7 @@
     transition: all 0.3s ease;
     z-index: 10001;
     min-width: 280px;
-    box-shadow: 
+    box-shadow:
         0 12px 24px rgba(0, 0, 0, 0.4),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -172,16 +172,16 @@
         padding: 24px 28px;
         margin: 20px;
     }
-    
+
     .pause-title {
         font-size: 20px;
     }
-    
+
     .pause-btn {
         padding: 12px 14px;
         font-size: 14px;
     }
-    
+
     #achievement-toast {
         right: 16px;
         bottom: 16px;
