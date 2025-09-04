@@ -3,7 +3,6 @@ _jsonCallback({
 		256,
 		500
 	],
-	
 	"yang": {
 		"tileMap": [
 			{
@@ -14,7 +13,6 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				
 				"tiling": true
 			},
 			{
@@ -25,7 +23,6 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				
 				"tiling": true
 			},
 			{
@@ -36,7 +33,6 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				
 				"tiling": true
 			},
 			{
@@ -47,7 +43,6 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				
 				"tiling": true
 			},
 			{
@@ -58,7 +53,6 @@ _jsonCallback({
 					45
 				],
 				"col": true,
-				
 				"tiling": true
 			},
 			{
@@ -102,7 +96,6 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				
 				"tiling": true
 			},
 			{
