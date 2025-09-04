@@ -49,7 +49,7 @@ function checkSaveData() {
             levelConfig[level].unlocked = true;
         }
     });
-    
+
     // 调试：打印当前解锁状态
     // console.log("=== 关卡解锁状态调试 ===");
     // console.log("localStorage中的unlockedLevels:", unlockedLevels);
@@ -76,13 +76,13 @@ function checkSaveData() {
 function updateLevelButtons() {
     const buttons = document.querySelectorAll(".level-button");
     // console.log(`找到 ${buttons.length} 个关卡按钮`);
-    
+
     buttons.forEach((button, index) => {
         const level = button.getAttribute("data-level");
         const isUnlocked = levelConfig[level] && levelConfig[level].unlocked;
-        
+
         // console.log(`按钮 ${index + 1}: ${level}, 解锁状态: ${isUnlocked}`);
-        
+
         if (levelConfig[level] && !levelConfig[level].unlocked) {
             button.classList.add("locked");
             button.onclick = null;
@@ -138,7 +138,7 @@ function goBack() {
             button.style.transform = "";
         }, 150);
     }
-    
+
     setTimeout(() => {
         window.location.href = "../../index.html#menu";
     }, 200);
@@ -151,7 +151,7 @@ function clearSave() {
         localStorage.removeItem("unlockedLevels");
         localStorage.removeItem("yyj_achievements_v1");
         showMessage("存档已清除！", "success");
-        
+
         setTimeout(() => {
             location.reload();
         }, 1000);
@@ -169,9 +169,9 @@ function showMessage(message, type = "info") {
         top: 20px;
         left: 50%;
         transform: translateX(-50%) translateY(-100px);
-        background: ${type === "success" ? "linear-gradient(145deg, #4caf50, #45a049)" : 
-                    type === "warning" ? "linear-gradient(145deg, #ff9800, #f57c00)" : 
-                    "linear-gradient(145deg, #1a1a1a, #2a2a2a)"};
+        background: ${type === "success" ? "linear-gradient(145deg, #4caf50, #45a049)" :
+            type === "warning" ? "linear-gradient(145deg, #ff9800, #f57c00)" :
+                "linear-gradient(145deg, #1a1a1a, #2a2a2a)"};
         color: white;
         padding: 16px 24px;
         border-radius: 12px;
@@ -181,14 +181,14 @@ function showMessage(message, type = "info") {
         border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
     `;
-    
+
     document.body.appendChild(messageEl);
-    
+
     // 显示动画
     setTimeout(() => {
         messageEl.style.transform = "translateX(-50%) translateY(0)";
     }, 10);
-    
+
     // 自动隐藏
     setTimeout(() => {
         messageEl.style.transform = "translateX(-50%) translateY(-100px)";
@@ -208,7 +208,7 @@ function debugUnlockStatus() {
     console.log("已解锁关卡:", unlockedLevels);
     console.log("存档数据:", saveData ? JSON.parse(saveData) : "无");
     console.log("当前关卡配置:", levelConfig);
-    
+
     // 检查每个关卡的解锁状态
     Object.keys(levelConfig).forEach(level => {
         const isUnlocked = unlockedLevels.includes(level);
@@ -220,24 +220,24 @@ function debugUnlockStatus() {
 function unlockAllLevels() {
     if (confirm("确定要解锁所有关卡吗？这将跳过游戏进度直接解锁所有关卡。")) {
         const allLevels = Object.keys(levelConfig);
-        
+
         // 更新localStorage
         localStorage.setItem("unlockedLevels", JSON.stringify(allLevels));
-        
+
         // 更新当前配置
         allLevels.forEach(level => {
             if (levelConfig[level]) {
                 levelConfig[level].unlocked = true;
             }
         });
-        
+
         // 显示成功消息
         showMessage("所有关卡已解锁！", "success");
-        
+
         // 更新界面显示
         updateLevelButtons();
         updateUnlockedCount();
-        
+
         console.log("已解锁所有关卡:", allLevels);
     }
 }
@@ -252,7 +252,7 @@ function resetToFirstLevel() {
 // 测试CSS样式是否正确加载
 function testCSSLoading() {
     console.log("=== CSS样式测试 ===");
-    
+
     // 测试locked样式是否存在
     const testButton = document.querySelector('.level-button');
     if (testButton) {
@@ -260,7 +260,7 @@ function testCSSLoading() {
         testButton.classList.add("locked");
         console.log("添加locked后，classList:", testButton.classList.toString());
         console.log("计算后的样式:", window.getComputedStyle(testButton).background);
-        
+
         // 移除测试样式
         testButton.classList.remove("locked");
         console.log("移除locked后，classList:", testButton.classList.toString());
@@ -274,12 +274,12 @@ window.resetToFirstLevel = resetToFirstLevel;
 window.testCSSLoading = testCSSLoading;
 
 // 添加键盘快捷键支持
-document.addEventListener("keydown", function(e) {
+document.addEventListener("keydown", function (e) {
     // ESC键返回主菜单
     if (e.code === "Escape") {
         goBack();
     }
-    
+
     // 数字键快速选择关卡
     if (e.code >= "Digit1" && e.code <= "Digit3") {
         const levelIndex = parseInt(e.code.replace("Digit", "")) - 1;
@@ -293,20 +293,20 @@ document.addEventListener("keydown", function(e) {
 // 滑动功能
 function updateSlider() {
     updateLevelsPerPage(); // 更新每页显示的关卡数
-    
+
     const track = document.getElementById('levelTrack');
     const levelWidth = 220; // 每个关卡按钮的宽度 + 间距
     const offset = -currentLevelIndex * levelWidth;
-    
+
     track.style.transform = `translateX(${offset}px)`;
-    
+
     // 更新导航按钮状态
     const prevBtn = document.querySelector('.prev-button');
     const nextBtn = document.querySelector('.next-button');
-    
+
     prevBtn.disabled = currentLevelIndex === 0;
     nextBtn.disabled = currentLevelIndex >= totalLevels - levelsPerPage;
-    
+
     // 更新指示器
     updateIndicators();
 }
@@ -329,9 +329,9 @@ function updateIndicators() {
     const indicators = document.querySelectorAll('.indicator');
     indicators.forEach((indicator, index) => {
         const indicatorIndex = parseInt(indicator.dataset.index);
-        const isVisible = indicatorIndex >= currentLevelIndex && 
-                         indicatorIndex < currentLevelIndex + levelsPerPage;
-        
+        const isVisible = indicatorIndex >= currentLevelIndex &&
+            indicatorIndex < currentLevelIndex + levelsPerPage;
+
         indicator.classList.toggle('active', isVisible);
         indicator.classList.toggle('visible', isVisible);
     });
@@ -345,48 +345,130 @@ function goToLevel(index) {
     }
 }
 
-// 添加触摸滑动支持
+// 添加触摸和鼠标拖动支持
 function initTouchSupport() {
     const slider = document.querySelector('.level-slider');
+    const track = document.getElementById('levelTrack');
     let startX = 0;
     let isDragging = false;
-    
+    let currentX = 0;
+    let startTransform = 0;
+    let isMouseDown = false;
+
+    // 触摸事件
     slider.addEventListener('touchstart', (e) => {
         startX = e.touches[0].clientX;
         isDragging = true;
+        track.style.transition = 'none';
+        slider.classList.add('dragging');
     });
-    
+
     slider.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         e.preventDefault();
+
+        const currentTouchX = e.touches[0].clientX;
+        const diff = currentTouchX - startX;
+        const levelWidth = 220;
+        const offset = -currentLevelIndex * levelWidth + diff;
+
+        track.style.transform = `translateX(${offset}px)`;
     });
-    
+
     slider.addEventListener('touchend', (e) => {
         if (!isDragging) return;
         isDragging = false;
-        
+
         const endX = e.changedTouches[0].clientX;
         const diff = startX - endX;
-        
+
+        // 移除拖动状态
+        slider.classList.remove('dragging');
+        track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
         if (Math.abs(diff) > 50) { // 最小滑动距离
             if (diff > 0) {
                 nextLevel(); // 向左滑动，显示下一组
             } else {
                 previousLevel(); // 向右滑动，显示上一组
             }
+        } else {
+            // 回弹到原位置
+            updateSlider();
         }
     });
+
+    // 鼠标事件
+    slider.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startX = e.clientX;
+        isMouseDown = true;
+        isDragging = true;
+        track.style.transition = 'none';
+        track.style.cursor = 'grabbing';
+
+        // 添加拖动时的视觉反馈
+        slider.style.cursor = 'grabbing';
+        slider.classList.add('dragging');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isMouseDown || !isDragging) return;
+        e.preventDefault();
+
+        const currentMouseX = e.clientX;
+        const diff = currentMouseX - startX;
+        const levelWidth = 220;
+        const offset = -currentLevelIndex * levelWidth + diff;
+
+        track.style.transform = `translateX(${offset}px)`;
+    });
+
+    document.addEventListener('mouseup', (e) => {
+        if (!isMouseDown || !isDragging) return;
+        isMouseDown = false;
+        isDragging = false;
+
+        const endX = e.clientX;
+        const diff = startX - endX;
+
+        // 移除拖动状态
+        slider.classList.remove('dragging');
+        track.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        track.style.cursor = 'grab';
+        slider.style.cursor = 'grab';
+
+        if (Math.abs(diff) > 50) { // 最小拖动距离
+            if (diff > 0) {
+                nextLevel(); // 向左拖动，显示下一组
+            } else {
+                previousLevel(); // 向右拖动，显示上一组
+            }
+        } else {
+            // 回弹到原位置
+            updateSlider();
+        }
+    });
+
+    // 防止在拖动时选中文本
+    slider.addEventListener('selectstart', (e) => {
+        e.preventDefault();
+    });
+
+    // 设置初始光标样式
+    slider.style.cursor = 'grab';
+    track.style.cursor = 'grab';
 }
 
 // 页面加载时检查存档
 window.addEventListener("load", () => {
     checkSaveData();
     debugUnlockStatus(); // 显示调试信息
-    
+
     // 初始化滑动器
     updateSlider();
     initTouchSupport();
-    
+
     // 添加指示器点击事件
     const indicators = document.querySelectorAll('.indicator');
     indicators.forEach((indicator, index) => {
@@ -394,7 +476,7 @@ window.addEventListener("load", () => {
             goToLevel(index);
         });
     });
-    
+
     // 添加页面加载动画
     const container = document.querySelector('.level-select-container');
     if (container) {
