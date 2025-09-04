@@ -268,12 +268,26 @@ h1::after {
     background: linear-gradient(145deg, #444444, #333333);
 }
 
-.star-rating {
+.back-button.unlock-all {
+    background: linear-gradient(145deg, #888888, #666666);
+    border-color: rgba(120, 120, 120, 0.4);
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.back-button.unlock-all:hover {
+    background: linear-gradient(145deg, #666666, #888888);
+    border-color: rgba(120, 120, 120, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(120, 120, 120, 0.3);
+}
+
+/* .star-rating {
     color: #ffd700;
     font-size: 1.3em;
     margin-top: 12px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
+} */
 
 /* 关卡指示器 */
 .level-indicators {
