@@ -30,7 +30,7 @@ class game {
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
-        this.hp = new hp(10, this);
+        this.hp = new hp(3, this);
         this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
         this.cg = false;
