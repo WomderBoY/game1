@@ -88,7 +88,7 @@ class Fratile extends Rect {
         // 播放木头断裂音效
         if (game.soundmanager) {
             console.log("尝试播放木头断裂音效...");
-            const result = game.soundmanager.playOnce("wood_snap", 1.0, 1);
+            const result = game.soundmanager.playOnce("wood_snap", 20, 1);
             if (result) {
                 console.log("✅ 木头断裂音效播放成功");
             } else {
