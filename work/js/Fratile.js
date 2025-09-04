@@ -22,6 +22,11 @@ class Fratile extends Rect {
         return game.gameFrame - this.lst <= 50;
     }
 
+    starthurt(game) {
+        if (!this.lst) return false;
+        return game.gameFrame - this.lst <= 1;
+    }
+
     draw(game) {
         //        console.log(this.img[0], this.x, this.y, this.w, this.h);
         if (this.alive(game) && !this.hurt(game)) {
@@ -33,6 +38,9 @@ class Fratile extends Rect {
             }
         }
         else if (this.hurt(game)) {
+            if (this.starthurt(game)) {
+                game.expmanager.addexp(this.x, this.y, this.w, this.h);
+            }
             if (game.gameFrame % 2 == 1) {
                 if (this.tiling) {
                     this.drawTiling(game.ctx, this.img[0], this.x, this.y, this.w, this.h);

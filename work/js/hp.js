@@ -251,27 +251,6 @@ class hp {
         const textboxWidth = totalWidth;
         const textboxHeight = barHeight;
 
-        // 绘制HP文字背景框
-        ctx.fillStyle = "rgba(30, 30, 30, 0.8)";
-        this.drawRoundedRect(ctx, textboxX, textboxY, textboxWidth, textboxHeight, radius);
-        ctx.fill();
-        
-        // 绘制文字框边框
-        ctx.strokeStyle = "rgba(200, 200, 200, 0.8)";
-        ctx.lineWidth = borderWidth;
-        ctx.stroke();
-
-        // 绘制HP文字
-        ctx.fillStyle = "white";
-        ctx.font = `${14 * scale}px Arial`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(
-            `HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`,
-            textboxX + textboxWidth / 2,
-            textboxY + textboxHeight / 2
-        );
-
         // 绘制血条外框
         ctx.fillStyle = "rgba(50, 50, 50, 0.9)";
         this.drawRoundedRect(ctx, x, y, totalWidth, barHeight, radius);
@@ -322,7 +301,6 @@ class hp {
             ctx.fill();
         }
 
-<<<<<<< HEAD
         // 血量文字（放在血条中间）
         ctx.fillStyle = "white";
         ctx.font = `${16 * scale}px Arial`;
@@ -351,12 +329,6 @@ class hp {
         // this.particles.forEach(particle => {
         //     particle.draw(ctx, scaleX, scaleY);
         // });
-=======
-        // 绘制粒子
-        this.particles.forEach(particle => {
-            particle.draw(ctx, scaleX, scaleY);
-        });
->>>>>>> d11c16a986e10987a385a65c4b1530be038179c9
     }
 }
 

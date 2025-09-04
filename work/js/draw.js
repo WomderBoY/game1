@@ -154,12 +154,10 @@ class DrawManager {
             //            || !this.game.mapmanager.hurt()
             //         ) {
             let o = tile.hp - Math.floor(this.game.changetimes / 2);
-            if (o > 0) {
-                let k = o - 1;
-                if (this.game.changetimes % 2 == 0) ++k;
-                if (tile.img[k]) {
-                    ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
-                }
+            let k = o - 1;
+            if (this.game.changetimes % 2 == 0) ++k;
+            if (k >= 0) {
+                ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
             }
             // }
             // else if (
@@ -403,35 +401,53 @@ class DrawManager {
                 let o = tile.hp - Math.floor(this.game.changetimes / 2);
                 if (o > 0) {
                     let k = o - 1;
-                    if (tile.tiling) {
+                    if (tile.tiling== true) {
                         this.drawNinePatch(ctx, tile.img[k], x, y, w, h);
                     } else {
                         ctx.drawImage(tile.img[k], x, y, w, h);
                     }
                 }
-            } else if (
-                this.game.mapmanager.hurt() &&
-                this.game.gameFrame % 2 == 1 &&
-                Math.floor(this.game.changetimes / 2) <= tile.hp
-            ) {
-                console.warn(
-                    tile.hp,
-                    tile.hp - Math.floor(this.game.changetimes / 2)
-                );
-                const imgIndex = Math.max(
-                    0,
-                    tile.hp - Math.floor(this.game.changetimes / 2)
-                );
-                if (tile.tiling) {
-                    this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
-                } else {
-                    ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+            // } else if (
+            //     this.game.mapmanager.hurt() &&
+            //     Math.floor(this.game.changetimes / 2) < tile.hp
+            // ) {
+            //     console.warn(
+            //         tile.hp,
+            //         tile.hp - Math.floor(this.game.changetimes / 2)
+            //     );
+            //     const imgIndex = Math.max(
+            //         0,
+            //         tile.hp - Math.floor(this.game.changetimes / 2)
+            //     );
+            //     if (this.game.mapmanager.starthurt()) {
+            //         this.game.expmanager.addexp(x, y, w, h);
+            //     }
+            //     if (tile.tiling) {
+            //         this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
+            //     } else {
+            //         ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+            //     }
+            } else if (Math.floor(this.game.changetimes / 2) <= tile.hp
+                    && this.game.mapmanager.hurt()) {
+                if (this.game.mapmanager.starthurt()) {
+                    this.game.expmanager.addexp(x, y, w, h);
+                }
+                if (this.game.gameFrame % 2 == 1) {
+                     const imgIndex = Math.max(
+                        0,
+                        tile.hp - Math.floor(this.game.changetimes / 2)
+                    );
+                    if (tile.tiling == true) {
+                        this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
+                    } else {
+                        ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+                    }
                 }
             }
         } else {
             if (atk && this.game.mapmanager.loadingatk()) {
                 this.drawunstable(tile.img[0], x, y, w, h);
-            } else if (tile.tiling) {
+            } else if (tile.tiling == true) {
                 this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
             } else {
                 ctx.drawImage(tile.img[0], x, y, w, h);
