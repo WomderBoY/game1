@@ -24,7 +24,7 @@ class DeathParticle {
         this.vy = (Math.random() - 0.5) * 4;
 
         this.alpha = 1;
-        this.life = 800; // 粒子寿命更短
+        this.life = 1500; // 粒子寿命更短
         this.markedForDeletion = false;
     }
 
@@ -33,8 +33,8 @@ class DeathParticle {
         this.y += this.vy;
 
         // 粒子逐渐减速
-        this.vx *= 0.9;
-        this.vy *= 0.9;
+        this.vx *= 0.95;
+        this.vy *= 0.95;
 
         // 透明度随时间衰减
         this.life -= deltaTime;

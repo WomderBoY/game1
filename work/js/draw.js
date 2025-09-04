@@ -57,52 +57,6 @@ class DrawManager {
         this.drawDangerElements(app[type]);
     }
 
-    drawpblock(x, y, w, h) {
-        const ctx = this.game.ctx;
-        // 虚化砖块效果
-        ctx.save();
-
-        // 设置透明度
-        ctx.globalAlpha = 0.8;
-
-        // 1. 虚化底色（半透明）
-        ctx.fillStyle = "rgba(139, 139, 122, 0.5)";
-        ctx.fillRect(x, y, w, h);
-
-        // 2. 虚化边框（半透明）
-        // ctx.strokeStyle = "rgba(109, 109, 90, 0.5)";
-        // ctx.lineWidth = 2;
-        // ctx.strokeRect(x, y, w, h);
-
-        // 3. 虚化纹理线条（半透明）
-        ctx.strokeStyle = "rgba(125, 125, 106, 0.4)";
-        ctx.lineWidth = 1;
-        const lineSpacing = 25;
-
-        // 横向纹理
-        for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(x + 2, ly);
-            ctx.lineTo(x + w - 2, ly);
-            ctx.stroke();
-        }
-
-        // 纵向纹理
-        for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(lx, y + 2);
-            ctx.lineTo(lx, y + h - 2);
-            ctx.stroke();
-        }
-
-        // 4. 虚化高光效果
-        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-        ctx.fillRect(x, y, w, 2); // 顶部边缘
-        ctx.fillRect(x, y, 2, h); // 左侧边缘
-
-        ctx.restore();
-    }
-
     // 绘制虚化砖块（相反属性的碰撞箱）
     drawPhantomBlocks(phantomCollidable, atk) {
         for (let j = 0; j < phantomCollidable.length; ++j) {
@@ -112,21 +66,7 @@ class DrawManager {
                 w = i.size.x,
                 h = i.size.y;
             if (i instanceof Tile) {
-                if (i.img.length == 0) {
-                    // 无图片的砖块
-                    if (atk[j]) {
-                        if (this.game.mapmanager.loadingatk()) {
-                            this.drawunstable(x, y, w, h);
-                        } else {
-                            this.drawpdg(x, y, w, h);
-                        }
-                    } else {
-                        this.drawpblock(x, y, w, h);
-                    }
-                } else {
-                    // 有图片的砖块（包括有血量的方块）
-                    this.drawPhantomTile(i);
-                }
+                this.drawPhantomTile(i, atk[j]);
             } else if (i instanceof Fratile) {
                 // 绘制虚化的可破坏砖块
                 this.drawPhantomFratile(i);
@@ -141,7 +81,7 @@ class DrawManager {
     }
 
         // 绘制虚化的有血量方块
-    drawPhantomTile(tile) {
+    drawPhantomTile(tile, atk) {
         const ctx = this.game.ctx;
         ctx.save();
 
@@ -174,11 +114,30 @@ class DrawManager {
         } else {
             // 无生命值的普通图片方块
             if (tile.img && tile.img[0]) {
-                // 绘制图片作为虚化效果
-                if (tile.tiling) {
-                    this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
-                } else {
-                    ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                if (atk) {
+                    if (this.game.mapmanager.loadingatk()) {
+                        if (this.game.gameFrame % 2 == 1) {
+                            if (tile.tiling) {
+                                this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                            } else {
+                                ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                            }
+                        }
+                    }
+                    else {
+                        if (this.game.mapmanager.startatk()) {
+                            this.game.expmanager.addexp(tile.x, tile.y, tile.w, tile.h);
+                        }
+                        this.drawdg(tile.x, tile.y, tile.w, tile.h);
+                    }
+                }
+                else {
+                    // 绘制图片作为虚化效果
+                    if (tile.tiling) {
+                        this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                    } else {
+                        ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                    }
                 }
             }
         }
@@ -307,17 +266,17 @@ class DrawManager {
         ctx.restore();
     }
 
-    drawunstable(x, y, w, h) {
-        if (this.game.gameFrame % 2 == 1) {
-            this.drawStoneTile(x, y, w, h);
-        }
-    }
+    // drawunstable(img, x, y, w, h) {
+    //     if (this.game.gameFrame % 2 == 1) {
+    //         this.drawImage(img, x, y, w, h);
+    //     }
+    // }
 
-    drawpunstable(x, y, w, h, img = null) {
-        if (this.game.gameFrame % 2 == 1) {
-            this.drawpblock(x, y, w, h);
-        }
-    }
+    // drawpunstable(x, y, w, h, img = null) {
+    //     if (this.game.gameFrame % 2 == 1) {
+    //         this.drawpblock(x, y, w, h);
+    //     }
+    // }
 
     // 绘制碰撞元素
     drawCollidableElements(collidable, atk) {
@@ -330,68 +289,14 @@ class DrawManager {
                 h = i.size.y;
 
             if (i instanceof Tile) {
-                if (i.img.length == 0) {
-                    // 石板砖块效果
-                    if (atk[j]) {
-                        if (this.game.mapmanager.loadingatk()) {
-                            this.drawunstable(x, y, w, h);
-                        } else {
-                            this.drawdg(x, y, w, h);
-                        }
-                    } else this.drawStoneTile(x, y, w, h);
-                } else {
-                    // 绘制贴纸/装饰图层
-                    this.drawImageTile(ctx, i, x, y, w, h, atk[j]);
-                }
-            } else if (i instanceof Fratile) {
+                this.drawImageTile(this.game.ctx, i, x, y, w, h, atk[j]);
+            }
+            else if (i instanceof Fratile) {
                 i.draw(this.game);
             } else if (i instanceof Movetile) {
                 i.draw(this.game);
             }
         }
-    }
-
-    // 绘制石板砖块
-    drawStoneTile(x, y, w, h) {
-        const ctx = this.game.ctx;
-        ctx.save(); // 保存当前绘图状态
-
-        // 1. 砖块底色
-        ctx.fillStyle = "#8B8B7A";
-        ctx.fillRect(x, y, w, h);
-
-        // 2. 砖块边框
-        ctx.strokeStyle = "#6D6D5A";
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x, y, w, h);
-
-        // 3. 纹理线条
-        ctx.strokeStyle = "#7D7D6A";
-        ctx.lineWidth = 1;
-        const lineSpacing = 25;
-
-        // 横向纹理
-        for (let ly = y + lineSpacing; ly < y + h; ly += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(x + 2, ly);
-            ctx.lineTo(x + w - 2, ly);
-            ctx.stroke();
-        }
-
-        // 纵向纹理
-        for (let lx = x + lineSpacing; lx < x + w; lx += lineSpacing) {
-            ctx.beginPath();
-            ctx.moveTo(lx, y + 2);
-            ctx.lineTo(lx, y + h - 2);
-            ctx.stroke();
-        }
-
-        // 4. 高光效果
-        ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-        ctx.fillRect(x, y, w, 2); // 顶部边缘
-        ctx.fillRect(x, y, 2, h); // 左侧边缘
-
-        ctx.restore(); // 恢复绘图状态
     }
 
     // 绘制图片砖块
@@ -445,12 +350,28 @@ class DrawManager {
                 }
             }
         } else {
-            if (atk && this.game.mapmanager.loadingatk()) {
-                this.drawunstable(tile.img[0], x, y, w, h);
-            } else if (tile.tiling == true) {
-                this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
-            } else {
-                ctx.drawImage(tile.img[0], x, y, w, h);
+            if (atk) {
+                if (this.game.mapmanager.loadingatk()) {
+                    if (this.game.gameFrame % 2 == 1) {
+                        if (tile.tiling) {
+                            this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                        } else {
+                            ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                        }
+                    }
+                }
+                else {
+                    if (this.game.mapmanager.startatk()) {
+                        this.game.expmanager.addexp(x, y, w, h);
+                    }
+                    this.drawdg(x, y, w, h);
+                }
+            }else {
+                if (tile.tiling == true) {
+                    this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
+                } else {
+                    ctx.drawImage(tile.img[0], x, y, w, h);
+                }
             }
         }
     }
