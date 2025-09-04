@@ -557,24 +557,6 @@ class DrawManager {
             }
         }
 
-        // 3. 添加像素风格的裂纹和纹理
-        ctx.fillStyle = colors.yellow;
-        const crackWidth = 2; // 更粗的裂纹，更明显
-
-        // 横向裂纹（像素化）
-        for (let ly = y + 8; ly < y + h - 8; ly += 16) {
-            const crackLength = w * (0.3 + Math.sin(ly * 0.05 + this.game.gameFrame * 0.01) * 0.2);
-            const startX = x + (w - crackLength) / 2;
-            ctx.fillRect(Math.floor(startX), ly, Math.floor(crackLength), crackWidth);
-        }
-
-        // 纵向裂纹（像素化）
-        for (let lx = x + 8; lx < x + w - 8; lx += 16) {
-            const crackLength = h * (0.25 + Math.sin(lx * 0.05 + this.game.gameFrame * 0.008) * 0.15);
-            const startY = y + (h - crackLength) / 2;
-            ctx.fillRect(lx, Math.floor(startY), crackWidth, Math.floor(crackLength));
-        }
-
         // 4. 像素风格的高光边缘 - 更明显
         ctx.fillStyle = colors.white;
         ctx.fillRect(x, y, w, 2); // 顶部

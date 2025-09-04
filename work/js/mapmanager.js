@@ -28,6 +28,7 @@ class Tile extends Rect {
 
 class mapmanager {
     static lstchange = -100;
+    static lastSoundTime = 0; // 添加静态变量记录上次播放音效的时间
 
     constructor(game) {
         this.game = game;
@@ -78,7 +79,19 @@ class mapmanager {
     }
 
     hurt() {
-        return this.game.gameFrame - mapmanager.lstchange <= 80;
+        const isHurt = this.game.gameFrame - mapmanager.lstchange <= 80;
+        
+        // 当砖块血量减少时播放音效，但防止重复播放
+        if (isHurt && this.game.soundmanager) {
+            const currentTime = this.game.gameFrame;
+            // 只有当距离上次播放音效超过100帧（约1.67秒）时才播放
+            if (currentTime - mapmanager.lastSoundTime > 100) {
+                this.game.soundmanager.playOnce("wood_snap", 1.0, 1);
+                mapmanager.lastSoundTime = currentTime;
+            }
+        }
+        
+        return isHurt;
     }
 
     async loadMap(src) {
