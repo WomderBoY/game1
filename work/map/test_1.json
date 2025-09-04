@@ -71,7 +71,7 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "changemap",
-					"target": "../map/jiaoxue1.json",
+					"target": "../map/bgtest.json",
 					"way": "negative",
 					"with": {
 						"images": [

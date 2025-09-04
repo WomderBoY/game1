@@ -38,7 +38,7 @@ _jsonCallback({
                     "../images/vine1.png"
                 ],
                 "hp": 4,
-                "tiling": true,
+//                "tiling": true,
             },
             {
                 "hitbox": [
@@ -55,7 +55,7 @@ _jsonCallback({
                     "../images/vine1.png"
                 ],
                 "hp": 3,
-                "tiling": true,
+//                "tiling": true,
             },
             {
                 "hitbox": [
@@ -238,7 +238,7 @@ _jsonCallback({
                     "../images/vine1.png"
                 ],
                 "hp": 3,
-                "tiling": true,
+//                "tiling": true,
             }
         ],
         "bagua": [

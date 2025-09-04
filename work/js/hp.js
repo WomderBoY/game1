@@ -55,8 +55,8 @@ class hp {
     }
     
     // 创建血液粒子
-    createBloodParticles(damageAmount, x, y) {
-        const particleCount = Math.min(damageAmount * 3, 10); // 每次扣血生成最多10个粒子
+    async createBloodParticles(damageAmount, x, y) {
+        const particleCount = Math.min(damageAmount * 3, 100); // 每次扣血生成最多10个粒子
         
         for (let i = 0; i < particleCount; i++) {
             // 粒子生成位置在血条附近
@@ -64,8 +64,21 @@ class hp {
             const particleY = y + Math.random() * 20;
             this.particles.push(new BloodParticle(particleX, particleY));
         }
-        
         console.log(`创建了${particleCount}个血液粒子，当前粒子总数: ${this.particles.length}`);
+    }
+
+    drawblood(canvasWidth = 1280, canvasHeight = 720, deltaTime = 16.67) {
+        const scaleX = this.game.ctx.canvas.width / canvasWidth;
+        const scaleY = this.game.ctx.canvas.height / canvasHeight;
+        this.particles.forEach(particle => {
+            particle.draw(this.game.ctx, scaleX, scaleY);
+        });
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            this.particles[i].update(deltaTime);
+            if (this.particles[i].markedForDeletion) {
+                this.particles.splice(i, 1);
+            }
+        }
     }
     
     // 调试信息
@@ -100,12 +113,6 @@ class hp {
         }
 
         // 更新和移除粒子
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            this.particles[i].update(deltaTime);
-            if (this.particles[i].markedForDeletion) {
-                this.particles.splice(i, 1);
-            }
-        }
     }
 
     // 绘制方法（通用版）
@@ -154,10 +161,10 @@ class hp {
             ctx.fillText(`HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`, textX, textY);
         }
 
-        // 绘制粒子
-        this.particles.forEach(particle => {
-            particle.draw(ctx, scaleX, scaleY);
-        });
+        // // 绘制粒子
+        // this.particles.forEach(particle => {
+        //     particle.draw(ctx, scaleX, scaleY);
+        // });
     }
 
     // 绘制方法（中心版）
@@ -218,10 +225,10 @@ class hp {
         
         ctx.fillText(text, cx, cy);
 
-        // 绘制粒子
-        this.particles.forEach(particle => {
-            particle.draw(ctx, scaleX, scaleY);
-        });
+        // // 绘制粒子
+        // this.particles.forEach(particle => {
+        //     particle.draw(ctx, scaleX, scaleY);
+        // });
     }
 }
 

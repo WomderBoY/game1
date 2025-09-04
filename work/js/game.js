@@ -30,7 +30,7 @@ class game {
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
         this.inputmanager = new inputmanager(this);
-        this.hp = new hp(10, this);
+        this.hp = new hp(3, this);
         this.baguamanager = new BaguaManager(this);
         this.achievements = new AchievementsManager(this);
         this.cg = false;
@@ -395,6 +395,7 @@ class game {
                 }
 
                 await this.entitymanager.update();
+                this.hp.drawblood();
                 await this.entitymanager.checkCollision();
                 if (this.boss) {
                     console.log('boss!!!');
@@ -429,6 +430,7 @@ class game {
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 this.entitymanager.drawPlayer();
+                this.hp.drawblood();
 
                 // 更新HP系统（暂停时也需要更新动画）
                 this.hp.update(16.6667);
@@ -454,6 +456,7 @@ class game {
 
                 // 绘制死亡状态的玩家（在地图和敌人之上）
                 this.entitymanager.drawDeadPlayer();
+                this.hp.drawblood();
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 // 绘制游戏结束遮罩和文字（在最上层）
