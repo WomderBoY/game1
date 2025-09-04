@@ -94,6 +94,11 @@ class mapmanager {
         return isHurt;
     }
 
+    starthurt() {
+        const isHurt = this.game.gameFrame - mapmanager.lstchange <= 1;
+        return isHurt;
+    }
+
     async loadMap(src) {
         this.game.canmove = false;
         console.log("开始加载地图:", src);
@@ -421,10 +426,10 @@ class mapmanager {
         );
 
         // 绘制血条
-        this.drawhp();
+        this.drawhp(type);
     }
 
-    async drawhp() {
+    async drawhp(type) {
         // 使用绘制管理器绘制血条
         this.drawManager.drawHP(this.collidable, this.HP, this.game.env);
     }

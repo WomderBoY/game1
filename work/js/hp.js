@@ -55,8 +55,8 @@ class hp {
     }
     
     // 创建血液粒子
-    createBloodParticles(damageAmount, x, y) {
-        const particleCount = Math.min(damageAmount * 3, 10); // 每次扣血生成最多10个粒子
+    async createBloodParticles(damageAmount, x, y) {
+        const particleCount = Math.min(damageAmount * 3, 100); // 每次扣血生成最多10个粒子
         
         for (let i = 0; i < particleCount; i++) {
             // 粒子生成位置在血条附近
@@ -64,8 +64,21 @@ class hp {
             const particleY = y + Math.random() * 20;
             this.particles.push(new BloodParticle(particleX, particleY));
         }
-        
         console.log(`创建了${particleCount}个血液粒子，当前粒子总数: ${this.particles.length}`);
+    }
+
+    drawblood(canvasWidth = 1280, canvasHeight = 720, deltaTime = 16.67) {
+        const scaleX = this.game.ctx.canvas.width / canvasWidth;
+        const scaleY = this.game.ctx.canvas.height / canvasHeight;
+        this.particles.forEach(particle => {
+            particle.draw(this.game.ctx, scaleX, scaleY);
+        });
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            this.particles[i].update(deltaTime);
+            if (this.particles[i].markedForDeletion) {
+                this.particles.splice(i, 1);
+            }
+        }
     }
     
     // 调试信息
@@ -100,98 +113,192 @@ class hp {
         }
 
         // 更新和移除粒子
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            this.particles[i].update(deltaTime);
-            if (this.particles[i].markedForDeletion) {
-                this.particles.splice(i, 1);
-            }
-        }
     }
 
-    // 绘制方法（通用版）
+    //绘制圆角矩形
+    drawRoundedRect(ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.arcTo(x + width, y, x + width, y + height, radius);
+        ctx.arcTo(x + width, y + height, x, y + height, radius);
+        ctx.arcTo(x, y + height, x, y, radius);
+        ctx.arcTo(x, y, x + width, y, radius);
+        ctx.closePath();
+    }
+
+    // 绘制方法（通用版）- 美化版
     draw(ctx, canvasWidth = 1280, canvasHeight = 720) {
-        // 当前 canvas 尺寸
-        const scaleX = ctx.canvas.width / canvasWidth;
-        const scaleY = ctx.canvas.height / canvasHeight;
-
-        // 血条位置和尺寸（固定位置）
-        const x = 20 * scaleX;
-        const y = 20 * scaleY;
-        const width = this.maxHP * 30 * scaleX; // 背景宽度
-        const height = 20 * scaleY; // 血条高度
-        const currentDisplayWidth = this.displayHP * 30 * scaleX; // 当前显示血量宽度
-
-        // 背景血条
-        ctx.fillStyle = "gray";
-        ctx.fillRect(x, y, width, height);
-
-        // 当前血量（使用 displayHP 进行平滑过渡）
-        ctx.fillStyle = "red";
-        ctx.fillRect(x, y, currentDisplayWidth, height);
-
-        // 扣血时的闪烁效果
-        if (this.damageEffectTimer > 0) {
-            ctx.fillStyle = `rgba(255, 0, 0, ${this.damageEffectTimer / this.damageEffectDuration})`;
-            ctx.fillRect(x, y, width, height);
-        }
-
-        // 文字 - 修复文字位置，确保在血条内部
-        ctx.fillStyle = "white";
-        ctx.font = `${16 * Math.min(scaleX, scaleY)}px Arial`;
-        ctx.textAlign = "left";
-        ctx.textBaseline = "middle";
-        
-        // 计算文字位置，确保在血条内部居中
-        const textX = x + 5 * scaleX;
-        const textY = y + height / 2; // 垂直居中
-        
-        // 检查文字是否会超出血条边界，如果会则调整位置
-        const textWidth = ctx.measureText(`HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`).width;
-        if (textX + textWidth > x + width) {
-            // 如果文字会超出右边界，调整到血条内部
-            ctx.fillText(`HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`, x + 2 * scaleX, textY);
-        } else {
-            ctx.fillText(`HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`, textX, textY);
-        }
-
-        // 绘制粒子
-        this.particles.forEach(particle => {
-            particle.draw(ctx, scaleX, scaleY);
-        });
-    }
-
-    // 绘制方法（中心版）
-    draw2(ctx, centerX, centerY, canvasWidth = 1280, canvasHeight = 720) {
-        // 缩放系数
         const scaleX = ctx.canvas.width / canvasWidth;
         const scaleY = ctx.canvas.height / canvasHeight;
         const scale = Math.min(scaleX, scaleY);
 
-        // 血条尺寸
-        const totalWidth = this.maxHP * 30 * scaleX; // 血条总宽度
-        const height = 20 * scaleY; // 血条高度
-        const currentDisplayWidth = this.displayHP * 30 * scaleX; // 当前显示血量宽度
+        // 血条配置
+        const padding = 5 * scale;
+        const borderWidth = 2 * scale;
+        const radius = 8 * scale;
+        const barHeight = 20 * scale;
+        const totalWidth = this.maxHP * 30 * scaleX;
+        
+        // 位置调整
+        const x = 20 * scaleX;
+        const y = 20 * scaleY;
+        
+        // HP文字框位置（右侧）
+        const textboxX = x + totalWidth + 15 * scaleX;
+        const textboxY = y;
+        const textboxWidth = 80 * scaleX;
+        const textboxHeight = barHeight;
 
-        // 中心位置缩放
-        const cx = centerX * scaleX;
-        const cy = centerY * scaleY;
+        // 绘制HP文字背景框
+        ctx.fillStyle = "rgba(30, 30, 30, 0.8)";
+        this.drawRoundedRect(ctx, textboxX, textboxY, textboxWidth, textboxHeight, radius);
+        ctx.fill();
+        
+        // 绘制文字框边框
+        ctx.strokeStyle = "rgba(200, 200, 200, 0.8)";
+        ctx.lineWidth = borderWidth;
+        ctx.stroke();
 
-        // 左上角起点 (从中心点向左、向上偏移)
-        const x = cx - totalWidth / 2;
-        const y = cy - height / 2;
+        // 绘制HP文字
+        ctx.fillStyle = "white";
+        ctx.font = `${14 * scale}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(
+            `HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`,
+            textboxX + textboxWidth / 2,
+            textboxY + textboxHeight / 2
+        );
 
-        // 背景血条
-        ctx.fillStyle = "gray";
-        ctx.fillRect(x, y, totalWidth, height);
+        // 绘制血条外框
+        ctx.fillStyle = "rgba(50, 50, 50, 0.9)";
+        this.drawRoundedRect(ctx, x, y, totalWidth, barHeight, radius);
+        ctx.fill();
+        
+        // 绘制血条边框
+        ctx.strokeStyle = "rgba(200, 200, 200, 0.6)";
+        ctx.lineWidth = borderWidth;
+        ctx.stroke();
 
-        // 当前血量（使用 displayHP 进行平滑过渡）
-        ctx.fillStyle = "red";
-        ctx.fillRect(x, y, currentDisplayWidth, height);
+        // 计算当前血量宽度（考虑内边距）
+        const currentDisplayWidth = this.displayHP * 30 * scaleX;
+        const innerX = x + padding;
+        const innerY = y + padding;
+        const innerWidth = Math.max(0, currentDisplayWidth - padding * 2);
+        const innerHeight = barHeight - padding * 2;
+
+        // 根据血量设置不同颜色
+        let fillColor;
+        if (this.displayHP / this.maxHP > 0.5) {
+            // 健康状态 - 绿色渐变
+            fillColor = ctx.createLinearGradient(innerX, innerY, innerX + innerWidth, innerY);
+            fillColor.addColorStop(0, "#4CAF50");
+            fillColor.addColorStop(1, "#8BC34A");
+        } else if (this.displayHP / this.maxHP > 0.2) {
+            // 警告状态 - 黄色渐变
+            fillColor = ctx.createLinearGradient(innerX, innerY, innerX + innerWidth, innerY);
+            fillColor.addColorStop(0, "#FFC107");
+            fillColor.addColorStop(1, "#FFEB3B");
+        } else {
+            // 危险状态 - 红色渐变
+            fillColor = ctx.createLinearGradient(innerX, innerY, innerX + innerWidth, innerY);
+            fillColor.addColorStop(0, "#F44336");
+            fillColor.addColorStop(1, "#FF5722");
+        }
+
+        // 绘制当前血量
+        if (innerWidth > 0) {
+            ctx.fillStyle = fillColor;
+            this.drawRoundedRect(ctx, innerX, innerY, innerWidth, innerHeight, radius / 2);
+            ctx.fill();
+        }
 
         // 扣血时的闪烁效果
         if (this.damageEffectTimer > 0) {
-            ctx.fillStyle = `rgba(255, 0, 0, ${this.damageEffectTimer / this.damageEffectDuration})`;
-            ctx.fillRect(x, y, totalWidth, height);
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.3 * this.damageEffectTimer / this.damageEffectDuration})`;
+            this.drawRoundedRect(ctx, x, y, totalWidth, barHeight, radius);
+            ctx.fill();
+        }
+
+        // // 绘制粒子
+        // this.particles.forEach(particle => {
+        //     particle.draw(ctx, scaleX, scaleY);
+        // });
+    }
+
+    // 绘制方法（中心版）- 美化版
+    draw2(ctx, centerX, centerY, canvasWidth = 1280, canvasHeight = 720) {
+        const scaleX = ctx.canvas.width / canvasWidth;
+        const scaleY = ctx.canvas.height / canvasHeight;
+        const scale = Math.min(scaleX, scaleY);
+
+        // 血条配置
+        const padding = 5 * scale;
+        const borderWidth = 2 * scale;
+        const radius = 8 * scale;
+        const barHeight = 20 * scale;
+        const totalWidth = this.maxHP * 30 * scaleX;
+        
+        // 中心位置调整
+        const cx = centerX * scaleX;
+        const cy = centerY * scaleY;
+        const x = cx - totalWidth / 2;
+        const y = cy - barHeight / 2;
+        
+        // HP文字框位置（上方）
+        const textboxX = x;
+        const textboxY = y - barHeight - 10 * scaleY;
+        const textboxWidth = totalWidth;
+        const textboxHeight = barHeight;
+
+        // 绘制血条外框
+        ctx.fillStyle = "rgba(50, 50, 50, 0.9)";
+        this.drawRoundedRect(ctx, x, y, totalWidth, barHeight, radius);
+        ctx.fill();
+        
+        // 绘制血条边框
+        ctx.strokeStyle = "rgba(200, 200, 200, 0.6)";
+        ctx.lineWidth = borderWidth;
+        ctx.stroke();
+
+        // 计算当前血量宽度（考虑内边距）
+        const currentDisplayWidth = this.displayHP * 30 * scaleX;
+        const innerX = x + padding;
+        const innerY = y + padding;
+        const innerWidth = Math.max(0, currentDisplayWidth - padding * 2);
+        const innerHeight = barHeight - padding * 2;
+
+        // 根据血量设置不同颜色
+        let fillColor;
+        if (this.displayHP / this.maxHP > 0.5) {
+            // 健康状态 - 绿色渐变
+            fillColor = ctx.createLinearGradient(innerX, innerY, innerX + innerWidth, innerY);
+            fillColor.addColorStop(0, "#4CAF50");
+            fillColor.addColorStop(1, "#8BC34A");
+        } else if (this.displayHP / this.maxHP > 0.2) {
+            // 警告状态 - 黄色渐变
+            fillColor = ctx.createLinearGradient(innerX, innerY, innerX + innerWidth, innerY);
+            fillColor.addColorStop(0, "#FFC107");
+            fillColor.addColorStop(1, "#FFEB3B");
+        } else {
+            // 危险状态 - 红色渐变
+            fillColor = ctx.createLinearGradient(innerX, innerY, innerX + innerWidth, innerY);
+            fillColor.addColorStop(0, "#F44336");
+            fillColor.addColorStop(1, "#FF5722");
+        }
+
+        // 绘制当前血量
+        if (innerWidth > 0) {
+            ctx.fillStyle = fillColor;
+            this.drawRoundedRect(ctx, innerX, innerY, innerWidth, innerHeight, radius / 2);
+            ctx.fill();
+        }
+
+        // 扣血时的闪烁效果
+        if (this.damageEffectTimer > 0) {
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.3 * this.damageEffectTimer / this.damageEffectDuration})`;
+            this.drawRoundedRect(ctx, x, y, totalWidth, barHeight, radius);
+            ctx.fill();
         }
 
         // 血量文字（放在血条中间）
@@ -218,10 +325,10 @@ class hp {
         
         ctx.fillText(text, cx, cy);
 
-        // 绘制粒子
-        this.particles.forEach(particle => {
-            particle.draw(ctx, scaleX, scaleY);
-        });
+        // // 绘制粒子
+        // this.particles.forEach(particle => {
+        //     particle.draw(ctx, scaleX, scaleY);
+        // });
     }
 }
 

@@ -38,7 +38,7 @@ _jsonCallback({
                     "../images/fratile1.png"
                 ],
                 "hp": 4,
-                "tiling": true,
+                "tiling": false,
             },
             {
                 "hitbox": [
@@ -55,7 +55,7 @@ _jsonCallback({
                     "../images/fratile1.png"
                 ],
                 "hp": 3,
-                "tiling": true,
+                "tiling": false,
             },
             {
                 "hitbox": [
@@ -118,7 +118,7 @@ _jsonCallback({
                 "img": [
                     "../images/test1.png"
                 ],
-                "tiling": true,
+//                "tiling": true,
             },
             {
                 "hitbox": [
@@ -238,7 +238,7 @@ _jsonCallback({
                     "../images/fratile1.png"
                 ],
                 "hp": 3,
-                "tiling": true,
+                "tiling": false,
             }
         ],
         "bagua": [
