@@ -314,12 +314,69 @@ function drawBackground() {
     backgroundAnimationId = requestAnimationFrame(drawBackground);
 }
 
+/* ================== 键盘事件监听 ================== */
+
+// 为登录表单添加键盘监听
+function addLoginKeyboardListeners() {
+    const loginUsername = document.getElementById('login-username');
+    const loginPassword = document.getElementById('login-password');
+
+    if (loginUsername && loginPassword) {
+        // 在密码框按Enter键时触发登录
+        loginPassword.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                login(transitionToMainMenu);
+            }
+        });
+
+        // 在用户名框按Enter键时，焦点移到密码框
+        loginUsername.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                loginPassword.focus();
+            }
+        });
+    }
+}
+
+// 为注册表单添加键盘监听
+function addRegisterKeyboardListeners() {
+    const registerUsername = document.getElementById('register-username');
+    const registerPassword = document.getElementById('register-password');
+    const registerConfirmPassword = document.getElementById('register-confirm-password');
+
+    if (registerUsername && registerPassword && registerConfirmPassword) {
+        // 在确认密码框按Enter键时触发注册
+        registerConfirmPassword.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                register();
+            }
+        });
+
+        // 在密码框按Enter键时，焦点移到确认密码框
+        registerPassword.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                registerConfirmPassword.focus();
+            }
+        });
+
+        // 在用户名框按Enter键时，焦点移到密码框
+        registerUsername.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                registerPassword.focus();
+            }
+        });
+    }
+}
+
 /* ================== 事件监听 (代码不变) ================== */
 document.addEventListener('DOMContentLoaded', () => {
     drawBackground();
     // 初始化 BGM 音轨（索引 0 = 登录，索引 1 = 游戏）
     bgmmanager.add("./work/bgms/bg1.mp3"); // 索引 0
 
+    // 添加键盘监听事件
+    addLoginKeyboardListeners();
+    addRegisterKeyboardListeners();
 
     document.getElementById('start-game-btn').addEventListener('click', transitionToGame);
     document.getElementById('achievements-btn').addEventListener('click', showAchievements);

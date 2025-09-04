@@ -56,8 +56,8 @@ class hp {
     }
     
     // 创建血液粒子
-    createBloodParticles(damageAmount, x, y) {
-        const particleCount = Math.min(damageAmount * 3, 10); // 每次扣血生成最多10个粒子
+    async createBloodParticles(damageAmount, x, y) {
+        const particleCount = Math.min(damageAmount * 3, 100); // 每次扣血生成最多10个粒子
         
         for (let i = 0; i < particleCount; i++) {
             // 粒子生成位置在血条附近
@@ -65,8 +65,21 @@ class hp {
             const particleY = y + Math.random() * 20;
             this.particles.push(new BloodParticle(particleX, particleY));
         }
-        
         console.log(`创建了${particleCount}个血液粒子，当前粒子总数: ${this.particles.length}`);
+    }
+
+    drawblood(canvasWidth = 1280, canvasHeight = 720, deltaTime = 16.67) {
+        const scaleX = this.game.ctx.canvas.width / canvasWidth;
+        const scaleY = this.game.ctx.canvas.height / canvasHeight;
+        this.particles.forEach(particle => {
+            particle.draw(this.game.ctx, scaleX, scaleY);
+        });
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            this.particles[i].update(deltaTime);
+            if (this.particles[i].markedForDeletion) {
+                this.particles.splice(i, 1);
+            }
+        }
     }
     
     // 调试信息
@@ -101,12 +114,6 @@ class hp {
         }
 
         // 更新和移除粒子
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-            this.particles[i].update(deltaTime);
-            if (this.particles[i].markedForDeletion) {
-                this.particles.splice(i, 1);
-            }
-        }
     }
 
     //绘制圆角矩形
@@ -214,10 +221,10 @@ class hp {
             ctx.fill();
         }
 
-        // 绘制粒子
-        this.particles.forEach(particle => {
-            particle.draw(ctx, scaleX, scaleY);
-        });
+        // // 绘制粒子
+        // this.particles.forEach(particle => {
+        //     particle.draw(ctx, scaleX, scaleY);
+        // });
     }
 
     // 绘制方法（中心版）- 美化版
@@ -244,27 +251,6 @@ class hp {
         const textboxY = y - barHeight - 10 * scaleY;
         const textboxWidth = totalWidth;
         const textboxHeight = barHeight;
-
-        // 绘制HP文字背景框
-        ctx.fillStyle = "rgba(30, 30, 30, 0.8)";
-        this.drawRoundedRect(ctx, textboxX, textboxY, textboxWidth, textboxHeight, radius);
-        ctx.fill();
-        
-        // 绘制文字框边框
-        ctx.strokeStyle = "rgba(200, 200, 200, 0.8)";
-        ctx.lineWidth = borderWidth;
-        ctx.stroke();
-
-        // 绘制HP文字
-        ctx.fillStyle = "white";
-        ctx.font = `${14 * scale}px Arial`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(
-            `HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`,
-            textboxX + textboxWidth / 2,
-            textboxY + textboxHeight / 2
-        );
 
         // 绘制血条外框
         ctx.fillStyle = "rgba(50, 50, 50, 0.9)";
@@ -316,10 +302,34 @@ class hp {
             ctx.fill();
         }
 
-        // 绘制粒子
-        this.particles.forEach(particle => {
-            particle.draw(ctx, scaleX, scaleY);
-        });
+        // 血量文字（放在血条中间）
+        ctx.fillStyle = "white";
+        ctx.font = `${16 * scale}px Arial`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        
+        // 确保文字在血条内部，如果血条太窄则调整字体大小
+        const text = `HP: ${Math.ceil(this.displayHP)}/${this.maxHP}`;
+        let fontSize = 16 * scale;
+        let finalFont = `${fontSize}px Arial`;
+        
+        // 检查文字是否会超出血条宽度
+        ctx.font = finalFont;
+        const textWidth = ctx.measureText(text).width;
+        
+        if (textWidth > totalWidth - 10 * scaleX) {
+            // 如果文字太宽，减小字体大小
+            fontSize = Math.max(8 * scale, (totalWidth - 10 * scaleX) / text.length * 0.8);
+            finalFont = `${fontSize}px Arial`;
+            ctx.font = finalFont;
+        }
+        
+        ctx.fillText(text, cx, cy);
+
+        // // 绘制粒子
+        // this.particles.forEach(particle => {
+        //     particle.draw(ctx, scaleX, scaleY);
+        // });
     }
 }
 

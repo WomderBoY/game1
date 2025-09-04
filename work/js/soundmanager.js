@@ -9,7 +9,7 @@ class SoundManager {
         await this.load("run", "../sound/move.mp3");
         await this.load("jump", "../sound/jump.mp3");
         await this.load("land", "../sound/fallog.mp3");
-        await this.load("typing", "../sound/typing.mp3");
+        await this.load("five_beeps", "../sound/five_beeps.mp3");
         await this.load("death", "../sound/death.mp3");
         await this.load("enemydeath", "../sound/enemydeath.mp3");
         await this.load("change", "../sound/change.mp3");

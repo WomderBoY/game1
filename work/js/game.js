@@ -46,9 +46,27 @@ class game {
         this.cgmanager = new CGManager(this);
         this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
+        this.expmanager = new Expmanager(this);
+
+        // 感叹号提示系统
+        this.exclamationPrompt = {
+            show: false,
+            x: 0,
+            y: 0,
+            timer: 0,
+            maxTimer: 300, // 显示5秒（60fps）
+            animationPhase: 0,
+            image: null
+        };
+        //        this.expmanager.addexp(100, 100, 100, 100);
+        //      this.expmanager.addexp(500, 500, 100, 100);
+
         await this.soundmanager.init();
         let s1 = await this.datamanager.loadSpritesheet("ying-data.json");
         let s2 = await this.datamanager.loadSpritesheet("yang-right-0.json");
+
+        // 加载感叹号图片
+        this.exclamationPrompt.image = await this.datamanager.loadImg("../images/point.png");
         //    console.log(s);
         this.animationmachine = new AnimationMachine(this, s1, s2);
 
@@ -72,6 +90,14 @@ class game {
             await this.baguamanager.LoadBagua(selectedLevel);
             await this.bossmanager.loadBoss(selectedLevel);
             this.mapmanager.draw(this.env);
+
+            // 如果是第四关，显示感叹号提示
+            if (selectedLevel.includes("bg-map4.json")) {
+                this.showExclamationPrompt(
+                    this.player.position.x,
+                    this.player.position.y
+                );
+            }
             // 加载 Boss
 
         }
@@ -326,6 +352,62 @@ class game {
         });
     }
 
+    // 显示感叹号提示
+    showExclamationPrompt(x, y) {
+        this.exclamationPrompt.show = true;
+        this.exclamationPrompt.x = x;
+        this.exclamationPrompt.y = y;
+        this.exclamationPrompt.timer = 0;
+        this.exclamationPrompt.animationPhase = 0;
+
+        // 添加回车键监听事件
+        this.addEnterKeyListener();
+    }
+
+    // 隐藏感叹号提示
+    hideExclamationPrompt() {
+        this.exclamationPrompt.show = false;
+    }
+
+    // 更新感叹号提示动画
+    updateExclamationPrompt() {
+        if (!this.exclamationPrompt.show) return;
+
+        this.exclamationPrompt.timer++;
+        this.exclamationPrompt.animationPhase = Math.sin(this.exclamationPrompt.timer * 0.1) * 0.3 + 0.7;
+
+        // 5秒后自动隐藏
+        if (this.exclamationPrompt.timer >= this.exclamationPrompt.maxTimer) {
+            this.hideExclamationPrompt();
+        }
+    }
+
+    // 绘制感叹号提示
+    drawExclamationPrompt() {
+        if (!this.exclamationPrompt.show || !this.exclamationPrompt.image) return;
+
+        const ctx = this.ctx;
+        const x = this.exclamationPrompt.x;
+        const y = this.exclamationPrompt.y;
+        const phase = this.exclamationPrompt.animationPhase;
+
+        // 保存当前状态
+        ctx.save();
+
+        // 绘制point.png图片，使用呼吸效果
+        const size = 32 * phase; // 呼吸缩放效果
+        ctx.drawImage(
+            this.exclamationPrompt.image,
+            x + this.player.size.x, // 右上角
+            y - 10, // 悬浮在头顶
+            size,
+            size
+        );
+
+        // 恢复状态
+        ctx.restore();
+    }
+
     async update(delta) {
         const debug = true; // 调试开关
         if (debug && !this.debugListenerAdded) {
@@ -370,10 +452,14 @@ class game {
                         this.ctx.fillRect(0, 0, this.width, this.height);
                     }
                 }
+                if (this.canmove) {
+                    this.expmanager.update(16);
+                    this.expmanager.draw(this.ctx);
+                }
                 await this.enemymanager.update();
                 await this.enemy2manager.update();
                 await this.mapmanager.drawPortals();
-                await this.mapmanager.drawhp();
+                //                await this.mapmanager.drawhp();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
                 if (this.cg == false) {
@@ -395,6 +481,7 @@ class game {
                 }
 
                 await this.entitymanager.update();
+                this.hp.drawblood();
                 await this.entitymanager.checkCollision();
                 if (this.boss) {
                     console.log('boss!!!');
@@ -409,8 +496,14 @@ class game {
                 // 更新HP系统（包括动画和粒子）
                 this.hp.update(16.6667);
 
+                // 更新感叹号提示
+                this.updateExclamationPrompt();
+
                 // 绘制血条，放在最后，保证在最上层
                 this.hp.draw(this.ctx, this.width, this.height);
+
+                // 绘制感叹号提示（在血条之上）
+                this.drawExclamationPrompt();
                 break;
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
@@ -429,11 +522,15 @@ class game {
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
                 this.entitymanager.drawPlayer();
+                this.hp.drawblood();
 
                 // 更新HP系统（暂停时也需要更新动画）
                 this.hp.update(16.6667);
 
                 this.hp.draw(this.ctx, this.width, this.height);
+
+                // 绘制感叹号提示
+                this.drawExclamationPrompt();
                 break;
             case "over":
                 console.log("游戏结束");
@@ -454,8 +551,11 @@ class game {
 
                 // 绘制死亡状态的玩家（在地图和敌人之上）
                 this.entitymanager.drawDeadPlayer();
+                this.hp.drawblood();
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
+                this.hp.update(16.67);
+                this.hp.draw(this.ctx, this.width, this.height);
                 // 绘制游戏结束遮罩和文字（在最上层）
                 this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
                 this.ctx.fillRect(0, 0, this.view.width, this.view.height);
@@ -475,6 +575,10 @@ class game {
                     this.view.width / 2,
                     this.view.height / 2 + 40
                 );
+
+                // 绘制感叹号提示
+                this.drawExclamationPrompt();
+
                 if (this.inputmanager.takeEnter()) {
                     await this.savemanager.load();
                     this.hp.reset();

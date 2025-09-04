@@ -98,12 +98,12 @@ class entitymanager {
         entitymanager.pre = ps;
     }
 
-    gethurt(x = 1) {
+    async gethurt(x = 1) {
         let now = Date.now();
         if (now >= entitymanager.safeUntil) {
             if (this.game.hp) this.game.hp.decrease(x, 20, 20);
             entitymanager.safeUntil = now + 3000; // 3秒无敌
-            this.game.hp.createBloodParticles(10, this.game.player.position.x, this.game.player.position.y);
+            await this.game.hp.createBloodParticles(10, this.game.player.position.x, this.game.player.position.y);
         }
     }
 
@@ -365,6 +365,8 @@ class entitymanager {
         const now = Date.now();
 
         for (let enemy of this.game.enemymanager.enemies) {
+            let now = Date.now();
+            if (now < enemy.born) continue;
             const rect = enemy.rect;
             const enemyBottom = rect.position.y + rect.size.y;
             const enemyRight = rect.position.x + rect.size.x;
@@ -390,6 +392,7 @@ class entitymanager {
                     this.game.boss.gethurt(3);
                     this.game.boss.HP.update();
                 }
+                this.game.hp.createBloodParticles(10, rect.position.x, rect.position.y);
                 this.game.soundmanager.playOnce("enemydeath");
                 entitymanager.vy = -10;
                 if (this.game.achievements)
