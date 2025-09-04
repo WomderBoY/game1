@@ -97,7 +97,13 @@ class DrawManager {
             let k = o - 1;
             if (this.game.changetimes % 2 == 0) ++k;
             if (k >= 0) {
-                ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
+                // 支持平铺模式，默认启用平铺
+                const defaultTiling = tile.tiling !== false;
+                if (defaultTiling) {
+                    this.drawNinePatch(ctx, tile.img[k], tile.x, tile.y, tile.w, tile.h);
+                } else {
+                    ctx.drawImage(tile.img[k], tile.x, tile.y, tile.w, tile.h);
+                }
             }
             // }
             // else if (
@@ -158,9 +164,11 @@ class DrawManager {
         // 设置透明度
         ctx.globalAlpha = 0.6;
 
-        // 绘制原始图片作为虚化效果
+        // 绘制原始图片作为虚化效果，支持默认平铺模式
         if (fratile.img && fratile.img[0]) {
-            if (fratile.tiling) {
+            // 默认启用平铺模式，除非明确设置为 false
+            const defaultTiling = fratile.tiling !== false;
+            if (defaultTiling) {
                 this.drawNinePatch(ctx, fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
             } else {
                 ctx.drawImage(fratile.img[0], fratile.x, fratile.y, fratile.w, fratile.h);
@@ -201,9 +209,11 @@ class DrawManager {
         // 设置透明度
         ctx.globalAlpha = 0.6;
 
-        // 绘制原始图片作为虚化效果
+        // 绘制原始图片作为虚化效果，支持默认平铺模式
         if (movetile.img && movetile.img[0]) {
-            if (movetile.tiling) {
+            // 默认启用平铺模式，除非明确设置为 false
+            const defaultTiling = movetile.tiling !== false;
+            if (defaultTiling) {
                 this.drawNinePatch(ctx, movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
             } else {
                 ctx.drawImage(movetile.img[0], movetile.x, movetile.y, movetile.w, movetile.h);
