@@ -391,7 +391,7 @@ class DiveBoss {
             && player.position.x + player.size.x >= this.rect.position.x
             && player.position.x <= this.rect.position.x + this.rect.size.x
         ) {
-            this.hp.decrease();
+            this.hp.decrease(); 
             entitymanager.vy = -10;
             if (this.hp.isDead()) {
                 this.dead = true;

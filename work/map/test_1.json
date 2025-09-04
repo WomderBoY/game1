@@ -71,7 +71,7 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "changemap",
-					"target": "../map/bgtest.json",
+					"target": "../map/jiaoxue1.json",
 					"way": "negative",
 					"with": {
 						"images": [
@@ -102,7 +102,7 @@ _jsonCallback({
 					"way": "negative",
 					"x": 50,
 					"y": 90,
-					"target": "../map/bg-map1.json",
+					"target": "../map/jiaoxue1.json",
 					"with": {
 						"type": "cg",
 						"way": "negative",
@@ -138,9 +138,8 @@ _jsonCallback({
 				"y": 300,
 				"w": 30,
 				"h": 30,
-				"speed": 2,
-				"attackRange":150, 
-				"dashSpeed":5
+				"attackRange":500, 
+				"dashSpeed":12
 			}
 		],
 		"bagua": [

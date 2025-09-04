@@ -343,6 +343,7 @@ class entitymanager {
                 if (e.event.way == "tunnal") {
                     console.log("tunnal事件触发", e.event);
                     this.game.eventmanager.add(e.event);
+                    e.event.way="negative";  //我在这直接修改他的属性，这样就不会一直触发
                 } else {
                     const press = this.game.inputmanager.takeEnter();
                     if (press) {
