@@ -140,7 +140,7 @@ class DrawManager {
         }
     }
 
-    // 绘制虚化的有血量方块
+        // 绘制虚化的有血量方块
     drawPhantomTile(tile) {
         const ctx = this.game.ctx;
         ctx.save();
@@ -173,21 +173,17 @@ class DrawManager {
             //         ctx.drawImage(tile.img[imgIndex], tile.x, tile.y, tile.w, tile.h);
             //     }
             // }
+        } else {
+            // 无生命值的普通图片方块
+            if (tile.img && tile.img[0]) {
+                // 绘制图片作为虚化效果
+                if (tile.tiling) {
+                    this.drawNinePatch(ctx, tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                } else {
+                    ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
+                }
+            }
         }
-        // else {
-        //     // 无生命值的普通图片方块
-        //     if (atk && this.game.mapmanager.loadingatk()) {
-        //         // 攻击状态下的不稳定效果
-        //         if (this.game.gameFrame % 2 == 1 && tile.img[0]) {
-        //             ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
-        //         }
-        //     } else if (tile.img[0]) {
-        //         // 正常状态
-        //         ctx.drawImage(tile.img[0], tile.x, tile.y, tile.w, tile.h);
-        //     }
-        // }
-
-        // 移除虚化边框，保持完全透明的效果
 
         ctx.restore();
     }
