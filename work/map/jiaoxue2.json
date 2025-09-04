@@ -40,7 +40,7 @@ _jsonCallback({
                 "event": {
 					"type": "changemap",
 					"way": "tunnal",
-					"target": "../map/jiaoxue2.json",
+					"target": "../map/bg-map1.json",
 				},
 				"col": false
 			},
@@ -118,7 +118,7 @@ _jsonCallback({
         
 		"bagua": [],
 
-		"background": "../images/lib2.png"
+		"background": "../images/jiaoxuebg.jpg"
 	},
     "yin": {
 		"tileMap": [],
