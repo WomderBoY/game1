@@ -101,6 +101,49 @@
             </ul>
         </div>
     </div>
+
+    <!-- 游戏设置弹窗 (默认隐藏) -->
+    <div id="settings-modal" class="hidden">
+        <div class="modal-content settings-content">
+            <span class="modal-close-btn" id="settings-close-btn">&times;</span>
+            <h2>游戏设置</h2>
+
+            <!-- 音频设置区域 -->
+            <div class="settings-section">
+                <h3>音频设置</h3>
+
+                <!-- 背景音乐音量 -->
+                <div class="volume-control">
+                    <label for="main-bgm-volume-slider" class="volume-label">背景音乐音量</label>
+                    <div class="volume-container">
+                        <input type="range" id="main-bgm-volume-slider" class="volume-slider" min="0" max="100"
+                            value="50" step="5">
+                        <span id="main-bgm-volume-value" class="volume-value">50%</span>
+                    </div>
+                </div>
+
+                <!-- 音效音量 -->
+                <div class="volume-control">
+                    <label for="sfx-volume-slider" class="volume-label">音效音量</label>
+                    <div class="volume-container">
+                        <input type="range" id="sfx-volume-slider" class="volume-slider" min="0" max="100" value="50"
+                            step="5">
+                        <span id="sfx-volume-value" class="volume-value">50%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 游戏设置区域 -->
+            <div class="settings-section">
+                <h3>游戏设置</h3>
+
+                <!-- 其他设置可以在这里添加 -->
+                <div class="setting-item">
+                    <label class="setting-label">更多设置即将推出...</label>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="./work/js/bgmmanager.js"></script>
     <script src="./src/auth/auth.js"></script>
     <script>

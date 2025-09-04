@@ -9,6 +9,8 @@ class BGMManager {
         this.tracks = [];
         // 当前正在播放的音轨索引
         this.current = null;
+        // BGM音量，默认为0.5
+        this.volume = 0.5;
     }
 
     // 添加一首 BGM
@@ -16,6 +18,7 @@ class BGMManager {
         // 创建一个 Audio 对象，并开启循环播放
         let audio = new Audio(src);
         audio.loop = true;
+        audio.volume = this.volume; // 应用当前音量设置
         // 把这个音频对象放到 tracks 列表里
         this.tracks.push(audio);
     }
@@ -45,6 +48,32 @@ class BGMManager {
             this.tracks[this.current].pause();
             this.tracks[this.current].currentTime = 0;
             this.current = null;
+        }
+    }
+
+    // 设置BGM音量
+    setVolume(volume) {
+        this.volume = Math.max(0, Math.min(1, volume)); // 限制在0-1之间
+
+        // 更新所有音轨的音量
+        for (let track of this.tracks) {
+            track.volume = this.volume;
+        }
+
+        // 保存到本地存储
+        localStorage.setItem('bgmVolume', this.volume.toString());
+    }
+
+    // 获取当前BGM音量
+    getVolume() {
+        return this.volume;
+    }
+
+    // 从本地存储加载音量设置
+    loadVolumeSettings() {
+        const savedVolume = localStorage.getItem('bgmVolume');
+        if (savedVolume !== null) {
+            this.volume = parseFloat(savedVolume);
         }
     }
 }
