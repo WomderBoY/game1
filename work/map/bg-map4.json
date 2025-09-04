@@ -31,11 +31,11 @@ _jsonCallback({
                     215
                 ],
                 "img": [
-                    "../images/vine5.png",
-                    "../images/vine4.png",
-                    "../images/vine3.png",
-                    "../images/vine2.png",
-                    "../images/vine1.png"
+                    "../images/fratile5.png",
+                    "../images/fratile4.png",
+                    "../images/fratile3.png",
+                    "../images/fratile2.png",
+                    "../images/fratile1.png"
                 ],
                 "hp": 4,
                 "tiling": true,
@@ -48,11 +48,11 @@ _jsonCallback({
                     181
                 ],
                 "img": [
-                    "../images/vine5.png",
-                    "../images/vine4.png",
-                    "../images/vine3.png",
-                    "../images/vine2.png",
-                    "../images/vine1.png"
+                    "../images/fratile5.png",
+                    "../images/fratile4.png",
+                    "../images/fratile3.png",
+                    "../images/fratile2.png",
+                    "../images/fratile1.png"
                 ],
                 "hp": 3,
                 "tiling": true,
@@ -231,11 +231,11 @@ _jsonCallback({
                 ],
                 "col": true,
                 "img": [
-                    "../images/vine5.png",
-                    "../images/vine4.png",
-                    "../images/vine3.png",
-                    "../images/vine2.png",
-                    "../images/vine1.png"
+                    "../images/fratile5.png",
+                    "../images/fratile4.png",
+                    "../images/fratile3.png",
+                    "../images/fratile2.png",
+                    "../images/fratile1.png"
                 ],
                 "hp": 3,
                 "tiling": true,
