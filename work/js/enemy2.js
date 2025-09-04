@@ -223,9 +223,9 @@ class Enemy2 {
                     this.spawnExplosionParticles(420);
                 }
                 this.particles.forEach(p => p.draw(ctx));
-                return ;
+                return;
             }
-            else return ;
+            else return;
         } else if (this.dead) {
             return;
         }
@@ -257,7 +257,7 @@ class Enemy2 {
 
         ctx.restore();
 
-        
+
     }
 }
 

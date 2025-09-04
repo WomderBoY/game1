@@ -47,9 +47,9 @@ class game {
         this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
         this.expmanager = new Expmanager(this);
-//        this.expmanager.addexp(100, 100, 100, 100);
-  //      this.expmanager.addexp(500, 500, 100, 100);
-        
+        //        this.expmanager.addexp(100, 100, 100, 100);
+        //      this.expmanager.addexp(500, 500, 100, 100);
+
         await this.soundmanager.init();
         let s1 = await this.datamanager.loadSpritesheet("ying-data.json");
         let s2 = await this.datamanager.loadSpritesheet("yang-right-0.json");
@@ -329,7 +329,7 @@ class game {
             }, 100);
         });
     }
-    
+
     async update(delta) {
         const debug = true; // 调试开关
         if (debug && !this.debugListenerAdded) {
@@ -381,7 +381,7 @@ class game {
                 await this.enemymanager.update();
                 await this.enemy2manager.update();
                 await this.mapmanager.drawPortals();
-//                await this.mapmanager.drawhp();
+                //                await this.mapmanager.drawhp();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
                 if (this.cg == false) {

@@ -140,7 +140,7 @@ class DrawManager {
         }
     }
 
-        // 绘制虚化的有血量方块
+    // 绘制虚化的有血量方块
     drawPhantomTile(tile) {
         const ctx = this.game.ctx;
         ctx.save();
@@ -401,39 +401,39 @@ class DrawManager {
                 let o = tile.hp - Math.floor(this.game.changetimes / 2);
                 if (o > 0) {
                     let k = o - 1;
-                    if (tile.tiling== true) {
+                    if (tile.tiling == true) {
                         this.drawNinePatch(ctx, tile.img[k], x, y, w, h);
                     } else {
                         ctx.drawImage(tile.img[k], x, y, w, h);
                     }
                 }
-            // } else if (
-            //     this.game.mapmanager.hurt() &&
-            //     Math.floor(this.game.changetimes / 2) < tile.hp
-            // ) {
-            //     console.warn(
-            //         tile.hp,
-            //         tile.hp - Math.floor(this.game.changetimes / 2)
-            //     );
-            //     const imgIndex = Math.max(
-            //         0,
-            //         tile.hp - Math.floor(this.game.changetimes / 2)
-            //     );
-            //     if (this.game.mapmanager.starthurt()) {
-            //         this.game.expmanager.addexp(x, y, w, h);
-            //     }
-            //     if (tile.tiling) {
-            //         this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
-            //     } else {
-            //         ctx.drawImage(tile.img[imgIndex], x, y, w, h);
-            //     }
+                // } else if (
+                //     this.game.mapmanager.hurt() &&
+                //     Math.floor(this.game.changetimes / 2) < tile.hp
+                // ) {
+                //     console.warn(
+                //         tile.hp,
+                //         tile.hp - Math.floor(this.game.changetimes / 2)
+                //     );
+                //     const imgIndex = Math.max(
+                //         0,
+                //         tile.hp - Math.floor(this.game.changetimes / 2)
+                //     );
+                //     if (this.game.mapmanager.starthurt()) {
+                //         this.game.expmanager.addexp(x, y, w, h);
+                //     }
+                //     if (tile.tiling) {
+                //         this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
+                //     } else {
+                //         ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+                //     }
             } else if (Math.floor(this.game.changetimes / 2) <= tile.hp
-                    && this.game.mapmanager.hurt()) {
+                && this.game.mapmanager.hurt()) {
                 if (this.game.mapmanager.starthurt()) {
                     this.game.expmanager.addexp(x, y, w, h);
                 }
                 if (this.game.gameFrame % 2 == 1) {
-                     const imgIndex = Math.max(
+                    const imgIndex = Math.max(
                         0,
                         tile.hp - Math.floor(this.game.changetimes / 2)
                     );
@@ -515,9 +515,9 @@ class DrawManager {
     drawPixelLava(ctx, x, y, w, h) {
         // 更美观的像素风配色方案
         const colors = {
-            deep: "#1A0A0A",    // 深黑红
-            dark: "#2D0F0F",    // 深红
-            medium: "#5C1A1A",  // 中深红
+            deep: "#FF6347",    // 深黑红
+            dark: "#CD5C5C",    // 深红
+            medium: "#FFD700",  // 中深红
             bright: "#8B2C2C",  // 中红
             hot: "#CD5C5C",     // 亮红
             orange: "#FF6347",  // 橙红
