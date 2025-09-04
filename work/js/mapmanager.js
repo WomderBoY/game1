@@ -376,7 +376,14 @@ class mapmanager {
                 i.tiling
             );
         } else {
-            tile = new Tile(x, y, w, h, i.hp, img, i.event, i.tiling);
+            const defaultTiling = i.tiling !== false; // 如果未设置或设置为 true，则默认为 true
+            // 如果没有指定图片，使用默认的 test1.png
+            let defaultImg = img;
+            if (!img || img.length === 0) {
+                defaultImg = [await this.game.datamanager.loadImg("../images/tile.png")];
+            }
+            
+            tile = new Tile(x, y, w, h, i.hp, defaultImg, i.event, defaultTiling);
         }
         // 把 overlayImg 存进去
         //调试图片是否加载出来

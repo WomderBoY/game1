@@ -57,9 +57,7 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				"img": [
-					"../images/test1.png"
-				],
+				
 				"tiling": true
 			},
 			{
@@ -70,9 +68,7 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				"img": [
-					"../images/test1.png"
-				],
+				
 				"tiling": true
 			},
 			{
@@ -83,9 +79,7 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				"img": [
-					"../images/test1.png"
-				],
+				
 				"tiling": true
 			},
 			{
@@ -96,9 +90,7 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				"img": [
-					"../images/test1.png"
-				],
+				
 				"tiling": true
 			},
 			{
@@ -109,9 +101,7 @@ _jsonCallback({
 					45
 				],
 				"col": true,
-				"img": [
-					"../images/test1.png"
-				],
+				
 				"tiling": true
 			},
 			{
@@ -129,9 +119,9 @@ _jsonCallback({
 					"target": "../map/bg-map2.json"
 				},
 				"col": false,
-				"img": [
-					"../images/test1.png"
-				],
+				// "img": [
+				// 	"../images/test1.png"
+				// ],
 				"tiling": true
 			},
 			{
@@ -155,9 +145,7 @@ _jsonCallback({
 					40
 				],
 				"col": true,
-				"img": [
-					"../images/test1.png"
-				],
+				
 				"tiling": true
 			},
 			{
