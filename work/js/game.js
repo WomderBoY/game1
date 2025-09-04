@@ -46,6 +46,10 @@ class game {
         this.cgmanager = new CGManager(this);
         this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
+        this.expmanager = new Expmanager(this);
+//        this.expmanager.addexp(100, 100, 100, 100);
+  //      this.expmanager.addexp(500, 500, 100, 100);
+        
         await this.soundmanager.init();
         let s1 = await this.datamanager.loadSpritesheet("ying-data.json");
         let s2 = await this.datamanager.loadSpritesheet("yang-right-0.json");
@@ -325,7 +329,7 @@ class game {
             }, 100);
         });
     }
-
+    
     async update(delta) {
         const debug = true; // 调试开关
         if (debug && !this.debugListenerAdded) {
@@ -370,10 +374,14 @@ class game {
                         this.ctx.fillRect(0, 0, this.width, this.height);
                     }
                 }
+                if (this.canmove) {
+                    this.expmanager.update(16);
+                    this.expmanager.draw(this.ctx);
+                }
                 await this.enemymanager.update();
                 await this.enemy2manager.update();
                 await this.mapmanager.drawPortals();
-                await this.mapmanager.drawhp();
+//                await this.mapmanager.drawhp();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
                 if (this.cg == false) {
@@ -459,6 +467,8 @@ class game {
                 this.hp.drawblood();
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
+                this.hp.update(16.67);
+                this.hp.draw(this.ctx, this.width, this.height);
                 // 绘制游戏结束遮罩和文字（在最上层）
                 this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
                 this.ctx.fillRect(0, 0, this.view.width, this.view.height);
