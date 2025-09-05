@@ -47,6 +47,16 @@ _jsonCallback({
 			},
 			{
 				"hitbox": [
+					1000,
+					150,
+					40,
+					525
+				],
+				"col": true,
+				"tiling": true
+			},
+			{
+				"hitbox": [
 					1180,
 					550,
 					800,
@@ -54,6 +64,19 @@ _jsonCallback({
 				],
 				"col": true,
 				"tiling": true
+			},
+			{
+				"hitbox": [
+					1000,
+					110,
+					40,
+					40
+				],
+				"event": {
+					"type": "kill-2", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
 			},
 			{
 				"hitbox": [
@@ -98,33 +121,32 @@ _jsonCallback({
 				"col": true,
 				"tiling": true
 			},
+			// {
+			// 	"hitbox": [
+			// 		777,
+			// 		551,
+			// 		250,
+			// 		80
+			// 	],
+			// 	//	"hp":1,
+			// 	"fra": true,
+			// 	"col": true,
+			// 	"img": [
+			// 		"../images/fratile1.png"
+			// 	],
+			// 	"tiling": true
+			// },
 			{
 				"hitbox": [
-					777,
-					551,
-					250,
-					80
-				],
-				//	"hp":1,
-				"fra": true,
-				"col": true,
-				"img": [
-					"../images/fratile1.png"
-				],
-				"tiling": true
-			},
-			{
-				"hitbox": [
-					1000,
-					200,
+					400,
+					60,
 					80,
-					10
+					40
 				],
-				//	"hp":1,
 				"move": true,
 				"area": [
-					500,
-					1000,
+					400,
+					1100,
 					-1,
 					-1
 				],
@@ -139,15 +161,13 @@ _jsonCallback({
 		],
 		"enemy": [],
 		"bagua": [],
-		"background": "../images/lib2.png",
-		
+		"background": "../images/bg.png",
 	},
 	"yin": {
 		"tileMap": [],
 		"enemy": [],
 		"bagua": [],
 		"background": ""
-	},
-	"Boss":true
+	}
 }
 )
