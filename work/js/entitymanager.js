@@ -143,12 +143,6 @@ class entitymanager {
             this.game.soundmanager.playOnce("change", 1, 1); //触发太极音效
         }
 
-        if (ky.change && this.game.gameFrame - this.rre >= 200) {
-            ga.env = ga.env === "yin" ? "yang" : "yin";
-            this.rre = this.game.gameFrame;
-            ++this.game.changetimes;
-            this.game.mapmanager.sethurt();
-        }
         //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
         let vx = entitymanager.vx;
