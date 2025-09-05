@@ -646,23 +646,6 @@ drawSpikes(ctx, x, y, w, h) {
             HP[env][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
         }
 
-        // 绘制相反环境的虚化血量条
-        // let oppositeEnv = env === "yang" ? "yin" : "yang";
-        // if (collidable[oppositeEnv] && HP[oppositeEnv]) {
-        //     for (let j = 0; j < collidable[oppositeEnv].length; ++j) {
-        //         let p = collidable[oppositeEnv][j];
-        //         if (!p.hp || !p.alive(this.game)) continue;
-        //         if (!this.game.inputmanager.isOver(p.x, p.y, p.w, p.h)) {
-        //             continue;
-        //         }
-        //         let o = p.hp - Math.floor(this.game.changetimes / 2);
-        //         if (o > 0) { // 只显示还有生命值的虚化方块的血量条
-        //             console.warn("draw phantom hp p = ", p, "HP = ", HP[oppositeEnv][j]);
-        //             HP[oppositeEnv][j].sethp(o);
-        //             HP[oppositeEnv][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
-        //         }
-        //     }
-        // }
     }
 
     // 绘制传送门
