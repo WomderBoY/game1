@@ -195,7 +195,7 @@ class DiveBoss {
                 //这里加一个事件，让玩家传送到下一个关卡
                 this.game.eventmanager.add({ 
                     type: "changemap", 
-                    target: "../map/bg-map1.json", 
+                    target: "../map/bg-map4.json", 
                     x: 0, 
                     y: 0 }, true);
 
