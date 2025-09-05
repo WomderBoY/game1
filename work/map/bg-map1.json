@@ -162,14 +162,12 @@ _jsonCallback({
 		"enemy": [],
 		"bagua": [],
 		"background": "../images/bg.png",
-		"boss":true
 	},
 	"yin": {
 		"tileMap": [],
 		"enemy": [],
 		"bagua": [],
 		"background": ""
-	},
-	"Boss":true
+	}
 }
 )

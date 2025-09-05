@@ -315,6 +315,10 @@ class entitymanager {
 
         // 边界限制
         if (ga.player.position.x < 0) ga.player.position.x = 0;
+        if (ga.player.position.y < 0) {
+            ga.player.position.y = 0;
+            vy = 0;
+        }
         if (ga.player.position.x + ga.player.size.x > ga.width)
             ga.player.position.x = ga.width - ga.player.size.x;
         if (ga.player.position.y + ga.player.size.y > ga.height) {
