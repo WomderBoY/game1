@@ -25,33 +25,54 @@ const DEFAULT_LEVELS_CONFIG = {
             "order": 3
         },
         {
-            "id": "bg_map1",
-            "file": "../map/bg-map1.json", 
-            "name": "第一关",
+            "id": "jiaoxue1", 
+            "file": "../map/jiaoxue2.json",
+            "name": "教学关卡2",
             "unlocked": false,
             "order": 4
         },
         {
-            "id": "bg_map2",
-            "file": "../map/bg-map2.json",
-            "name": "第二关", 
+            "id": "bg_map1",
+            "file": "../map/bg-map1.json", 
+            "name": "第一关",
             "unlocked": false,
             "order": 5
         },
         {
-            "id": "bg_map3",
-            "file": "../map/bg-map3.json",
-            "name": "第三关",
-            "unlocked": false, 
+            "id": "zhengshi_2",
+            "file": "../map/zhengshi_2.json",
+            "name": "第二关", 
+            "unlocked": false,
             "order": 6
         },
         {
-            "id": "bg_map4",
-            "file": "../map/bg-map4.json",
+            "id": "bg-map2",
+            "file": "../map/bg-map2.json",
+            "name": "第三关",
+            "unlocked": false, 
+            "order": 7
+        },
+        {
+            "id": "bg-map3",
+            "file": "../map/bg-map3.json",
             "name": "第四关",
             "unlocked": false,
-            "order": 7
-        }
+            "order": 8
+        },
+        {
+            "id": "bg4", 
+            "file": "../map/bg4.json",
+            "name": "第五关",
+            "unlocked": false,
+            "order": 9
+        },
+        {
+            "id": "bg-map4", 
+            "file": "../map/bg-map4.json",
+            "name": "第六关",
+            "unlocked": false,
+            "order": 10
+        },
     ],
     "defaultUnlocked": ["test_1"],
     "version": "1.0"
