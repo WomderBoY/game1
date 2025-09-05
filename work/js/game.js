@@ -162,14 +162,38 @@ class game {
 
     // 解锁关卡系统
     unlockNextLevel(currentLevel) {
-        const levelOrder = [
-            "../map/test_1.json",
-            "../map/test_2.json",
-            "../map/bg-map1.json",
-            "../map/bg-map2.json",
-            "../map/bg-map3.json",
-            "../map/bg-map4.json",
-        ];
+        // 从关卡配置文件获取关卡顺序
+        let levelOrder = [];
+        
+        // 尝试从localStorage获取关卡配置（如果关卡选择界面已经加载过）
+        const levelsConfig = localStorage.getItem('levelsConfig');
+        if (levelsConfig) {
+            try {
+                const config = JSON.parse(levelsConfig);
+                levelOrder = config.levels.map(level => level.file);
+            } 
+            catch (e) {
+                console.warn('解析关卡配置失败，使用默认顺序');
+                levelOrder = [
+                    "../map/test_1.json",
+                    "../map/test_2.json",
+                    "../map/bg-map1.json",
+                    "../map/bg-map2.json",
+                    "../map/bg-map3.json",
+                    "../map/bg-map4.json",
+                ];
+            }
+        } else {
+            // 如果还没有配置，使用默认顺序
+            levelOrder = [
+                "../map/test_1.json",
+                "../map/test_2.json",
+                "../map/bg-map1.json",
+                "../map/bg-map2.json",
+                "../map/bg-map3.json",
+                "../map/bg-map4.json",
+            ];
+        }
         const currentIndex = levelOrder.indexOf(currentLevel);
 
         console.log(`=== 关卡解锁调试 ===`);
@@ -359,9 +383,6 @@ class game {
         this.exclamationPrompt.y = y;
         this.exclamationPrompt.timer = 0;
         this.exclamationPrompt.animationPhase = 0;
-
-        // 添加回车键监听事件
-        this.addEnterKeyListener();
     }
 
     // 隐藏感叹号提示
