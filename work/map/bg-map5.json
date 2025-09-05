@@ -1,0 +1,114 @@
+_jsonCallback({
+    "born":[94, 500],
+    "yang":{
+        "tileMap":[
+            {
+                "hitbox":[94, 598, 146, 160],
+                "col":true,
+            },
+            {
+                "hitbox":[278, 601, 660, 30],
+                "col":true,
+                "fra":true,
+                "img":["../images/hitbox.png"],
+            },
+            {
+                "hitbox":[1006, 469, 200, 60],
+                "col":true,
+            },
+            {
+                "hitbox":[469, 393, 250, 40],
+                "col":true,
+                "move":true,
+                "vx":2,
+                "vy":0,
+                "area":[122, 991, -1, -1],
+                "img":["../images/hitbox.png"],
+            },
+            {
+                "hitbox":[474, 78, 120, 30],
+                "col":true,
+            }
+        ],
+        "enemy":[
+            {
+                "x":1006,
+                "y":400,
+                "w":30,
+                "h":30,
+                "speed":3,
+            },
+            {
+                "x":469,
+                "y":350,
+                "w":30, "h":30,
+                "speed":3,
+            },
+            {
+                "x":479,
+                "y":40,
+                "w":30, "h":30,
+                "speed":3,
+            },
+            {
+                "x":489,
+                "y":40,
+                "w":30, "h":30,
+                "speed":3,
+                "type":true,
+            },
+            {
+                "x":499,
+                "y":40,
+                "w":30, "h":30,
+                "speed":3,
+            },
+            {
+                "x":510,
+                "y":40,
+                "w":30, "h":30,
+                "speed":3,
+                "type":true,
+            },
+            {
+                "x":500,
+                "y":40,
+                "w":30, "h":30,
+                "speed":3,
+            }
+        ],
+        "bagua":[
+            {
+                "hitbox":[69, 288, 50, 50],
+            }
+        ]
+    },
+    "yin":{
+        "tileMap":[
+            {
+                "hitbox":[424, 170, 240, 50],
+                "col":true,
+                "move":true,
+                "area":[430, 1128, -1, -1],
+                "vx":2,
+                "vy":0,
+                "img":["../images/hitbox.png"],
+            },
+            {
+                "hitbox":[127, 303, 120, 40],
+                "col":true,
+            },
+            {
+                "hitbox":[1200, 20, 50, 50],
+                "event":{
+                    "type":"changemap",
+                    "way":"tunnal",
+                    "target":"../map/bg-map4.json",
+                },
+                "col":false,
+            }
+        ],
+        "enemy":[],
+        "bagua":[],
+    }
+})
