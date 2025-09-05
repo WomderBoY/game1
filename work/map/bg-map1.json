@@ -169,6 +169,7 @@ _jsonCallback({
 		"enemy": [],
 		"bagua": [],
 		"background": ""
-	}
+	},
+	"Boss":true
 }
 )
