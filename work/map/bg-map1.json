@@ -140,13 +140,14 @@ _jsonCallback({
 		"enemy": [],
 		"bagua": [],
 		"background": "../images/lib2.png",
-		"boss":true
+		
 	},
 	"yin": {
 		"tileMap": [],
 		"enemy": [],
 		"bagua": [],
 		"background": ""
-	}
+	},
+	"Boss":true
 }
 )
