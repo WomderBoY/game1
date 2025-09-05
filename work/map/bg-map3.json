@@ -63,6 +63,17 @@ _jsonCallback({
             },
             {
                 "hitbox": [
+                    0,
+                    700,
+                    1280,
+                    20
+                ],
+                "col": true,
+                
+                "tiling": true
+            },
+            {
+                "hitbox": [
                     338,
                     660,
                     50,
@@ -174,7 +185,7 @@ _jsonCallback({
         ],
         "enemy": [],
         "bagua": [],
-        "background": "",
+        "background": "../images/bg.png",
         "enemy2": [],
     },
     "yin": {

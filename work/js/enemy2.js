@@ -82,7 +82,7 @@ class Enemy2 {
 
     update(colliders) {
         let now = Date.now();
-        console.warn(this.born, now);
+ //       console.warn(this.born, now);
         if (now - this.born <= 3000) {
             console.warn('fuckyou!');
             return ;

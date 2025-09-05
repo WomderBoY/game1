@@ -143,12 +143,6 @@ class entitymanager {
             this.game.soundmanager.playOnce("change", 1, 1); //触发太极音效
         }
 
-        if (ky.envchange && this.game.gameFrame - this.rre >= 200) {
-            ga.env = ga.env === "yin" ? "yang" : "yin";
-            this.rre = this.game.gameFrame;
-            ++this.game.changetimes;
-            this.game.mapmanager.sethurt();
-        }
         //      console.log(this.game.gameFrame, this.re);
         // 用静态变量访问速度等
         let vx = entitymanager.vx;
@@ -168,16 +162,23 @@ class entitymanager {
         let lstjp = entitymanager.lstjp;
         let vxx = entitymanager.vxx;
         let vyy = entitymanager.vyy;
+        let prevX = this.px, prevY = this.py;
         entitymanager.vxx = 0;
         entitymanager.vyy = 0;
+        console.warn('vy = ', vy);
+        let dbg = false;
+        if (vy == -100) dbg = true;
         let fl = false;
         for (let p of ga.mapmanager.collidable[this.game.env])
             if (p instanceof Movetile) {
                 p.update(this.game)
             }
+            
+        if (dbg)
+            console.warn('vy = ', vy);
         for (let p of ga.mapmanager.tram) {
-            let prevX = ga.player.position.x - vx - vxx;
-            let prevY = ga.player.position.y - vy - vyy;
+            // let prevX = ga.player.position.x - vx - vxx;
+            // let prevY = ga.player.position.y - vy - vyy;
             if (ga.player.containsRect(p) && this.game.env != (this.game.yingyang ? 'yang' : 'yin')) {
                 p.update(prevX, prevY, vx, vy, ga);
                 vx = entitymanager.vx;
@@ -189,6 +190,8 @@ class entitymanager {
                 break;
             }
         }
+        if (dbg)
+            console.warn('vy = ', vy);
         if (!fl) {
             for (let j = 0; j < ga.mapmanager.collidable[this.game.env].length; ++j) {
                 let p =  ga.mapmanager.collidable[this.game.env][j];
@@ -198,17 +201,17 @@ class entitymanager {
                     continue;
                 }
                 
-                let prevX = ga.player.position.x - vx - vxx;
-                let prevY = ga.player.position.y - vy - vyy;
+                // let prevX = ga.player.position.x - vx - vxx;
+                // let prevY = ga.player.position.y - vy - vyy;
                 if (ga.player.containsRect(p)) {
    //                 console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
                     if (ga.mapmanager.atk[ga.env][j] && !ga.mapmanager.loadingatk()) {
                         this.gethurt();
                     }
-                    if (p instanceof Movetile) {
-                        prevX += p.vx;
-                        prevY += p.vy;
-                    }                
+                    // if (p instanceof Movetile) {
+                    //     prevX += p.vx;
+                    //     prevY += p.vy;
+                    // }                
 
                     // 上方碰撞
                     if (prevY + ga.player.size.y <= p.y) {
@@ -258,6 +261,9 @@ class entitymanager {
         }
 
         if (this.game.cg == false) this.drawPlayer();
+
+        this.px = ga.player.position.x;
+        this.py = ga.player.position.y;
 
         ga.player.position.x += vx + vxx;
 
@@ -359,7 +365,16 @@ class entitymanager {
         }
     }
 
-    checkCollision() {
+    updatevy(v) {
+        this.game.player.position.y -= entitymanager.vy;
+        entitymanager.vy = v;
+    }
+    updatevx(v) {
+        this.game.player.position.x -= entitymanager.vx;
+        entitymanager.vx = v;
+    }
+
+    async checkCollision() {
         const player = this.game.player;
         const playerPrevX = player.position.x - entitymanager.vx;
         const playerPrevY = player.position.y - entitymanager.vy;
@@ -398,16 +413,17 @@ class entitymanager {
                 }
                 this.game.hp.createBloodParticles(10, rect.position.x, rect.position.y);
                 this.game.soundmanager.playOnce("enemydeath");
-                entitymanager.vy = -10;
+                this.updatevy(-10);
                 if (this.game.achievements)
                     this.game.achievements.unlock("first_kill");
             } else {
                 // 扣血条件：阴阳相同 或 阴阳不同非踩头
-                this.gethurt();
-                entitymanager.vx = this.game.player.position.x < rect.position.x ? -15 : 15;
-                entitymanager.vy = -6;
+                this.updatevx(this.game.player.position.x < rect.position.x ? -15 : 15);
+                this.updatevy(-10);
                 entitymanager.isjp = true;
                 entitymanager.lstjp = 0;
+                console.warn('change vy = ', entitymanager.vy);
+                this.gethurt();
             }
         }
     }

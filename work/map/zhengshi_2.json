@@ -124,6 +124,42 @@ _jsonCallback({
                  "tiling": true
             },
             {
+				"hitbox": [
+					0,
+					80,
+					20,
+					20,
+				],
+                "event": {
+					"type": "dialog",
+					"way": "tunnal",
+					"text": [
+						"进入了古塔第二层",
+						"看来下面应该就是阴石召唤出的怪物",
+						"空中飘荡着诡异的火球，看来要小心一点",
+						"想办法去到下一层吧"
+					]
+				},
+				"col": false
+			},
+            {
+				"hitbox": [
+					20,
+					640,
+					30,
+					20
+				],
+				"event": {
+					"type": "changemap",
+					"way": "tunnal",
+					"x": 50,
+					"y": 90,
+					"target": "../map/bg-map2.json"
+				},
+				"col": false,
+				"tiling": true
+			},
+            {
                 "hitbox":[
                     550,
                     570,
@@ -154,18 +190,18 @@ _jsonCallback({
             {
 				"x": 1080,
 				"y": 325,
-				"w": 40,
-				"h": 40,
+				"w": 60,
+				"h": 60,
 				"attackRange":250, 
-				"dashSpeed":20
+				"dashSpeed":10
 			},
             {
 				"x": 1080,
 				"y": 125,
-				"w": 30,
-				"h": 30,
+				"w": 60,
+				"h": 60,
 				"attackRange":200, 
-				"dashSpeed":20
+				"dashSpeed":10
 			},
 			{
 				"x": 360,
@@ -178,8 +214,8 @@ _jsonCallback({
             {
 				"x": 750,
 				"y": 80,
-				"w": 30,
-				"h": 30,
+				"w": 50,
+				"h": 50,
 				"attackRange":220, 
 				"dashSpeed":20
 			}
