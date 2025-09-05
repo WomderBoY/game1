@@ -73,6 +73,13 @@ const DEFAULT_LEVELS_CONFIG = {
             "unlocked": false,
             "order": 10
         },
+        {
+            "id": "bg-map6", 
+            "file": "../map/bg-map6.json",
+            "name": "第七关",
+            "unlocked": false,
+            "order": 11
+        },
     ],
     "defaultUnlocked": ["test_1"],
     "version": "1.0"

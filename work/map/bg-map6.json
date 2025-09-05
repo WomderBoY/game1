@@ -149,7 +149,7 @@ _jsonCallback({
 				],
 			}
 		],
-		"background": "../images/hitbox.png"
+		"background": "../images/bg.png"
 	},
 	"yin": {
 		"tileMap": [
@@ -214,7 +214,7 @@ _jsonCallback({
 		],
 		"enemy": [],
 		"bagua": [],
-		"background": ""
+		"background": "../images/bg.png"
 	}
 }
 )

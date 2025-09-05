@@ -154,10 +154,10 @@ _jsonCallback({
             {
 				"x": 1080,
 				"y": 325,
-				"w": 30,
-				"h": 30,
+				"w": 40,
+				"h": 40,
 				"attackRange":250, 
-				"dashSpeed":10
+				"dashSpeed":20
 			},
             {
 				"x": 1080,
@@ -165,15 +165,15 @@ _jsonCallback({
 				"w": 30,
 				"h": 30,
 				"attackRange":200, 
-				"dashSpeed":10
+				"dashSpeed":20
 			},
 			{
 				"x": 360,
 				"y": 120,
-				"w": 30,
-				"h": 30,
+				"w": 70,
+				"h": 70,
 				"attackRange":180, 
-				"dashSpeed":10
+				"dashSpeed":20
 			},
             {
 				"x": 750,
@@ -181,7 +181,7 @@ _jsonCallback({
 				"w": 30,
 				"h": 30,
 				"attackRange":220, 
-				"dashSpeed":8
+				"dashSpeed":20
 			}
 		],
         "enemy": [
@@ -208,7 +208,7 @@ _jsonCallback({
 			}
         ],
         "bagua": [],
-        "background": ""
+        "background": "../images/bg.png"
     },
     "yin": {
         "tileMap": [],
