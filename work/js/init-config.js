@@ -46,39 +46,46 @@ const DEFAULT_LEVELS_CONFIG = {
             "order": 6
         },
         {
+            "id": "bg-map5", 
+            "file": "../map/bg-map5.json",
+            "name": "第三关",
+            "unlocked": false,
+            "order": 7
+        },
+        {
             "id": "bg-map2",
             "file": "../map/bg-map2.json",
-            "name": "第三关",
+            "name": "第四关",
             "unlocked": false, 
-            "order": 7
+            "order": 8
         },
         {
             "id": "bg-map3",
             "file": "../map/bg-map3.json",
-            "name": "第四关",
-            "unlocked": false,
-            "order": 8
-        },
-        {
-            "id": "bg4", 
-            "file": "../map/bg4.json",
             "name": "第五关",
             "unlocked": false,
             "order": 9
-        },
+        },  
         {
-            "id": "bg-map4", 
-            "file": "../map/bg-map4.json",
+            "id": "bg4", 
+            "file": "../map/bg4.json",
             "name": "第六关",
             "unlocked": false,
             "order": 10
+        },  
+        {
+            "id": "bg-map4", 
+            "file": "../map/bg-map4.json",
+            "name": "第七关",
+            "unlocked": false,
+            "order": 11
         },
         {
             "id": "bg-map6", 
             "file": "../map/bg-map6.json",
-            "name": "第七关",
+            "name": "第八关",
             "unlocked": false,
-            "order": 11
+            "order": 12
         },
     ],
     "defaultUnlocked": ["test_1"],
