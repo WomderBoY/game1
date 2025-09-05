@@ -8,10 +8,10 @@ _jsonCallback({
 			"../images/start1.jpg",
 			"../images/start2.jpg",
 			"../images/start3.jpg",
-			"../images/jiaoxue1.png"
+			"../images/jiaoxue1.jpg"
 		],
 		"text": [ //教学观死不了就先这样把
-			[
+			[	"提示：鼠标点击任意位置以播放声音，按Enter键继续",
 				"宗门名列江湖名门，隐于群山之间，门风清正，以守护阴阳二石为己任。相传二石乃天地孕育之至宝，阴石如夜，寒光幽冷；阳石如昼，炽烈明耀。二者合一，足以颠倒阴阳，逆转乾坤",
 				"因此自古以来，宗门代代以守护二石为天职，从不许外人染指。",
 				"你自幼入门，拜掌门为师，既是弟子，亦如子嗣。掌门德望兼备，门中弟子皆敬仰有加。",
@@ -41,7 +41,7 @@ _jsonCallback({
 				"hitbox": [
 					0,
 					700,
-					250,
+					1280,
 					40,
 				],
 				"col": true
@@ -114,7 +114,7 @@ _jsonCallback({
 						"type": "cg",
 						"way": "negative",
 						"images": [
-							"../images/jiaoxue2.png"
+							"../images/jiaoxue2.jpg"
 						],
 						"text": [
 							[
@@ -136,8 +136,10 @@ _jsonCallback({
 					"type": "dialog",
 					"way": "tunnal",
 					"text": [
+						"A/D键控制左右移动，W键跳跃",
 						"按下J健可以切换阴阳状态",
 						"其中阳形态的跳跃高度较高，阴形态的跑步速度极快",
+						"当出现感叹号时可按Enter键查看信息"
 					]
 				},
 				"col": false
