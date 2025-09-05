@@ -146,22 +146,22 @@ class BaguaManager {
     }
 
     update(player) {
-        // 更新感叹号提示
-        this.updateExclamationPrompt();
+        // // 更新感叹号提示
+        // this.updateExclamationPrompt();
 
-        // 如果感叹号显示且按下回车键，显示对话框
-        if (this.exclamationPrompt.show && this.game.inputmanager.takeEnter() && !this.exclamationPrompt.enterPressed) {
-            this.exclamationPrompt.enterPressed = true;
-            this.hideExclamationPrompt();
+        // // 如果感叹号显示且按下回车键，显示对话框
+        // if (this.exclamationPrompt.show && this.game.inputmanager.takeEnter() && !this.exclamationPrompt.enterPressed) {
+        //     this.exclamationPrompt.enterPressed = true;
+        //     this.hideExclamationPrompt();
 
-            // 显示对话框
-            this.game.eventmanager.add({
-                type: "dialog",
-                text: [
-                    "【旁白】在中央八卦阵按enter，将触发地图变化"
-                ]
-            });
-        }
+        //     // 显示对话框
+        //     this.game.eventmanager.add({
+        //         type: "dialog",
+        //         text: [
+        //             "【旁白】在中央八卦阵按enter，将触发地图变化"
+        //         ]
+        //     });
+        // }
 
         for (let b of this.baguas) {
             // 如果和玩家重叠，并且按下Enter，就切换环境

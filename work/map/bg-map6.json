@@ -1,0 +1,220 @@
+_jsonCallback({
+	"born":[155, 560],
+	"with":[],
+	"yang": {
+		"tileMap": [
+			{
+				"hitbox": [
+					0,
+					600,
+					310,
+					40
+				],
+				"col": true,
+				"img": [
+					"../images/hitbox.png"
+				]
+			},
+			{
+				"hitbox": [
+					155,
+					500,
+					155,
+					40
+				],
+				"col": true,
+				"img": [
+					"../images/hitbox.png"
+				]
+			},
+			{
+				"hitbox": [
+					155,
+					420,
+					155,
+					40
+				],
+				"col": true,
+				"img": [
+					"../images/hitbox.png"
+				]
+			},
+			{
+				"hitbox": [
+					155,
+					282,
+					155,
+					40
+				],
+				"col": true,
+				"img": [
+					"../images/hitbox.png"
+				]
+			},
+			{
+				"hitbox": [
+					155,
+					202,
+					155,
+					40
+				],
+				"col": true,
+				"img": [
+					"../images/hitbox.png"
+				]
+			},
+			{
+				"hitbox": [
+					155,
+					64,
+					155,
+					40
+				],
+				"col": true,
+				"img": [
+					"../images/hitbox.png"
+				]
+			},
+			{
+				"hitbox": [
+					350,
+					64,
+					40,
+					611
+				],
+				"col": true,
+				"img": [
+					"../images/hitbox.png"
+				]
+			},
+			{
+                "hitbox":[680, 198, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[680, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+                "hitbox":[730, 298, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[730, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+                "hitbox":[780, 398, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[780, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+                "hitbox":[830, 498, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[830, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+				"hitbox": [
+					0,
+					675,
+					2000,
+					75
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			}
+			
+		],
+		"enemy": [],
+		"bagua": [
+			{
+				"hitbox": [
+					830,
+					448,
+					50,
+					50
+				],
+			}
+		],
+		"background": "../images/hitbox.png"
+	},
+	"yin": {
+		"tileMap": [
+			{
+                "hitbox":[680, 198, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[680, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+                "hitbox":[730, 298, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[730, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+                "hitbox":[780, 398, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[780, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+                "hitbox":[830, 498, 81, 30],
+                "move":true,
+                "img":["../images/hitbox.png"],
+                "area":[830, 1030, -1, -1],
+                "vx":2,
+                "vy":0,
+                "col":true,
+            },
+			{
+				"hitbox": [
+					1060,
+					98,
+					220,
+					40
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					0,
+					675,
+					2000,
+					75
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			}
+		],
+		"enemy": [],
+		"bagua": [],
+		"background": ""
+	}
+}
+)

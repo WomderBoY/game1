@@ -34,6 +34,7 @@ class Enemy {
     }
 
     update(colliders) {
+        this.vyy = this.vxx = 0;
         let now = Date.now();
         if (now <= this.born) return;
         // === 水平方向运动 ===
@@ -61,6 +62,8 @@ class Enemy {
                 this.rect.position.y -= this.vy; // 回退
                 this.vy = 0; // 停止下落
                 this.onGround = true;
+                if (box instanceof Movetile)
+                    this.rect.position.x += box.vx;
                 break;
             }
         }
