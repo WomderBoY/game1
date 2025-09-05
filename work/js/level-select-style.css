@@ -105,8 +105,8 @@ h1::after {
 }
 
 .level-slider {
-    width: 660px;
-    /* 3个关卡按钮的宽度 + 间距 */
+    width: 580px;
+    /* 3个关卡按钮的宽度 + 间距：180px × 3 = 540px + 40px边距 */
     overflow: hidden;
     position: relative;
     border-radius: 16px;
@@ -214,7 +214,7 @@ h1::after {
     position: relative;
     overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.2);
-    min-width: 200px;
+    min-width: 160px;
     flex-shrink: 0;
     /* 防止在flex布局中被压缩 */
 }
@@ -351,6 +351,8 @@ h1::after {
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
+    display: inline-block;
+    margin: 0 4px;
 }
 
 .indicator.active {
@@ -376,8 +378,8 @@ h1::after {
     }
 
     .level-slider {
-        width: 440px;
-        /* 2个关卡按钮的宽度 + 间距 */
+        width: 380px;
+        /* 2个关卡按钮的宽度 + 间距：180px × 2 = 360px + 20px边距 */
     }
 
     .level-button {
@@ -414,8 +416,8 @@ h1::after {
     }
 
     .level-slider {
-        width: 220px;
-        /* 1个关卡按钮的宽度 */
+        width: 200px;
+        /* 1个关卡按钮的宽度：180px + 20px边距 */
     }
 
     .level-slider-container {

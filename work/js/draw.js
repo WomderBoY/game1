@@ -25,7 +25,7 @@ class DrawManager {
     }
 
     // 绘制主要地图内容
-    drawMap(type, background, collidable, tram, app, events, atk) {
+    drawMap(type, background, collidable, tram, app, events, atk,damege) {
         let detype = type == "yang" ? "yin" : "yang";
 
         // 绘制背景
@@ -55,6 +55,7 @@ class DrawManager {
 
         // 绘制危险元素（岩浆等）
         this.drawDangerElements(app[type]);
+        this.drawDangerthing2(damege[type]);
     }
 
     // 绘制虚化砖块（相反属性的碰撞箱）
@@ -80,7 +81,78 @@ class DrawManager {
         }
     }
 
-        // 绘制虚化的有血量方块
+ // 绘制尖刺危险元素（改进版：纯三角形组合，无砖块背景）
+drawDangerthing2(spikeElements) {
+    for (let i of spikeElements) {
+        const ctx = this.game.ctx;
+        const { x, y, w, h } = i; // 从元素获取位置和尺寸信息
+        this.drawSpikes(ctx, x, y, w, h);
+    }
+}
+
+// 绘制尖刺图形（纯三角形组合，无底座）
+drawSpikes(ctx, x, y, w, h) {
+    ctx.save();
+
+    // 尖刺颜色配置（更鲜明的危险色）
+    const colors = {
+        base: "#9b2226",      // 尖刺主体颜色（深红色）
+        highlight: "#bb3e03", // 尖刺高光（橙红色）
+        shadow: "#660708"     // 尖刺阴影（暗红色）
+    };
+
+    // 计算尖刺数量和尺寸（根据宽度自动适配）
+    const spikeCount = Math.max(2, Math.floor(w / 10)); // 至少2个尖刺，每10像素一个
+    const spikeWidth = w / spikeCount; // 每个尖刺基座宽度
+    const spikeHeight = h; // 尖刺高度（使用全部高度，无额外底座）
+
+    // 绘制每个尖刺（连续排列的三角形）
+    for (let i = 0; i < spikeCount; i++) {
+        const spikeX = x + i * spikeWidth;
+        
+        // 创建尖刺主体路径（三角形）
+        ctx.beginPath();
+        ctx.moveTo(spikeX, y + spikeHeight); // 左下角
+        ctx.lineTo(spikeX + spikeWidth / 2, y); // 顶端
+        ctx.lineTo(spikeX + spikeWidth, y + spikeHeight); // 右下角
+        ctx.closePath();
+
+        // 绘制尖刺主体
+        ctx.fillStyle = colors.base;
+        ctx.fill();
+
+        // 绘制尖刺左侧高光（增强立体感）
+        ctx.beginPath();
+        ctx.moveTo(spikeX, y + spikeHeight);
+        ctx.lineTo(spikeX + spikeWidth / 2, y);
+        ctx.lineTo(spikeX + spikeWidth * 0.2, y + spikeHeight * 0.7);
+        ctx.closePath();
+        ctx.fillStyle = colors.highlight;
+        ctx.fill();
+
+        // 绘制尖刺右侧阴影（增强立体感）
+        ctx.beginPath();
+        ctx.moveTo(spikeX + spikeWidth / 2, y);
+        ctx.lineTo(spikeX + spikeWidth, y + spikeHeight);
+        ctx.lineTo(spikeX + spikeWidth * 0.8, y + spikeHeight * 0.7);
+        ctx.closePath();
+        ctx.fillStyle = colors.shadow;
+        ctx.fill();
+
+        // 绘制尖刺边缘线（强化三角形轮廓）
+        ctx.strokeStyle = "#00000033";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // 添加底部阴影（增强与地面的衔接感）
+    ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+    ctx.fillRect(x, y + spikeHeight - 1, w, 3);
+
+    ctx.restore();
+}
+
+    // 绘制虚化的有血量方块
     drawPhantomTile(tile, atk) {
         const ctx = this.game.ctx;
         ctx.save();
@@ -316,39 +388,39 @@ class DrawManager {
                 let o = tile.hp - Math.floor(this.game.changetimes / 2);
                 if (o > 0) {
                     let k = o - 1;
-                    if (tile.tiling== true) {
+                    if (tile.tiling == true) {
                         this.drawNinePatch(ctx, tile.img[k], x, y, w, h);
                     } else {
                         ctx.drawImage(tile.img[k], x, y, w, h);
                     }
                 }
-            // } else if (
-            //     this.game.mapmanager.hurt() &&
-            //     Math.floor(this.game.changetimes / 2) < tile.hp
-            // ) {
-            //     console.warn(
-            //         tile.hp,
-            //         tile.hp - Math.floor(this.game.changetimes / 2)
-            //     );
-            //     const imgIndex = Math.max(
-            //         0,
-            //         tile.hp - Math.floor(this.game.changetimes / 2)
-            //     );
-            //     if (this.game.mapmanager.starthurt()) {
-            //         this.game.expmanager.addexp(x, y, w, h);
-            //     }
-            //     if (tile.tiling) {
-            //         this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
-            //     } else {
-            //         ctx.drawImage(tile.img[imgIndex], x, y, w, h);
-            //     }
+                // } else if (
+                //     this.game.mapmanager.hurt() &&
+                //     Math.floor(this.game.changetimes / 2) < tile.hp
+                // ) {
+                //     console.warn(
+                //         tile.hp,
+                //         tile.hp - Math.floor(this.game.changetimes / 2)
+                //     );
+                //     const imgIndex = Math.max(
+                //         0,
+                //         tile.hp - Math.floor(this.game.changetimes / 2)
+                //     );
+                //     if (this.game.mapmanager.starthurt()) {
+                //         this.game.expmanager.addexp(x, y, w, h);
+                //     }
+                //     if (tile.tiling) {
+                //         this.drawNinePatch(ctx, tile.img[imgIndex], x, y, w, h);
+                //     } else {
+                //         ctx.drawImage(tile.img[imgIndex], x, y, w, h);
+                //     }
             } else if (Math.floor(this.game.changetimes / 2) <= tile.hp
-                    && this.game.mapmanager.hurt()) {
+                && this.game.mapmanager.hurt()) {
                 if (this.game.mapmanager.starthurt()) {
                     this.game.expmanager.addexp(x, y, w, h);
                 }
                 if (this.game.gameFrame % 2 == 1) {
-                     const imgIndex = Math.max(
+                    const imgIndex = Math.max(
                         0,
                         tile.hp - Math.floor(this.game.changetimes / 2)
                     );
@@ -376,7 +448,7 @@ class DrawManager {
                     }
                     this.drawdg(x, y, w, h);
                 }
-            }else {
+            } else {
                 if (tile.tiling == true) {
                     this.drawNinePatch(ctx, tile.img[0], x, y, w, h);
                 } else {
@@ -446,9 +518,9 @@ class DrawManager {
     drawPixelLava(ctx, x, y, w, h) {
         // 更美观的像素风配色方案
         const colors = {
-            deep: "#1A0A0A",    // 深黑红
-            dark: "#2D0F0F",    // 深红
-            medium: "#5C1A1A",  // 中深红
+            deep: "#FF6347",    // 深黑红
+            dark: "#CD5C5C",    // 深红
+            medium: "#FFD700",  // 中深红
             bright: "#8B2C2C",  // 中红
             hot: "#CD5C5C",     // 亮红
             orange: "#FF6347",  // 橙红
@@ -574,23 +646,6 @@ class DrawManager {
             HP[env][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
         }
 
-        // 绘制相反环境的虚化血量条
-        // let oppositeEnv = env === "yang" ? "yin" : "yang";
-        // if (collidable[oppositeEnv] && HP[oppositeEnv]) {
-        //     for (let j = 0; j < collidable[oppositeEnv].length; ++j) {
-        //         let p = collidable[oppositeEnv][j];
-        //         if (!p.hp || !p.alive(this.game)) continue;
-        //         if (!this.game.inputmanager.isOver(p.x, p.y, p.w, p.h)) {
-        //             continue;
-        //         }
-        //         let o = p.hp - Math.floor(this.game.changetimes / 2);
-        //         if (o > 0) { // 只显示还有生命值的虚化方块的血量条
-        //             console.warn("draw phantom hp p = ", p, "HP = ", HP[oppositeEnv][j]);
-        //             HP[oppositeEnv][j].sethp(o);
-        //             HP[oppositeEnv][j].draw2(this.game.ctx, p.x + p.w / 2, p.y + p.h / 2);
-        //         }
-        //     }
-        // }
     }
 
     // 绘制传送门

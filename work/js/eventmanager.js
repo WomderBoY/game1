@@ -108,7 +108,7 @@ class eventmanager {
             }
         }
 
-        if (e.type === "kill") {
+        if (e.type === "kill"||e.type ==="kill-2") {
             this.game.hp.decrease(10);
         }
 

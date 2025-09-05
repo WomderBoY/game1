@@ -47,11 +47,13 @@ class mapmanager {
     }
 
     empty() {
+        this.status = 'over';
         this.test = { yin: [], yang: [] };
         this.collidable = { yin: [], yang: [] };
         this.HP = { yin: [], yang: [] };
         this.events = { yin: [], yang: [] };
         this.app = { yin: [], yang: [] };
+        this.damege={ yin: [], yang: []};
         this.room = "";
         this.background = { yin: [], yang: [] };
         this.atk = { yin: [], yang: [] };
@@ -108,6 +110,7 @@ class mapmanager {
 
     async loadMap(src) {
         this.game.canmove = false;
+        this.status = 'loading';
         console.log("开始加载地图:", src);
 
         // 如果是第一次加载地图，直接调用 loadNewMap
@@ -156,6 +159,7 @@ class mapmanager {
         await fadeOut();
         await this.loadNewMap(src);
         await this.resetcanmove();
+        this.status = 'over';
     }
 
     async resetcanmove() {
@@ -406,6 +410,7 @@ class mapmanager {
         console.log("overlayImg paths:", i.overlayImg);
 
         if (i.event && i.event.type === "kill") this.app[type].push(tile); //这是伤害的方块 不对这里
+        if (i.event && i.event.type === "kill-2") this.damege[type].push(tile); //这是另一种形式的伤害方块
         if (i.col != false) {
             this.collidable[type].push(tile);
             if (i.hp) this.HP[type].push(new hp(i.hp));
@@ -433,6 +438,7 @@ class mapmanager {
             this.app,
             this.events,
             this.atk,
+            this.damege,
         );
 
         // 绘制血条

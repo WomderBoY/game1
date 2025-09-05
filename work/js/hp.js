@@ -1,6 +1,7 @@
 class hp {
     constructor(maxHP = 5, game) {
         this.maxHP = maxHP; // 最大血量
+        console.warn('set hp = ', maxHP);
         this.currentHP = maxHP; // 当前血量
         this.game = game; // 游戏实例
 
@@ -19,7 +20,7 @@ class hp {
     }
 
     // 减少血量
-    decrease(amount = 1, x, y) {
+    decrease(amount, x, y) {
         const oldHP = this.currentHP;
         this.currentHP -= amount;
         if (this.currentHP < 0) this.currentHP = 0;

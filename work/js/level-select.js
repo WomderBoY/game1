@@ -1,19 +1,129 @@
 // 关卡选择界面脚本
 
-// 关卡配置
-const levelConfig = {
-    "../map/test_1.json": { name: "待定", unlocked: true },
-    "../map/test_2.json": { name: "待定", unlocked: false },
-    "../map/bg-map1.json": { name: "待定", unlocked: false },
-    "../map/bg-map2.json": { name: "待定", unlocked: false },
-    "../map/bg-map3.json": { name: "待定", unlocked: false },
-    "../map/bg-map4.json": { name: "待定", unlocked: false },
-};
+// 关卡配置 - 将从JSON文件动态加载
+let levelConfig = {};
+let levelsData = [];
+let totalLevels = 0;
 
 // 滑动相关变量
 let currentLevelIndex = 0;
 let levelsPerPage = 3; // 每页显示的关卡数
-const totalLevels = Object.keys(levelConfig).length;
+
+// 加载关卡配置
+function loadLevelsConfig() {
+    // 直接从localStorage加载配置
+    const savedConfig = localStorage.getItem('levelsConfig');
+    if (savedConfig) {
+        try {
+            const config = JSON.parse(savedConfig);
+            levelsData = config.levels;
+            totalLevels = levelsData.length;
+            
+            // 构建levelConfig对象
+            levelConfig = {};
+            levelsData.forEach(level => {
+                levelConfig[level.file] = {
+                    name: level.name,
+                    unlocked: level.unlocked,
+                    id: level.id,
+                    order: level.order
+                };
+            });
+            
+            console.log(`成功加载 ${totalLevels} 个关卡配置`);
+            console.log('构建的levelConfig:', levelConfig);
+            
+            // 动态生成HTML
+            generateLevelsHTML();
+            
+            // 检查存档状态
+            checkSaveData();
+            
+            // 初始化界面
+            updateSlider();
+            initTouchSupport();
+            
+        } catch (e) {
+            console.error('从localStorage加载配置失败:', e);
+            console.log('使用默认配置作为备用方案');
+            useDefaultConfig();
+        }
+    } else {
+        console.log('localStorage中没有配置，使用默认配置');
+        useDefaultConfig();
+    }
+}
+
+// 使用默认配置（备用方案）
+function useDefaultConfig() {
+    levelConfig = {
+        "../map/test_1.json": { name: "待定", unlocked: true },
+        "../map/test_2.json": { name: "待定", unlocked: false },
+        "../map/bg-map1.json": { name: "待定", unlocked: false },
+        "../map/bg-map2.json": { name: "待定", unlocked: false },
+        "../map/bg-map3.json": { name: "待定", unlocked: false },
+        "../map/bg-map4.json": { name: "待定", unlocked: false },
+    };
+    totalLevels = Object.keys(levelConfig).length;
+    levelsData = Object.keys(levelConfig).map((file, index) => ({
+        file: file,
+        name: levelConfig[file].name,
+        unlocked: levelConfig[file].unlocked,
+        order: index + 1
+    }));
+    
+    generateLevelsHTML();
+    checkSaveData();
+    updateSlider();
+    initTouchSupport();
+}
+
+// 动态生成关卡HTML
+function generateLevelsHTML() {
+    const track = document.getElementById('levelTrack');
+    const indicatorsContainer = document.querySelector('.level-indicators');
+    
+    if (!track || !indicatorsContainer) return;
+    
+    // 清空现有内容
+    track.innerHTML = '';
+    indicatorsContainer.innerHTML = '';
+    
+    // 生成关卡按钮
+    levelsData.forEach((level, index) => {
+        const button = document.createElement('button');
+        button.className = 'level-button';
+        button.setAttribute('data-level', level.file);
+        button.setAttribute('data-index', index); // 添加索引用于调试
+        button.onclick = () => selectLevel(level.file);
+        
+        button.innerHTML = `
+            <span class="level-number">${level.order}</span>
+            <span class="level-name">${level.name}</span>
+        `;
+        
+        track.appendChild(button);
+        // console.log(`创建关卡按钮 ${index + 1}: ${level.name} (${level.file})`);
+    });
+    
+    // 生成指示器
+    const totalPages = Math.ceil(totalLevels / levelsPerPage);
+    // console.log(`计算指示器数量 - 总关卡数: ${totalLevels}, 每页显示: ${levelsPerPage}, 总页数: ${totalPages}`);
+    
+    for (let i = 0; i < totalPages; i++) {
+        const indicator = document.createElement('span');
+        indicator.className = 'indicator';
+        indicator.setAttribute('data-index', i);
+        indicator.addEventListener('click', () => goToLevel(i));
+        indicatorsContainer.appendChild(indicator);
+        // console.log(`创建指示器 ${i}, data-index: ${i}`);
+    }
+    
+    // console.log(`生成了 ${totalPages} 个指示器`);
+    
+    // 更新解锁数量显示
+    updateUnlockedCount();
+}
 
 // 根据屏幕尺寸调整每页显示的关卡数
 function updateLevelsPerPage() {
@@ -101,7 +211,7 @@ function updateUnlockedCount() {
     const unlockedCount = Object.values(levelConfig).filter(
         (level) => level.unlocked
     ).length;
-    document.getElementById("unlocked-levels").textContent = `${unlockedCount}/6`;
+    document.getElementById("unlocked-levels").textContent = `${unlockedCount}/${totalLevels}`;
 }
 
 // 选择关卡
@@ -273,6 +383,21 @@ function testCSSLoading() {
 window.resetToFirstLevel = resetToFirstLevel;
 window.testCSSLoading = testCSSLoading;
 
+// 调试函数：检查当前滑动状态
+// window.debugSliderState = function() {
+//     console.log('=== 滑动状态调试 ===');
+//     console.log('总关卡数:', totalLevels);
+//     console.log('每页显示:', levelsPerPage);
+//     console.log('总页数:', Math.ceil(totalLevels / levelsPerPage));
+//     console.log('当前页索引:', currentLevelIndex);
+//     console.log('指示器数量:', document.querySelectorAll('.indicator').length);
+    
+//     const indicators = document.querySelectorAll('.indicator');
+//     indicators.forEach((indicator, index) => {
+//         console.log(`指示器 ${index}: data-index="${indicator.dataset.index}", classList="${indicator.classList.toString()}"`);
+//     });
+// };
+
 // 添加键盘快捷键支持
 document.addEventListener("keydown", function (e) {
     // ESC键返回主菜单
@@ -295,17 +420,22 @@ function updateSlider() {
     updateLevelsPerPage(); // 更新每页显示的关卡数
 
     const track = document.getElementById('levelTrack');
-    const levelWidth = 220; // 每个关卡按钮的宽度 + 间距
-    const offset = -currentLevelIndex * levelWidth;
+    const levelWidth = 180; // 缩小：每个关卡按钮的宽度 + 间距（从220改为180）
+    
+    // 修复：每页显示3个关卡，所以偏移量应该是3的倍数
+    const offset = -currentLevelIndex * (levelWidth * levelsPerPage);
+    
+    // console.log(`滑动更新 - 当前页: ${currentLevelIndex}, 偏移量: ${offset}px, 每页关卡数: ${levelsPerPage}`);
 
     track.style.transform = `translateX(${offset}px)`;
 
     // 更新导航按钮状态
     const prevBtn = document.querySelector('.prev-button');
     const nextBtn = document.querySelector('.next-button');
+    const maxIndex = Math.ceil(totalLevels / levelsPerPage) - 1;
 
     prevBtn.disabled = currentLevelIndex === 0;
-    nextBtn.disabled = currentLevelIndex >= totalLevels - levelsPerPage;
+    nextBtn.disabled = currentLevelIndex >= maxIndex;
 
     // 更新指示器
     updateIndicators();
@@ -319,7 +449,8 @@ function previousLevel() {
 }
 
 function nextLevel() {
-    if (currentLevelIndex < totalLevels - levelsPerPage) {
+    const maxIndex = Math.ceil(totalLevels / levelsPerPage) - 1;
+    if (currentLevelIndex < maxIndex) {
         currentLevelIndex++;
         updateSlider();
     }
@@ -327,19 +458,31 @@ function nextLevel() {
 
 function updateIndicators() {
     const indicators = document.querySelectorAll('.indicator');
+    const totalPages = Math.ceil(totalLevels / levelsPerPage);
+    
     indicators.forEach((indicator, index) => {
         const indicatorIndex = parseInt(indicator.dataset.index);
-        const isVisible = indicatorIndex >= currentLevelIndex &&
-            indicatorIndex < currentLevelIndex + levelsPerPage;
-
-        indicator.classList.toggle('active', isVisible);
+        
+        // 当前页的指示器应该是active状态
+        const isActive = indicatorIndex === currentLevelIndex;
+        
+        // 所有指示器都应该是visible状态
+        const isVisible = true;
+        
+        indicator.classList.toggle('active', isActive);
         indicator.classList.toggle('visible', isVisible);
+        
+        // 调试信息
+        // if (index === 0) {
+        //     console.log(`更新指示器状态 - 当前页: ${currentLevelIndex}, 总页数: ${totalPages}, 指示器索引: ${indicatorIndex}, 是否激活: ${isActive}`);
+        // }
     });
 }
 
 // 点击指示器跳转到对应关卡
 function goToLevel(index) {
-    if (index >= 0 && index <= totalLevels - levelsPerPage) {
+    const maxIndex = Math.ceil(totalLevels / levelsPerPage) - 1;
+    if (index >= 0 && index <= maxIndex) {
         currentLevelIndex = index;
         updateSlider();
     }
@@ -369,8 +512,8 @@ function initTouchSupport() {
 
         const currentTouchX = e.touches[0].clientX;
         const diff = currentTouchX - startX;
-        const levelWidth = 220;
-        const offset = -currentLevelIndex * levelWidth + diff;
+        const levelWidth = 180; // 同步缩小触摸拖动的宽度
+        const offset = -currentLevelIndex * (levelWidth * levelsPerPage) + diff;
 
         track.style.transform = `translateX(${offset}px)`;
     });
@@ -388,9 +531,22 @@ function initTouchSupport() {
 
         if (Math.abs(diff) > 50) { // 最小滑动距离
             if (diff > 0) {
-                nextLevel(); // 向左滑动，显示下一组
+                // 向左滑动，显示下一组（需要检查是否已经是最后一页）
+                const maxIndex = Math.ceil(totalLevels / levelsPerPage) - 1;
+                if (currentLevelIndex < maxIndex) {
+                    nextLevel();
+                } else {
+                    // 已经是最后一页，回弹
+                    updateSlider();
+                }
             } else {
-                previousLevel(); // 向右滑动，显示上一组
+                // 向右滑动，显示上一组（需要检查是否已经是第一页）
+                if (currentLevelIndex > 0) {
+                    previousLevel();
+                } else {
+                    // 已经是第一页，回弹
+                    updateSlider();
+                }
             }
         } else {
             // 回弹到原位置
@@ -418,8 +574,8 @@ function initTouchSupport() {
 
         const currentMouseX = e.clientX;
         const diff = currentMouseX - startX;
-        const levelWidth = 220;
-        const offset = -currentLevelIndex * levelWidth + diff;
+        const levelWidth = 180; // 同步缩小鼠标拖动的宽度
+        const offset = -currentLevelIndex * (levelWidth * levelsPerPage) + diff;
 
         track.style.transform = `translateX(${offset}px)`;
     });
@@ -440,9 +596,22 @@ function initTouchSupport() {
 
         if (Math.abs(diff) > 50) { // 最小拖动距离
             if (diff > 0) {
-                nextLevel(); // 向左拖动，显示下一组
+                // 向左拖动，显示下一组（需要检查是否已经是最后一页）
+                const maxIndex = Math.ceil(totalLevels / levelsPerPage) - 1;
+                if (currentLevelIndex < maxIndex) {
+                    nextLevel();
+                } else {
+                    // 已经是最后一页，回弹
+                    updateSlider();
+                }
             } else {
-                previousLevel(); // 向右拖动，显示上一组
+                // 向右拖动，显示上一组（需要检查是否已经是第一页）
+                if (currentLevelIndex > 0) {
+                    previousLevel();
+                } else {
+                    // 已经是第一页，回弹
+                    updateSlider();
+                }
             }
         } else {
             // 回弹到原位置
@@ -462,20 +631,8 @@ function initTouchSupport() {
 
 // 页面加载时检查存档
 window.addEventListener("load", () => {
-    checkSaveData();
+    loadLevelsConfig(); // 加载关卡配置
     debugUnlockStatus(); // 显示调试信息
-
-    // 初始化滑动器
-    updateSlider();
-    initTouchSupport();
-
-    // 添加指示器点击事件
-    const indicators = document.querySelectorAll('.indicator');
-    indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => {
-            goToLevel(index);
-        });
-    });
 
     // 添加页面加载动画
     const container = document.querySelector('.level-select-container');

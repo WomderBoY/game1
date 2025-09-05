@@ -223,9 +223,9 @@ class Enemy2 {
                     this.spawnExplosionParticles(420);
                 }
                 this.particles.forEach(p => p.draw(ctx));
-                return ;
+                return;
             }
-            else return ;
+            else return;
         } else if (this.dead) {
             return;
         }
@@ -257,7 +257,10 @@ class Enemy2 {
 
         ctx.restore();
 
-        
+        // 非死亡、资源正常时也绘制粒子（确保待命时的岩浆滴落可见）
+        this.particles.forEach(p => p.draw(ctx));
+
+
     }
 }
 

@@ -36,7 +36,7 @@ class Enemy {
     update(colliders) {
         this.vyy = this.vxx = 0;
         let now = Date.now();
-        if (now <= this.born) return ;
+        if (now <= this.born) return;
         // === 水平方向运动 ===
         this.rect.position.x += this.speed;
 
