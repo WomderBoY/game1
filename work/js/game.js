@@ -498,12 +498,12 @@ class game {
                 } else if (this.boss) {
                     console.log('⚠️ Boss存在但HP系统未初始化:', this.boss);
                 } else {
-                    console.log('ℹ️ 当前关卡没有Boss');
+      //              console.log('ℹ️ 当前关卡没有Boss');
                 }
 
-                await this.entitymanager.update();
                 this.hp.drawblood();
                 await this.entitymanager.checkCollision();
+                await this.entitymanager.update();
                 if (this.boss) {
                     console.log('boss!!!');
                     this.boss.move();
