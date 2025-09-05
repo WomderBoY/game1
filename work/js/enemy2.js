@@ -42,7 +42,7 @@ class LavaParticle {
  * Enemy2 类
  */
 class Enemy2 {
-    constructor(game, x, y, width, height, speed = 2, attackRange = 150, dashSpeed = 3) {
+    constructor(game, x, y, width, height, speed = 2, attackRange = 150, dashSpeed = 3, born = -10000) {
         this.game = game;
         this.rect = new Rect(x, y, width, height);
 
@@ -53,6 +53,7 @@ class Enemy2 {
         this.type = false;
         this.dead = false;
         this.dying = false;
+        this.born = born;
 
         // 攻击逻辑
         this.attackRange = attackRange;
@@ -80,6 +81,12 @@ class Enemy2 {
     }
 
     update(colliders) {
+        let now = Date.now();
+        console.warn(this.born, now);
+        if (now - this.born <= 3000) {
+            console.warn('fuckyou!');
+            return ;
+        }
         const player = this.game.player;
         let gm = this.game;
 
@@ -230,6 +237,9 @@ class Enemy2 {
             return;
         }
 
+        let now = Date.now();
+        if (now - this.born <= 3000 && this.game.gameFrame % 2 == 1) return ;
+
         const img = !this.isAttacking ? this.imgstatic : this.imgmove;
         if (!img) {
             this.particles.forEach(p => p.draw(ctx));
@@ -292,9 +302,32 @@ class Enemy2Manager {
         }
     }
 
-    addEnemy2(x, y, width, height, speed = 2, attackRange = 150, dashSpeed = 6) {
+    cl_enemy() {
+        this.enemies = [];
+    }
+
+    jud(x, y) {
+        for (let j of this.game.mapmanager.collidable['yin'])
+            if (j.containsRect(new Rect(x, y, 50, 50)))
+                return false;
+        for (let j of this.game.mapmanager.collidable['yang'])
+            if (j.containsRect(new Rect(x, y, 50, 50)))
+                return false;
+        return true;
+    }
+
+    set_enemy() {
+        let x, y;
+        do {
+            x = this.game.random(1, 1230);
+            y = this.game.random(1, 600);
+        }while (!this.jud(x, y))
+        this.addEnemy2(x, y, 50, 50, 2, 1500, 6, Date.now());
+    }
+
+    addEnemy2(x, y, width, height, speed = 2, attackRange = 150, dashSpeed = 6, born = -10000) {
         this.enemies.push(
-            new Enemy2(this.game, x, y, width, height, speed, attackRange, dashSpeed)
+            new Enemy2(this.game, x, y, width, height, speed, attackRange, dashSpeed, born)
         );
     }
 

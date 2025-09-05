@@ -36,6 +36,14 @@ class Boss {
         }
     }
 
+    async get_enemy2(x) {
+        console.warn('enemy2!!');
+        this.game.enemy2manager.cl_enemy();
+        for (let i = 1; i <= x; ++i) {
+            this.game.enemy2manager.set_enemy();
+        }
+    }
+
     gethurt(x = 10) {
         // 使用新的HP系统方法
         if (this.HP && typeof this.HP.decrease === 'function') {
@@ -51,7 +59,7 @@ class Boss {
         let now = Date.now();
         if (now - this.lstmove <= 10000) return ;
         console.warn('boss move!!');
-        let o = this.game.random(1, 2);
+        let o = this.game.random(3, 3);
         if (o == 1) {
             await this.change_hitbox('yin', 1);
             await this.change_hitbox('yang', 1);
@@ -59,6 +67,9 @@ class Boss {
         else if (o == 2) {
             await this.get_enemy(this.game.env, 1);
 //            await this.get_enemy('yang', 1);
+        }
+        else if (o == 3) {
+            await this.get_enemy2(1);
         }
         this.lstmove = now;
     }
