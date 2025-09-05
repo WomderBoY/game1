@@ -57,17 +57,18 @@ _jsonCallback({
                 ],
                 "tiling": true
             },
-            {
+            { //刺的效果
                 "hitbox": [
                     0,
                     450,
                     900,
                     30
                 ],
-                "col": true,
-                "img": [
-                    "../images/test1.png"
-                ],
+                "col": false,
+                "event": {
+					"type": "kill-2", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
                 "tiling": true
             },
             {

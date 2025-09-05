@@ -53,6 +53,7 @@ class mapmanager {
         this.HP = { yin: [], yang: [] };
         this.events = { yin: [], yang: [] };
         this.app = { yin: [], yang: [] };
+        this.damege={ yin: [], yang: []};
         this.room = "";
         this.background = { yin: [], yang: [] };
         this.atk = { yin: [], yang: [] };
@@ -409,6 +410,7 @@ class mapmanager {
         console.log("overlayImg paths:", i.overlayImg);
 
         if (i.event && i.event.type === "kill") this.app[type].push(tile); //这是伤害的方块 不对这里
+        if (i.event && i.event.type === "kill-2") this.damege[type].push(tile); //这是另一种形式的伤害方块
         if (i.col != false) {
             this.collidable[type].push(tile);
             if (i.hp) this.HP[type].push(new hp(i.hp));
@@ -436,6 +438,7 @@ class mapmanager {
             this.app,
             this.events,
             this.atk,
+            this.damege,
         );
 
         // 绘制血条
