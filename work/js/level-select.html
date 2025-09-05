@@ -1,108 +1,94 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>关卡选择 - 阴阳劫</title>
-        <link rel="stylesheet" href="level-select-style.css">
-    </head>
-    <body>
-        <div class="level-select-container">
-            <h1>选择关卡</h1>
 
-            <div class="progress-info">
-                <!-- <div>当前进度：<span id="current-progress">第1关</span></div> -->
-                <div>已解锁关卡：<span id="unlocked-levels">1/6</span></div>
-            </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>关卡选择 - 阴阳劫</title>
+    <link rel="icon" type="image/svg+xml" href="../../logo.svg">
+    <link rel="stylesheet" href="level-select-style.css">
+</head>
 
-            <!-- 滑动关卡选择器 -->
-            <div class="level-slider-container">
-                <button class="nav-button prev-button" onclick="previousLevel()" disabled>
-                    <span>‹</span>
-                </button>
-                
-                <div class="level-slider">
-                    <div class="level-track" id="levelTrack">
-                        <button
-                            class="level-button"
-                            data-level="../map/test_1.json"
-                            onclick="selectLevel('../map/test_1.json')"
-                        >
-                            <span class="level-number">1</span>
-                            <span class="level-name">待定</span>
-                        </button>
+<body>
+    <div class="level-select-container">
+        <h1>选择关卡</h1>
 
-                        <button
-                            class="level-button"
-                            data-level="../map/test_2.json"
-                            onclick="selectLevel('../map/test_2.json')"
-                        >
-                            <span class="level-number">2</span>
-                            <span class="level-name">待定</span>
-                        </button>
+        <div class="progress-info">
+            <!-- <div>当前进度：<span id="current-progress">第1关</span></div> -->
+            <div>已解锁关卡：<span id="unlocked-levels">1/6</span></div>
+        </div>
 
-                        <button
-                            class="level-button"
-                            data-level="../map/bg-map1.json"
-                            onclick="selectLevel('../map/bg-map1.json')"
-                        >
-                            <span class="level-number">3</span>
-                            <span class="level-name">待定</span>
-                        </button>
-
-                        <button
-                            class="level-button"
-                            data-level="../map/bg-map2.json"
-                            onclick="selectLevel('../map/bg-map2.json')"
-                        >
-                            <span class="level-number">4</span>
-                            <span class="level-name">待定</span>
-                        </button>
-
-                        <button
-                            class="level-button"
-                            data-level="../map/bg-map3.json"
-                            onclick="selectLevel('../map/bg-map3.json')"
-                        >
-                            <span class="level-number">5</span>
-                            <span class="level-name">待定</span>
-                        </button>
-
-                        <button
-                            class="level-button"
-                            data-level="../map/bg-map4.json"
-                            onclick="selectLevel('../map/bg-map4.json')"
-                        >
-                            <span class="level-number">6</span>
-                            <span class="level-name">待定</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <button class="nav-button next-button" onclick="nextLevel()">
-                    <span>›</span>
-                </button>
-            </div>
-
-            <!-- 关卡指示器 -->
-            <div class="level-indicators">
-                <span class="indicator active" data-index="0"></span>
-                <span class="indicator" data-index="1"></span>
-                <span class="indicator" data-index="2"></span>
-                <span class="indicator" data-index="3"></span>
-                <span class="indicator" data-index="4"></span>
-                <span class="indicator" data-index="5"></span>
-            </div>
-
-            <button class="back-button" onclick="goBack()">返回主菜单</button>
-            <button class="back-button unlock-all" onclick="unlockAllLevels()">
-                解锁所有关卡
+        <!-- 滑动关卡选择器 -->
+        <div class="level-slider-container">
+            <button class="nav-button prev-button" onclick="previousLevel()" disabled>
+                <span>‹</span>
             </button>
-            <button class="back-button clear-save" onclick="clearSave()">
-                清除存档
+
+            <div class="level-slider">
+                <div class="level-track" id="levelTrack">
+                    <button class="level-button" data-level="../map/test_1.json"
+                        onclick="selectLevel('../map/test_1.json')">
+                        <span class="level-number">1</span>
+                        <span class="level-name">待定</span>
+                    </button>
+
+                    <button class="level-button" data-level="../map/test_2.json"
+                        onclick="selectLevel('../map/test_2.json')">
+                        <span class="level-number">2</span>
+                        <span class="level-name">待定</span>
+                    </button>
+
+                    <button class="level-button" data-level="../map/bg-map1.json"
+                        onclick="selectLevel('../map/bg-map1.json')">
+                        <span class="level-number">3</span>
+                        <span class="level-name">待定</span>
+                    </button>
+
+                    <button class="level-button" data-level="../map/bg-map2.json"
+                        onclick="selectLevel('../map/bg-map2.json')">
+                        <span class="level-number">4</span>
+                        <span class="level-name">待定</span>
+                    </button>
+
+                    <button class="level-button" data-level="../map/bg-map3.json"
+                        onclick="selectLevel('../map/bg-map3.json')">
+                        <span class="level-number">5</span>
+                        <span class="level-name">待定</span>
+                    </button>
+
+                    <button class="level-button" data-level="../map/bg-map4.json"
+                        onclick="selectLevel('../map/bg-map4.json')">
+                        <span class="level-number">6</span>
+                        <span class="level-name">待定</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="nav-button next-button" onclick="nextLevel()">
+                <span>›</span>
             </button>
         </div>
 
-        <script src="level-select.js"></script>
-    </body>
+        <!-- 关卡指示器 -->
+        <div class="level-indicators">
+            <span class="indicator active" data-index="0"></span>
+            <span class="indicator" data-index="1"></span>
+            <span class="indicator" data-index="2"></span>
+            <span class="indicator" data-index="3"></span>
+            <span class="indicator" data-index="4"></span>
+            <span class="indicator" data-index="5"></span>
+        </div>
+
+        <button class="back-button" onclick="goBack()">返回主菜单</button>
+        <button class="back-button unlock-all" onclick="unlockAllLevels()">
+            解锁所有关卡
+        </button>
+        <button class="back-button clear-save" onclick="clearSave()">
+            清除存档
+        </button>
+    </div>
+
+    <script src="level-select.js"></script>
+</body>
+
 </html>
