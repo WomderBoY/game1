@@ -174,13 +174,6 @@ _jsonCallback({
 					50,
 					50
 				],
-				"event": {
-					"type": "dialog",
-					"way": "negative",
-					"text": [
-						"【旁白】在八卦阵附近按下回车，地图将会发生变化"
-					]
-				}
 			}
 		],
 		"background": "../images/lib2.png"

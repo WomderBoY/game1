@@ -1,50 +1,77 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>关卡选择 - 阴阳劫</title>
-        <link rel="stylesheet" href="level-select-style.css">
-    </head>
-    <body>
-        <div class="level-select-container">
-            <h1>选择关卡</h1>
 
-            <div class="progress-info">
-                <div>已解锁关卡：<span id="unlocked-levels">0/0</span></div>
-            </div>
+<div class="progress-info">
+    <div>已解锁关卡：<span id="unlocked-levels">0/0</span></div>
+</div>
 
-            <!-- 滑动关卡选择器 -->
-            <div class="level-slider-container">
-                <button class="nav-button prev-button" onclick="previousLevel()" disabled>
-                    <span>‹</span>
-                </button>
-                
-                <div class="level-slider">
-                    <div class="level-track" id="levelTrack">
-                        <!-- 关卡按钮将在这里动态生成 -->
-                    </div>
-                </div>
-                
-                <button class="nav-button next-button" onclick="nextLevel()">
-                    <span>›</span>
-                </button>
-            </div>
+<!-- 滑动关卡选择器 -->
+<div class="level-slider-container">
+    <button class="nav-button prev-button" onclick="previousLevel()" disabled>
+        <span>‹</span>
+    </button>
 
-            <!-- 关卡指示器 -->
-            <div class="level-indicators">
-                <!-- 指示器将在这里动态生成 -->
-            </div>
-
-            <button class="back-button" onclick="goBack()">返回主菜单</button>
-            <button class="back-button unlock-all" onclick="unlockAllLevels()">
-                解锁所有关卡
-            </button>
-            <button class="back-button clear-save" onclick="clearSave()">
-                清除存档
-            </button>
+    <div class="level-slider">
+        <div class="level-track" id="levelTrack">
+            <!-- 关卡按钮将在这里动态生成 -->
         </div>
-        <script src="init-config.js"></script>
-        <script src="level-select.js"></script>
-    </body>
+    </div>
+
+    <button class="nav-button next-button" onclick="nextLevel()">
+        <span>›</span>
+    </button>
+</div>
+
+<!-- 关卡指示器 -->
+<div class="level-indicators">
+    <!-- 指示器将在这里动态生成 -->
+</div>
+
+<button class="back-button" onclick="goBack()">返回主菜单</button>
+<button class="back-button unlock-all" onclick="unlockAllLevels()">
+    解锁所有关卡
+</button>
+
+<div class="level-slider">
+    <div class="level-track" id="levelTrack">
+        <button class="level-button" data-level="../map/test_1.json" onclick="selectLevel('../map/test_1.json')">
+            <span class="level-number">1</span>
+            <span class="level-name">待定</span>
+        </button>
+
+        <button class="level-button" data-level="../map/test_2.json" onclick="selectLevel('../map/test_2.json')">
+            <span class="level-number">2</span>
+            <span class="level-name">待定</span>
+        </button>
+
+        <button class="level-button" data-level="../map/bg-map1.json" onclick="selectLevel('../map/bg-map1.json')">
+            <span class="level-number">3</span>
+            <span class="level-name">待定</span>
+        </button>
+
+        <button class="level-button" data-level="../map/bg-map2.json" onclick="selectLevel('../map/bg-map2.json')">
+            <span class="level-number">4</span>
+            <span class="level-name">待定</span>
+        </button>
+
+        <button class="level-button" data-level="../map/bg-map3.json" onclick="selectLevel('../map/bg-map3.json')">
+            <span class="level-number">5</span>
+            <span class="level-name">待定</span>
+        </button>
+
+        <button class="level-button" data-level="../map/bg-map4.json" onclick="selectLevel('../map/bg-map4.json')">
+            <span class="level-number">6</span>
+            <span class="level-name">待定</span>
+        </button>
+    </div>
+</div>
+
+<button class="nav-button next-button" onclick="nextLevel()">
+    <span>›</span>
+</button>
+</div>
+<script src="init-config.js"></script>
+<script src="level-select.js"></script>
+</body>
+
 </html>
