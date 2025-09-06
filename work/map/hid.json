@@ -124,10 +124,68 @@ _jsonCallback({
 				"hitbox": [
 					950,
 					0,
-					20,
+					30,
 					200
 				],
 				"col": true
+			},
+			{
+				"hitbox": [
+					950,
+					400,
+					30,
+					320
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					950,
+					370,
+					30,
+					30
+				],
+				"event": {
+					"type": "kill-2", 
+					"way": "tunnal", 
+				},
+				"col": false
+			},
+			{
+				"hitbox": [
+					1080,
+					520,
+					200,
+					200
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					1220,
+					480,
+					40,
+					40
+				],
+				"event": {
+					"type": "man", 
+					"way": "negative", 
+					"with": {
+						"images": [  //等待剧情
+							"../images/black-right2-0.png",
+							"../images/white.png"
+						],
+						"text": [
+							[
+								"【旁白】这是传送门"
+							],
+							[
+								"【旁白】将你传送到下一关"
+							]
+						],
+					}
+				},
+				"col": false
 			},
 			
 		],

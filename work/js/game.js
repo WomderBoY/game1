@@ -480,6 +480,7 @@ class game {
                 await this.enemymanager.update();
                 await this.enemy2manager.update();
                 await this.mapmanager.drawPortals();
+                await this.mapmanager.drawPeople();
                 //                await this.mapmanager.drawhp();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
@@ -542,6 +543,7 @@ class game {
                 this.enemy2manager.draw(this.ctx);
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
+                this.mapmanager.drawPeople();
                 this.entitymanager.drawPlayer();
                 this.hp.drawblood();
 
@@ -575,6 +577,7 @@ class game {
                 this.hp.drawblood();
                 this.baguamanager.draw(this.ctx);
                 this.mapmanager.drawPortals();
+                this.mapmanager.drawPeople();
                 this.hp.update(16.67);
                 this.hp.draw(this.ctx, this.width, this.height);
                 // 绘制游戏结束遮罩和文字（在最上层）

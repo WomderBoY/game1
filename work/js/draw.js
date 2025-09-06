@@ -25,7 +25,7 @@ class DrawManager {
     }
 
     // 绘制主要地图内容
-    drawMap(type, background, collidable, tram, app, events, atk,damege) {
+    drawMap(type, background, collidable, tram, app, events, atk,damege,man) {
         let detype = type == "yang" ? "yin" : "yang";
 
         // 绘制背景
@@ -56,6 +56,7 @@ class DrawManager {
         // 绘制危险元素（岩浆等）
         this.drawDangerElements(app[type]);
         this.drawDangerthing2(damege[type]);
+        this.drawPeople(this.game.mapmanager.manImg, events, type);
     }
 
     // 绘制虚化砖块（相反属性的碰撞箱）
@@ -80,6 +81,7 @@ class DrawManager {
             }
         }
     }
+
 
  // 绘制尖刺危险元素（改进版：纯三角形组合，无砖块背景）
 drawDangerthing2(spikeElements) {
@@ -679,4 +681,26 @@ drawSpikes(ctx, x, y, w, h) {
             }
         }
     }
+
+    drawPeople(manImg, events, env) {
+    if (!manImg) return;
+
+    for (let e of events[env]) {
+        if (e.event && e.event.type === "man") {
+            // 计算传送门位置（居中显示在事件区域）
+            const manX = e.x + (e.w - manImg.width) / 2;
+            const manY = e.y + (e.h - manImg.height) / 2;
+
+            // 直接绘制传送门图片，无动画效果
+            this.game.ctx.drawImage(
+                manImg,
+                manX,
+                manY,
+                manImg.width,
+                manImg.height
+                );
+             }
+        }
+    }
+
 }

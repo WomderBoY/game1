@@ -43,6 +43,9 @@ class mapmanager {
         this.portalImg = await this.game.datamanager.loadImg(
             "../images/portal.png"
         );
+        this.manImg = await this.game.datamanager.loadImg(
+            "../images/man.png"
+        );
         this.defaultImg = [await this.game.datamanager.loadImg("../images/tile.png")];
     }
 
@@ -54,6 +57,7 @@ class mapmanager {
         this.events = { yin: [], yang: [] };
         this.app = { yin: [], yang: [] };
         this.damege={ yin: [], yang: []};
+        this.man = { yin: [], yang: [] };
         this.room = "";
         this.background = { yin: [], yang: [] };
         this.atk = { yin: [], yang: [] };
@@ -411,6 +415,7 @@ class mapmanager {
 
         if (i.event && i.event.type === "kill") this.app[type].push(tile); //这是伤害的方块 不对这里
         if (i.event && i.event.type === "kill-2") this.damege[type].push(tile); //这是另一种形式的伤害方块
+        if (i.event && i.event.type === "man") this.man[type].push(tile);
         if (i.col != false) {
             this.collidable[type].push(tile);
             if (i.hp) this.HP[type].push(new hp(i.hp));
@@ -439,6 +444,7 @@ class mapmanager {
             this.events,
             this.atk,
             this.damege,
+            this.man
         );
 
         // 绘制血条
@@ -453,4 +459,8 @@ class mapmanager {
     drawPortals() {
         this.drawManager.drawPortals(this.portalImg, this.events, this.game.env);
     }
+    drawPeople() {
+        this.drawManager.drawPeople(this.manImg, this.events, this.game.env);
+    }
+
 }
