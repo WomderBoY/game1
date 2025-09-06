@@ -5,6 +5,8 @@ class AchievementsManager {
         this.achievements = {
             first_kill: { id: 'first_kill', name: '初战告捷', desc: '击杀一个小怪', unlocked: false, unlockedAt: null },
             first_toggle: { id: 'first_toggle', name: '阴阳初转', desc: '切换一次阴阳形态', unlocked: false, unlockedAt: null },
+            first_fratile: { id: 'first_fratile', name: '踏碎虚空', desc: '踩碎一个易碎方块', unlocked: false, unlockedAt: null },
+            orb_death: { id: 'orb_death', name: '法球之殇', desc: '被法球击杀', unlocked: false, unlockedAt: null },
         };
         this.load();
         this.toastQueue = [];

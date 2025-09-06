@@ -166,6 +166,11 @@ class Enemy2 {
                     gm.player.position.y >= rect.position.y &&
                     gm.player.position.y <= rect.position.y + rect.size.y
                 ) {
+                    // 触发法球碰撞成就
+                    if (this.game.achievements) {
+                        this.game.achievements.unlock("orb_death");
+                    }
+                    
                     this.dying = true;
                     this.deathTimer = 30;
                     this.game.hp.decrease(10);

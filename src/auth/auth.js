@@ -65,7 +65,9 @@ function renderAchievementsList() {
     // 定义已知成就的基本信息（与游戏中 AchievementsManager 对应）
     const defs = {
         first_kill: { name: '初战告捷', desc: '击杀一个小怪' },
-        first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' }
+        first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' },
+        first_fratile: { name: '踏碎虚空', desc: '踩碎一个易碎方块' },
+        orb_death: { name: '法球之殇', desc: '被法球击杀' }
     };
     const ids = Object.keys(defs);
     ids.forEach(id => {

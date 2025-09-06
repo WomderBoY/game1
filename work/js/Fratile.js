@@ -93,6 +93,11 @@ class Fratile extends Rect {
         console.log("Fratile被踩踏，玩家位置:", game.player);
         this.lst = game.gameFrame;
 
+        // 触发易碎方块成就
+        if (game.achievements) {
+            game.achievements.unlock("first_fratile");
+        }
+
         // 播放木头断裂音效
         if (game.soundmanager) {
             console.log("尝试播放木头断裂音效...");
