@@ -276,7 +276,9 @@ class dialog {
             this.text.innerHTML = "";
             let chars = text.split("");
             let skip = false;
-            this.game.soundmanager.playLoop("beep", 1, 2.5);
+            if (this.game.soundmanager._unlocked) {
+                this.game.soundmanager.playLoop("beep", 1, 2.5);
+            }
 
             // 逐字打印
             for (let i = 0; i < chars.length; i++) {
