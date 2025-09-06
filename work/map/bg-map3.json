@@ -155,7 +155,7 @@ _jsonCallback({
                     "way": "negative",
                     "text": [
                         "呼~，终于逃出来了吗…",
-                        "事不宜迟，赶紧继续前进吧。"
+                        "事不宜迟，赶紧追上它把。"
                     ]
                 },
                 "col": false
@@ -170,7 +170,21 @@ _jsonCallback({
                 "event": {
                     "type": "changemap",
                     "way": "negative",
-                    "target": "../map/bg-map4.json"
+                    "target": "../map/bg4.json",
+                    "with": {
+						"type": "cg",
+						"way": "negative",
+						"images": [
+							"../images/middle3.jpg",
+						],
+						"text": [
+							[
+								"你抓紧来到了下一层",
+								"只见黑雾翻涌，幽影如魍魉般在林间疾驰，那“至阴之物”忽远忽近，似引似诱，双眸寒芒毕露，森冷如刃。",
+								"风声呜咽，天地间杀机顿起，仿佛连草木亦屏息不动，一场恶战，已是箭在弦上。"
+							]
+					]
+					}
                 },
                 "col": false
             }
