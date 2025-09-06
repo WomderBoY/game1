@@ -172,6 +172,17 @@ class DiveBoss {
         }
     }
 
+    revive(x = 100, y = 100) {
+        this.dead = false;
+        this.hp.reset();   // 血回满
+        this.state = "LEFT_IDLE"; // 初始状态
+        this.stateTimer = 0;
+        this.rect.position.x = x; // 重置坐标
+        this.rect.position.y = y;
+        this.vx = 0;
+     this.vy = 0;
+    }
+
     reached(tx, ty, tolerance = 10) {
         return Math.abs(this.rect.position.x - tx) <= tolerance &&
                Math.abs(this.rect.position.y - ty) <= tolerance;
@@ -286,6 +297,14 @@ class BossManager {
     addBoss(x, y, width = 80, height = 80, maxHP = 10) {
         this.bosses.push(new DiveBoss(this.game, x, y, width, height, maxHP));
     }
+
+    resetAllBosses() {
+    for (let boss of this.bosses) {
+        if (!boss.dead) {
+            boss.revive(100, 100);  // 初始坐标随你设定
+        }
+    }
+}
 
     async loadBoss(jsonPath) {
         const data = await this.game.datamanager.loadJSON(jsonPath);

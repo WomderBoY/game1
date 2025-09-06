@@ -145,6 +145,7 @@ class game {
         if (menu) menu.style.display = "none";
         this.savemanager.load();
         this.canmove = true;
+        this.bossmanager.resetAllBosses();
     }
 
     returnToMainMenu() {
@@ -607,6 +608,7 @@ class game {
                 if (this.inputmanager.takeEnter()) {
                     await this.savemanager.load();
                     this.hp.reset();
+                    this.bossmanager.resetAllBosses();
                     console.log('游戏重新开始，HP已重置');
                 }
                 break;
