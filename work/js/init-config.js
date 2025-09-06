@@ -7,7 +7,7 @@ const DEFAULT_LEVELS_CONFIG = {
             "id": "jiaoxue1", 
             "file": "../map/jiaoxue1.json",
             "name": "教学关卡1",
-            "unlocked": false,
+            "unlocked": true,
             "order": 1
         },
         {
@@ -77,7 +77,7 @@ const DEFAULT_LEVELS_CONFIG = {
             "id": "test_1",
             "file": "../map/test_1.json",
             "name": "测试关卡1",
-            "unlocked": true,
+            "unlocked": false,
             "order": 11
         },
         {
@@ -88,8 +88,8 @@ const DEFAULT_LEVELS_CONFIG = {
             "order": 12
         },
     ],
-    "defaultUnlocked": ["test_1"],
-    "version": "1.0"
+    "defaultUnlocked": ["jiaoxue1"],
+    "version": "2.0"
 };
 
 // 将配置保存到localStorage
