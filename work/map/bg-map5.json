@@ -13,6 +13,25 @@ _jsonCallback({
                 "img":["../images/hitbox.png"],
             },
             {
+				"hitbox": [
+					94,
+					500,
+					20,
+					20,
+				],
+                "event": {
+					"type": "dialog",
+					"way": "tunnal",
+					"text": [
+						"进入了古塔第七层",
+						"又出现阴石产生的生物了，而且地形变得更加复杂了",
+						"右边那个长长的平台看起来一碰就碎啊...",
+						"想办法去到下一层吧"
+					]
+				},
+				"col": false
+			},
+            {
                 "hitbox":[1006, 469, 200, 60],
                 "col":true,
             },
@@ -81,7 +100,8 @@ _jsonCallback({
             {
                 "hitbox":[69, 288, 50, 50],
             }
-        ]
+        ],
+        "background": "../images/bg.png",
     },
     "yin":{
         "tileMap":[
@@ -110,5 +130,6 @@ _jsonCallback({
         ],
         "enemy":[],
         "bagua":[],
+        "background": "../images/bg.png"
     }
 })

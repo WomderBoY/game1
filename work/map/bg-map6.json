@@ -18,6 +18,26 @@ _jsonCallback({
 			{
 				"hitbox": [
 					155,
+					560,
+					20,
+					20,
+				],
+                "event": {
+					"type": "dialog",
+					"way": "tunnal",
+					"text": [
+						"进入了古塔第六层",
+						"前往下一层的楼梯被彻底毁坏了，只剩下一根竖直的立柱",
+						"最右边的平台好像可以去到下一关，可惜只是虚影",
+						"下面那个，又是八卦阵么",
+						"想办法去到下一层吧"
+					]
+				},
+				"col": false
+			},
+			{
+				"hitbox": [
+					155,
 					500,
 					155,
 					40
@@ -189,6 +209,22 @@ _jsonCallback({
                 "vy":0,
                 "col":true,
             },
+			{
+				"hitbox": [
+					1100,
+					58,
+					30,
+					20
+				],
+				"event": {
+					"type": "changemap",
+					"way": "tunnal",
+					"x": 94,
+					"y": 500,
+					"target": "../map/bg-map5.json"
+				},
+				"col": false,
+			},
 			{
 				"hitbox": [
 					1060,
