@@ -1,0 +1,203 @@
+_jsonCallback({
+	"born": [
+		519,
+		113
+	],
+	"yang": {
+		"tileMap": [
+			{
+				"hitbox": [
+					0,
+					680,
+					180,
+					40
+				],
+				"col": true
+			},
+            {
+				"hitbox": [
+					0,
+					680,
+					180,
+					40
+				],
+				"col": true
+			},
+            {
+				"hitbox": [
+					200,
+					680,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					570,
+					680
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					200,
+					500,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					390,
+					500
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					300,
+					390,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					440,
+					550
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					300,
+					210,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					260,
+					370
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					470,
+					165,
+					200,
+					40
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					950,
+					0,
+					30,
+					200
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					950,
+					400,
+					30,
+					320
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					950,
+					370,
+					30,
+					30
+				],
+				"event": {
+					"type": "kill-2", 
+					"way": "tunnal", 
+				},
+				"col": false
+			},
+			{
+				"hitbox": [
+					1080,
+					520,
+					200,
+					200
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					1220,
+					480,
+					40,
+					40
+				],
+				"event": {
+					"type": "man", 
+					"way": "negative", 
+					"with": {
+						"images": [  //等待剧情
+							"../images/black-right2-0.png",
+							"../images/white.png"
+						],
+						"text": [
+							[
+								"【旁白】这是传送门"
+							],
+							[
+								"【旁白】将你传送到下一关"
+							]
+						],
+					}
+				},
+				"col": false
+			},
+			
+		],
+		"enemy": [],
+		"bagua": [],
+		"background": "../images/bg.png",
+	},
+	"yin": {
+		"tileMap": [],
+		"enemy": [],
+		"bagua": [],
+		"background": ""
+	}
+}
+)
