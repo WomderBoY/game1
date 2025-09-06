@@ -682,7 +682,7 @@ drawSpikes(ctx, x, y, w, h) {
         }
     }
 
-    drawPeople(manImg, events, env) {
+    drawPeople(manImg, events, env) { //这是绘制人物的地方，我希望在这里加全局变量
     if (!manImg) return;
 
     for (let e of events[env]) {
@@ -701,6 +701,7 @@ drawSpikes(ctx, x, y, w, h) {
                 );
              }
         }
+        
     }
 
 }
