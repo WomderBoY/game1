@@ -1,0 +1,145 @@
+_jsonCallback({
+	"born": [
+		519,
+		113
+	],
+	"yang": {
+		"tileMap": [
+			{
+				"hitbox": [
+					0,
+					680,
+					180,
+					40
+				],
+				"col": true
+			},
+            {
+				"hitbox": [
+					0,
+					680,
+					180,
+					40
+				],
+				"col": true
+			},
+            {
+				"hitbox": [
+					200,
+					680,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					570,
+					680
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					200,
+					500,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					390,
+					500
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					300,
+					390,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					440,
+					550
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					300,
+					210,
+					80,
+					50
+				],
+				"move": true,
+				"area": [
+					-1,
+					-1,
+					260,
+					370
+				],
+				"vx": 0,
+				"vy": 0.5,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+			{
+				"hitbox": [
+					470,
+					165,
+					200,
+					40
+				],
+				"col": true
+			},
+			{
+				"hitbox": [
+					950,
+					0,
+					20,
+					200
+				],
+				"col": true
+			},
+			
+		],
+		"enemy": [],
+		"bagua": [],
+		"background": "../images/bg.png",
+	},
+	"yin": {
+		"tileMap": [],
+		"enemy": [],
+		"bagua": [],
+		"background": ""
+	}
+}
+)

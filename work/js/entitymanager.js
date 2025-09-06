@@ -169,6 +169,9 @@ class entitymanager {
         let dbg = false;
         if (vy == -100) dbg = true;
         let fl = false;
+        let standingOnMovetile = false; // 将变量定义移到外层作用域
+        
+        // 先更新所有移动砖块的位置
         for (let p of ga.mapmanager.collidable[this.game.env])
             if (p instanceof Movetile) {
                 p.update(this.game)
@@ -193,6 +196,44 @@ class entitymanager {
         if (dbg)
             console.warn('vy = ', vy);
         if (!fl) {
+            // 检查玩家是否站在移动砖块上，如果是则持续跟随
+            let movetileVx = 0, movetileVy = 0;
+            
+            for (let j = 0; j < ga.mapmanager.collidable[this.game.env].length; ++j) {
+                let p =  ga.mapmanager.collidable[this.game.env][j];
+                //            console.warn("check col", p);
+                if (p.alive(this.game) == false) {
+                    console.warn("pass it");
+                    continue;
+                }
+                
+                // 检查玩家是否站在移动砖块上（上方碰撞）
+                if (p instanceof Movetile && ga.player.containsRect(p)) {
+                    // 更精确的检测：玩家脚部在砖块顶部附近
+                    let playerBottom = ga.player.position.y + ga.player.size.y;
+                    let tileTop = p.y;
+                    if (playerBottom >= tileTop - 10 && playerBottom <= tileTop + 10) { // 10像素容差
+                        standingOnMovetile = true;
+                        movetileVx = p.vx;
+                        movetileVy = p.vy;
+                        break;
+                    }
+                }
+            }
+            
+            // 如果玩家站在移动砖块上，先应用移动砖块的速度
+            if (standingOnMovetile) {
+                ga.player.position.x += movetileVx;
+                ga.player.position.y += movetileVy;
+                entitymanager.vxx = movetileVx;
+                entitymanager.vyy = movetileVy;
+                // 设置玩家在地面上，防止重力影响
+                og = true;
+                isjp = false;
+                // 重置玩家的垂直速度，让玩家完全跟随移动砖块
+                vy = 0;
+            }
+            
             for (let j = 0; j < ga.mapmanager.collidable[this.game.env].length; ++j) {
                 let p =  ga.mapmanager.collidable[this.game.env][j];
                 //            console.warn("check col", p);
@@ -217,13 +258,12 @@ class entitymanager {
                     if (prevY + ga.player.size.y <= p.y) {
                         
             //            console.warn("up col!!!");
-                        ga.player.position.y = p.y - ga.player.size.y;
-                        vy = 0;
-                        og = true;
-                        isjp = false;
-                        if (p instanceof Movetile) {
-                            entitymanager.vxx = p.vx;
-                            entitymanager.vyy = p.vy;
+                        // 如果玩家已经站在移动砖块上，不需要重复设置位置
+                        if (!(p instanceof Movetile && standingOnMovetile)) {
+                            ga.player.position.y = p.y - ga.player.size.y;
+                            vy = 0;
+                            og = true;
+                            isjp = false;
                         }
                     }
                     // 下方碰撞
@@ -238,18 +278,14 @@ class entitymanager {
                         ga.player.position.x = p.x - ga.player.size.x - 0.5;
                         vx = 0;
             //            console.warn("left col!!!");
-                        if (p instanceof Movetile) {
-                            entitymanager.vxx = p.vx;
-                        }
+                        // 移动砖块的速度已经在前面处理过了，这里不需要重复处理
                     }
                     // 右侧碰撞
                     else if (prevX >= p.x + p.w) {
             //            console.warn("right col!!!");
                         ga.player.position.x = p.x + p.w + 0.5;
                         vx = 0;
-                        if (p instanceof Movetile) {
-                            entitymanager.vxx = p.vx;
-                        }
+                        // 移动砖块的速度已经在前面处理过了，这里不需要重复处理
                     }
                     if (p instanceof Fratile)
                     {
@@ -260,7 +296,7 @@ class entitymanager {
             }
         }
 
-        if (this.game.cg == false) this.drawPlayer();
+        if (this.game.cg == false) this.drawPlayer(standingOnMovetile);
 
         this.px = ga.player.position.x;
         this.py = ga.player.position.y;
@@ -281,8 +317,29 @@ class entitymanager {
     //        if (vy < entitymanager.maxspeedy) vy = entitymanager.maxspeedy;
         }
 
-        vy += gravity;
+        // 如果玩家站在移动砖块上，不应用重力
+        if (!standingOnMovetile) {
+            vy += gravity;
+        }
+        
+        // 应用垂直移动
         ga.player.position.y += vy + vyy;
+        
+        // 如果玩家站在移动砖块上，确保位置同步
+        if (standingOnMovetile) {
+            // 再次确保玩家位置与移动砖块同步
+            for (let p of ga.mapmanager.collidable[this.game.env]) {
+                if (p instanceof Movetile && ga.player.containsRect(p)) {
+                    let playerBottom = ga.player.position.y + ga.player.size.y;
+                    let tileTop = p.y;
+                    if (playerBottom >= tileTop - 10 && playerBottom <= tileTop + 10) {
+                        // 确保玩家脚部始终在砖块顶部
+                        ga.player.position.y = p.y - ga.player.size.y;
+                        break;
+                    }
+                }
+            }
+        }
 
         // 水平移动
         if (ky.left) {
@@ -428,13 +485,28 @@ class entitymanager {
         }
     }
 
-    async drawPlayer() {
+    async drawPlayer(standingOnMovetile = false) {
         let machine = this.game.animationmachine;
-        if (this.keys.up || entitymanager.onground == false) {
+        
+        // 动画状态逻辑优化
+        if (this.keys.up) {
+            // 玩家主动跳跃
+            machine.current = "jump";
+        } else if (standingOnMovetile) {
+            // 站在移动砖块上时，根据移动方向决定动画
+            if (this.keys.left || this.keys.right) {
+                machine.current = "run";
+            } else {
+                machine.current = "stand";
+            }
+        } else if (entitymanager.onground == false) {
+            // 在空中且不在移动砖块上
             machine.current = "jump";
         } else if (this.keys.left || this.keys.right) {
+            // 在地面上移动
             machine.current = "run";
         } else {
+            // 在地面上静止
             machine.current = "stand";
         }
         if (machine.current != this.lt) {
