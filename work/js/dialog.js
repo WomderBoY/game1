@@ -306,7 +306,7 @@ class dialog {
                 });
             }
 
-            await this.game.soundmanager.fadeLoop("beep", 0.05);
+            await this.game.soundmanager.stopLoop2("beep");
 
             // 段落显示完成，等待 Enter 再进入下一段
             if (this.canceled) return;

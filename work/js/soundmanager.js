@@ -112,6 +112,22 @@ class SoundManager {
         delete this.loopSources[name];
     }
 
+    /** 停止循环播放（等当前播放完再停） */
+    stopLoop2(name) {
+        if (!this.loopSources[name]) return;
+
+        const audio = this.loopSources[name];
+
+        // 如果本来是循环的，先关掉 loop
+        audio.loop = false;
+
+        // 移除之前的 onended，避免重复绑定
+        audio.onended = () => {
+            delete this.loopSources[name];
+        };
+}
+
+
     /** 淡出循环音效 */
     fadeLoop(name, duration = 0.1) {
         if (!this.loopSources[name]) return;
