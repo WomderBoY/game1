@@ -148,9 +148,9 @@ class dialog {
 
         const speakerConfig = {
             "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
-            "玩家": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
-            "Boss": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
-            "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" }
+            "玩家": { theme: "player", avatar: null, background: "../images/diagbg2.png", displayName: "玩家" },
+            "Boss": { theme: "mysterious", avatar: null, background: "../images/diagbg3.png", displayName: "旁白" },
+            "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" }
         };
 
         // 检查是否匹配已知的对话人
