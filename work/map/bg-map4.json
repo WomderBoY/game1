@@ -1,16 +1,7 @@
 _jsonCallback({
     "born": [
-        0,
-        0
-    ],
-    "with": [
-        {
-            "type": "dialog",
-            "text": [
-                "来到了新地图",
-                "尝试制作"
-            ]
-        }
+        55,
+        180
     ],
     "yang": {
         "tileMap": [
@@ -23,6 +14,31 @@ _jsonCallback({
                 ],
                 "col": true,
             },
+            {
+				"hitbox": [
+					55,
+					200,
+					20,
+					20,
+				],
+                "event": {
+					"type": "dialog",
+					"way": "tunnal",
+					"text": [
+						"来到了古塔第八层",
+                        "师傅常说九九归一，这塔应有九层，副掌门应该就在上面了",
+                        "这一层机关更加扑朔迷离了，是为了防止入侵者么",
+                        "中间那个带十字的方块似乎很有弹性啊，但是它好像只有变成黑色的时候才能踩上去",
+                        "提示：按住W键以使用弹跳方块",
+                        "那些藤蔓缠绕的岩石平台看起来不太牢靠",
+                        "手中的阳石在震动，那些红色砖块是阴石的产物，转动八卦阵或许能对他们造成影响",
+                        "提示：当红砖不是虚影时，鼠标悬停可以查看他们的血量",
+                        "想办法去到下一层吧",
+                        "本关难度极高，请谨慎挑战"
+					]
+				},
+				"col": false
+			},
             {
                 "hitbox": [
                     182,
@@ -97,6 +113,19 @@ _jsonCallback({
                 ],
                 "col": true,
             },
+            {
+				"hitbox": [
+					0,
+					675,
+					2000,
+					75
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			},
             {
                 "hitbox": [
                     844,
@@ -186,7 +215,7 @@ _jsonCallback({
             }
         ],
         "enemy": [],
-        "background": "../images/baguazhen.png",
+        "background": "../images/bg.png",
     },
     "yin": {
         "tileMap": [
@@ -204,6 +233,19 @@ _jsonCallback({
                 ],
                 "tiling": true,
             },
+            {
+				"hitbox": [
+					0,
+					675,
+					2000,
+					75
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			},
             {
                 "hitbox": [
                     225,
@@ -276,7 +318,7 @@ _jsonCallback({
             }
         ],
         "enemy": [],
-        "background": "../images/baguazhen.png",
+        "background": "../images/bg.png",
     },
     "Tram": [
         {

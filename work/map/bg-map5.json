@@ -7,10 +7,10 @@ _jsonCallback({
                 "col":true,
             },
             {
-                "hitbox":[278, 601, 660, 30],
+                "hitbox":[278, 601, 660, 60],
                 "col":true,
                 "fra":true,
-                "img":["../images/hitbox.png"],
+                "img":["../images/vine1.png"],
             },
             {
 				"hitbox": [
@@ -25,9 +25,22 @@ _jsonCallback({
 					"text": [
 						"进入了古塔第七层",
 						"又出现阴石产生的生物了，而且地形变得更加复杂了",
-						"右边那个长长的平台看起来一碰就碎啊...",
+						"右边的藤蔓感觉不太结实，要小心",
 						"想办法去到下一层吧"
 					]
+				},
+				"col": false
+			},
+            {
+				"hitbox": [
+					0,
+					675,
+					2000,
+					75
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
 				},
 				"col": false
 			},
@@ -114,6 +127,19 @@ _jsonCallback({
                 "vy":0,
                 "img":["../images/hitbox.png"],
             },
+            {
+				"hitbox": [
+					0,
+					675,
+					2000,
+					75
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			},
             {
                 "hitbox":[127, 303, 120, 40],
                 "col":true,
