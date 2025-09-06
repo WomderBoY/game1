@@ -6,6 +6,48 @@ _jsonCallback({
     "yang": {
         "tileMap": [
             {
+				"hitbox": [
+					620,
+					600,
+					20,
+					20,
+				],
+                "event": {
+					"type": "dialog",
+					"way": "tunnal",
+					"text": [
+						"【旁白】提示：至阴之物乃阴属性，你应该切换为阳属性与之对战，攻击方式仍为踩头。",
+					]
+				},
+				"col": false
+			},
+            {
+				"hitbox": [
+					0,
+					670,
+					300,
+					50
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			},
+            {
+				"hitbox": [
+					980,
+					670,
+					300,
+					50
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			},
+            {
                 "hitbox": [
                     300,
                     650,
@@ -35,7 +77,7 @@ _jsonCallback({
             "y": 100,
             "w": 80,
             "h": 80,
-            "maxHP": 2
+            "maxHP": 3
                 
         }
     ]
