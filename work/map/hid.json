@@ -1,7 +1,7 @@
 _jsonCallback({
 	"born": [
-		519,
-		113
+		70,
+		630
 	],
 	"yang": {
 		"tileMap": [
@@ -13,6 +13,24 @@ _jsonCallback({
 					40
 				],
 				"col": true
+			},
+			{
+				"hitbox": [
+					70,
+					630,
+					20,
+					20,
+				],
+                "event": {
+					"type": "dialog",
+					"way": "tunnal",
+					"text": [
+						"不好，掉进洞里了，这是哪里啊...",
+						"右边好像有个人影，是敌人么",
+						"不管了，过去看看吧"
+					]
+				},
+				"col": false
 			},
             {
 				"hitbox": [
@@ -159,6 +177,19 @@ _jsonCallback({
 					200
 				],
 				"col": true
+			},
+			{
+				"hitbox": [
+					180,
+					680,
+					1100,
+					40
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
 			},
 			{
 				"hitbox": [

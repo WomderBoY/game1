@@ -56,7 +56,7 @@ class eventmanager {
             await this.game.dialog.prints(e.text);
             this.game.canmove = true;
         }
-        if (e.type === "changemap"||e.type ==="man") {
+        if (e.type === "changemap"||e.type ==="man"||e.type ==="changemap2") {
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             if (e.with) {
                 console.warn("start", this.event.next);
