@@ -276,7 +276,7 @@ class dialog {
             this.text.innerHTML = "";
             let chars = text.split("");
             let skip = false;
-            this.game.soundmanager.playLoop("five_beeps", 1, 1);
+            this.game.soundmanager.playLoop("beep", 1, 2.5);
 
             // 逐字打印
             for (let i = 0; i < chars.length; i++) {
@@ -306,7 +306,7 @@ class dialog {
                 });
             }
 
-            await this.game.soundmanager.fadeLoop("five_beeps", 0.5);
+            await this.game.soundmanager.fadeLoop("beep", 0.05);
 
             // 段落显示完成，等待 Enter 再进入下一段
             if (this.canceled) return;

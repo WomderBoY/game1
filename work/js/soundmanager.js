@@ -15,6 +15,7 @@ class SoundManager {
         await this.load("change", "../sound/change.mp3");
         await this.load("wood_snap", "../sound/wood_snap.wav");
         await this.load("explode", "../sound/explode.wav");
+        await this.load("beep", "../sound/beep.mp3");
     }
 
     /** 加载音效 */

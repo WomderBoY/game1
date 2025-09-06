@@ -162,6 +162,7 @@ class BaguaManager {
         //         ]
         //     });
         // }
+        if (!this.game.canmove) return ;
 
         for (let b of this.baguas) {
             // 如果和玩家重叠，并且按下Enter，就切换环境
