@@ -7,6 +7,7 @@ class game {
         return Math.floor(Math.random() * (r - l + 1)) + l;
     }
 
+
     static lst;
     static yingyang = true;
     async init() {
@@ -21,7 +22,7 @@ class game {
         this.env = "yang"; // 默认环境为阳
         this.changetimes = 0; // 切换环境次数
         this.yingyang = true;
-
+        this.ending=true;//这是隐藏结局
         this.datamanager = new datamanager(this);
 
         // 添加太极管理器（新增代码）

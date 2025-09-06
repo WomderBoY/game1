@@ -170,17 +170,17 @@ _jsonCallback({
 				"event": {
 					"type": "man", 
 					"way": "negative", 
+					"target":"../map/bg-map2.json",
 					"with": {
-						"images": [  //等待剧情
-							"../images/black-right2-0.png",
-							"../images/white.png"
+						"type": "cg",
+						"way": "negative", //待加入剧情
+						"images": [
+							"../images/jiaoxue2.jpg"
 						],
 						"text": [
 							[
-								"【旁白】这是传送门"
-							],
-							[
-								"【旁白】将你传送到下一关"
+								"“今日你已初步掌握阳石之力，但江湖险恶，不止于此。”他手一挥，殿内光芒一闪，阴石残留之气凝聚，化作小巧而灵动的怪物，绕着你飞舞。",
+								"“这些便是阴石残余之气所化小怪，虽弱，却能扰乱行踪。”"
 							]
 						],
 					}

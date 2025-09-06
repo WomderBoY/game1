@@ -414,6 +414,10 @@ class entitymanager {
                 } else {
                     const press = this.game.inputmanager.takeEnter();
                     if (press) {
+                        if (e.event.type == 'man'){
+                            this.ending=false;
+                            console.warn('触发了')
+                        }
                         console.log("消极事件触发", e.event);
                         this.game.eventmanager.add(e.event);
                     }
