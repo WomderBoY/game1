@@ -207,6 +207,119 @@ function logout() {
     }, 1000);
 }
 
+/* ================== 删除存档功能 ================== */
+
+function deleteUserSaveData() {
+    const username = localStorage.getItem("yyj_username");
+    if (!username) {
+        showPopup("未找到当前用户信息");
+        return;
+    }
+
+    // 显示确认对话框
+    const confirmed = confirm(
+        `确定要删除用户 "${username}" 的所有存档数据吗？\n\n` +
+        `这将删除：\n` +
+        `• 游戏进度存档\n` +
+        `• 所有成就数据\n` +
+        `• 关卡解锁状态\n` +
+        `• 关卡配置数据\n\n` +
+        `此操作不可撤销！`
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    // 再次确认
+    const doubleConfirmed = confirm(
+        `最后确认：您真的要删除用户 "${username}" 的所有数据吗？\n\n` +
+        `删除后需要重新开始游戏！`
+    );
+
+    if (!doubleConfirmed) {
+        return;
+    }
+
+    try {
+        // 删除所有与当前用户相关的数据
+        const keysToDelete = [
+            `saveData1_${username}`,
+            `yyj_achievements_v1_${username}`,
+            `levelsConfig_${username}`,
+            `unlockedLevels_${username}`,
+            `selectedLevel_${username}`
+        ];
+
+        let deletedCount = 0;
+        keysToDelete.forEach(key => {
+            if (localStorage.getItem(key)) {
+                localStorage.removeItem(key);
+                deletedCount++;
+                console.log(`已删除: ${key}`);
+            }
+        });
+
+        // 显示删除结果
+        if (deletedCount > 0) {
+            showPopup(`成功删除 ${deletedCount} 项存档数据！`);
+            console.log(`用户 ${username} 的存档数据已全部删除`);
+            
+            // 验证删除结果
+            console.log("=== 删除验证 ===");
+            keysToDelete.forEach(key => {
+                const remaining = localStorage.getItem(key);
+                console.log(`${key}: ${remaining ? '仍存在' : '已删除'}`);
+            });
+        } else {
+            showPopup("没有找到需要删除的存档数据");
+        }
+
+        // 关闭设置弹窗
+        hideSettings();
+
+    } catch (error) {
+        console.error("删除存档数据时发生错误:", error);
+        showPopup("删除存档时发生错误，请重试");
+    }
+}
+
+// 调试功能：显示当前用户的所有存档数据
+function debugUserSaveData() {
+    const username = localStorage.getItem("yyj_username");
+    if (!username) {
+        console.log("未找到当前用户信息");
+        return;
+    }
+
+    console.log(`=== 用户 ${username} 的存档数据调试 ===`);
+    
+    const keysToCheck = [
+        `saveData1_${username}`,
+        `yyj_achievements_v1_${username}`,
+        `levelsConfig_${username}`,
+        `unlockedLevels_${username}`,
+        `selectedLevel_${username}`
+    ];
+
+    keysToCheck.forEach(key => {
+        const data = localStorage.getItem(key);
+        if (data) {
+            try {
+                const parsed = JSON.parse(data);
+                console.log(`${key}:`, parsed);
+            } catch (e) {
+                console.log(`${key}: ${data}`);
+            }
+        } else {
+            console.log(`${key}: 不存在`);
+        }
+    });
+}
+
+// 将调试函数暴露到全局，方便在控制台调用
+window.debugUserSaveData = debugUserSaveData;
+
 /* ================== 登录注册逻辑 ================== */
 
 function login(onSuccessCallback) {
@@ -391,6 +504,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.modal-close-btn').addEventListener('click', hideAchievements);
     document.getElementById('settings-close-btn').addEventListener('click', hideSettings);
     document.getElementById('about-us').addEventListener('click', transitionTous);
+    
+    // 删除存档按钮事件监听
+    const deleteSaveBtn = document.getElementById('delete-save-btn');
+    if (deleteSaveBtn) {
+        deleteSaveBtn.addEventListener('click', deleteUserSaveData);
+    }
 
     // 如果 URL 带有 #menu，直接展示主菜单界面
     if (window.location.hash === '#menu') {
