@@ -433,6 +433,10 @@ class mapmanager {
         return this.collidable[type];
     }
 
+    drawbg(type = 'yin') {
+        this.drawManager.drawBackground(type, this.background);
+    }
+
     draw(type = "yin") {
         // 使用绘制管理器绘制地图
         this.drawManager.drawMap(
