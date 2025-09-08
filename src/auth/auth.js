@@ -26,9 +26,9 @@ function updateUsernameDisplay() {
     if (usernameDisplay) {
         const username = localStorage.getItem('yyj_username');
         if (username) {
-            usernameDisplay.textContent = `你好：${username}`;
+            usernameDisplay.textContent = '';  //你好，用户名
         } else {
-            usernameDisplay.textContent = '你好：旅行者';
+            usernameDisplay.textContent = '';
         }
     }
 }
@@ -51,7 +51,9 @@ function transitionToGame() {
 
 function getSavedAchievements() {
     try {
-        const raw = localStorage.getItem('yyj_achievements_v1');
+        const username = localStorage.getItem("yyj_username");
+        const key = username ? `yyj_achievements_v1_${username}` : 'yyj_achievements_v1';
+        const raw = localStorage.getItem(key);
         if (!raw) return null;
         return JSON.parse(raw);
     } catch (_) { return null; }
@@ -214,6 +216,8 @@ function login(onSuccessCallback) {
     const stored = JSON.parse(localStorage.getItem(u));
     if (!stored) { showPopup("账号未注册！"); return; }
     if (stored.password === p) {
+        // 保存当前登录的用户名
+        localStorage.setItem("yyj_username", u);
         showPopup(`登录成功！欢迎，${u}`);
         setTimeout(onSuccessCallback, 1500);
     } else { showPopup("密码错误！"); }

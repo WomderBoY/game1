@@ -4,6 +4,12 @@ class SaveManager {
         this.makeEmptyData();
         console.log("SaveManager 构造函数完成，this.data:", this.data);
     }
+    
+    // 获取当前用户的存储键
+    getUserStorageKey(baseKey) {
+        const username = localStorage.getItem("yyj_username");
+        return username ? `${baseKey}_${username}` : baseKey;
+    }
     makeEmptyData() {
         this.data = {
             room: "../map/test_1.json",
@@ -37,7 +43,8 @@ class SaveManager {
         console.log("with = ", this.game.eventmanager.event?.with);
         console.log("this.data", this.data);
         let data = JSON.stringify(this.data);
-        localStorage.setItem("saveData1", data);
+        const saveKey = this.getUserStorageKey("saveData1");
+        localStorage.setItem(saveKey, data);
         console.log("游戏已保存", data);
         console.log("youxibaocun", this.data);
     }
@@ -47,7 +54,8 @@ class SaveManager {
         console.log("加载前的 this.data:", this.data);
         this.game.nightmanager.deactivateNight();
 
-        let data = localStorage.getItem("saveData1");
+        const saveKey = this.getUserStorageKey("saveData1");
+        let data = localStorage.getItem(saveKey);
         if (!data) {
             console.warn("没有找到保存的数据");
             return;

@@ -75,7 +75,9 @@ class game {
         //    await this.enemymanager.LoadEnemy("test_1.json");
         //  await this.baguamanager.LoadBagua("test_1.json");
         // 检查是否有选择的关卡
-        const selectedLevel = localStorage.getItem("selectedLevel");
+        const username = localStorage.getItem("yyj_username");
+        const selectedLevelKey = username ? `selectedLevel_${username}` : "selectedLevel";
+        const selectedLevel = localStorage.getItem(selectedLevelKey);
 
         if (selectedLevel) {
             // 有选择的关卡，直接加载该关卡
@@ -205,8 +207,10 @@ class game {
 
         if (currentIndex >= 0) {
             // 解锁当前关卡和之前的所有关卡
+            const username = localStorage.getItem("yyj_username");
+            const unlockedLevelsKey = username ? `unlockedLevels_${username}` : "unlockedLevels";
             const unlockedLevels = JSON.parse(
-                localStorage.getItem("unlockedLevels") || "[]"
+                localStorage.getItem(unlockedLevelsKey) || "[]"
             );
 
             console.log(`解锁前的关卡列表:`, unlockedLevels);
@@ -232,7 +236,7 @@ class game {
             console.log(`解锁后的关卡列表:`, unlockedLevels);
 
             localStorage.setItem(
-                "unlockedLevels",
+                unlockedLevelsKey,
                 JSON.stringify(unlockedLevels)
             );
         } else {
@@ -242,14 +246,16 @@ class game {
 
     // 获取已解锁的关卡列表
     getUnlockedLevels() {
+        const username = localStorage.getItem("yyj_username");
+        const unlockedLevelsKey = username ? `unlockedLevels_${username}` : "unlockedLevels";
         const unlockedLevels = JSON.parse(
-            localStorage.getItem("unlockedLevels") || "[]"
+            localStorage.getItem(unlockedLevelsKey) || "[]"
         );
         // 确保第一关总是解锁的
         if (!unlockedLevels.includes("../map/test_1.json")) {
             unlockedLevels.push("../map/test_1.json");
             localStorage.setItem(
-                "unlockedLevels",
+                unlockedLevelsKey,
                 JSON.stringify(unlockedLevels)
             );
         }
