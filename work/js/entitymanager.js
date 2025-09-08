@@ -190,7 +190,7 @@ class entitymanager {
                 break;
             }
         }
-        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
+//        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
         if (!fl) {
             // 检查玩家是否站在移动砖块上，如果是则持续跟随
             let movetileVx = 0, movetileVy = 0;

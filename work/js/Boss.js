@@ -59,7 +59,7 @@ class Boss {
         let now = Date.now();
         if (now - this.lstmove <= 10000) return ;
         console.warn('boss move!!');
-        let o = this.game.random(3, 3);
+        let o = this.game.random(2, 2);
         if (o == 1) {
             await this.change_hitbox('yin', 1);
             await this.change_hitbox('yang', 1);

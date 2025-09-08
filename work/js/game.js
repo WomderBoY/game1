@@ -481,10 +481,7 @@ class game {
                 //
                 // 绘制地图（背景或场景元素）
                 
-                if (this.canmove) {
-                    this.expmanager.update(16);
-                    this.expmanager.draw(this.ctx);
-                }
+                
                 await this.enemymanager.update();
                 await this.enemy2manager.update();
                 //                await this.mapmanager.drawhp();
@@ -505,6 +502,10 @@ class game {
                 await this.mapmanager.drawPeople();
                 await this.baguamanager.draw(this.ctx);
                 await this.baguamanager.update(this.player);
+                if (this.canmove) {
+                    this.expmanager.update(16);
+                    this.expmanager.draw(this.ctx);
+                }
                 if (this.cg == false) {
                     this.enemymanager.draw(this.ctx);
                     this.enemy2manager.draw(this.ctx);
@@ -565,6 +566,10 @@ class game {
                 this.mapmanager.drawPeople();
                 this.entitymanager.drawPlayer();
                 this.hp.drawblood();
+                if (this.canmove) {
+                    this.expmanager.update(16);
+                    this.expmanager.draw(this.ctx);
+                }
 
                 // 更新HP系统（暂停时也需要更新动画）
                 this.hp.update(16.6667);
@@ -594,6 +599,10 @@ class game {
                         this.ctx.fillStyle = "#484848ff";
                         this.ctx.fillRect(0, 0, this.width, this.height);
                     }
+                }
+                if (this.canmove) {
+                    this.expmanager.update(16);
+                    this.expmanager.draw(this.ctx);
                 }
                 await this.enemy2manager.update();
                 this.enemymanager.draw(this.ctx);
