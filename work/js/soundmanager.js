@@ -3,6 +3,24 @@ class SoundManager {
         this.buffers = {}; // 已加载的音效
         this.instances = {}; // 正在播放的实例列表
         this.loopSources = {}; // 循环音效单独存储
+        this._unlocked = false; // 是否已解锁音频
+        this.init();
+
+        // 绑定用户交互解锁
+        const unlockHandler = () => {
+            if (this._unlocked) return;
+            this._unlocked = true;
+            console.log("首次用户交互，解锁音效播放权限");
+            for (let key in this.buffers) {
+                const audio = this.buffers[key];
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(() => {});
+            }
+        };
+        document.addEventListener("click", unlockHandler, { once: true });
+        document.addEventListener("keydown", unlockHandler, { once: true });
     }
 
     async init() {
@@ -15,6 +33,21 @@ class SoundManager {
         await this.load("change", "../sound/change.mp3");
         await this.load("wood_snap", "../sound/wood_snap.wav");
         await this.load("explode", "../sound/explode.wav");
+        await this.load("beep", "../sound/beep.wav");
+        await this.load("beep1", "../sound/beep1.mp3");
+        this.unlock();
+    }
+
+    unlock() {
+        document.addEventListener("click", () => {
+            Object.values(this.buffers).forEach(audio => {
+                // 试播一下，马上暂停，用来解锁
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(()=>{});
+            });
+        }, { once: true });
     }
 
     /** 加载音效 */
@@ -77,6 +110,7 @@ class SoundManager {
     playLoop(name, volume = 1, playbackRate = 1) {
         console.log(name, volume);
         if (this.loopSources[name]) return; // 已经在循环播放
+        console.warn('okr');
 
         if (!this.buffers[name]) return null;
 
@@ -110,6 +144,22 @@ class SoundManager {
         audio.currentTime = 0; // 重置播放位置
         delete this.loopSources[name];
     }
+
+    /** 停止循环播放（等当前播放完再停） */
+    stopLoop2(name) {
+        if (!this.loopSources[name]) return;
+
+        const audio = this.loopSources[name];
+
+        // 如果本来是循环的，先关掉 loop
+        audio.loop = false;
+
+        // 移除之前的 onended，避免重复绑定
+        audio.onended = () => {
+            delete this.loopSources[name];
+        };
+}
+
 
     /** 淡出循环音效 */
     fadeLoop(name, duration = 0.1) {
