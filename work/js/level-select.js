@@ -64,7 +64,7 @@ function loadLevelsConfig() {
 // 使用默认配置（备用方案）
 function useDefaultConfig() {
     levelConfig = {
-        "../map/test_1.json": { name: "待定", unlocked: true },
+        "../map/test_1.json": { name: "待定", unlocked: false },
         "../map/test_2.json": { name: "待定", unlocked: false },
         "../map/bg-map1.json": { name: "待定", unlocked: false },
         "../map/bg-map2.json": { name: "待定", unlocked: false },
@@ -153,9 +153,16 @@ function checkSaveData() {
         localStorage.getItem(unlockedLevelsKey) || "[]"
     );
 
-    // 确保第一关总是解锁的
-    if (!unlockedLevels.includes("../map/test_1.json")) {
-        unlockedLevels.push("../map/test_1.json");
+    // 确保默认关卡总是解锁的
+    const defaultUnlockedLevels = ["../map/jiaoxue1.json"]; // 根据配置，默认解锁教学关卡1
+    defaultUnlockedLevels.forEach(level => {
+        if (!unlockedLevels.includes(level)) {
+            unlockedLevels.push(level);
+        }
+    });
+    
+    // 如果有新的解锁关卡，保存到localStorage
+    if (defaultUnlockedLevels.some(level => !unlockedLevels.includes(level))) {
         localStorage.setItem(
             unlockedLevelsKey,
             JSON.stringify(unlockedLevels)
@@ -368,7 +375,7 @@ function unlockAllLevels() {
 // 强制重置为只解锁第一关（调试用）
 function resetToFirstLevel() {
     const unlockedLevelsKey = getUserStorageKey("unlockedLevels");
-    localStorage.setItem(unlockedLevelsKey, JSON.stringify(["../map/test_1.json"]));
+    localStorage.setItem(unlockedLevelsKey, JSON.stringify(["../map/jiaoxue1.json"]));
     console.log("已重置为只解锁第一关");
     location.reload(); // 重新加载页面以更新界面
 }

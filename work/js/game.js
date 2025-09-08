@@ -251,9 +251,18 @@ class game {
         const unlockedLevels = JSON.parse(
             localStorage.getItem(unlockedLevelsKey) || "[]"
         );
-        // 确保第一关总是解锁的
-        if (!unlockedLevels.includes("../map/test_1.json")) {
-            unlockedLevels.push("../map/test_1.json");
+        // 确保默认关卡总是解锁的
+        const defaultUnlockedLevels = ["../map/jiaoxue1.json"]; // 根据配置，默认解锁教学关卡1
+        let hasNewUnlocks = false;
+        defaultUnlockedLevels.forEach(level => {
+            if (!unlockedLevels.includes(level)) {
+                unlockedLevels.push(level);
+                hasNewUnlocks = true;
+            }
+        });
+        
+        // 如果有新的解锁关卡，保存到localStorage
+        if (hasNewUnlocks) {
             localStorage.setItem(
                 unlockedLevelsKey,
                 JSON.stringify(unlockedLevels)
