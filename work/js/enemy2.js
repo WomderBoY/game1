@@ -185,7 +185,8 @@ class Enemy2 {
             this.particleTimer++;
             if (this.particleTimer >= this.particleSpawnInterval) {
                 this.particleTimer = 0;
-                this.spawnLavaParticle();
+                for (let i = 0; i < 3; ++i)
+                    this.spawnLavaParticle();
             }
         }
 
@@ -194,8 +195,8 @@ class Enemy2 {
     }
 
     spawnLavaParticle() {
-        const x = this.rect.position.x + this.rect.size.x / 2;
-        const y = this.rect.position.y + this.rect.size.y;
+        const x = this.rect.position.x + (Math.random() * this.rect.size.x * 0.5) + 0.25 * this.rect.size.x;
+        const y = this.rect.position.y + this.rect.size.y * 0.9;
         const size = Math.random() * 3 + 2;
         const dx = (Math.random() - 0.5) * 1;
         const dy = Math.random() * 0.5;
