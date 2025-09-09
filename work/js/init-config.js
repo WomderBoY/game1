@@ -92,8 +92,10 @@ const DEFAULT_LEVELS_CONFIG = {
     "version": "2.0"
 };
 
-// 将配置保存到localStorage
-localStorage.setItem('levelsConfig', JSON.stringify(DEFAULT_LEVELS_CONFIG));
+// 将配置保存到localStorage（为当前用户）
+const username = localStorage.getItem("yyj_username");
+const configKey = username ? `levelsConfig_${username}` : 'levelsConfig';
+localStorage.setItem(configKey, JSON.stringify(DEFAULT_LEVELS_CONFIG));
 
 console.log('关卡配置已初始化并保存到localStorage');
 console.log('配置内容:', DEFAULT_LEVELS_CONFIG);

@@ -71,7 +71,7 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "changemap",
-					"target": "../map/hid.json",
+					"target": "../map/bgtest.json",
 					"way": "negative",
 					"with": {
 						"images": [

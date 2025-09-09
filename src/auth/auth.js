@@ -3,6 +3,7 @@ let showLogin = true;
 let blackMode = true;
 let backgroundAnimationId = null;
 
+
 /* ================== 场景切换逻辑 ================== */
 
 function transitionToMainMenu() {
@@ -26,9 +27,9 @@ function updateUsernameDisplay() {
     if (usernameDisplay) {
         const username = localStorage.getItem('yyj_username');
         if (username) {
-            usernameDisplay.textContent = `你好：${username}`;
+            usernameDisplay.textContent = '';  //你好，用户名
         } else {
-            usernameDisplay.textContent = '你好：旅行者';
+            usernameDisplay.textContent = '';
         }
     }
 }
@@ -51,7 +52,9 @@ function transitionToGame() {
 
 function getSavedAchievements() {
     try {
-        const raw = localStorage.getItem('yyj_achievements_v1');
+        const username = localStorage.getItem("yyj_username");
+        const key = username ? `yyj_achievements_v1_${username}` : 'yyj_achievements_v1';
+        const raw = localStorage.getItem(key);
         if (!raw) return null;
         return JSON.parse(raw);
     } catch (_) { return null; }
@@ -205,6 +208,119 @@ function logout() {
     }, 1000);
 }
 
+/* ================== 删除存档功能 ================== */
+
+function deleteUserSaveData() {
+    const username = localStorage.getItem("yyj_username");
+    if (!username) {
+        showPopup("未找到当前用户信息");
+        return;
+    }
+
+    // 显示确认对话框
+    const confirmed = confirm(
+        `确定要删除用户 "${username}" 的所有存档数据吗？\n\n` +
+        `这将删除：\n` +
+        `• 游戏进度存档\n` +
+        `• 所有成就数据\n` +
+        `• 关卡解锁状态\n` +
+        `• 关卡配置数据\n\n` +
+        `此操作不可撤销！`
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    // 再次确认
+    const doubleConfirmed = confirm(
+        `最后确认：您真的要删除用户 "${username}" 的所有数据吗？\n\n` +
+        `删除后需要重新开始游戏！`
+    );
+
+    if (!doubleConfirmed) {
+        return;
+    }
+
+    try {
+        // 删除所有与当前用户相关的数据
+        const keysToDelete = [
+            `saveData1_${username}`,
+            `yyj_achievements_v1_${username}`,
+            `levelsConfig_${username}`,
+            `unlockedLevels_${username}`,
+            `selectedLevel_${username}`
+        ];
+
+        let deletedCount = 0;
+        keysToDelete.forEach(key => {
+            if (localStorage.getItem(key)) {
+                localStorage.removeItem(key);
+                deletedCount++;
+                console.log(`已删除: ${key}`);
+            }
+        });
+
+        // 显示删除结果
+        if (deletedCount > 0) {
+            showPopup(`成功删除 ${deletedCount} 项存档数据！`);
+            console.log(`用户 ${username} 的存档数据已全部删除`);
+            
+            // 验证删除结果
+            console.log("=== 删除验证 ===");
+            keysToDelete.forEach(key => {
+                const remaining = localStorage.getItem(key);
+                console.log(`${key}: ${remaining ? '仍存在' : '已删除'}`);
+            });
+        } else {
+            showPopup("没有找到需要删除的存档数据");
+        }
+
+        // 关闭设置弹窗
+        hideSettings();
+
+    } catch (error) {
+        console.error("删除存档数据时发生错误:", error);
+        showPopup("删除存档时发生错误，请重试");
+    }
+}
+
+// 调试功能：显示当前用户的所有存档数据
+function debugUserSaveData() {
+    const username = localStorage.getItem("yyj_username");
+    if (!username) {
+        console.log("未找到当前用户信息");
+        return;
+    }
+
+    console.log(`=== 用户 ${username} 的存档数据调试 ===`);
+    
+    const keysToCheck = [
+        `saveData1_${username}`,
+        `yyj_achievements_v1_${username}`,
+        `levelsConfig_${username}`,
+        `unlockedLevels_${username}`,
+        `selectedLevel_${username}`
+    ];
+
+    keysToCheck.forEach(key => {
+        const data = localStorage.getItem(key);
+        if (data) {
+            try {
+                const parsed = JSON.parse(data);
+                console.log(`${key}:`, parsed);
+            } catch (e) {
+                console.log(`${key}: ${data}`);
+            }
+        } else {
+            console.log(`${key}: 不存在`);
+        }
+    });
+}
+
+// 将调试函数暴露到全局，方便在控制台调用
+window.debugUserSaveData = debugUserSaveData;
+
 /* ================== 登录注册逻辑 ================== */
 
 function login(onSuccessCallback) {
@@ -214,6 +330,8 @@ function login(onSuccessCallback) {
     const stored = JSON.parse(localStorage.getItem(u));
     if (!stored) { showPopup("账号未注册！"); return; }
     if (stored.password === p) {
+        // 保存当前登录的用户名
+        localStorage.setItem("yyj_username", u);
         showPopup(`登录成功！欢迎，${u}`);
         setTimeout(onSuccessCallback, 1500);
     } else { showPopup("密码错误！"); }
@@ -302,19 +420,95 @@ function showPopup(msg) {
 }
 
 /* ================== 背景动画 (代码不变) ================== */
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-let waveTime = 0, particles = [], waves = [];
-for (let i = 0; i < 10; i++) { waves.push({ y: Math.random() * canvas.height, amplitude: 20 + Math.random() * 80, speed: 0.001 + Math.random() * 0.003, phase: Math.random() * Math.PI * 2, type: Math.floor(Math.random() * 2), color: 'rgba(255,255,255,0.3)' }); }
-for (let i = 0; i < 150; i++) { particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.5, dx: (Math.random() - 0.5) * 0.6, dy: (Math.random() - 0.5) * 0.6, color: 'rgba(255,255,255,0.5)' }); }
-function drawBackground() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    waveTime += 0.01;
-    waves.forEach(w => { ctx.beginPath(); for (let x = 0; x < canvas.width; x += 3) { let t = x * 0.01 + waveTime * 100 * w.speed + w.phase; let yOffset = w.type === 0 ? Math.sin(t) * w.amplitude : Math.cos(t) * w.amplitude; ctx.lineTo(x, w.y + yOffset); } ctx.strokeStyle = w.color; ctx.lineWidth = 2; ctx.shadowBlur = 10; ctx.shadowColor = w.color; ctx.stroke(); });
-    particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.shadowBlur = 5; ctx.shadowColor = p.color; ctx.fill(); p.x += p.dx; p.y += p.dy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; });
-    backgroundAnimationId = requestAnimationFrame(drawBackground);
+let backgroundRunning = false;
+let canvas = document.getElementById('bg');
+let ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let waveTime = 0;
+let waves = [];
+let particles = [];
+
+// 初始化波浪和粒子
+function initBackgroundElements() {
+    waves = [];
+    particles = [];
+    for (let i = 0; i < 10; i++) {
+        waves.push({
+            y: Math.random() * canvas.height,
+            amplitude: 20 + Math.random() * 80,
+            speed: 0.001 + Math.random() * 0.003,
+            phase: Math.random() * Math.PI * 2,
+            type: Math.floor(Math.random() * 2),
+            color: 'rgba(255,255,255,0.3)'
+        });
+    }
+    for (let i = 0; i < 150; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.5,
+            dx: (Math.random() - 0.5) * 0.6,
+            dy: (Math.random() - 0.5) * 0.6,
+            color: 'rgba(255,255,255,0.5)'
+        });
+    }
 }
+
+function drawBackground(force = false) {
+    if (backgroundRunning && !force) return; // 非强制情况下已运行就不重复启动
+    backgroundRunning = true;
+
+    initBackgroundElements(); // 初始化粒子和波浪
+
+    function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        waveTime += 0.01;
+
+        waves.forEach(w => {
+            ctx.beginPath();
+            for (let x = 0; x < canvas.width; x += 3) {
+                let t = x * 0.01 + waveTime * 100 * w.speed + w.phase;
+                let yOffset = w.type === 0 ? Math.sin(t) * w.amplitude : Math.cos(t) * w.amplitude;
+                ctx.lineTo(x, w.y + yOffset);
+            }
+            ctx.strokeStyle = w.color;
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = w.color;
+            ctx.stroke();
+        });
+
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = p.color;
+            ctx.fill();
+            p.x += p.dx;
+            p.y += p.dy;
+            if (p.x < 0) p.x = canvas.width;
+            if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height;
+            if (p.y > canvas.height) p.y = 0;
+        });
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+}
+
+
+// 调整窗口大小
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initBackgroundElements(); // 保持元素数量和位置合理
+});
+
 
 /* ================== 键盘事件监听 ================== */
 
@@ -387,6 +581,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.modal-close-btn').addEventListener('click', hideAchievements);
     document.getElementById('settings-close-btn').addEventListener('click', hideSettings);
     document.getElementById('about-us').addEventListener('click', transitionTous);
+    
+    // 删除存档按钮事件监听
+    const deleteSaveBtn = document.getElementById('delete-save-btn');
+    if (deleteSaveBtn) {
+        deleteSaveBtn.addEventListener('click', deleteUserSaveData);
+    }
 
     // 如果 URL 带有 #menu，直接展示主菜单界面
     if (window.location.hash === '#menu') {

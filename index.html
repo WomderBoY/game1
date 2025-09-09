@@ -142,9 +142,11 @@
             <div class="settings-section">
                 <h3>游戏设置</h3>
 
-                <!-- 其他设置可以在这里添加 -->
+                <!-- 删除存档设置 -->
                 <div class="setting-item">
-                    <label class="setting-label">更多设置即将推出...</label>
+                    <label class="setting-label">存档管理</label>
+                    <button id="delete-save-btn" class="delete-save-button">删除存档</button>
+                    <p class="setting-description">删除当前账号的所有游戏进度、成就和关卡数据</p>
                 </div>
             </div>
         </div>
@@ -152,14 +154,20 @@
     <script src="./work/js/bgmmanager.js"></script>
     <script src="./src/auth/auth.js"></script>
     <script>
-        // 如果URL带有#goto-main-menu，则直接显示主菜单，并初始化
-        if (window.location.hash === "#goto-main-menu") {
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('main-menu-screen').classList.remove('hidden');
-            // 如果有主菜单初始化函数，调用它
-            if (typeof transitionToMainMenu === 'function') {
-                transitionToMainMenu();
-            }
+        if (window.location.hash === '#menu' || window.location.hash === '#goto-main-menu') {
+        const authScreen = document.getElementById('auth-screen');
+        const mainMenuScreen = document.getElementById('main-menu-screen');
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        if (sliderWrapper) sliderWrapper.style.display = 'none';
+        if (authScreen) authScreen.style.display = '';
+        if (mainMenuScreen) {
+            mainMenuScreen.classList.remove('hidden');
+            mainMenuScreen.style.opacity = '1';
+            updateUsernameDisplay();
+        }
+
+        // 强制重新绘制背景动画
+        drawBackground(true);
         }
     </script>
 </body>

@@ -1,7 +1,7 @@
 class AchievementsManager {
     constructor(game) {
         this.game = game;
-        this.key = 'yyj_achievements_v1';
+        this.baseKey = 'yyj_achievements_v1';
         this.achievements = {
             first_kill: { id: 'first_kill', name: '初战告捷', desc: '击杀一个小怪', unlocked: false, unlockedAt: null },
             first_toggle: { id: 'first_toggle', name: '阴阳初转', desc: '切换一次阴阳形态', unlocked: false, unlockedAt: null },
@@ -12,10 +12,17 @@ class AchievementsManager {
         this.toastQueue = [];
         this.isToasting = false;
     }
+    
+    // 获取当前用户的存储键
+    getUserStorageKey() {
+        const username = localStorage.getItem("yyj_username");
+        return username ? `${this.baseKey}_${username}` : this.baseKey;
+    }
 
     load() {
         try {
-            const raw = localStorage.getItem(this.key);
+            const key = this.getUserStorageKey();
+            const raw = localStorage.getItem(key);
             if (!raw) return;
             const saved = JSON.parse(raw);
             Object.keys(this.achievements).forEach(id => {
@@ -26,7 +33,8 @@ class AchievementsManager {
 
     save() {
         try {
-            localStorage.setItem(this.key, JSON.stringify(this.achievements));
+            const key = this.getUserStorageKey();
+            localStorage.setItem(key, JSON.stringify(this.achievements));
         } catch (_) {}
     }
 

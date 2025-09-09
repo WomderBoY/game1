@@ -9,10 +9,17 @@ let totalLevels = 0;
 let currentLevelIndex = 0;
 let levelsPerPage = 3; // 每页显示的关卡数
 
+// 获取当前用户的存储键
+function getUserStorageKey(baseKey) {
+    const username = localStorage.getItem("yyj_username");
+    return username ? `${baseKey}_${username}` : baseKey;
+}
+
 // 加载关卡配置
 function loadLevelsConfig() {
     // 直接从localStorage加载配置
-    const savedConfig = localStorage.getItem('levelsConfig');
+    const configKey = getUserStorageKey('levelsConfig');
+    const savedConfig = localStorage.getItem(configKey);
     if (savedConfig) {
         try {
             const config = JSON.parse(savedConfig);
@@ -57,7 +64,7 @@ function loadLevelsConfig() {
 // 使用默认配置（备用方案）
 function useDefaultConfig() {
     levelConfig = {
-        "../map/test_1.json": { name: "待定", unlocked: true },
+        "../map/test_1.json": { name: "待定", unlocked: false },
         "../map/test_2.json": { name: "待定", unlocked: false },
         "../map/bg-map1.json": { name: "待定", unlocked: false },
         "../map/bg-map2.json": { name: "待定", unlocked: false },
@@ -139,16 +146,25 @@ function updateLevelsPerPage() {
 
 // 检查存档状态
 function checkSaveData() {
-    const saveData = localStorage.getItem("saveData");
+    const saveDataKey = getUserStorageKey("saveData");
+    const saveData = localStorage.getItem(saveDataKey);
+    const unlockedLevelsKey = getUserStorageKey("unlockedLevels");
     const unlockedLevels = JSON.parse(
-        localStorage.getItem("unlockedLevels") || "[]"
+        localStorage.getItem(unlockedLevelsKey) || "[]"
     );
 
-    // 确保第一关总是解锁的
-    if (!unlockedLevels.includes("../map/test_1.json")) {
-        unlockedLevels.push("../map/test_1.json");
+    // 确保默认关卡总是解锁的
+    const defaultUnlockedLevels = ["../map/jiaoxue1.json"]; // 根据配置，默认解锁教学关卡1
+    defaultUnlockedLevels.forEach(level => {
+        if (!unlockedLevels.includes(level)) {
+            unlockedLevels.push(level);
+        }
+    });
+    
+    // 如果有新的解锁关卡，保存到localStorage
+    if (defaultUnlockedLevels.some(level => !unlockedLevels.includes(level))) {
         localStorage.setItem(
-            "unlockedLevels",
+            unlockedLevelsKey,
             JSON.stringify(unlockedLevels)
         );
     }
@@ -231,7 +247,8 @@ function selectLevel(levelFile) {
     }
 
     // 保存选择的关卡到localStorage
-    localStorage.setItem("selectedLevel", levelFile);
+    const selectedLevelKey = getUserStorageKey("selectedLevel");
+    localStorage.setItem(selectedLevelKey, levelFile);
 
     // 跳转到游戏页面
     setTimeout(() => {
@@ -310,10 +327,12 @@ function showMessage(message, type = "info") {
 
 // 调试功能：在控制台显示解锁状态
 function debugUnlockStatus() {
+    const unlockedLevelsKey = getUserStorageKey("unlockedLevels");
     const unlockedLevels = JSON.parse(
-        localStorage.getItem("unlockedLevels") || "[]"
+        localStorage.getItem(unlockedLevelsKey) || "[]"
     );
-    const saveData = localStorage.getItem("saveData");
+    const saveDataKey = getUserStorageKey("saveData");
+    const saveData = localStorage.getItem(saveDataKey);
     console.log("=== 关卡选择界面解锁状态调试 ===");
     console.log("已解锁关卡:", unlockedLevels);
     console.log("存档数据:", saveData ? JSON.parse(saveData) : "无");
@@ -332,7 +351,8 @@ function unlockAllLevels() {
         const allLevels = Object.keys(levelConfig);
 
         // 更新localStorage
-        localStorage.setItem("unlockedLevels", JSON.stringify(allLevels));
+        const unlockedLevelsKey = getUserStorageKey("unlockedLevels");
+        localStorage.setItem(unlockedLevelsKey, JSON.stringify(allLevels));
 
         // 更新当前配置
         allLevels.forEach(level => {
@@ -354,7 +374,8 @@ function unlockAllLevels() {
 
 // 强制重置为只解锁第一关（调试用）
 function resetToFirstLevel() {
-    localStorage.setItem("unlockedLevels", JSON.stringify(["../map/test_1.json"]));
+    const unlockedLevelsKey = getUserStorageKey("unlockedLevels");
+    localStorage.setItem(unlockedLevelsKey, JSON.stringify(["../map/jiaoxue1.json"]));
     console.log("已重置为只解锁第一关");
     location.reload(); // 重新加载页面以更新界面
 }
