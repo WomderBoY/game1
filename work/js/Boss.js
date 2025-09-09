@@ -2,27 +2,27 @@ class Boss {
     constructor(game) {
         this.game = game;
         this.lstmove = -20000;
-        this.HP = new hp(10, this.game);  // 添加game参数
+        this.HP = new hp(10, this.game);
         console.log('Boss HP系统初始化完成:', this.HP);
 
-        // 新增：状态管理
-        this.state = "IDLE"; // 默认状态：闲置
-        this.stateTimer = 0; // 状态计时器
+        this.state = "IDLE";
+        this.stateTimer = 0;
+        this.attackStateDuration = 5000; // 攻击状态持续时间延长至5秒（5000ms）
 
-        // 新增：位置与尺寸（可根据实际需求调整）
-        this.x = 640; // 初始X坐标（示例：屏幕中心）
-        this.y = 360; // 初始Y坐标
-        this.width = 50; // 宽度
-        this.height = 50; // 高度
+        this.x = 640;
+        this.y = 360;
+        this.width = 50;
+        this.height = 50;
 
-        // 新增：加载不同状态的图片
-        this.imageIdle = this.loadImage("../images/boss_idle.png"); // 闲置状态图片
-        this.imageAttackHitbox = this.loadImage("../images/boss_enemy2.png"); // 攻击_hitbox状态图片
-        this.imageAttackEnemy = this.loadImage("../images/boss_enemy2.png"); // 召唤敌人状态图片
-        this.imageAttackEnemy2 = this.loadImage("../images/boss_enemy2.png"); // 召唤enemy2状态图片
+        this.imageIdle = this.loadImage("../images/boss_idle.png");
+        this.imageAttackHitbox = this.loadImage("../images/boss_enemy2.png");
+        this.imageAttackEnemy = this.loadImage("../images/boss_enemy2.png");
+        this.imageAttackEnemy2 = this.loadImage("../images/boss_enemy2.png");
+
+        // 新增：粒子系统相关
+        this.particles = []; // 存储粒子的数组
     }
 
-    // 新增：加载图片方法
     loadImage(src) {
         const img = new Image();
         img.src = src;
@@ -41,9 +41,9 @@ class Boss {
 
     async change_hitbox(type, x) {
         console.warn('hitbox!!');
-        // 新增：设置攻击_hitbox状态
         this.state = "ATTACK_HITBOX";
-        this.stateTimer = 0; // 重置状态计时器
+        this.stateTimer = 0;
+        this.game.expmanager.conaddblk(this.x, this.y); // 触发粒子效果
 
         let len = this.game.mapmanager.collidable[type].length;
         this.game.mapmanager.cl_attack(type);
@@ -56,9 +56,9 @@ class Boss {
 
     async get_enemy(type, x) {
         console.warn('enemy!!');
-        // 新增：设置召唤敌人状态
         this.state = "ATTACK_ENEMY";
         this.stateTimer = 0;
+        this.game.expmanager.conaddblk(this.x, this.y); // 触发粒子效果
 
         let len = this.game.mapmanager.collidable[type].length;
         this.game.enemymanager.cl_enemy();
@@ -71,9 +71,9 @@ class Boss {
 
     async get_enemy2(x) {
         console.warn('enemy2!!');
-        // 新增：设置召唤enemy2状态
         this.state = "ATTACK_ENEMY2";
         this.stateTimer = 0;
+        this.game.expmanager.conaddblk(this.x, this.y); // 触发粒子效果
 
         this.game.enemy2manager.cl_enemy();
         for (let i = 1; i <= x; ++i) {
@@ -82,7 +82,6 @@ class Boss {
     }
 
     gethurt(x = 10) {
-        // 使用新的HP系统方法
         if (this.HP && typeof this.HP.decrease === 'function') {
             console.log(`Boss受到伤害: ${x}点`);
             this.HP.decrease(x, 640, 690);
@@ -95,9 +94,9 @@ class Boss {
         if (!this.game.canmove) return ;
         let now = Date.now();
         if (now - this.lstmove <= 10000) {
-            // 新增：如果处于攻击状态且超时，恢复闲置状态
-            this.stateTimer += now - this.lstmove;
-            if (this.stateTimer > 2000) { // 攻击状态持续2秒后恢复闲置
+            this.stateTimer = now - this.lstmove;
+            // 使用延长后的攻击状态持续时间
+            if (this.stateTimer > this.attackStateDuration) {
                 this.state = "IDLE";
             }
             return ;
@@ -116,19 +115,42 @@ class Boss {
         this.lstmove = now;
     }
 
-    // 新增：根据状态更新逻辑（可选，用于状态过渡）
     update(deltaTime) {
-        // 示例：攻击状态持续一段时间后自动恢复闲置
+        // 更新粒子状态
+        this.particles = this.particles.filter(particle => {
+            // 移动粒子
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+            // 减少生命值
+            particle.life--;
+            // 轻微减速效果
+            particle.speedX *= 0.98;
+            particle.speedY *= 0.98;
+            // 保留生命值>0的粒子
+            return particle.life > 0;
+        });
+
+        // 更新攻击状态持续时间
         if (this.state !== "IDLE") {
             this.stateTimer += deltaTime;
-            if (this.stateTimer > 2000) { // 2000毫秒后恢复闲置
+            if (this.stateTimer > this.attackStateDuration) {
                 this.state = "IDLE";
             }
         }
     }
 
     draw() {
-        // 新增：根据状态绘制对应图片
+        // 绘制粒子
+        this.particles.forEach(particle => {
+            // 计算透明度（随生命周期衰减）
+            const alpha = particle.life / particle.maxLife;
+            this.game.ctx.fillStyle = particle.color.replace('1)', `${alpha})`);
+            this.game.ctx.beginPath();
+            this.game.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.game.ctx.fill();
+        });
+
+        // 绘制Boss图片
         let img = null;
         switch (this.state) {
             case "IDLE":
@@ -136,29 +158,30 @@ class Boss {
                 break;
             case "ATTACK_HITBOX":
                 img = this.imageAttackHitbox.loaded ? this.imageAttackHitbox : null;
+//        console.warn(img);
                 break;
             case "ATTACK_ENEMY":
                 img = this.imageAttackEnemy.loaded ? this.imageAttackEnemy : null;
+//       console.warn(img);
                 break;
             case "ATTACK_ENEMY2":
                 img = this.imageAttackEnemy2.loaded ? this.imageAttackEnemy2 : null;
+ //       console.warn(img);
                 break;
             default:
                 img = this.imageIdle.loaded ? this.imageIdle : null;
         }
-
-        // 绘制Boss图片
         if (img) {
             this.game.ctx.drawImage(
                 img,
-                this.x - this.width / 2, // 居中绘制
+                this.x - this.width / 2,
                 this.y - this.height / 2,
                 this.width,
                 this.height
             );
         }
 
-        // 保持原有的HP绘制
+        // 绘制HP
         this.HP.draw2(this.game.ctx, 1280 / 2, 720 - 30);
     }
 }

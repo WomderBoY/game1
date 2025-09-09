@@ -519,7 +519,7 @@ class game {
 
                 this.hp.drawblood();
                 if (this.boss) {
-                    console.log('boss!!!');
+    //                console.log('boss!!!');
                     this.boss.move();
                     this.boss.draw();
                 }
