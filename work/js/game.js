@@ -22,7 +22,7 @@ class game {
         this.env = "yang"; // 默认环境为阳
         this.changetimes = 0; // 切换环境次数
         this.yingyang = true;
-        this.ending=true;//这是隐藏结局
+        this.ending = true;//这是隐藏结局
         this.datamanager = new datamanager(this);
 
         // 添加太极管理器（新增代码）
@@ -168,14 +168,14 @@ class game {
     unlockNextLevel(currentLevel) {
         // 从关卡配置文件获取关卡顺序
         let levelOrder = [];
-        
+
         // 尝试从localStorage获取关卡配置（如果关卡选择界面已经加载过）
         const levelsConfig = localStorage.getItem('levelsConfig');
         if (levelsConfig) {
             try {
                 const config = JSON.parse(levelsConfig);
                 levelOrder = config.levels.map(level => level.file);
-            } 
+            }
             catch (e) {
                 console.warn('解析关卡配置失败，使用默认顺序');
                 levelOrder = [
@@ -260,7 +260,7 @@ class game {
                 hasNewUnlocks = true;
             }
         });
-        
+
         // 如果有新的解锁关卡，保存到localStorage
         if (hasNewUnlocks) {
             localStorage.setItem(
@@ -480,27 +480,26 @@ class game {
             case "running": // 游戏运行状态
                 //
                 // 绘制地图（背景或场景元素）
-                this.mapmanager.draw(this.env);
-                if (this.cg == false) {
-                    if (this.night == false) {
-                        //                console.log('Night state before drawing:', this.night);  // 打印 night 状态
-                        this.mapmanager.draw(this.env);
-                    } else {
-                        this.ctx.fillStyle = "#484848ff";
-                        this.ctx.fillRect(0, 0, this.width, this.height);
-                    }
-                }
+
+
+                await this.enemymanager.update();
+                await this.enemy2manager.update();
+                //                await this.mapmanager.drawhp();
+                //    this.mapmanager.draw(this.env);
+                //            console.log('Night state before drawing:', this.night);  // 打印 night 状态
+                this.mapmanager.drawbg(this.env);
+                await this.entitymanager.checkCollision();
+                await this.entitymanager.update();
+                //              if (this.night == false)
+                await this.mapmanager.draw(this.env);
+                await this.mapmanager.drawPortals();
+                await this.mapmanager.drawPeople();
+                await this.baguamanager.draw(this.ctx);
+                await this.baguamanager.update(this.player);
                 if (this.canmove) {
                     this.expmanager.update(16);
                     this.expmanager.draw(this.ctx);
                 }
-                await this.enemymanager.update();
-                await this.enemy2manager.update();
-                await this.mapmanager.drawPortals();
-                await this.mapmanager.drawPeople();
-                //                await this.mapmanager.drawhp();
-                await this.baguamanager.draw(this.ctx);
-                await this.baguamanager.update(this.player);
                 if (this.cg == false) {
                     this.enemymanager.draw(this.ctx);
                     this.enemy2manager.draw(this.ctx);
@@ -509,19 +508,16 @@ class game {
                 // 更新和绘制 Boss
                 await this.bossmanager.update(this.player, 16.6667); // deltaTime 可按需调整
                 if (this.cg == false) this.bossmanager.draw(this.ctx);
-
                 // 更新Boss HP系统（如果存在）
                 if (this.boss && this.boss.HP) {
                     this.boss.HP.update(16.6667);
                 } else if (this.boss) {
                     console.log('⚠️ Boss存在但HP系统未初始化:', this.boss);
                 } else {
-      //              console.log('ℹ️ 当前关卡没有Boss');
+                    //              console.log('ℹ️ 当前关卡没有Boss');
                 }
 
                 this.hp.drawblood();
-                await this.entitymanager.checkCollision();
-                await this.entitymanager.update();
                 if (this.boss) {
                     console.log('boss!!!');
                     this.boss.move();
@@ -547,15 +543,9 @@ class game {
             case "paused":
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制
-                if (this.cg == false) {
-                    if (this.night == false) {
-                        //                console.log('Night state before drawing:', this.night);  // 打印 night 状态
-                        this.mapmanager.draw(this.env);
-                    } else {
-                        this.ctx.fillStyle = "#484848ff";
-                        this.ctx.fillRect(0, 0, this.width, this.height);
-                    }
-                }
+
+                this.mapmanager.drawbg(this.env);
+
                 this.enemymanager.draw(this.ctx);
                 this.enemy2manager.draw(this.ctx);
                 this.baguamanager.draw(this.ctx);
@@ -563,6 +553,10 @@ class game {
                 this.mapmanager.drawPeople();
                 this.entitymanager.drawPlayer();
                 this.hp.drawblood();
+                if (this.canmove) {
+                    this.expmanager.update(16);
+                    this.expmanager.draw(this.ctx);
+                }
 
                 // 更新HP系统（暂停时也需要更新动画）
                 this.hp.update(16.6667);
@@ -574,20 +568,25 @@ class game {
                 break;
             case "over":
                 console.log("游戏结束");
+                this.mapmanager.drawbg(this.env);
+
                 // 绘制背景和场景
                 if (this.cg == false) {
-                    if (this.night == false) {
-                        console.log("Night state before drawing:", this.night); // 打印 night 状态
+                    if (this.night == false || (this.nightmanager && this.nightmanager.isActive && !this.nightmanager.isActive())) {
                         this.mapmanager.draw(this.env);
                     } else {
-                        this.ctx.fillStyle = "#484848ff";
-                        this.ctx.fillRect(0, 0, this.width, this.height);
+                        this.mapmanager.draw(this.env);
                     }
+                }
+                if (this.canmove) {
+                    this.expmanager.update(16);
+                    this.expmanager.draw(this.ctx);
                 }
                 await this.enemy2manager.update();
                 this.enemymanager.draw(this.ctx);
                 this.enemy2manager.draw(this.ctx);
                 this.hp.draw(this.ctx, this.width, this.height);
+                await this.mapmanager.draw(this.env);
 
                 // 绘制死亡状态的玩家（在地图和敌人之上）
                 this.entitymanager.drawDeadPlayer();

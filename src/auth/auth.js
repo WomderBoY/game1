@@ -3,6 +3,7 @@ let showLogin = true;
 let blackMode = true;
 let backgroundAnimationId = null;
 
+
 /* ================== 场景切换逻辑 ================== */
 
 function transitionToMainMenu() {
@@ -419,19 +420,95 @@ function showPopup(msg) {
 }
 
 /* ================== 背景动画 (代码不变) ================== */
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-let waveTime = 0, particles = [], waves = [];
-for (let i = 0; i < 10; i++) { waves.push({ y: Math.random() * canvas.height, amplitude: 20 + Math.random() * 80, speed: 0.001 + Math.random() * 0.003, phase: Math.random() * Math.PI * 2, type: Math.floor(Math.random() * 2), color: 'rgba(255,255,255,0.3)' }); }
-for (let i = 0; i < 150; i++) { particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.5, dx: (Math.random() - 0.5) * 0.6, dy: (Math.random() - 0.5) * 0.6, color: 'rgba(255,255,255,0.5)' }); }
-function drawBackground() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    waveTime += 0.01;
-    waves.forEach(w => { ctx.beginPath(); for (let x = 0; x < canvas.width; x += 3) { let t = x * 0.01 + waveTime * 100 * w.speed + w.phase; let yOffset = w.type === 0 ? Math.sin(t) * w.amplitude : Math.cos(t) * w.amplitude; ctx.lineTo(x, w.y + yOffset); } ctx.strokeStyle = w.color; ctx.lineWidth = 2; ctx.shadowBlur = 10; ctx.shadowColor = w.color; ctx.stroke(); });
-    particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.shadowBlur = 5; ctx.shadowColor = p.color; ctx.fill(); p.x += p.dx; p.y += p.dy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; });
-    backgroundAnimationId = requestAnimationFrame(drawBackground);
+let backgroundRunning = false;
+let canvas = document.getElementById('bg');
+let ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let waveTime = 0;
+let waves = [];
+let particles = [];
+
+// 初始化波浪和粒子
+function initBackgroundElements() {
+    waves = [];
+    particles = [];
+    for (let i = 0; i < 10; i++) {
+        waves.push({
+            y: Math.random() * canvas.height,
+            amplitude: 20 + Math.random() * 80,
+            speed: 0.001 + Math.random() * 0.003,
+            phase: Math.random() * Math.PI * 2,
+            type: Math.floor(Math.random() * 2),
+            color: 'rgba(255,255,255,0.3)'
+        });
+    }
+    for (let i = 0; i < 150; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.5,
+            dx: (Math.random() - 0.5) * 0.6,
+            dy: (Math.random() - 0.5) * 0.6,
+            color: 'rgba(255,255,255,0.5)'
+        });
+    }
 }
+
+function drawBackground(force = false) {
+    if (backgroundRunning && !force) return; // 非强制情况下已运行就不重复启动
+    backgroundRunning = true;
+
+    initBackgroundElements(); // 初始化粒子和波浪
+
+    function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        waveTime += 0.01;
+
+        waves.forEach(w => {
+            ctx.beginPath();
+            for (let x = 0; x < canvas.width; x += 3) {
+                let t = x * 0.01 + waveTime * 100 * w.speed + w.phase;
+                let yOffset = w.type === 0 ? Math.sin(t) * w.amplitude : Math.cos(t) * w.amplitude;
+                ctx.lineTo(x, w.y + yOffset);
+            }
+            ctx.strokeStyle = w.color;
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = w.color;
+            ctx.stroke();
+        });
+
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = p.color;
+            ctx.fill();
+            p.x += p.dx;
+            p.y += p.dy;
+            if (p.x < 0) p.x = canvas.width;
+            if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height;
+            if (p.y > canvas.height) p.y = 0;
+        });
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+}
+
+
+// 调整窗口大小
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initBackgroundElements(); // 保持元素数量和位置合理
+});
+
 
 /* ================== 键盘事件监听 ================== */
 

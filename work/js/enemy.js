@@ -36,7 +36,10 @@ class Enemy {
     update(colliders) {
         this.vyy = this.vxx = 0;
         let now = Date.now();
-        if (now <= this.born) return;
+        if (now <= this.born) {
+            this.game.expmanager.addsmoke(this.rect.position.x, this.rect.position.y, 50, 50, 1);
+            return;
+        }
         // === 水平方向运动 ===
         this.rect.position.x += this.speed;
 
@@ -180,6 +183,7 @@ class EnemyManager {
         let p = this.game.mapmanager.collidable[type][x];
         let sp = this.game.random(1, 3), tp = this.game.random(0, 1) ? false : true;
         this.enemies.push(new Enemy(this.game, p.x, p.y - 50, 50, 50, sp, tp, Date.now() + 3000));
+//        this.game.expmanager.addsmoke(p.x, p.y - 50, 50, 50);
     }
 
     /**

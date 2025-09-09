@@ -5,42 +5,32 @@ class DrawManager {
     }
 
     // 绘制背景
-    drawBackground(background, width, height) {
+    drawBackground(type, background, width = 1280, height = 720) {
+        console.warn('drawbg', type);
         // 清空画布并绘制背景（如果背景存在）
-        if (background["yang"] && background["yang"] instanceof Image) {
-            this.game.ctx.drawImage(background["yang"], 0, 0, width, height);
-        } else if (background["yang"] === "") {
-            // 如果没有背景图，绘制默认背景色
-            this.game.ctx.fillStyle = "#87cefa";
-            this.game.ctx.fillRect(0, 0, width, height);
+        if (type == 'yang') {
+            if (background["yang"] && background["yang"] instanceof Image) {
+                this.game.ctx.drawImage(background["yang"], 0, 0, width, height);
+            } else if (background["yang"] === "") {
+                // 如果没有背景图，绘制默认背景色
+                this.game.ctx.fillStyle = "#87cefa";
+                this.game.ctx.fillRect(0, 0, width, height);
+            }
         }
-
-        if (background["yin"] && background["yin"] instanceof Image) {
-            this.game.ctx.drawImage(background["yin"], 0, 0, width, height);
-        } else if (background["yin"] === "") {
-            // 如果没有背景图，绘制默认背景色
-            this.game.ctx.fillStyle = "#87cefa";
-            this.game.ctx.fillRect(0, 0, width, height);
+        else {
+            if (background["yin"] && background["yin"] instanceof Image) {
+                this.game.ctx.drawImage(background["yin"], 0, 0, width, height);
+            } else if (background["yin"] === "") {
+                // 如果没有背景图，绘制默认背景色
+                this.game.ctx.fillStyle = "#87cefa";
+                this.game.ctx.fillRect(0, 0, width, height);
+            }
         }
     }
 
     // 绘制主要地图内容
     drawMap(type, background, collidable, tram, app, events, atk,damege,man) {
         let detype = type == "yang" ? "yin" : "yang";
-
-        // 绘制背景
-        if (background[type] == "") {
-            this.game.ctx.fillStyle = "#87cefa";
-            this.game.ctx.fillRect(0, 0, this.game.width, this.game.height);
-        } else {
-            this.game.ctx.drawImage(
-                background[type],
-                0,
-                0,
-                this.game.width,
-                this.game.height
-            );
-        }
 
         // 绘制弹跳箱
         for (let i of tram) {

@@ -12,6 +12,24 @@
     backdrop-filter: blur(4px);
 }
 
+
+.spotlight-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0, 0, 0, 0.9);
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.5s ease;
+                z-index: 50;
+            }
+
+.spotlight-active {
+                opacity: 1;
+            }
+
 .pause-container {
     background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
     color: #ffffff;

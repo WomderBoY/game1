@@ -165,7 +165,6 @@ class entitymanager {
         let prevX = this.px, prevY = this.py;
         entitymanager.vxx = 0;
         entitymanager.vyy = 0;
-        console.warn('vy = ', vy);
         let dbg = false;
         if (vy == -100) dbg = true;
         let fl = false;
@@ -177,8 +176,6 @@ class entitymanager {
                 p.update(this.game)
             }
             
-        if (dbg)
-            console.warn('vy = ', vy);
         for (let p of ga.mapmanager.tram) {
             // let prevX = ga.player.position.x - vx - vxx;
             // let prevY = ga.player.position.y - vy - vyy;
@@ -193,8 +190,7 @@ class entitymanager {
                 break;
             }
         }
-        if (dbg)
-            console.warn('vy = ', vy);
+//        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
         if (!fl) {
             // 检查玩家是否站在移动砖块上，如果是则持续跟随
             let movetileVx = 0, movetileVy = 0;
@@ -219,14 +215,14 @@ class entitymanager {
                         break;
                     }
                 }
-            }
+            }          
             
             // 如果玩家站在移动砖块上，先应用移动砖块的速度
             if (standingOnMovetile) {
                 ga.player.position.x += movetileVx;
                 ga.player.position.y += movetileVy;
-                entitymanager.vxx = movetileVx;
-                entitymanager.vyy = movetileVy;
+                // entitymanager.vxx = movetileVx;
+                // entitymanager.vyy = movetileVy;
                 // 设置玩家在地面上，防止重力影响
                 og = true;
                 isjp = false;
@@ -334,7 +330,7 @@ class entitymanager {
                     let tileTop = p.y;
                     if (playerBottom >= tileTop - 10 && playerBottom <= tileTop + 10) {
                         // 确保玩家脚部始终在砖块顶部
-                        ga.player.position.y = p.y - ga.player.size.y;
+                        ga.player.position.y = p.y - ga.player.size.y + 0.5;
                         break;
                     }
                 }
