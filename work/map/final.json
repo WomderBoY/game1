@@ -1,0 +1,144 @@
+_jsonCallback({
+    "born":[
+        150,
+        0
+    ],
+    "yang":{
+        "tileMap":[
+            {
+                "hitbox":[
+                    140,
+                    370,
+                    150,
+                    30
+                ],
+                "col":true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox":[
+                    990,
+                    370,
+                    150,
+                    30
+                ],
+                "col":true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+                "hitbox":[
+                    390,
+                    120,
+                    150,
+                    30
+                ],
+                "col":true,
+                 "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+             {
+                "hitbox":[
+                    740,
+                    120,
+                    150,
+                    30
+                ],
+                "col":true,
+                 "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+             {
+                "hitbox":[
+                    390,
+                    620,
+                    150,
+                    30
+                ],
+                "col":true,
+                 "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+             {
+                "hitbox":[
+                    740,
+                    620,
+                    150,
+                    30
+                ],
+                "col":true,
+                 "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+            {
+				"hitbox": [
+					565,
+					495,
+					100,
+					20
+				],
+				"move": true,
+				"area": [
+					390,
+					900,
+					-1,
+					-1
+				],
+				"vx": 2,
+				"vy": 0,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+            {
+				"hitbox": [
+					565,
+					245,
+					100,
+					20
+				],
+				"move": true,
+				"area": [
+					390,
+					900,
+					-1,
+					-1
+				],
+				"vx": -2,
+				"vy": 0,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+        ],
+        "enemy": [],
+        "bagua": [],
+        "background": ""
+    },
+    "yin":{
+        "tileMap":[],
+         "enemy": [],
+        "bagua": [],
+        "background": ""
+    },
+    "Boss":true,
+
+
+})
