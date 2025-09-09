@@ -85,15 +85,15 @@ _jsonCallback({
             },
             {
 				"hitbox": [
-					565,
-					495,
-					100,
+					280,
+					500,
+					130,
 					20
 				],
 				"move": true,
 				"area": [
-					390,
-					900,
+					280,
+					590,
 					-1,
 					-1
 				],
@@ -107,15 +107,38 @@ _jsonCallback({
 			},
             {
 				"hitbox": [
-					565,
-					245,
-					100,
+					590,
+					500,
+					130,
 					20
 				],
 				"move": true,
 				"area": [
-					390,
+					590,
 					900,
+					-1,
+					-1
+				],
+				"vx": 2,
+				"vy": 0,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+            
+            {
+				"hitbox": [
+					280,
+					245,
+					130,
+					20
+				],
+				"move": true,
+				"area": [
+					280,
+					605,
 					-1,
 					-1
 				],
@@ -127,6 +150,45 @@ _jsonCallback({
 				],
 				"tiling": true
 			},
+            {
+				"hitbox": [
+					605,
+					245,
+					130,
+					20
+				],
+				"move": true,
+				"area": [
+					605,
+					930,
+					-1,
+					-1
+				],
+				"vx": -2,
+				"vy": 0,
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+            {
+				"hitbox": [
+					615,
+					335,
+					50,
+					50
+				],
+                "event": { //
+					"type": "boss", 
+				},
+				"col": true,
+				"img": [
+					"../images/test1.png"
+				],
+				"tiling": true
+			},
+
         ],
         "enemy": [],
         "bagua": [],
