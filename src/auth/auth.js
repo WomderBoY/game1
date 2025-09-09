@@ -261,6 +261,10 @@ function deleteUserSaveData() {
             }
         });
 
+        //  直接重置 ending 为 true
+        localStorage.setItem(`ending_${username}`, JSON.stringify(true));
+        console.log(`用户 ${username} 的结局已复原为默认 true`);
+
         // 显示删除结果
         if (deletedCount > 0) {
             showPopup(`成功删除 ${deletedCount} 项存档数据！`);

@@ -70,23 +70,12 @@ _jsonCallback({
 					20
 				],
 				"event": {
-					"type": "changemap",
-					"target": "../map/final.json",
-					"way": "negative",
-					"with": {
-						"images": [
-							"../images/black-right2-0.png",
-							"../images/white.png"
-						],
-						"text": [
-							[
-								"【旁白】这是传送门"
-							],
-							[
-								"【旁白】将你传送到下一关"
-							]
-						],
-					}
+					"type": "changemap3",
+					"endingTrueTarget": "../map/bg-map1.json",
+					"endingFalseTarget": "../map/bg-map2.json",
+					"x": 100,
+					"y": 200,
+					"with": null
 				},
 				"col": false
 			},
