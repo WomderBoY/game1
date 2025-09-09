@@ -6,7 +6,7 @@ class DrawManager {
 
     // 绘制背景
     drawBackground(type, background, width = 1280, height = 720) {
-        console.warn('drawbg', type);
+  //      console.warn('drawbg', type);
         // 清空画布并绘制背景（如果背景存在）
         if (type == 'yang') {
             if (background["yang"] && background["yang"] instanceof Image) {

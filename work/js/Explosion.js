@@ -1,3 +1,85 @@
+class BlackParticle { // 类名规范：首字母大写
+    constructor(xi, yi) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 1 + Math.random() * 3; // 1-4的随机速度
+
+        this.x = xi; // 从Boss中心出发
+        this.y = yi;
+        this.size = 2 + Math.random() * 4; // 修复：漏了分号
+        this.speedX = Math.cos(angle) * speed; // 速度变量名：speedX
+        this.speedY = Math.sin(angle) * speed; // 速度变量名：speedY
+        // 黑紫色系（加深黑色调，更明显）
+        this.color = `rgba(${10 + Math.random() * 20}, ${0}, ${30 + Math.random() * 30}, 1)`;
+        this.life = 60 + Math.random() * 40; // 生命周期改为60-100帧（按帧计算）
+//        this.life *= 3;
+        this.maxLife = this.life; // 用初始life作为maxLife，方便计算透明度
+        this.markedForDeletion = false;
+    }
+
+    update() { // 按帧更新，无需deltaTime（或统一用帧计数）
+        // 用正确的速度变量名
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // 粒子逐渐减速
+        this.speedX *= 0.95;
+        this.speedY *= 0.95;
+
+        // 按帧减少生命周期（每帧减1）
+        this.life--;
+        // 透明度随生命周期衰减（0-1之间）
+        this.alpha = Math.max(0, this.life / this.maxLife);
+
+        if (this.life <= 0) {
+            this.markedForDeletion = true;
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha; // 应用透明度
+        ctx.fillStyle = this.color;
+        // 绘制方块粒子（基于中心定位，可选）
+        ctx.fillRect(
+            this.x - this.size / 2, // 左移半个size，使粒子以x,y为中心
+            this.y - this.size / 2,
+            this.size,
+            this.size
+        );
+        ctx.restore();
+    }
+}
+
+class BlackParticleSystem { // 类名更清晰：黑色粒子系统
+    constructor(x, y, count = 30) {
+        this.particles = [];
+        // 从(x,y)中心生成粒子（而非x+随机范围，避免偏移）
+        for (let i = 0; i < count; i++) {
+            this.particles.push(new BlackParticle(x, y));
+        }
+    }
+
+    update() {
+        // 更新所有粒子，删除已标记的粒子
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            this.particles[i].update();
+            if (this.particles[i].markedForDeletion) {
+                this.particles.splice(i, 1);
+            }
+        }
+    }
+
+    draw(ctx) {
+        // 绘制所有活跃粒子
+        this.particles.forEach(particle => particle.draw(ctx));
+    }
+
+    // 检查粒子是否全部消失
+    isEmpty() {
+        return this.particles.length === 0;
+    }
+}
+
 // 方块粒子类（MC 风格）
 class DeathParticle {
     constructor(x, y) {
@@ -165,16 +247,32 @@ class Smoke {
     }
 }
 
+class asplayer {
+    constructor(game, nowframe, lstframe, deltaframe, x, y) {
+        this.game = game;
+        this.startframe = nowframe;
+        this.lstframe = lstframe;
+        this.deltaframe = deltaframe;
+        this.x = x, this.y = y;
+    }
 
+    update() {
+        if (this.game.gameFrame <= this.startframe + this.lstframe
+            && (this.game.gameFrame - this.startframe) % this.deltaframe == 0) {
+            this.game.expmanager.addblk(this.x, this.y);
+        }
+    }
+}
 
 class Expmanager {
-    constructor (game) {
+    constructor(game) {
         this.game = game;
         this.empty();
     }
 
     empty() {
         this.exp = [];
+        this.asy = [];
     }
 
     addexp(x, y, w, h, amount = 50) {
@@ -187,6 +285,15 @@ class Expmanager {
         this.exp.push(new Smoke(x, y, w, h, amount));
     }
 
+    addblk(x, y) {
+        console.warn('addblk');
+        this.exp.push(new BlackParticleSystem(x, y));
+    }
+
+    conaddblk(x, y) {
+        this.asy.push(new asplayer(this.game, this.game.gameFrame, 100, 5, x, y));
+    }
+
     update(deltaTime) {
         for (let i of this.exp) {
             i.update(deltaTime);
@@ -194,6 +301,9 @@ class Expmanager {
     }
 
     draw() {
+        for (let i of this.asy) {
+            i.update();
+        }
         for (let i of this.exp) {
             i.draw(this.game.ctx);
         }
