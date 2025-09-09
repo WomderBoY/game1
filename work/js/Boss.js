@@ -2,7 +2,8 @@ class Boss {
     constructor(game) {
         this.game = game;
         this.lstmove = -20000;
-        this.HP = new hp(10, this.game);
+        this.HP = new hp(10, this.game); // 添加game参数
+        this.rect = new Rect(615, 335, 50, 50);
         console.log('Boss HP系统初始化完成:', this.HP);
 
         this.state = "IDLE";
@@ -47,8 +48,7 @@ class Boss {
 
         let len = this.game.mapmanager.collidable[type].length;
         this.game.mapmanager.cl_attack(type);
-        for (let ti = 1; ti <= x; ++ti)
-        {
+        for (let ti = 1; ti <= x; ++ti) {
             let y = this.game.random(0, len - 1);
             this.game.mapmanager.set_attack(type, y);
         }
@@ -62,8 +62,7 @@ class Boss {
 
         let len = this.game.mapmanager.collidable[type].length;
         this.game.enemymanager.cl_enemy();
-        for (let ti = 1; ti <= x; ++ti)
-        {
+        for (let ti = 1; ti <= x; ++ti) {
             let y = this.game.random(0, len - 1);
             this.game.enemymanager.set_enemy(type, y);
         }
@@ -82,16 +81,17 @@ class Boss {
     }
 
     gethurt(x = 10) {
-        if (this.HP && typeof this.HP.decrease === 'function') {
+        // 使用新的HP系统方法
+        if (this.HP && typeof this.HP.decrease === "function") {
             console.log(`Boss受到伤害: ${x}点`);
             this.HP.decrease(x, 640, 690);
         } else {
-            console.error('Boss HP系统未正确初始化!');
+            console.error("Boss HP系统未正确初始化!");
         }
     }
 
     async move() {
-        if (!this.game.canmove) return ;
+        if (!this.game.canmove) return;
         let now = Date.now();
         if (now - this.lstmove <= 10000) {
             this.stateTimer = now - this.lstmove;
