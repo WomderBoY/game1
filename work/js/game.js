@@ -489,7 +489,6 @@ class game {
                 //            console.log('Night state before drawing:', this.night);  // 打印 night 状态
                 this.mapmanager.drawbg(this.env);
                 await this.entitymanager.checkCollision();
-                await this.entitymanager.checkboss();
                 await this.entitymanager.update();
                 //              if (this.night == false)
                 await this.mapmanager.draw(this.env);
@@ -512,7 +511,9 @@ class game {
                 // 更新Boss HP系统（如果存在）
                 if (this.boss && this.boss.HP) {
                     this.boss.HP.update(16.6667);
+                    await this.entitymanager.checkboss();
                 } else if (this.boss) {
+                    await this.entitymanager.checkboss();
                     console.log('⚠️ Boss存在但HP系统未初始化:', this.boss);
                 } else {
                     //              console.log('ℹ️ 当前关卡没有Boss');
