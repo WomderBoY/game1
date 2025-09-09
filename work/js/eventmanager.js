@@ -57,6 +57,14 @@ class eventmanager {
             this.game.canmove = true;
         }
         if (e.type === "changemap"||e.type ==="man"||e.type ==="changemap2") {
+            // 检查是否是隐藏关成就触发
+            if (e.type === "man" && this.game.mapmanager.room && this.game.mapmanager.room.includes("hid.json")) {
+                // 触发隐藏关成就
+                if (this.game.achievements) {
+                    this.game.achievements.unlock("hidden_passage");
+                }
+            }
+            
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             if (e.with) {
                 console.warn("start", this.event.next);
