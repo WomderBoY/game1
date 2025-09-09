@@ -65,6 +65,14 @@ class eventmanager {
                 }
             }
             
+            // 检查是否是bg-map4通关成就触发
+            if (e.type === "changemap" && this.game.mapmanager.room && this.game.mapmanager.room.includes("bg-map4.json")) {
+                // 触发bg-map4通关成就
+                if (this.game.achievements) {
+                    this.game.achievements.unlock("tower_master");
+                }
+            }
+            
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             if (e.with) {
                 console.warn("start", this.event.next);

@@ -9,6 +9,7 @@ class AchievementsManager {
             orb_death: { id: 'orb_death', name: '法球之殇', desc: '被法球击杀', unlocked: false, unlockedAt: null },
             hidden_passage: { id: 'hidden_passage', name: '隐秘救赎', desc: '通过隐藏关并救出被困的修士', unlocked: false, unlockedAt: null },
             boss_slayer: { id: 'boss_slayer', name: '精英猎手', desc: '击败至阴之物', unlocked: false, unlockedAt: null },
+            tower_master: { id: 'tower_master', name: '古塔征服者', desc: '通过古塔第八层高难关卡', unlocked: false, unlockedAt: null },
         };
         this.load();
         this.toastQueue = [];

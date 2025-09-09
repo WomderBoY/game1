@@ -315,11 +315,11 @@ button:active {
 .modal-content {
     position: relative;
     width: 90%;
-    max-width: 600px;
-    padding: 30px;
+    max-width: 400px;
+    padding: 20px;
     background: rgba(20, 20, 20, 0.9);
     border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 20px;
+    border-radius: 15px;
     box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -349,17 +349,17 @@ button:active {
 .achievement-list {
     list-style: none;
     padding: 0;
-    max-height: 60vh;
+    max-height: 300px;
     overflow-y: auto;
 }
 
 .achievement-item {
     display: flex;
     align-items: center;
-    padding: 15px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 8px;
     transition: background 0.3s, transform 0.2s;
 }
 
@@ -369,8 +369,8 @@ button:active {
 }
 
 .achievement-item .icon {
-    font-size: 2em;
-    margin-right: 20px;
+    font-size: 1.5em;
+    margin-right: 15px;
 }
 
 .achievement-item .details h3 {
@@ -393,6 +393,43 @@ button:active {
 .achievement-item.locked .details p::after {
     content: " (未解锁)";
     color: #999;
+}
+
+/* 成就分页控件样式 */
+.achievement-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    gap: 15px;
+}
+
+.page-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.page-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#page-info {
+    color: #fff;
+    font-size: 14px;
+    min-width: 60px;
+    text-align: center;
 }
 
 /* =================== 游戏界面样式 =================== */
