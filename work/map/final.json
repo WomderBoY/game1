@@ -172,22 +172,22 @@ _jsonCallback({
 				],
 				"tiling": true
 			},
-            {
-				"hitbox": [
-					615,
-					335,
-					50,
-					50
-				],
-                "event": { //
-					"type": "boss", 
-				},
-				"col": true,
-				"img": [
-					"../images/test1.png"
-				],
-				"tiling": true
-			},
+            // {
+			// 	"hitbox": [
+			// 		615,
+			// 		335,
+			// 		50,
+			// 		50
+			// 	],
+            //     "event": { //
+			// 		"type": "boss", 
+			// 	},
+			// 	"col": true,
+			// 	"img": [
+			// 		"../images/test1.png"
+			// 	],
+			// 	"tiling": true
+			// },
 
         ],
         "enemy": [],

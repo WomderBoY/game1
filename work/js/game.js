@@ -489,6 +489,7 @@ class game {
                 //            console.log('Night state before drawing:', this.night);  // 打印 night 状态
                 this.mapmanager.drawbg(this.env);
                 await this.entitymanager.checkCollision();
+                await this.entitymanager.checkboss();
                 await this.entitymanager.update();
                 //              if (this.night == false)
                 await this.mapmanager.draw(this.env);

@@ -485,6 +485,18 @@ class entitymanager {
         }
     }
 
+    async checkboss() {
+        if (this.game.boss.rect.containsRect(this.game.player))
+        {
+            this.updatevx(-entitymanager.vx * 2);
+            this.updatevy(-entitymanager.vy * 2);
+            entitymanager.isjp = true;
+            entitymanager.lstjp = 0;
+            console.warn('change vy = ', entitymanager.vy);
+            this.gethurt();
+        }
+    }
+
     async drawPlayer(standingOnMovetile = false) {
         let machine = this.game.animationmachine;
         
