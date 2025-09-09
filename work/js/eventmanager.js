@@ -105,6 +105,35 @@ class eventmanager {
             console.warn("loadmap over");
             //        this.game.player.facing = e.facing;
         }
+
+        if (e.type === "changemap3") {
+            // 使用内存里的 ending
+            const currentEnding = (window.game && window.game.ending !== undefined) ? window.game.ending : true;
+
+            const targetMap = currentEnding === false ? e.endingFalseTarget : e.endingTrueTarget;
+
+            if (e.with) await window.game.cgmanager.play(e.with);
+
+            if (e.x !== undefined) window.game.player.position.x = e.x;
+            if (e.y !== undefined) window.game.player.position.y = e.y;
+
+            await window.game.mapmanager.loadMap(targetMap);
+            await window.game.enemymanager.LoadEnemy(targetMap);
+            await window.game.enemy2manager.LoadEnemy2(targetMap);
+            await window.game.baguamanager.LoadBagua(targetMap);
+            await window.game.bossmanager.loadBoss(targetMap);
+
+            window.game.status = "running";
+
+            if (window.game.savemanager) {
+                await window.game.savemanager.save(targetMap);
+            }
+
+            if (window.game.unlockNextLevel) window.game.unlockNextLevel(targetMap);
+
+            console.log("changemap3 完成, targetMap:", targetMap);
+        }
+
         if (e.type === "cg") {
             // this.game.status = "cg"; // 进入CG状态
             //

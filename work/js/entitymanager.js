@@ -349,6 +349,9 @@ class entitymanager {
             fw = 1;
         }
 
+        if (vx > 0 && vx > maxSpeed) vx -= a * 3;
+        if (vx < 0 && vx < -maxSpeed) vx += a * 3;
+
         // 松开按键减速
         if (!ky.left && !ky.right) {
             vx *= friction;
@@ -411,7 +414,13 @@ class entitymanager {
                     const press = this.game.inputmanager.takeEnter();
                     if (press) {
                         if (e.event.type == 'man'){
-                            this.ending=false;
+                           if (window.game) {
+                                const username = localStorage.getItem("yyj_username");
+                                if (username) {
+                                    window.game.ending = false;
+                                    window.game.savemanager.saveEnding(username, false);
+                                }
+                            }
                             console.warn('触发了')
                         }
                         console.log("消极事件触发", e.event);

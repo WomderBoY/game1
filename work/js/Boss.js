@@ -50,6 +50,8 @@ class Boss {
         this.game.mapmanager.cl_attack(type);
         for (let ti = 1; ti <= x; ++ti) {
             let y = this.game.random(0, len - 1);
+            while (this.game.mapmanager.collidable[type][y] instanceof Movetile)
+                y = this.game.random(0, len - 1);
             this.game.mapmanager.set_attack(type, y);
         }
     }
@@ -64,6 +66,8 @@ class Boss {
         this.game.enemymanager.cl_enemy();
         for (let ti = 1; ti <= x; ++ti) {
             let y = this.game.random(0, len - 1);
+            while (this.game.mapmanager.collidable[type][y] instanceof Movetile)
+                y = this.game.random(0, len - 1);
             this.game.enemymanager.set_enemy(type, y);
         }
     }
