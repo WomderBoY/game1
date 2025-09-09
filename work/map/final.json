@@ -182,7 +182,7 @@ _jsonCallback({
                 "event": { //
 					"type": "boss", 
 				},
-				"col": true,
+				"col": false,
 				"img": [
 					"../images/test1.png"
 				],
