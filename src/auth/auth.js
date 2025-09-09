@@ -70,7 +70,9 @@ function renderAchievementsList() {
         first_kill: { name: '初战告捷', desc: '击杀一个小怪' },
         first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' },
         first_fratile: { name: '踏碎虚空', desc: '踩碎一个易碎方块' },
-        orb_death: { name: '法球之殇', desc: '被法球击杀' }
+        orb_death: { name: '法球之殇', desc: '被法球击杀' },
+        hidden_passage: { name: '隐秘救赎', desc: '通过隐藏关并救出被困的师兄' },
+        boss_slayer: { name: '精英猎手', desc: '击败至阴之物' }
     };
     const ids = Object.keys(defs);
     ids.forEach(id => {
