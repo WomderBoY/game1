@@ -467,12 +467,12 @@ class game {
                 // 绘制地图（背景或场景元素）
                 this.mapmanager.draw(this.env);
                 if (this.cg == false) {
-                    if (this.night == false) {
-                        //                console.log('Night state before drawing:', this.night);  // 打印 night 状态
+                    if (this.night == false || (this.nightmanager && this.nightmanager.isActive && !this.nightmanager.isActive())) {
+                        // 夜晚未启用覆盖层时，保持原有逻辑；否则由 DOM 覆盖层负责遮罩
                         this.mapmanager.draw(this.env);
                     } else {
-                        this.ctx.fillStyle = "#484848ff";
-                        this.ctx.fillRect(0, 0, this.width, this.height);
+                        // 覆盖层存在时，底下仍绘制地图，让聚光灯区域显示原画面
+                        this.mapmanager.draw(this.env);
                     }
                 }
                 if (this.canmove) {
@@ -533,12 +533,10 @@ class game {
                 // 暂停时不更新游戏逻辑，仅保持最后一帧画面（可选显示遮罩由 DOM 负责）
                 // 仍然绘制当前画面（如需要也可不绘制
                 if (this.cg == false) {
-                    if (this.night == false) {
-                        //                console.log('Night state before drawing:', this.night);  // 打印 night 状态
+                    if (this.night == false || (this.nightmanager && this.nightmanager.isActive && !this.nightmanager.isActive())) {
                         this.mapmanager.draw(this.env);
                     } else {
-                        this.ctx.fillStyle = "#484848ff";
-                        this.ctx.fillRect(0, 0, this.width, this.height);
+                        this.mapmanager.draw(this.env);
                     }
                 }
                 this.enemymanager.draw(this.ctx);
@@ -561,12 +559,10 @@ class game {
                 console.log("游戏结束");
                 // 绘制背景和场景
                 if (this.cg == false) {
-                    if (this.night == false) {
-                        console.log("Night state before drawing:", this.night); // 打印 night 状态
+                    if (this.night == false || (this.nightmanager && this.nightmanager.isActive && !this.nightmanager.isActive())) {
                         this.mapmanager.draw(this.env);
                     } else {
-                        this.ctx.fillStyle = "#484848ff";
-                        this.ctx.fillRect(0, 0, this.width, this.height);
+                        this.mapmanager.draw(this.env);
                     }
                 }
                 await this.enemy2manager.update();
