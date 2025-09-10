@@ -134,7 +134,7 @@ class entitymanager {
         if (this.game.status !== "running") return;
         const ky = this.keys;
         const ga = this.game;
-        if (ky.change && this.game.gameFrame - this.re >= 200) {
+        if (ky.change && this.game.gameFrame - this.re >= 80) {
             ga.yingyang = !ga.yingyang;
             this.re = this.game.gameFrame;
             if (this.game.achievements)
@@ -162,7 +162,6 @@ class entitymanager {
         let lstjp = entitymanager.lstjp;
         let vxx = entitymanager.vxx;
         let vyy = entitymanager.vyy;
-        let prevX = this.px, prevY = this.py;
         entitymanager.vxx = 0;
         entitymanager.vyy = 0;
         let dbg = false;
@@ -179,6 +178,7 @@ class entitymanager {
         for (let p of ga.mapmanager.tram) {
             // let prevX = ga.player.position.x - vx - vxx;
             // let prevY = ga.player.position.y - vy - vyy;
+            let prevX = this.px, prevY = this.py;
             if (ga.player.containsRect(p) && this.game.env != (this.game.yingyang ? 'yang' : 'yin')) {
                 p.update(prevX, prevY, vx, vy, ga);
                 vx = entitymanager.vx;
@@ -238,6 +238,12 @@ class entitymanager {
                     continue;
                 }
                 
+                let prevX = this.px, prevY = this.py;
+                if (p instanceof Movetile) {
+                    prevX += p.vx;
+                    prevY += p.vy;
+                }
+                
                 // let prevX = ga.player.position.x - vx - vxx;
                 // let prevY = ga.player.position.y - vy - vyy;
                 if (ga.player.containsRect(p)) {
@@ -266,7 +272,7 @@ class entitymanager {
                     else if (prevY >= p.y + p.h) {
                         
             //            console.warn("down col!!!");
-                        ga.player.position.y = p.y + p.h;
+                        ga.player.position.y = p.y + p.h + 0.5;
                         vy = 0;
                     }
                     // 左侧碰撞
