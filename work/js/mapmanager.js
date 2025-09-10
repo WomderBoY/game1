@@ -46,6 +46,9 @@ class mapmanager {
         this.manImg = await this.game.datamanager.loadImg(
             "../images/man.png"
         );
+        this.bossImg = await this.game.datamanager.loadImg(
+            "../images/deadboos.png"
+        );
         this.defaultImg = [await this.game.datamanager.loadImg("../images/tile.png")];
     }
 
@@ -464,7 +467,7 @@ class mapmanager {
         this.drawManager.drawPortals(this.portalImg, this.events, this.game.env);
     }
     drawPeople() {
-        this.drawManager.drawPeople(this.manImg, this.events, this.game.env);
+        this.drawManager.drawPeople(this.manImg, this.bossImg,this.events, this.game.env);
     }
 
 }

@@ -200,6 +200,7 @@ _jsonCallback({
 				],
 				"event": {
 					"type": "man", 
+					"who":"hero",
 					"way": "negative", 
 					"target":"../map/bg-map2.json",
 					"with": {
