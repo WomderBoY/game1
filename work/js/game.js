@@ -23,7 +23,7 @@ class game {
         this.env = "yang"; // 默认环境为阳
         this.changetimes = 0; // 切换环境次数
         this.yingyang = true;
-        this.ending = true;//这是隐藏结局
+        if (this.ending !== false) this.ending = true;//这是隐藏结局
         this.datamanager = new datamanager(this);
 
         // 添加太极管理器（新增代码）
@@ -50,11 +50,13 @@ class game {
         this.expmanager = new Expmanager(this);
 
         const username = localStorage.getItem("yyj_username");
+        console.warn('user = ', username);
         if (username) {
-        const savedEnding = this.savemanager.loadEnding(username);
-        this.ending = savedEnding !== null ? savedEnding : true; // 默认 true
+            const savedEnding = this.savemanager.loadEnding(username);
+            console.warn('saev = ', savedEnding);
+            this.ending = savedEnding !== null ? savedEnding : true; // 默认 true
         } else {
-        this.ending = true; // 没账号也用默认
+            this.ending = true; // 没账号也用默认
         }
 
 
@@ -455,6 +457,7 @@ class game {
     }
 
     async update(delta) {
+        console.warn(this.ending);
         const debug = true; // 调试开关
         if (debug && !this.debugListenerAdded) {
             this.debugListenerAdded = true;

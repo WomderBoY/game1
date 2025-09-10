@@ -95,6 +95,7 @@ class eventmanager {
             await this.game.bossmanager.loadBoss(targetMap);
 
             // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
+            window.game.ending = false;
             this.game.status = "running";
             console.log(
                 "player pos",
@@ -103,14 +104,14 @@ class eventmanager {
             );
 
             // 自动保存当前进度
-            if (this.game.savemanager) {
-                await this.game.savemanager.save(e.target);
-            }
+            // if (this.game.savemanager) {
+            //     await this.game.savemanager.save(e.target);
+            // }
 
-            // 解锁下一个关卡
-            if (this.game.unlockNextLevel) {
-                this.game.unlockNextLevel(e.target);
-            }
+            // // 解锁下一个关卡
+            // if (this.game.unlockNextLevel) {
+            //     this.game.unlockNextLevel(e.target);
+            // }
             console.warn("loadmap over");
             //        this.game.player.facing = e.facing;
         }
