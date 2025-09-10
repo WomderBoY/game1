@@ -70,9 +70,10 @@ _jsonCallback({
 					20
 				],
 				"event": {
-					"type": "changemap",
-					"target": "../map/final.json",
-					"way": "negative",
+					"type": "changemap3",
+					"endingTrueTarget": "../map/bg-map1.json",
+  					"endingFalseTarget": "../map/bg-map2.json",
+					"way": "tunnal",
 					"with": {
 						"images": [
 							"../images/black-right2-0.png",

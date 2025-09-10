@@ -52,10 +52,10 @@ class TaijiManager {
 
     // 触发太极动画（在角色位置）
     trigger() {
-        const now = this.game.gameFrame;
+//        const now = this.game.gameFrame;
         // 冷却时间检查（300ms内不重复触发）
-        if (now - this.cooldown < 200) return;
-        this.cooldown = now;
+//        if (now - this.cooldown < 80) return;
+//        this.cooldown = now;
 
         const player = this.game.player;
         const canvas = this.game.view;
