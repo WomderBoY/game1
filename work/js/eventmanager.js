@@ -56,7 +56,7 @@ class eventmanager {
             await this.game.dialog.prints(e.text);
             this.game.canmove = true;
         }
-        if (e.type === "changemap"||e.type ==="man"||e.type ==="changemap2") {
+        if ( e.type === "changemap" ||e.type === "man" ||e.type === "changemap2" ||e.type === "changemap3") {
             // 检查是否是隐藏关成就触发
             if (e.type === "man" && this.game.mapmanager.room && this.game.mapmanager.room.includes("hid.json")) {
                 // 触发隐藏关成就
@@ -72,6 +72,14 @@ class eventmanager {
                     this.game.achievements.unlock("tower_master");
                 }
             }
+
+            let targetMap = e.target; // 默认
+            if (e.type === "changemap3") {
+                const currentEnding = (window.game && window.game.ending !== undefined)
+                    ? window.game.ending
+                    : true;
+                targetMap = currentEnding === false ? e.endingFalseTarget : e.endingTrueTarget;
+            }
             
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             if (e.with) {
@@ -80,11 +88,12 @@ class eventmanager {
             }
             this.game.player.position.x = e.x;
             this.game.player.position.y = e.y;
-            await this.game.mapmanager.loadMap(e.target);
-            await this.game.enemymanager.LoadEnemy(e.target);
-            await this.game.enemy2manager.LoadEnemy2(e.target); //新加的敌人类型
-            await this.game.baguamanager.LoadBagua(e.target);
-            await this.game.bossmanager.loadBoss(e.target);
+            await this.game.mapmanager.loadMap(targetMap);
+            await this.game.enemymanager.LoadEnemy(targetMap);
+            await this.game.enemy2manager.LoadEnemy2(targetMap); //新加的敌人类型
+            await this.game.baguamanager.LoadBagua(targetMap);
+            await this.game.bossmanager.loadBoss(targetMap);
+
             // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
             this.game.status = "running";
             console.log(
@@ -104,34 +113,6 @@ class eventmanager {
             }
             console.warn("loadmap over");
             //        this.game.player.facing = e.facing;
-        }
-
-        if (e.type === "changemap3") {
-            // 使用内存里的 ending
-            const currentEnding = (window.game && window.game.ending !== undefined) ? window.game.ending : true;
-
-            const targetMap = currentEnding === false ? e.endingFalseTarget : e.endingTrueTarget;
-
-            if (e.with) await window.game.cgmanager.play(e.with);
-
-            if (e.x !== undefined) window.game.player.position.x = e.x;
-            if (e.y !== undefined) window.game.player.position.y = e.y;
-
-            await window.game.mapmanager.loadMap(targetMap);
-            await window.game.enemymanager.LoadEnemy(targetMap);
-            await window.game.enemy2manager.LoadEnemy2(targetMap);
-            await window.game.baguamanager.LoadBagua(targetMap);
-            await window.game.bossmanager.loadBoss(targetMap);
-
-            window.game.status = "running";
-
-            if (window.game.savemanager) {
-                await window.game.savemanager.save(targetMap);
-            }
-
-            if (window.game.unlockNextLevel) window.game.unlockNextLevel(targetMap);
-
-            console.log("changemap3 完成, targetMap:", targetMap);
         }
 
         if (e.type === "cg") {
