@@ -43,7 +43,7 @@ class eventmanager {
     async handle() {
         //console.log('shijian', this.game.canmove);\
 //        console.warn(this.front, this.rear);
-        if (this.front > this.rear) return; // 如果不在 start 状态，直接返回（已在处理或已结束）
+        if (this.front > this.rear || this.progress == 'processing') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
         
         let e = this.event[this.front];
         ++this.front;

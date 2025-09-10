@@ -485,7 +485,7 @@ class game {
     }
 
     async update(delta) {
-        console.warn(this.ending);
+//        console.warn(this.ending);
         const debug = true; // 调试开关
         if (debug && !this.debugListenerAdded) {
             this.debugListenerAdded = true;

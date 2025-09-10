@@ -17,8 +17,8 @@ _jsonCallback({
                     "【旁白】至阴之物身形一闪，沿着破碎的台阶向上层逃去。"
                 ]
             ]
-            },
-            {
+        },
+        {
             "type": "dialog",
             "way": "negative",
             "text": [
