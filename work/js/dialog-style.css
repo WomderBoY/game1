@@ -183,24 +183,24 @@
 
 /* 系统对话 */
 .dialog-container.system {
-    border-color: rgba(150, 100, 255, 0.6);
+    border-color: rgba(253, 183, 19, 0.6);
     background: linear-gradient(145deg, rgba(30, 20, 40, 0.95), rgba(50, 30, 60, 0.95));
     box-shadow:
         0 20px 40px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(150, 100, 255, 0.3),
+        0 0 20px rgba(255, 221, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .dialog-container.system .dialog-avatar {
-    background: linear-gradient(145deg, #9666ff, #7744ff);
-    border-color: rgba(150, 100, 255, 0.6);
-    box-shadow: 0 4px 8px rgba(150, 100, 255, 0.3);
+    background: linear-gradient(145deg, rgb(182, 170, 134), rgb(205, 171, 35));
+    border-color: rgba(253, 183, 19, 0.6);
+    box-shadow: 0 4px 8px rgba(255, 221, 0, 0.3);
 }
 
 .dialog-container.system .dialog-name {
-    color: #330066;
+    color: #9b6a00;
     font-size: 22px;
-    text-shadow: 0 2px 4px rgba(150, 100, 255, 0.3);
+    text-shadow: 0 2px 4px rgba(255, 221, 0, 0.3);
 }
 
 /* 玩家对话 */
@@ -257,18 +257,18 @@
 
 /*旁白对话 */
 .dialog-container.mysterious {
-    border-color: rgba(150, 100, 255, 0.6);
+    border-color: rgba(200, 200, 200, 0.4);
     background: linear-gradient(145deg, rgba(30, 20, 40, 0.95), rgba(50, 30, 60, 0.95));
     box-shadow:
         0 20px 40px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(150, 100, 255, 0.3),
+        0 0 20px rgba(255, 221, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .dialog-container.mysterious .dialog-avatar {
-    background: linear-gradient(145deg, #9666ff, #7744ff);
-    border-color: rgba(150, 100, 255, 0.6);
-    box-shadow: 0 4px 8px rgba(150, 100, 255, 0.3);
+    background: linear-gradient(145deg, rgb(182, 170, 134), rgb(205, 171, 35));
+    border-color: linear-gradient(145deg, #4a4a4a, #6a6a6a);
+    border-color: rgba(200, 200, 200, 0.4);
 }
 
 .dialog-container.mysterious .dialog-name {

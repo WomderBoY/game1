@@ -116,7 +116,7 @@ class dialog {
 
         // 强制设置背景图片
         if (this.dialog.classList.contains("has-bg")) {
-            this.dialog.style.backgroundImage = "url(../images/diagbg1.png)";
+            this.dialog.style.backgroundImage = "url(../images/diagbg4.png)";
             this.dialog.style.backgroundSize = "cover";
             this.dialog.style.backgroundPosition = "center";
             this.dialog.style.backgroundRepeat = "no-repeat";
@@ -134,8 +134,8 @@ class dialog {
         // 强制设置头像样式
         if (this.dialog.classList.contains("mysterious")) {
             this.avatar.textContent = "🔮";
-            this.avatar.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
-            this.avatar.style.border = "2px solid rgba(150, 100, 255, 0.6)";
+            this.avatar.style.background = "linear-gradient(145deg,rgb(182, 170, 134),rgb(205, 171, 35))";
+            this.avatar.style.border = "2px solid rgba(253, 183, 19, 0.6)";
             console.log("强制设置头像样式");
         }
 
@@ -147,14 +147,14 @@ class dialog {
         console.log("设置对话人主题:", speakerName);
 
         const speakerConfig = {
-            "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
+            "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" },
             "玩家": { theme: "player", avatar: null, background: "../images/diagbg2.png", displayName: "玩家" },
             "Boss": { theme: "mysterious", avatar: null, background: "../images/diagbg3.png", displayName: "旁白" },
             "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" }
         };
 
         // 检查是否匹配已知的对话人
-        let config = { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" }; // 默认为mysterious主题
+        let config = { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" }; // 默认为mysterious主题
 
         for (let [key, value] of Object.entries(speakerConfig)) {
             if (speakerName.includes(key)) {
@@ -331,7 +331,7 @@ class dialog {
         this.name.textContent = "旁白";
         this.text.textContent = "请输入用户名：";
         this.setDialogTheme("mysterious");
-        this.setDialogBackground("../images/diagbg1.png");
+        this.setDialogBackground("../images/diagbg4.png");
         this.inputContainer.style.display = "block";
         this.inputField.focus();
 

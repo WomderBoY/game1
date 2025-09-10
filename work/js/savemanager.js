@@ -40,7 +40,9 @@ class SaveManager {
 
     async save(src) {
         console.log("保存游戏", src);
-        this.data.room = src;
+
+         // 如果 src 未提供，则保留上次的 room
+        this.data.room = src || this.data.room;
         this.data.player.x = this.game.player.position.x;
         this.data.player.y = this.game.player.position.y;
         console.warn('savemanager save', this.game.player.position.x, this.game.player.position.y);
@@ -52,11 +54,15 @@ class SaveManager {
             this.data.player.yingyang = null; // 使用 null 而不是 undefined
         }
 
-        // 修复：正确处理 event 数据
+        // 保存 event，只存对象/数组，不存函数
         if (this.game.eventmanager.event && this.game.eventmanager.event.with) {
-            this.data.event = this.game.eventmanager.event.with;
+            try {
+                this.data.event = JSON.parse(JSON.stringify(this.game.eventmanager.event.with));
+            } catch {
+                this.data.event = null;
+            }
         } else {
-            this.data.event = null; // 使用 null 而不是 undefined，确保字段被保存
+            this.data.event = null;
         }
 
         console.log("with = ", this.game.eventmanager.event?.with);
@@ -124,5 +130,3 @@ class SaveManager {
         }
     }
 }
-
-window.SaveManager = new SaveManager(window.game);

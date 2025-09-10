@@ -59,7 +59,7 @@ class mapmanager {
         this.HP = { yin: [], yang: [] };
         this.events = { yin: [], yang: [] };
         this.app = { yin: [], yang: [] };
-        this.damege={ yin: [], yang: []};
+        this.damege = { yin: [], yang: [] };
         this.man = { yin: [], yang: [] };
         this.room = "";
         this.background = { yin: [], yang: [] };
@@ -96,7 +96,7 @@ class mapmanager {
 
     hurt() {
         const isHurt = this.game.gameFrame - mapmanager.lstchange <= 80;
-        
+
         // 当砖块血量减少时播放音效，但防止重复播放
         if (isHurt && this.game.soundmanager) {
             const currentTime = this.game.gameFrame;
@@ -106,7 +106,7 @@ class mapmanager {
                 mapmanager.lastSoundTime = currentTime;
             }
         }
-        
+
         return isHurt;
     }
 
@@ -187,7 +187,7 @@ class mapmanager {
         // 重置对话框样式，确保关卡切换后对话框显示正常
         if (this.game.dialog) {
             this.game.dialog.setDialogTheme("mysterious");
-            this.game.dialog.setDialogBackground("../images/diagbg1.png");
+            this.game.dialog.setDialogBackground("../images/diagbg4.png");
             this.game.dialog.name.textContent = "旁白";
             this.game.dialog.avatar.textContent = "🔮";
             this.game.dialog.forceApplyStyles();
@@ -408,7 +408,7 @@ class mapmanager {
             if (!img || img.length === 0) {
                 img = this.defaultImg;
             }
-            
+
             tile = new Tile(x, y, w, h, i.hp, img, i.event, defaultTiling);
         }
         // 把 overlayImg 存进去
@@ -467,7 +467,7 @@ class mapmanager {
         this.drawManager.drawPortals(this.portalImg, this.events, this.game.env);
     }
     drawPeople() {
-        this.drawManager.drawPeople(this.manImg, this.bossImg,this.events, this.game.env);
+        this.drawManager.drawPeople(this.manImg, this.bossImg, this.events, this.game.env);
     }
 
 }
