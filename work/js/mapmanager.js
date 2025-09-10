@@ -189,7 +189,8 @@ class mapmanager {
             this.game.dialog.setDialogTheme("mysterious");
             this.game.dialog.setDialogBackground("../images/diagbg4.png");
             this.game.dialog.name.textContent = "旁白";
-            this.game.dialog.avatar.textContent = "🔮";
+            this.game.dialog.avatar.innerHTML = `<img src="../images/man2.png" alt="avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            this.game.dialog.avatar.classList.add("has-bg");
             this.game.dialog.forceApplyStyles();
         }
 
