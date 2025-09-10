@@ -19,6 +19,25 @@ class SaveManager {
         console.log("初始化数据:", this.data);
     }
 
+    // 保存结局到 localStorage
+    saveEnding(username, ending) {
+        if (!username) return;
+        localStorage.setItem(`ending_${username}`, JSON.stringify(ending));
+    }
+
+    // 读取结局
+    loadEnding(username) {
+        if (!username) return null;
+        const val = localStorage.getItem(`ending_${username}`);
+        return val ? JSON.parse(val) : null;
+    }
+
+    // 删除结局
+    clearEnding(username) {
+        if (!username) return;
+        localStorage.removeItem(`ending_${username}`);
+    }
+
     async save(src) {
         console.log("保存游戏", src);
         this.data.room = src;
@@ -53,6 +72,10 @@ class SaveManager {
         console.log("=== 开始加载存档 ===");
         console.log("加载前的 this.data:", this.data);
         this.game.nightmanager.deactivateNight();
+
+        const username = localStorage.getItem("yyj_username");
+        const savedEnding = this.loadEnding(username);
+        this.game.ending = savedEnding !== null ? savedEnding : true;
 
         const saveKey = this.getUserStorageKey("saveData1");
         let data = localStorage.getItem(saveKey);
@@ -101,3 +124,5 @@ class SaveManager {
         }
     }
 }
+
+window.SaveManager = new SaveManager(window.game);

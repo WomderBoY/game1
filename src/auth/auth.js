@@ -60,6 +60,10 @@ function getSavedAchievements() {
     } catch (_) { return null; }
 }
 
+// 成就分页相关变量
+let currentPage = 1;
+const achievementsPerPage = 3;
+
 function renderAchievementsList() {
     const list = document.getElementById('achievement-list');
     if (!list) return;
@@ -70,10 +74,23 @@ function renderAchievementsList() {
         first_kill: { name: '初战告捷', desc: '击杀一个小怪' },
         first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' },
         first_fratile: { name: '踏碎虚空', desc: '踩碎一个易碎方块' },
-        orb_death: { name: '法球之殇', desc: '被法球击杀' }
+        orb_death: { name: '法球之殇', desc: '被法球击杀' },
+        hidden_passage: { name: '隐秘救赎', desc: '通过隐藏关并救出被困的师兄' },
+        boss_slayer: { name: '精英猎手', desc: '击败至阴之物' },
+        tower_master: { name: '至高之术', desc: '通过第八层的高难关卡' }
     };
     const ids = Object.keys(defs);
-    ids.forEach(id => {
+    
+    // 计算总页数
+    const totalPages = Math.ceil(ids.length / achievementsPerPage);
+    
+    // 计算当前页显示的成就范围
+    const startIndex = (currentPage - 1) * achievementsPerPage;
+    const endIndex = Math.min(startIndex + achievementsPerPage, ids.length);
+    
+    // 只渲染当前页的成就
+    for (let i = startIndex; i < endIndex; i++) {
+        const id = ids[i];
         const unlocked = saved && saved[id] ? !!saved[id].unlocked : false;
         const li = document.createElement('li');
         li.className = 'achievement-item' + (unlocked ? '' : ' locked');
@@ -91,7 +108,28 @@ function renderAchievementsList() {
         li.appendChild(icon);
         li.appendChild(details);
         list.appendChild(li);
-    });
+    }
+    
+    // 更新分页信息
+    updatePaginationInfo(totalPages);
+}
+
+function updatePaginationInfo(totalPages) {
+    const pageInfo = document.getElementById('page-info');
+    const prevBtn = document.getElementById('prev-page-btn');
+    const nextBtn = document.getElementById('next-page-btn');
+    
+    if (pageInfo) {
+        pageInfo.textContent = `${currentPage} / ${totalPages}`;
+    }
+    
+    if (prevBtn) {
+        prevBtn.disabled = currentPage <= 1;
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = currentPage >= totalPages;
+    }
 }
 
 
@@ -112,6 +150,7 @@ function transitionTous() {
 
 function showAchievements() {
     const modal = document.getElementById('achievement-modal');
+    currentPage = 1; // 重置到第一页
     renderAchievementsList();
     modal.classList.remove('hidden');
     requestAnimationFrame(() => { modal.classList.add('show'); });
@@ -260,6 +299,10 @@ function deleteUserSaveData() {
                 console.log(`已删除: ${key}`);
             }
         });
+
+        //  直接重置 ending 为 true
+        localStorage.setItem(`ending_${username}`, JSON.stringify(true));
+        console.log(`用户 ${username} 的结局已复原为默认 true`);
 
         // 显示删除结果
         if (deletedCount > 0) {
@@ -581,6 +624,31 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.modal-close-btn').addEventListener('click', hideAchievements);
     document.getElementById('settings-close-btn').addEventListener('click', hideSettings);
     document.getElementById('about-us').addEventListener('click', transitionTous);
+    
+    // 成就分页按钮事件监听
+    document.getElementById('prev-page-btn').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderAchievementsList();
+        }
+    });
+    
+    document.getElementById('next-page-btn').addEventListener('click', () => {
+        const defs = {
+            first_kill: { name: '初战告捷', desc: '击杀一个小怪' },
+            first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' },
+            first_fratile: { name: '踏碎虚空', desc: '踩碎一个易碎方块' },
+            orb_death: { name: '法球之殇', desc: '被法球击杀' },
+            hidden_passage: { name: '隐秘救赎', desc: '通过隐藏关并救出被困的师兄' },
+            boss_slayer: { name: '精英猎手', desc: '击败至阴之物' },
+            tower_master: { name: '至高之术', desc: '通过第八层的高难关卡' }
+        };
+        const totalPages = Math.ceil(Object.keys(defs).length / achievementsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderAchievementsList();
+        }
+    });
     
     // 删除存档按钮事件监听
     const deleteSaveBtn = document.getElementById('delete-save-btn');

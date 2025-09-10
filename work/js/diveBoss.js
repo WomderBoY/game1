@@ -323,6 +323,15 @@ class DiveBoss {
             entitymanager.vy = -10;
             if (this.hp.isDead()) {
                 this.dead = true;
+                
+                // 检查是否是bg4关卡的Boss击杀成就
+                if (this.game.mapmanager.room && this.game.mapmanager.room.includes("bg4.json")) {
+                    // 触发Boss击杀成就
+                    if (this.game.achievements) {
+                        this.game.achievements.unlock("boss_slayer");
+                    }
+                }
+                
                 //这里加一个事件，让玩家传送到下一个关卡
                 this.game.eventmanager.add({ 
                     type: "changemap", 

@@ -11,6 +11,7 @@ class game {
     static lst;
     static yingyang = true;
     async init() {
+        this.savemanager = new SaveManager(this);
         this.player = new Rect(0, 0, 30, 40); //初始化玩家
         this.env = "yang";
         this.gameFrame = 0;
@@ -40,7 +41,6 @@ class game {
         this.entitymanager = new entitymanager(this);
         this.eventmanager = new eventmanager(this);
         this.bossmanager = new BossManager(this);
-        this.savemanager = new SaveManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
         this.enemy2manager = new Enemy2Manager(this)
@@ -48,6 +48,15 @@ class game {
         this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
         this.expmanager = new Expmanager(this);
+
+        const username = localStorage.getItem("yyj_username");
+        if (username) {
+        const savedEnding = this.savemanager.loadEnding(username);
+        this.ending = savedEnding !== null ? savedEnding : true; // 默认 true
+        } else {
+        this.ending = true; // 没账号也用默认
+        }
+
 
         // 感叹号提示系统
         this.exclamationPrompt = {
@@ -75,7 +84,6 @@ class game {
         //    await this.enemymanager.LoadEnemy("test_1.json");
         //  await this.baguamanager.LoadBagua("test_1.json");
         // 检查是否有选择的关卡
-        const username = localStorage.getItem("yyj_username");
         const selectedLevelKey = username ? `selectedLevel_${username}` : "selectedLevel";
         const selectedLevel = localStorage.getItem(selectedLevelKey);
 
@@ -511,7 +519,9 @@ class game {
                 // 更新Boss HP系统（如果存在）
                 if (this.boss && this.boss.HP) {
                     this.boss.HP.update(16.6667);
+                    await this.entitymanager.checkboss();
                 } else if (this.boss) {
+                    await this.entitymanager.checkboss();
                     console.log('⚠️ Boss存在但HP系统未初始化:', this.boss);
                 } else {
                     //              console.log('ℹ️ 当前关卡没有Boss');

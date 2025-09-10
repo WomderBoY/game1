@@ -190,7 +190,7 @@ class entitymanager {
                 break;
             }
         }
-//        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
+        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
         if (!fl) {
             // 检查玩家是否站在移动砖块上，如果是则持续跟随
             let movetileVx = 0, movetileVy = 0;
@@ -349,6 +349,9 @@ class entitymanager {
             fw = 1;
         }
 
+        if (vx > 0 && vx > maxSpeed) vx -= a * 3;
+        if (vx < 0 && vx < -maxSpeed) vx += a * 3;
+
         // 松开按键减速
         if (!ky.left && !ky.right) {
             vx *= friction;
@@ -356,8 +359,8 @@ class entitymanager {
         }
 
         // 限制最大速度
-        if (vx > maxSpeed) vx = maxSpeed;
-        if (vx < -maxSpeed) vx = -maxSpeed;
+        if (vx > maxSpeed && vx <= maxSpeed + a * 1.5) vx = maxSpeed;
+        if (vx < -maxSpeed && vx >= -maxSpeed - a * 1.5) vx = -maxSpeed;
 
         if (this.keys.up && entitymanager.onground == false) {
             machine.current = "jump";
@@ -411,7 +414,13 @@ class entitymanager {
                     const press = this.game.inputmanager.takeEnter();
                     if (press) {
                         if (e.event.type == 'man'){
-                            this.ending=false;
+                           if (window.game) {
+                                const username = localStorage.getItem("yyj_username");
+                                if (username) {
+                                    window.game.ending = false;
+                                    window.game.savemanager.saveEnding(username, false);
+                                }
+                            }
                             console.warn('触发了')
                         }
                         console.log("消极事件触发", e.event);
@@ -475,13 +484,39 @@ class entitymanager {
                     this.game.achievements.unlock("first_kill");
             } else {
                 // 扣血条件：阴阳相同 或 阴阳不同非踩头
-                this.updatevx(this.game.player.position.x < rect.position.x ? -15 : 15);
+                this.updatevx(this.game.player.position.x < rect.position.x ? -10 : 10);
                 this.updatevy(-10);
                 entitymanager.isjp = true;
                 entitymanager.lstjp = 0;
                 console.warn('change vy = ', entitymanager.vy);
                 this.gethurt();
             }
+        }
+    }
+
+    async checkboss() {
+        if (this.game.boss.rect.containsRect(this.game.player))
+        {
+            let vx, vy;
+            if (entitymanager.vx > 0) {
+                vx = Math.max(50, entitymanager.vx * 2)
+            }
+            else {
+                vx = Math.min(-50, entitymanager.vx * 2)
+            }
+            if (entitymanager.vy > 0) {
+                vy = entitymanager.vy;
+            }
+            else {
+                vy = entitymanager.vy;
+            }
+            vy = 8;
+            this.updatevx(-vx);
+            this.updatevy(-vy);
+            entitymanager.isjp = true;
+            entitymanager.lstjp = 0;
+            console.warn('change vy = ', entitymanager.vy);
+            this.gethurt();
         }
     }
 

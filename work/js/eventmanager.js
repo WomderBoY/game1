@@ -57,6 +57,22 @@ class eventmanager {
             this.game.canmove = true;
         }
         if (e.type === "changemap"||e.type ==="man"||e.type ==="changemap2") {
+            // 检查是否是隐藏关成就触发
+            if (e.type === "man" && this.game.mapmanager.room && this.game.mapmanager.room.includes("hid.json")) {
+                // 触发隐藏关成就
+                if (this.game.achievements) {
+                    this.game.achievements.unlock("hidden_passage");
+                }
+            }
+            
+            // 检查是否是bg-map4通关成就触发
+            if (e.type === "changemap" && this.game.mapmanager.room && this.game.mapmanager.room.includes("bg-map4.json")) {
+                // 触发bg-map4通关成就
+                if (this.game.achievements) {
+                    this.game.achievements.unlock("tower_master");
+                }
+            }
+            
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             if (e.with) {
                 console.warn("start", this.event.next);
@@ -89,6 +105,35 @@ class eventmanager {
             console.warn("loadmap over");
             //        this.game.player.facing = e.facing;
         }
+
+        if (e.type === "changemap3") {
+            // 使用内存里的 ending
+            const currentEnding = (window.game && window.game.ending !== undefined) ? window.game.ending : true;
+
+            const targetMap = currentEnding === false ? e.endingFalseTarget : e.endingTrueTarget;
+
+            if (e.with) await window.game.cgmanager.play(e.with);
+
+            if (e.x !== undefined) window.game.player.position.x = e.x;
+            if (e.y !== undefined) window.game.player.position.y = e.y;
+
+            await window.game.mapmanager.loadMap(targetMap);
+            await window.game.enemymanager.LoadEnemy(targetMap);
+            await window.game.enemy2manager.LoadEnemy2(targetMap);
+            await window.game.baguamanager.LoadBagua(targetMap);
+            await window.game.bossmanager.loadBoss(targetMap);
+
+            window.game.status = "running";
+
+            if (window.game.savemanager) {
+                await window.game.savemanager.save(targetMap);
+            }
+
+            if (window.game.unlockNextLevel) window.game.unlockNextLevel(targetMap);
+
+            console.log("changemap3 完成, targetMap:", targetMap);
+        }
+
         if (e.type === "cg") {
             // this.game.status = "cg"; // 进入CG状态
             //
