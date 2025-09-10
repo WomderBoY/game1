@@ -50,6 +50,7 @@ _jsonCallback({
 					"type": "changemap",
 					"way": "tunnal",
 					"target": "../map/bg-map1.json",
+					"bgm":1,
 					"with": {
 						"type": "cg",
 						"way": "negative",
