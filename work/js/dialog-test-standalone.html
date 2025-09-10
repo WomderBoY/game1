@@ -69,11 +69,11 @@
             transform: translateX(-50%);
             width: 80%;
             max-width: 600px;
-            background: linear-gradient(145deg, rgba(150, 100, 255, 0.9), rgba(120, 80, 200, 0.9));
-            border: 2px solid rgba(150, 100, 255, 0.6);
+            background: linear-gradient(145deg, rgba(226, 174, 0, 0.9), rgba(200, 190, 80, 0.9));
+            border: 2px solid rgba(49, 45, 24, 0.6);
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(150, 100, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 221, 0, 0.3);
             backdrop-filter: blur(10px);
             display: none;
             z-index: 1000;
@@ -132,11 +132,11 @@
         }
 
         .dialog-container.mysterious {
-            background: linear-gradient(145deg, rgba(150, 100, 255, 0.9), rgba(120, 80, 200, 0.9));
+            background: linear-gradient(145deg, rgba(226, 174, 0, 0.9), rgba(200, 190, 80, 0.9));
         }
 
         .dialog-container.mysterious .dialog-name {
-            color: #330066;
+            color: #494118;
             font-size: 22px;
             font-weight: bold;
         }
@@ -159,8 +159,8 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #9666ff, #7744ff);
-            border: 2px solid rgba(150, 100, 255, 0.6);
+            background: linear-gradient(145deg, rgba(226, 174, 0, 0.9), rgba(200, 190, 80, 0.9));
+            border: 2px solid rgba(255, 227, 100, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -287,14 +287,14 @@
                 this.log(`🔧 设置对话人主题: ${speakerName}`);
 
                 const speakerConfig = {
-                    "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" },
+                    "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" },
                     "玩家": { theme: "player", avatar: null, background: null, displayName: "玩家" },
                     "Boss": { theme: "boss", avatar: "👹", background: null, displayName: "Boss" },
-                    "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" }
+                    "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" }
                 };
 
                 // 检查是否匹配已知的对话人
-                let config = { theme: "mysterious", avatar: null, background: "../images/diagbg1.png", displayName: "旁白" };
+                let config = { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" };
 
                 for (let [key, value] of Object.entries(speakerConfig)) {
                     if (speakerName.includes(key)) {
@@ -330,7 +330,7 @@
 
                 // 强制设置背景图片
                 if (this.dialog.classList.contains("has-bg")) {
-                    this.dialog.style.backgroundImage = "url(../images/diagbg1.png)";
+                    this.dialog.style.backgroundImage = "url(../images/diagbg4.png)";
                     this.dialog.style.backgroundSize = "cover";
                     this.dialog.style.backgroundPosition = "center";
                     this.dialog.style.backgroundRepeat = "no-repeat";
@@ -348,7 +348,7 @@
                 // 强制设置头像样式
                 if (this.dialog.classList.contains("mysterious")) {
                     this.avatar.textContent = "🔮";
-                    this.avatar.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
+                    this.avatar.style.background = "linear-gradient(145deg, rgba(226, 174, 0, 0.9), rgba(200, 190, 80, 0.9))";
                     this.avatar.style.border = "2px solid rgba(150, 100, 255, 0.6)";
                     this.log("✅ 强制设置头像样式");
                 }

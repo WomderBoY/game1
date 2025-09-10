@@ -137,7 +137,7 @@ function fixGameDialog() {
     console.log("✅ 设置z-index为10002");
 
     // 2. 强制设置背景图片
-    dialogElement.style.backgroundImage = "url(../images/diagbg1.png)";
+    dialogElement.style.backgroundImage = "url(../images/diagbg4.png)";
     dialogElement.style.backgroundSize = "cover";
     dialogElement.style.backgroundPosition = "center";
     dialogElement.style.backgroundRepeat = "no-repeat";
@@ -161,8 +161,8 @@ function fixGameDialog() {
     // 5. 强制设置头像样式
     if (dialog.avatar) {
         dialog.avatar.textContent = "🔮";
-        dialog.avatar.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
-        dialog.avatar.style.border = "2px solid rgba(150, 100, 255, 0.6)";
+        dialog.avatar.style.background = "linear-gradient(145deg,rgb(255, 230, 154),rgb(255, 223, 84))";
+        dialog.avatar.style.border = "2px solid rgba(77, 60, 21, 0.6)";
         console.log("✅ 强制设置头像样式");
     }
 
