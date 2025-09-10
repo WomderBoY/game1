@@ -46,7 +46,7 @@ class DrawManager {
         // 绘制危险元素（岩浆等）
         this.drawDangerElements(app[type]);
         this.drawDangerthing2(damege[type]);
-        this.drawPeople(this.game.mapmanager.manImg, events, type);
+        this.drawPeople(this.game.mapmanager.manImg,this.game.mapmanager.bossImg, events, type);
     }
 
     // 绘制虚化砖块（相反属性的碰撞箱）
@@ -672,16 +672,14 @@ drawSpikes(ctx, x, y, w, h) {
         }
     }
 
-    drawPeople(manImg, events, env) { //这是绘制人物的地方，我希望在这里加全局变量
-    if (!manImg) return;
+    drawPeople(manImg,bossImg, events, env) { //这是绘制人物的地方，我希望在这里加全局变量
+        if (!manImg) return;
 
     for (let e of events[env]) {
-        if (e.event && e.event.type === "man") {
-            // 计算传送门位置（居中显示在事件区域）
+        if (e.event && e.event.type === "man"&&e.event.who=="hero") {
             const manX = e.x + (e.w - manImg.width) / 2;
             const manY = e.y + (e.h - manImg.height) / 2;
 
-            // 直接绘制传送门图片，无动画效果
             this.game.ctx.drawImage(
                 manImg,
                 manX,
@@ -689,9 +687,21 @@ drawSpikes(ctx, x, y, w, h) {
                 manImg.width,
                 manImg.height
                 );
-             }
         }
-        
+        if (e.event && e.event.type === "man"&&e.event.who==="boss") {
+            const manX = e.x + (e.w - bossImg.width) / 2;
+            const manY = e.y + (e.h - bossImg.height) / 2;
+
+            this.game.ctx.drawImage(
+                bossImg,
+                manX,
+                manY,
+                bossImg.width,
+                bossImg.height
+                );
+        }
     }
+        
+}
 
 }
