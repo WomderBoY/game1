@@ -74,18 +74,25 @@ const DEFAULT_LEVELS_CONFIG = {
             "order": 10
         },
         {
+            "id": "final", 
+            "file": "../map/final.json",
+            "name": "BOSS关",
+            "unlocked": false,
+            "order": 11
+        },
+        {   
             "id": "test_1",
             "file": "../map/test_1.json",
             "name": "测试关卡1",
             "unlocked": false,
-            "order": 11
+            "order": 12
         },
         {
             "id": "test_2", 
             "file": "../map/test_2.json",
             "name": "测试关卡2",
             "unlocked": false,
-            "order": 12
+            "order": 13
         },
     ],
     "defaultUnlocked": ["jiaoxue1"],
