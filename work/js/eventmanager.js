@@ -56,7 +56,7 @@ class eventmanager {
             await this.game.dialog.prints(e.text);
             this.game.canmove = true;
         }
-        if (e.type === "changemap"||e.type ==="man"||e.type ==="changemap2") {
+        if ((e.type === "changemap"||e.type ==="man"||e.type ==="changemap2")&&e.end!="gameend") {
             // 检查是否是隐藏关成就触发
             if (e.type === "man" && this.game.mapmanager.room && this.game.mapmanager.room.includes("hid.json")) {
                 // 触发隐藏关成就
@@ -132,6 +132,23 @@ class eventmanager {
             if (window.game.unlockNextLevel) window.game.unlockNextLevel(targetMap);
 
             console.log("changemap3 完成, targetMap:", targetMap);
+        }
+
+        if (e.end==="gameend"){
+            
+            // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
+            if (e.with) {
+                await this.game.cgmanager.play(e.with);
+            }
+
+            setTimeout(() => {
+                window.location.href = '../../index.html#goto-main-menu'; 
+            }, 500); // 500毫秒对应CSS中的淡出动画时间
+
+            if (this.game.savemanager) {
+                await this.game.savemanager.save(e.target);
+            }
+
         }
 
         if (e.type === "cg") {

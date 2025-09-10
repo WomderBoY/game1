@@ -26,10 +26,39 @@ _jsonCallback({
 					50
 				],
 				"event": {
-					"type": "man", 
+					"type": "man",
+					"end":"gameend", 
                     "who":"boss",
 					"way": "negative", 
-					"target":"../map/bg-map2.json",
+					"with": {
+						"type": "cg",
+						"way": "negative", //待加入剧情
+						"images": [
+							"../images/hid.jpg"
+						],
+						"text": [
+							[
+								"【旁白】洞中昏暗潮湿，铁锁叮当作响，一个羸弱的人影蜷缩其中。那人抬眼望来，神色苍白，却带着一股坚毅之气.",
+								"【旁白】他自称本是另一宗门弟子，因得知你宗副掌门窃走阴石，致使阴物肆虐、天下动荡，便下山为百姓除害，不料反遭擒获，囚困至此.",
+								"【旁白】你挥剑斩断铁锁，助其脱困，他拱手郑重一拜，目光炯然，言明此恩必将铭记，来日必报.",
+								"【旁白】其后，他带着你在洞壁间穿行，熟稔地指引暗道，最终引你避开重重机关，寻得一线天光，安然逃出此地."
+							]
+						],
+					}
+				},
+				"col": false
+			},
+            {
+				"hitbox": [
+					1160,
+					630,
+					50,
+					50
+				],
+				"event": {
+					"type": "changemap", 
+					"end":"gameend", 
+					"way": "negative", 
 					"with": {
 						"type": "cg",
 						"way": "negative", //待加入剧情
