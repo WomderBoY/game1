@@ -127,6 +127,7 @@ class Boss {
             }
             return ;
         }
+        this.game.soundmanager.playOnce("magic", 1, 1.5);
         console.warn('boss move!!');
         let o = this.game.random(1, 3);
         if (o == 1) {

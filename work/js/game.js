@@ -7,7 +7,6 @@ class game {
         return Math.floor(Math.random() * (r - l + 1)) + l;
     }
 
-
     static lst;
     static yingyang = true;
     async init() {
@@ -23,11 +22,12 @@ class game {
         this.env = "yang"; // 默认环境为阳
         this.changetimes = 0; // 切换环境次数
         this.yingyang = true;
-        if (this.ending !== false) this.ending = true;//这是隐藏结局
+        if (this.ending !== false) this.ending = true; //这是隐藏结局
         this.datamanager = new datamanager(this);
 
         // 添加太极管理器（新增代码）
         this.taijimanager = new TaijiManager(this);
+        this.overmanager = new OverManager(this);
 
         // 传递 datamanager 给 mapmanager
         this.mapmanager = new mapmanager(this);
@@ -43,22 +43,21 @@ class game {
         this.bossmanager = new BossManager(this);
         this.dialog = new dialog(this);
         this.enemymanager = new EnemyManager(this);
-        this.enemy2manager = new Enemy2Manager(this)
+        this.enemy2manager = new Enemy2Manager(this);
         this.cgmanager = new CGManager(this);
         this.nightmanager = new NightManager(this);
         this.soundmanager = new SoundManager(this);
         this.expmanager = new Expmanager(this);
 
         const username = localStorage.getItem("yyj_username");
-        console.warn('user = ', username);
+        console.warn("user = ", username);
         if (username) {
             const savedEnding = this.savemanager.loadEnding(username);
-            console.warn('saev = ', savedEnding);
+            console.warn("saev = ", savedEnding);
             this.ending = savedEnding !== null ? savedEnding : true; // 默认 true
         } else {
             this.ending = true; // 没账号也用默认
         }
-
 
         // 感叹号提示系统
         this.exclamationPrompt = {
@@ -68,7 +67,7 @@ class game {
             timer: 0,
             maxTimer: 300, // 显示5秒（60fps）
             animationPhase: 0,
-            image: null
+            image: null,
         };
         //        this.expmanager.addexp(100, 100, 100, 100);
         //      this.expmanager.addexp(500, 500, 100, 100);
@@ -78,7 +77,9 @@ class game {
         let s2 = await this.datamanager.loadSpritesheet("yang-right-0.json");
 
         // 加载感叹号图片
-        this.exclamationPrompt.image = await this.datamanager.loadImg("../images/point.png");
+        this.exclamationPrompt.image = await this.datamanager.loadImg(
+            "../images/point.png"
+        );
         //    console.log(s);
         this.animationmachine = new AnimationMachine(this, s1, s2);
 
@@ -86,7 +87,9 @@ class game {
         //    await this.enemymanager.LoadEnemy("test_1.json");
         //  await this.baguamanager.LoadBagua("test_1.json");
         // 检查是否有选择的关卡
-        const selectedLevelKey = username ? `selectedLevel_${username}` : "selectedLevel";
+        const selectedLevelKey = username
+            ? `selectedLevel_${username}`
+            : "selectedLevel";
         const selectedLevel = localStorage.getItem(selectedLevelKey);
 
         if (selectedLevel) {
@@ -97,7 +100,7 @@ class game {
             this.unlockNextLevel(selectedLevel);
 
             await this.mapmanager.loadMap(selectedLevel);
-            console.warn('game init over', this.canmove);
+            console.warn("game init over", this.canmove);
             await this.enemymanager.LoadEnemy(selectedLevel);
             await this.enemy2manager.LoadEnemy2(selectedLevel);
             await this.baguamanager.LoadBagua(selectedLevel);
@@ -112,7 +115,6 @@ class game {
                 );
             }
             // 加载 Boss
-
         }
         this.bgmmanager = new BGMManager(); // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.loadVolumeSettings(); // 加载音量设置
@@ -124,7 +126,7 @@ class game {
             },
             { once: true }
         );
-        console.warn('game init over', this.canmove);
+        console.warn("game init over", this.canmove);
         this.update();
         //    window.addEventListener('resize', () => this.autoScale(this.view));
     }
@@ -180,14 +182,13 @@ class game {
         let levelOrder = [];
 
         // 尝试从localStorage获取关卡配置（如果关卡选择界面已经加载过）
-        const levelsConfig = localStorage.getItem('levelsConfig');
+        const levelsConfig = localStorage.getItem("levelsConfig");
         if (levelsConfig) {
             try {
                 const config = JSON.parse(levelsConfig);
-                levelOrder = config.levels.map(level => level.file);
-            }
-            catch (e) {
-                console.warn('解析关卡配置失败，使用默认顺序');
+                levelOrder = config.levels.map((level) => level.file);
+            } catch (e) {
+                console.warn("解析关卡配置失败，使用默认顺序");
                 levelOrder = [
                     "../map/test_1.json",
                     "../map/test_2.json",
@@ -218,7 +219,9 @@ class game {
         if (currentIndex >= 0) {
             // 解锁当前关卡和之前的所有关卡
             const username = localStorage.getItem("yyj_username");
-            const unlockedLevelsKey = username ? `unlockedLevels_${username}` : "unlockedLevels";
+            const unlockedLevelsKey = username
+                ? `unlockedLevels_${username}`
+                : "unlockedLevels";
             const unlockedLevels = JSON.parse(
                 localStorage.getItem(unlockedLevelsKey) || "[]"
             );
@@ -257,14 +260,16 @@ class game {
     // 获取已解锁的关卡列表
     getUnlockedLevels() {
         const username = localStorage.getItem("yyj_username");
-        const unlockedLevelsKey = username ? `unlockedLevels_${username}` : "unlockedLevels";
+        const unlockedLevelsKey = username
+            ? `unlockedLevels_${username}`
+            : "unlockedLevels";
         const unlockedLevels = JSON.parse(
             localStorage.getItem(unlockedLevelsKey) || "[]"
         );
         // 确保默认关卡总是解锁的
         const defaultUnlockedLevels = ["../map/jiaoxue1.json"]; // 根据配置，默认解锁教学关卡1
         let hasNewUnlocks = false;
-        defaultUnlockedLevels.forEach(level => {
+        defaultUnlockedLevels.forEach((level) => {
             if (!unlockedLevels.includes(level)) {
                 unlockedLevels.push(level);
                 hasNewUnlocks = true;
@@ -422,7 +427,8 @@ class game {
         if (!this.exclamationPrompt.show) return;
 
         this.exclamationPrompt.timer++;
-        this.exclamationPrompt.animationPhase = Math.sin(this.exclamationPrompt.timer * 0.1) * 0.3 + 0.7;
+        this.exclamationPrompt.animationPhase =
+            Math.sin(this.exclamationPrompt.timer * 0.1) * 0.3 + 0.7;
 
         // 5秒后自动隐藏
         if (this.exclamationPrompt.timer >= this.exclamationPrompt.maxTimer) {
@@ -432,7 +438,8 @@ class game {
 
     // 绘制感叹号提示
     drawExclamationPrompt() {
-        if (!this.exclamationPrompt.show || !this.exclamationPrompt.image) return;
+        if (!this.exclamationPrompt.show || !this.exclamationPrompt.image)
+            return;
 
         const ctx = this.ctx;
         const x = this.exclamationPrompt.x;
@@ -483,15 +490,14 @@ class game {
         // 根据当前游戏状态进行不同处理
         //      console.log(this.changetimes);
         //        console.log(this.status, this.canmove);
-        if (this.hp.isDead() && this.status == 'running') {
-            this.status = 'over';
+        if (this.hp.isDead() && this.status == "running") {
+            this.status = "over";
             this.soundmanager.playOnce("death");
         }
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
                 // 绘制地图（背景或场景元素）
-
 
                 await this.enemymanager.update();
                 await this.enemy2manager.update();
@@ -525,14 +531,14 @@ class game {
                     await this.entitymanager.checkboss();
                 } else if (this.boss) {
                     await this.entitymanager.checkboss();
-                    console.log('⚠️ Boss存在但HP系统未初始化:', this.boss);
+                    console.log("⚠️ Boss存在但HP系统未初始化:", this.boss);
                 } else {
                     //              console.log('ℹ️ 当前关卡没有Boss');
                 }
 
                 this.hp.drawblood();
                 if (this.boss) {
-    //                console.log('boss!!!');
+                    //                console.log('boss!!!');
                     this.boss.move();
                     this.boss.draw();
                 }
@@ -581,62 +587,72 @@ class game {
                 break;
             case "over":
                 console.log("游戏结束");
-                this.mapmanager.drawbg(this.env);
+                if (this.overmanager.gettype() == -1) {
+                    this.mapmanager.drawbg(this.env);
 
-                // 绘制背景和场景
-                if (this.cg == false) {
-                    if (this.night == false || (this.nightmanager && this.nightmanager.isActive && !this.nightmanager.isActive())) {
-                        this.mapmanager.draw(this.env);
-                    } else {
-                        this.mapmanager.draw(this.env);
+                    // 绘制背景和场景
+                    if (this.cg == false) {
+                        if (
+                            this.night == false ||
+                            (this.nightmanager &&
+                                this.nightmanager.isActive &&
+                                !this.nightmanager.isActive())
+                        ) {
+                            this.mapmanager.draw(this.env);
+                        } else {
+                            this.mapmanager.draw(this.env);
+                        }
                     }
-                }
-                if (this.canmove) {
-                    this.expmanager.update(16);
-                    this.expmanager.draw(this.ctx);
-                }
-                await this.enemy2manager.update();
-                this.enemymanager.draw(this.ctx);
-                this.enemy2manager.draw(this.ctx);
-                this.hp.draw(this.ctx, this.width, this.height);
-                await this.mapmanager.draw(this.env);
+                    if (this.canmove) {
+                        this.expmanager.update(16);
+                        this.expmanager.draw(this.ctx);
+                    }
+                    await this.enemy2manager.update();
+                    this.enemymanager.draw(this.ctx);
+                    this.enemy2manager.draw(this.ctx);
+                    this.hp.draw(this.ctx, this.width, this.height);
+                    await this.mapmanager.draw(this.env);
 
-                // 绘制死亡状态的玩家（在地图和敌人之上）
-                this.entitymanager.drawDeadPlayer();
-                this.hp.drawblood();
-                this.baguamanager.draw(this.ctx);
-                this.mapmanager.drawPortals();
-                this.mapmanager.drawPeople();
-                this.hp.update(16.67);
-                this.hp.draw(this.ctx, this.width, this.height);
-                // 绘制游戏结束遮罩和文字（在最上层）
-                this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-                this.ctx.fillRect(0, 0, this.view.width, this.view.height);
+                    // 绘制死亡状态的玩家（在地图和敌人之上）
+                    this.entitymanager.drawDeadPlayer();
+                    this.hp.drawblood();
+                    this.baguamanager.draw(this.ctx);
+                    this.mapmanager.drawPortals();
+                    this.mapmanager.drawPeople();
+                    this.hp.update(16.67);
+                    this.hp.draw(this.ctx, this.width, this.height);
+                    // 绘制游戏结束遮罩和文字（在最上层）
+                    this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+                    this.ctx.fillRect(0, 0, this.view.width, this.view.height);
 
-                this.ctx.fillStyle = "white";
-                this.ctx.font = "bold 60px Arial";
-                this.ctx.textAlign = "center";
-                this.ctx.textBaseline = "middle";
-                this.ctx.fillText(
-                    "游戏结束",
-                    this.view.width / 2,
-                    this.view.height / 2
-                );
-                this.ctx.font = "30px Arial";
-                this.ctx.fillText(
-                    "按 Enter 键重新开始",
-                    this.view.width / 2,
-                    this.view.height / 2 + 40
-                );
+                    this.ctx.fillStyle = "white";
+                    this.ctx.font = "bold 60px Arial";
+                    this.ctx.textAlign = "center";
+                    this.ctx.textBaseline = "middle";
+                    this.ctx.fillText(
+                        "游戏结束",
+                        this.view.width / 2,
+                        this.view.height / 2
+                    );
+                    this.ctx.font = "30px Arial";
+                    this.ctx.fillText(
+                        "按 Enter 键重新开始",
+                        this.view.width / 2,
+                        this.view.height / 2 + 40
+                    );
 
-                // 绘制感叹号提示
-                this.drawExclamationPrompt();
+                    // 绘制感叹号提示
+                    this.drawExclamationPrompt();
 
-                if (this.inputmanager.takeEnter()) {
-                    await this.savemanager.load();
-                    this.hp.reset();
-                    this.bossmanager.resetAllBosses();
-                    console.log('游戏重新开始，HP已重置');
+                    if (this.inputmanager.takeEnter()) {
+                        await this.savemanager.load();
+                        this.hp.reset();
+                        this.bossmanager.resetAllBosses();
+                        console.log("游戏重新开始，HP已重置");
+                    }
+                } else {
+                    this.overmanager.gameover();
+                    this.eventmanager.handle();
                 }
                 break;
             //load...
