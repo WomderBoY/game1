@@ -349,8 +349,18 @@ class entitymanager {
             fw = 1;
         }
 
-        if (vx > 0 && vx > maxSpeed) vx -= a * 3;
-        if (vx < 0 && vx < -maxSpeed) vx += a * 3;
+        if (vx > 0 && vx > maxSpeed) {
+            vx -= a * 3;
+            if (vx < maxSpeed) {
+                vx = maxSpeed;
+            }
+        }
+        if (vx < 0 && vx < -maxSpeed) {
+            vx += a * 3;
+            if (vx > -maxSpeed) {
+                vx = -maxSpeed;
+            }
+        }
 
         // 松开按键减速
         if (!ky.left && !ky.right) {
