@@ -126,7 +126,7 @@ class dialog {
         // 强制设置名称样式
         if (this.name.textContent === "旁白") {
             this.name.style.color = "#330066";
-            this.name.style.fontSize = "22px";
+            this.name.style.fontSize = "30px";
             this.name.style.fontWeight = "bold";
             console.log("强制设置名称样式");
         }
