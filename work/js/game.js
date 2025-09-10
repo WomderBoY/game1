@@ -119,13 +119,13 @@ class game {
             await this.bossmanager.loadBoss(selectedLevel);
             this.mapmanager.draw(this.env);
 
-            // 如果是第四关，显示感叹号提示
-            if (selectedLevel.includes("bg-map4.json")) {
-                this.showExclamationPrompt(
-                    this.player.position.x,
-                    this.player.position.y
-                );
-            }
+            // // 如果是第四关，显示感叹号提示
+            // if (selectedLevel.includes("bg-map4.json")) {
+            //     this.showExclamationPrompt(
+            //         this.player.position.x,
+            //         this.player.position.y
+            //     );
+            // }
             // 加载 Boss
         }
         this.bgmmanager = new BGMManager(); // 创建游戏页面自己的 bgmmanager
