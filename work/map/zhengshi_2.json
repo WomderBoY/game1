@@ -150,11 +150,12 @@ _jsonCallback({
 					50
 				],
 				"event": {
-					"type": "changemap2",
+					"type": "changemap3",
+                    "endingTrueTarget": "../map/hid.json",
+                    "endingFalseTarget": "../map/hid2.json",
 					"way": "tunnal",
 					"x": 70,
 					"y": 630,
-					"target": "../map/hid.json"
 				},
 				"col": false,
 				"tiling": true
