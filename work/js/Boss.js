@@ -11,8 +11,8 @@ class Boss {
 
         this.x = 640;
         this.y = 360;
-        this.width = 50;
-        this.height = 50;
+        this.width = 70;
+        this.height = 70;
 
         this.imageIdle = this.loadImage("../images/boss_idle.png");
         this.imageAttackHitbox = this.loadImage("../images/boss_enemy2.png");

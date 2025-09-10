@@ -1,0 +1,35 @@
+_jsonCallback({
+    "born":[
+        680,
+        680
+    ],
+    "yang":{
+        "tileMap":[
+            {
+                "hitbox":[
+                    0,
+                    680,
+                    1280,
+                    40
+                ],
+                "col":true,
+                "img": [
+                    "../images/test1.png"
+                ],
+                "tiling": true
+            },
+
+        ],
+        "enemy": [],
+        "bagua": [],
+        "background": "../images/bg.png"
+    },
+    "yin":{
+        "tileMap":[],
+         "enemy": [],
+        "bagua": [],
+        "background": ""
+    },
+
+
+})
