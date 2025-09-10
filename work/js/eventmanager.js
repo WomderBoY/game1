@@ -73,6 +73,12 @@ class eventmanager {
                 }
             }
 
+            // ==== 新增：切换 BGM ====
+            if (e.bgm !== undefined && this.game.bgmmanager) {
+                this.game.bgmmanager.play(e.bgm);
+                console.log("切换 BGM 到索引:", e.bgm);
+            }
+
             let targetMap = e.target; // 默认
             if (e.type === "changemap3") {
                 const currentEnding = (window.game && window.game.ending !== undefined)

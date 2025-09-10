@@ -110,11 +110,11 @@ class game {
                 );
             }
             // 加载 Boss
-
         }
         this.bgmmanager = new BGMManager(); // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.loadVolumeSettings(); // 加载音量设置
-        this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
+        this.bgmmanager.add("../bgms/bg2.mp3");
+        this.bgmmanager.add("../bgms/bg3.mp3"); // 游戏 BGM
         window.addEventListener(
             "click",
             () => {
