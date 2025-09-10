@@ -67,7 +67,7 @@ class dialog {
     // 设置对话框主题
     setDialogTheme(theme) {
         // 移除所有主题类
-        this.dialog.classList.remove("system", "player", "npc", "boss", "mysterious");
+        this.dialog.classList.remove("system", "player", "mysterious");
         // 添加新主题类
         this.dialog.classList.add(theme);
 
@@ -83,18 +83,16 @@ class dialog {
             this.avatar.classList.add("has-bg");
             this.avatar.innerHTML = '<span class="avatar-text"></span>';
         } else {
-            // 使用默认表情符号
+            // 使用默认头像图片
             const avatarMap = {
-                "system": "🔮",
-                "player": "👤",
-                "npc": "🗣",
-                "boss": "👹",
-                "mysterious": "🔮"
+                "system": "../images/bagua.png",
+                "player": "../images/man2.png",
+                "mysterious": "../images/man2.png"
             };
 
-            this.avatar.style.backgroundImage = "";
-            this.avatar.classList.remove("has-bg");
-            this.avatar.textContent = avatarMap[theme] || "?";
+            const avatarImage = avatarMap[theme] || "../images/man2.png";
+            this.avatar.innerHTML = `<img src="${avatarImage}" alt="avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            this.avatar.classList.add("has-bg");
         }
     }
 
@@ -125,16 +123,16 @@ class dialog {
 
         // 强制设置名称样式
         if (this.name.textContent === "旁白") {
-            this.name.style.color = "#330066";
-            this.name.style.fontSize = "30px";
+            this.name.style.color = "rgba(253, 183, 19, 0.6)";
+            this.name.style.fontSize = "26px";
             this.name.style.fontWeight = "bold";
             console.log("强制设置名称样式");
         }
 
         // 强制设置头像样式
         if (this.dialog.classList.contains("mysterious")) {
-            this.avatar.textContent = "🔮";
-            this.avatar.style.background = "linear-gradient(145deg,rgb(182, 170, 134),rgb(205, 171, 35))";
+            this.avatar.innerHTML = `<img src="../images/man2.png" alt="avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            this.avatar.classList.add("has-bg");
             this.avatar.style.border = "2px solid rgba(253, 183, 19, 0.6)";
             console.log("强制设置头像样式");
         }
@@ -149,7 +147,6 @@ class dialog {
         const speakerConfig = {
             "系统": { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" },
             "玩家": { theme: "player", avatar: null, background: "../images/diagbg2.png", displayName: "玩家" },
-            "Boss": { theme: "mysterious", avatar: null, background: "../images/diagbg3.png", displayName: "旁白" },
             "旁白": { theme: "mysterious", avatar: null, background: "../images/diagbg4.png", displayName: "旁白" }
         };
 

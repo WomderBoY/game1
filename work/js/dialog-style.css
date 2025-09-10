@@ -6,7 +6,7 @@
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 500px;
+    width: 750px !important;
     min-height: 120px;
     max-width: 90vw;
     background: linear-gradient(145deg, rgba(20, 20, 20, 0.95), rgba(40, 40, 40, 0.95));
@@ -109,7 +109,7 @@
     border-radius: 50%;
     border: 3px solid rgba(255, 255, 255, 0.3);
     background: linear-gradient(145deg, #333, #555);
-    background-size: cover;
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
@@ -127,7 +127,7 @@
 
 /* 头像背景图片 */
 .dialog-avatar.has-bg {
-    background-size: cover;
+    background-size: 100% 100%;
     background-position: center;
 }
 
@@ -149,7 +149,7 @@
 
 /* 对话人名字 */
 .dialog-name {
-    font-size: 30px;
+    font-size: 35px !important;
     font-weight: 700;
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -159,7 +159,7 @@
 
 /* 对话文本区域 */
 .dialog-text {
-    font-size: 20px;
+    font-size: 25px !important;
     line-height: 1.6;
     color: #ffffff;
     margin: 0;
@@ -238,41 +238,6 @@
     color: #ffffff;
 }
 
-/* NPC对话 */
-.dialog-container.npc {
-    border-color: rgba(200, 200, 200, 0.4);
-    background: linear-gradient(145deg, rgba(35, 35, 35, 0.95), rgba(55, 55, 55, 0.95));
-}
-
-.dialog-container.npc .dialog-avatar {
-    background: linear-gradient(145deg, #4a4a4a, #6a6a6a);
-    border-color: rgba(200, 200, 200, 0.4);
-}
-
-.dialog-container.npc .dialog-name {
-    color: #e0e0e0;
-}
-
-/* 特殊角色对话 */
-.dialog-container.boss {
-    border-color: rgba(255, 100, 100, 0.6);
-    background: linear-gradient(145deg, rgba(40, 20, 20, 0.95), rgba(60, 30, 30, 0.95));
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(255, 100, 100, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.dialog-container.boss .dialog-avatar {
-    background: linear-gradient(145deg, #ff6666, #ff4444);
-    border-color: rgba(255, 100, 100, 0.6);
-    box-shadow: 0 4px 8px rgba(255, 100, 100, 0.3);
-}
-
-.dialog-container.boss .dialog-name {
-    color: #ffaaaa;
-    text-shadow: 0 2px 4px rgba(255, 100, 100, 0.3);
-}
 
 /*旁白对话 */
 .dialog-container.mysterious {
@@ -291,9 +256,9 @@
 }
 
 .dialog-container.mysterious .dialog-name {
-    color: #330066;
+    color: rgba(253, 183, 19, 0.6);
     font-size: 22px;
-    text-shadow: 0 2px 4px rgba(150, 100, 255, 0.3);
+    text-shadow: 0 2px 4px rgba(236, 192, 36, 0.3);
 }
 
 /* 动画效果 */
