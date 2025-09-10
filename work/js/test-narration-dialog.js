@@ -233,7 +233,9 @@ function directSetDialog() {
         game.dialog.dialog.classList.add("has-bg");
         console.log("✅ 设置背景图片");
 
-        game.dialog.avatar.textContent = "🔮";
+        game.dialog.avatar.style.backgroundImage = "url(../images/man2.png)";
+        game.dialog.avatar.classList.add("has-bg");
+        game.dialog.avatar.innerHTML = '<span class="avatar-text"></span>';
         console.log("✅ 设置头像图标");
 
         game.dialog.open();
@@ -332,9 +334,10 @@ function directDOMFix() {
 
     // 3. 强制设置头像
     if (avatarElement) {
-        avatarElement.textContent = "🔮";
-        avatarElement.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
-        avatarElement.style.border = "2px solid rgba(150, 100, 255, 0.6)";
+        avatarElement.style.backgroundImage = "url(../images/man2.png)";
+        avatarElement.classList.add("has-bg");
+        avatarElement.innerHTML = '<span class="avatar-text"></span>';
+        avatarElement.style.border = "2px solid rgba(238, 200, 48, 0.6)";
         console.log("✅ 设置头像");
     } else {
         console.log("❌ 未找到头像元素");
@@ -342,13 +345,13 @@ function directDOMFix() {
 
     // 4. 强制设置对话框样式
     dialogElement.className = "dialog-container mysterious has-bg";
-    dialogElement.style.background = "url(../images/diagbg1.png)";
+    dialogElement.style.background = "url(../images/diagbg4.png)";
     dialogElement.style.backgroundSize = "cover";
     dialogElement.style.backgroundPosition = "center";
     dialogElement.style.backgroundRepeat = "no-repeat";
-    dialogElement.style.border = "2px solid rgba(150, 100, 255, 0.6)";
+    dialogElement.style.border = "2px solid rgba(235, 197, 41, 0.6)";
     dialogElement.style.borderRadius = "20px";
-    dialogElement.style.boxShadow = "0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(150, 100, 255, 0.3)";
+    dialogElement.style.boxShadow = "0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(241, 202, 30, 0.3)";
     dialogElement.style.display = "block";
     dialogElement.style.opacity = "1";
     dialogElement.style.visibility = "visible";
@@ -394,7 +397,9 @@ function ultimateFix() {
     console.log("✅ 设置文本内容");
 
     // 3. 强制设置头像
-    avatarElement.textContent = "🔮";
+    avatarElement.style.backgroundImage = "url(../images/man2.png)";
+    avatarElement.classList.add("has-bg");
+    avatarElement.innerHTML = '<span class="avatar-text"></span>';
     avatarElement.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
     console.log("✅ 设置头像");
 
@@ -468,7 +473,9 @@ function forceFixDialog() {
     console.log("✅ 设置CSS类和背景图片");
 
     // 强制设置头像
-    avatarElement.textContent = "🔮";
+    avatarElement.style.backgroundImage = "url(../images/man2.png)";
+    avatarElement.classList.add("has-bg");
+    avatarElement.innerHTML = '<span class="avatar-text"></span>';
     console.log("✅ 设置头像图标");
 
     // 显示对话框
@@ -522,7 +529,9 @@ function diagnoseDialog() {
     dialog.dialog.style.backgroundSize = "cover";
     dialog.dialog.style.backgroundPosition = "center";
     dialog.dialog.style.backgroundRepeat = "no-repeat";
-    dialog.avatar.textContent = "🔮";
+    dialog.avatar.style.backgroundImage = "url(../images/man2.png)";
+    dialog.avatar.classList.add("has-bg");
+    dialog.avatar.innerHTML = '<span class="avatar-text"></span>';
 
     console.log("4. 修复后状态:");
     console.log("   - 显示名称:", dialog.name.textContent);
@@ -567,7 +576,9 @@ function quickTest() {
     game.dialog.text.textContent = "快速测试";
     game.dialog.dialog.className = "dialog-container mysterious has-bg";
     game.dialog.dialog.style.backgroundImage = "url(../images/diagbg1.png)";
-    game.dialog.avatar.textContent = "🔮";
+    game.dialog.avatar.style.backgroundImage = "url(../images/man2.png)";
+    game.dialog.avatar.classList.add("has-bg");
+    game.dialog.avatar.innerHTML = '<span class="avatar-text"></span>';
     game.dialog.open();
 
     console.log("✅ 快速测试完成！");
@@ -716,7 +727,9 @@ function directCSSFix() {
         // 查找并设置头像元素
         const avatarElement = dialogElement.querySelector('.dialog-avatar');
         if (avatarElement) {
-            avatarElement.textContent = "🔮";
+            avatarElement.style.backgroundImage = "url(../images/man2.png)";
+            avatarElement.classList.add("has-bg");
+            avatarElement.innerHTML = '<span class="avatar-text"></span>';
             avatarElement.style.background = "linear-gradient(145deg, #9666ff, #7744ff)";
             avatarElement.style.border = "2px solid rgba(150, 100, 255, 0.6)";
             console.log("✅ 设置头像元素");

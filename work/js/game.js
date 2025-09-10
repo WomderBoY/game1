@@ -7,6 +7,22 @@ class game {
         return Math.floor(Math.random() * (r - l + 1)) + l;
     }
 
+    getBGMIndexForLevel(levelFile) {
+        const mapping = {
+            "../map/jiaoxue1.json": 0,
+            "../map/jiaoxue2.json": 0,
+            "../map/bg-map1.json": 1,
+            "../map/bg-map2.json": 1,
+            "../map/bg-map3.json": 1,
+            "../map/bg-map4.json": 1,
+            "../map/bg-map5.json": 1,
+            "../map/bg-map6.json": 1,
+            "../map/zhengshi_2.json": 1
+        };
+        return mapping[levelFile] !== undefined ? mapping[levelFile] : 0;
+    }
+
+
     static lst;
     static yingyang = true;
     async init() {
@@ -107,22 +123,27 @@ class game {
             await this.bossmanager.loadBoss(selectedLevel);
             this.mapmanager.draw(this.env);
 
-            // 如果是第四关，显示感叹号提示
-            if (selectedLevel.includes("bg-map4.json")) {
-                this.showExclamationPrompt(
-                    this.player.position.x,
-                    this.player.position.y
-                );
-            }
+            // // 如果是第四关，显示感叹号提示
+            // if (selectedLevel.includes("bg-map4.json")) {
+            //     this.showExclamationPrompt(
+            //         this.player.position.x,
+            //         this.player.position.y
+            //     );
+            // }
             // 加载 Boss
         }
         this.bgmmanager = new BGMManager(); // 创建游戏页面自己的 bgmmanager
         this.bgmmanager.loadVolumeSettings(); // 加载音量设置
-        this.bgmmanager.add("../bgms/bg2.mp3"); // 游戏 BGM
+        this.bgmmanager.add("../bgms/jiaoxue.mp3");
+        this.bgmmanager.add("../bgms/guanqia.mp3"); // 游戏 BGM
         window.addEventListener(
             "click",
             () => {
-                this.bgmmanager.play(0);
+                // 根据关卡选择 BGM
+                let bgmIndex = this.getBGMIndexForLevel(selectedLevel);
+                if (bgmIndex !== null) {
+                    this.bgmmanager.play(bgmIndex);
+                }
             },
             { once: true }
         );
