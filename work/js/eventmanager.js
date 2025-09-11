@@ -114,10 +114,10 @@ class eventmanager {
             //     await this.game.savemanager.save(e.target);
             // }
 
-            // // 解锁下一个关卡
-            // if (this.game.unlockNextLevel) {
-            //     this.game.unlockNextLevel(e.target);
-            // }
+            // 解锁下一个关卡
+            if (this.game.unlockNextLevel) {
+                this.game.unlockNextLevel(e.target);
+            }
             console.warn("loadmap over");
             //        this.game.player.facing = e.facing;
         }
@@ -128,6 +128,11 @@ class eventmanager {
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             if (e.with) {
                 await this.game.cgmanager.play(e.with);
+            }
+
+            // 游戏结束时解锁下一关
+            if (this.game.unlockNextLevel) {
+                this.game.unlockNextLevel(e.target);
             }
 
             setTimeout(() => {

@@ -199,6 +199,12 @@ class game {
         }
     }
 
+    // 获取当前用户的存储键
+    getUserStorageKey(baseKey) {
+        const username = localStorage.getItem("yyj_username");
+        return username ? `${baseKey}_${username}` : baseKey;
+    }
+
     // 解锁关卡系统
     unlockNextLevel(currentLevel) {
         // 从关卡配置文件获取关卡顺序
@@ -242,9 +248,7 @@ class game {
         if (currentIndex >= 0) {
             // 解锁当前关卡和之前的所有关卡
             const username = localStorage.getItem("yyj_username");
-            const unlockedLevelsKey = username
-                ? `unlockedLevels_${username}`
-                : "unlockedLevels";
+            const unlockedLevelsKey = this.getUserStorageKey("unlockedLevels");
             const unlockedLevels = JSON.parse(
                 localStorage.getItem(unlockedLevelsKey) || "[]"
             );
@@ -259,16 +263,7 @@ class game {
                     console.log(`解锁关卡: ${levelToUnlock}`);
                 }
             }
-
-            // 如果当前关卡不是最后一关，也解锁下一关
-            // if (currentIndex < levelOrder.length - 1) {
-            //     const nextLevel = levelOrder[currentIndex + 1];
-            //     if (!unlockedLevels.includes(nextLevel)) {
-            //         unlockedLevels.push(nextLevel);
-            //         console.log(`解锁下一个关卡: ${nextLevel}`);
-            //     }
-            // }
-
+            
             console.log(`解锁后的关卡列表:`, unlockedLevels);
 
             localStorage.setItem(
@@ -283,9 +278,7 @@ class game {
     // 获取已解锁的关卡列表
     getUnlockedLevels() {
         const username = localStorage.getItem("yyj_username");
-        const unlockedLevelsKey = username
-            ? `unlockedLevels_${username}`
-            : "unlockedLevels";
+        const unlockedLevelsKey = this.getUserStorageKey("unlockedLevels");
         const unlockedLevels = JSON.parse(
             localStorage.getItem(unlockedLevelsKey) || "[]"
         );

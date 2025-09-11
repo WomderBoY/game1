@@ -7,7 +7,7 @@ class AchievementsManager {
             first_toggle: { id: 'first_toggle', name: '阴阳初转', desc: '切换一次阴阳形态', unlocked: false, unlockedAt: null },
             first_fratile: { id: 'first_fratile', name: '踏碎虚空', desc: '踩碎一个易碎方块', unlocked: false, unlockedAt: null },
             orb_death: { id: 'orb_death', name: '法球之殇', desc: '被法球击杀', unlocked: false, unlockedAt: null },
-            hidden_passage: { id: 'hidden_passage', name: '隐秘救赎', desc: '通过隐藏关并救出被困的修士', unlocked: false, unlockedAt: null },
+            hidden_passage: { id: 'hidden_passage', name: '隐秘救赎', desc: '通过隐藏关并救出被困的师兄', unlocked: false, unlockedAt: null },
             boss_slayer: { id: 'boss_slayer', name: '精英猎手', desc: '击败至阴之物', unlocked: false, unlockedAt: null },
             tower_master: { id: 'tower_master', name: '古塔征服者', desc: '通过古塔第八层高难关卡', unlocked: false, unlockedAt: null },
         };
