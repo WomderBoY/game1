@@ -173,8 +173,8 @@ _jsonCallback({
 						"type": "cg",
 						"way": "negative",
 						"images": [
-							"../images/fight1.jpg",
-							"../images/fight2.jpg"
+							"../images/fight1.png",
+							"../images/fight2.png"
 						],
 						"text": [
 							[
