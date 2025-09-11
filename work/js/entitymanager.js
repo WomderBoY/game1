@@ -82,7 +82,7 @@ class entitymanager {
             }
         } else if (ps == "startjump") {
             console.log("startjump");
-            this.game.soundmanager.playOnce("jump", 1, 1); // 停下或跳跃时淡出音效
+//            this.game.soundmanager.playOnce("jump", 1, 1); // 停下或跳跃时淡出音效
             if (this.game.gameFrame - entitymanager.lstrun >= 10)
                 this.game.soundmanager.fadeLoop("run", 0.1);
         } else if (ps == "stand") {
@@ -94,11 +94,15 @@ class entitymanager {
         } else if (ps == "onjump") {
             if (this.game.gameFrame - entitymanager.lstrun >= 10)
                 this.game.soundmanager.fadeLoop("run", 0.1);
+            // if (entitymanager.pre != 'onjump') {
+            //     this.game.soundmanager.playOnce("jump", 1, 1); // 停下或跳跃时淡出音效
+            // }
         }
         entitymanager.pre = ps;
     }
 
     async gethurt(x = 1) {
+            this.game.soundmanager.playOnce("hurt", 1, 1);
         let now = Date.now();
         if (now >= entitymanager.safeUntil) {
             if (this.game.hp) this.game.hp.decrease(x, 20, 20);
@@ -190,7 +194,7 @@ class entitymanager {
                 break;
             }
         }
-        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
+//        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
         if (!fl) {
             // 检查玩家是否站在移动砖块上，如果是则持续跟随
             let movetileVx = 0, movetileVy = 0;
@@ -316,6 +320,7 @@ class entitymanager {
                 vy = - Math.sqrt(jp * jp + vy * vy);
             og = false;
             isjp = true;
+            this.game.soundmanager.playOnce("jump", 1, 1); // 停下或跳跃时淡出音效
     //        if (vy < entitymanager.maxspeedy) vy = entitymanager.maxspeedy;
         }
 

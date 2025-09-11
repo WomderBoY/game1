@@ -43,7 +43,7 @@ class eventmanager {
     async handle() {
         //console.log('shijian', this.game.canmove);\
 //        console.warn(this.front, this.rear);
-        if (this.front > this.rear || this.progress != 'start') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
+        if (this.front > this.rear || this.progress == 'processing') return; // 如果不在 start 状态，直接返回（已在处理或已结束）
         
         let e = this.event[this.front];
         ++this.front;
@@ -138,6 +138,21 @@ class eventmanager {
                 await this.game.savemanager.save(e.target);
             }
 
+        }
+        if (e.type == 'over') {
+            console.log("startcg");
+            await this.game.cgmanager.play(e.cg); // 触发CG播放
+            console.log("endcg");
+            // const username = localStorage.getItem("yyj_username");
+            // const selectedLevelKey = username ? `selectedLevel_${username}` : "selectedLevel";
+            // const selectedLevel = localStorage.getItem(selectedLevelKey);
+            // localStorage.setItem(selectedLevel, stringify(e.target));
+            window.location.href = "level-select.html";
+        }
+
+        if (e.type == 'setover') {
+            this.game.status = 'over';
+            this.game.overmanager.settype(e.overtype);
         }
 
         if (e.type === "cg") {

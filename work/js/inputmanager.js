@@ -2,7 +2,7 @@ class inputmanager {
     constructor(game) {
         this.keys = new Set();
         this.game = game;
-        this.lastEnterTime = 0; // 记录上次按下 Enter 的时间
+        this.lastEnterTime = this.lastKTime = 0; // 记录上次按下 Enter 的时间
         this.cooldown = 300; // 冷却时间 300 毫秒
         this.mouseX = 0, this.mouseY = 0;
 
@@ -74,6 +74,18 @@ class inputmanager {
             now - this.lastEnterTime > this.cooldown
         ) {
             this.lastEnterTime = now;
+            return true;
+        }
+        return false;
+    }
+
+    takeK() {
+        const now = Date.now();
+        if (
+            this.isPressed("KeyK") &&
+            now - this.lastKTime > this.cooldown
+        ) {
+            this.lastKTime = now;
             return true;
         }
         return false;

@@ -644,7 +644,7 @@ function checkCSS() {
         const sheet = stylesheets[i];
         try {
             const href = sheet.href;
-            if (href && href.includes('dialog-style.css')) {
+            if (href && href.includes('../css/dialog-style.css')) {
                 console.log("✅ 找到dialog-style.css:", href);
 
                 // 检查CSS规则

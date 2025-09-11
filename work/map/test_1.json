@@ -70,23 +70,25 @@ _jsonCallback({
 					20
 				],
 				"event": {
-					"type": "changemap",
-					"target": "../map/final.json",
-					"way": "tunnal",
-					"with": {
-						"images": [
-							"../images/black-right2-0.png",
-							"../images/white.png"
-						],
-						"text": [
-							[
-								"【旁白】这是传送门"
-							],
-							[
-								"【旁白】将你传送到下一关"
-							]
-						],
-					}
+					// "type": "changemap",
+					// "target": "../map/final.json",
+					// "way": "tunnal",
+					// "with": {
+					// 	"images": [
+					// 		"../images/black-right2-0.png",
+					// 		"../images/white.png"
+					// 	],
+					// 	"text": [
+					// 		[
+					// 			"【旁白】这是传送门"
+					// 		],
+					// 		[
+					// 			"【旁白】将你传送到下一关"
+					// 		]
+					// 	],
+					// }
+					"type":"setover",
+					"overtype":0,
 				},
 				"col": false
 			},

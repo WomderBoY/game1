@@ -35,6 +35,8 @@ class SoundManager {
         await this.load("explode", "../sound/explode.wav");
         await this.load("beep", "../sound/beep.wav");
         await this.load("beep1", "../sound/beep1.mp3");
+        await this.load("hurt", "../sound/hurt.mp3");
+        await this.load("magic", "../sound/magic1.mp3");
         this.unlock();
     }
 
