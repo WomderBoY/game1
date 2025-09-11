@@ -290,12 +290,19 @@ class dialog {
 
                 if (skip) continue; // 已按 Enter，直接显示剩余文字
 
-                // 等待 50ms 或 Enter
+                // 等待 50ms 或 Enter 或 U键跳过
                 await new Promise((resolve) => {
                     const timer = setTimeout(resolve, 50);
                     const handler = (e) => {
                         if (e.code === "Enter") {
                             skip = true;
+                            clearTimeout(timer);
+                            document.removeEventListener("keydown", handler);
+                            resolve();
+                        }
+                        // 添加U键跳过功能
+                        if (e.key === "u" || e.key === "U") {
+                            this.clearBuffer(); // 清空缓冲区
                             clearTimeout(timer);
                             document.removeEventListener("keydown", handler);
                             resolve();
@@ -307,11 +314,17 @@ class dialog {
 
             await this.game.soundmanager.stopLoop2("beep");
 
-            // 段落显示完成，等待 Enter 再进入下一段
+            // 段落显示完成，等待 Enter 或 U键跳过 再进入下一段
             if (this.canceled) return;
             await new Promise((resolve) => {
                 const handler = (e) => {
                     if (e.code === "Enter") {
+                        document.removeEventListener("keydown", handler);
+                        resolve();
+                    }
+                    // 添加U键跳过功能
+                    if (e.key === "u" || e.key === "U") {
+                        this.clearBuffer(); // 清空缓冲区
                         document.removeEventListener("keydown", handler);
                         resolve();
                     }
@@ -368,5 +381,11 @@ class dialog {
         this.name.textContent = "";
         this.inputContainer.style.display = "none";
         this.dialog.style.display = "none";
+    }
+
+    // 清空缓冲区（用于跳过功能）
+    clearBuffer() {
+        this.buffer = [];
+        this.canceled = true;
     }
 }

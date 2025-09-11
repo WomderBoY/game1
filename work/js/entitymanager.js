@@ -102,9 +102,10 @@ class entitymanager {
     }
 
     async gethurt(x = 1) {
-            this.game.soundmanager.playOnce("hurt", 1, 1);
         let now = Date.now();
         if (now >= entitymanager.safeUntil) {
+            // 只有在真正受击时才播放音效
+            this.game.soundmanager.playOnce("hurt", 1, 1);
             if (this.game.hp) this.game.hp.decrease(x, 20, 20);
             entitymanager.safeUntil = now + 3000; // 3秒无敌
             await this.game.hp.createBloodParticles(10, this.game.player.position.x, this.game.player.position.y);

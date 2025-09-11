@@ -126,6 +126,23 @@ class CGManager {
                 this._resolveNext = null;
             }
         }
+        // 添加U键跳过功能
+        if (e.key === "u" || e.key === "U") {
+            this.canceled = true;
+            // 立即结束当前CG
+            this.queue = []; // 清空队列
+            // 清空当前事件的剩余内容
+            this.images = [];
+            this.texts = [];
+            // 清空对话系统的缓冲区
+            if (this.dialog) {
+                this.dialog.clearBuffer();
+            }
+            if (this._resolveNext) {
+                this._resolveNext();
+                this._resolveNext = null;
+            }
+        }
     }
 
     _onClick() {
