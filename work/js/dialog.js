@@ -280,7 +280,10 @@ class dialog {
             // 逐字打印
             for (let i = 0; i < chars.length; i++) {
                 if (this.canceled) {
-                    //          this.game.soundmanager.fadeLoop('typing', 0.5);
+                    // 停止打字音效
+                    if (this.game.soundmanager) {
+                        this.game.soundmanager.stopLoop2("beep");
+                    }
                     return;
                 }
 
@@ -381,11 +384,19 @@ class dialog {
         this.name.textContent = "";
         this.inputContainer.style.display = "none";
         this.dialog.style.display = "none";
+        // 停止打字音效
+        if (this.game.soundmanager) {
+            this.game.soundmanager.stopLoop2("beep");
+        }
     }
 
     // 清空缓冲区（用于跳过功能）
     clearBuffer() {
         this.buffer = [];
         this.canceled = true;
+        // 停止打字音效
+        if (this.game.soundmanager) {
+            this.game.soundmanager.stopLoop2("beep");
+        }
     }
 }
