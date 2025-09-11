@@ -169,6 +169,7 @@ _jsonCallback({
                     "type": "changemap",
                     "way":"tunnal",
                     "target": "../map/final.json",
+                    "bgm": 2,
                     "with": {
 						"type": "cg",
 						"way": "negative",
