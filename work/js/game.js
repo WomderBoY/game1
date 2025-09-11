@@ -603,6 +603,10 @@ class game {
                 break;
             case "over":
                 console.log("游戏结束");
+                // 玩家死亡时禁用失明效果，确保游戏结束文字可见
+                if (this.nightmanager && this.nightmanager.isActive()) {
+                    this.nightmanager.deactivateNight();
+                }
                 if (this.overmanager.gettype() == -1) {
                     this.mapmanager.drawbg(this.env);
 

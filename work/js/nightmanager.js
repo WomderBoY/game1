@@ -30,6 +30,12 @@ class NightManager {
 
     // 激活夜晚模式和聚光灯效果
     activateNight() {
+        // 如果游戏处于结束状态，不激活失明效果
+        if (this.game.status === "over") {
+            console.log("游戏已结束，跳过失明效果激活");
+            return;
+        }
+        
         console.log("Night mode activation started");
         this.game.night = true;
         this._active = true;
