@@ -2,7 +2,7 @@ class NightManager {
     constructor(game) {
         this.game = game; // 游戏实例
         this.spotlightOverlay = document.getElementById('spotlightOverlay');
-        this.spotlightRadius = 150;
+        this.spotlightRadius = 50;
         this.updateSpotlightInterval = null;
         this._active = false; // 覆盖层是否启用
         this._lastCanvasRect = null; // 缓存画布矩形，减少重排
@@ -75,7 +75,7 @@ class NightManager {
         this.spotlightOverlay.style.background = `radial-gradient(circle at ${screenX}px ${screenY}px,
             rgba(0, 0, 0, 0) ${this.spotlightRadius}px,
             rgba(0, 0, 0, 0.7) ${this.spotlightRadius + 50}px,
-            rgba(0, 0, 0, 0.9) ${this.spotlightRadius + 100}px)`;
+            rgba(0, 0, 0, 1) ${this.spotlightRadius + 100}px)`;
     }
 
     // 取消夜晚模式和聚光灯效果
