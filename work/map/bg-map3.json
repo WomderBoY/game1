@@ -54,16 +54,18 @@ _jsonCallback({
                 "tiling": true
             },
             {
-                "hitbox": [
-                    0,
-                    700,
-                    1280,
-                    20
-                ],
-                "col": true,
-                
-                "tiling": true
-            },
+				"hitbox": [
+					0,
+					700,
+					1280,
+					30
+				],
+				"event": {
+					"type": "kill", //
+					"way": "tunnal", //x和y不知道要不要保留
+				},
+				"col": false
+			},
             {
                 "hitbox": [
                     338,
@@ -169,7 +171,7 @@ _jsonCallback({
                 ],
                 "event": {
                     "type": "changemap",
-                    "way": "negative",
+                    "way": "tunnal",
                     "target": "../map/bg4.json",
                     "with": {
 						"type": "cg",
