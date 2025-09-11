@@ -157,6 +157,11 @@ class DiveBoss {
         // 踩头/碰撞判定
         this.handlePlayerCollision(player);
 
+        // 更新血量系统（包括显示血量的平滑过渡和扣血动画）
+        if (this.hp) {
+            this.hp.update(deltaTime);
+        }
+
         // 新增：更新尘土粒子状态（删除已消亡的粒子）
         this.dustParticles = this.dustParticles.filter(particle => {
             return particle.update(deltaTime); // 调用粒子的update，返回false则删除
@@ -409,12 +414,14 @@ class DiveBoss {
             particle.draw(ctx);
         });
 
-        // // 血条
-        // this.hp.draw2(
-        //     ctx,
-        //     this.rect.position.x + this.rect.size.x / 2,
-        //     this.rect.position.y - 20
-        // );
+        // 绘制血量条 - 在游戏画布上方显示
+        if (this.hp && !this.dead) {
+            this.hp.draw2(
+                ctx,
+                this.rect.position.x + this.rect.size.x / 2,
+                this.rect.position.y - 30  // 在Boss上方30像素处显示血量条
+            );
+        }
     }
 }
 
