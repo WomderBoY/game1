@@ -75,7 +75,7 @@ function renderAchievementsList() {
         first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' },
         first_fratile: { name: '踏碎虚空', desc: '踩碎一个易碎方块' },
         orb_death: { name: '法球之殇', desc: '被法球击杀' },
-        hidden_passage: { name: '隐秘救赎', desc: '通过隐藏关并救出被困的师兄' },
+        hidden_passage: { name: '隐秘救赎', desc: '通过隐藏关并救出被困的同道之人' },
         boss_slayer: { name: '精英猎手', desc: '击败至阴之物' },
         tower_master: { name: '至高之术', desc: '通过第八层的高难关卡' }
     };
@@ -639,7 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
             first_toggle: { name: '阴阳初转', desc: '切换一次阴阳形态' },
             first_fratile: { name: '踏碎虚空', desc: '踩碎一个易碎方块' },
             orb_death: { name: '法球之殇', desc: '被法球击杀' },
-            hidden_passage: { name: '隐秘救赎', desc: '通过隐藏关并救出被困的师兄' },
+            hidden_passage: { name: '隐秘救赎', desc: '通过隐藏关并救出被困的同道之人' },
             boss_slayer: { name: '精英猎手', desc: '击败至阴之物' },
             tower_master: { name: '至高之术', desc: '通过第八层的高难关卡' }
         };
