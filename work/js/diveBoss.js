@@ -327,7 +327,7 @@ class DiveBoss {
         ) {
             console.warn("口血了");
             this.hp.decrease(1, this.rect.x, this.rect.y);
-            this.game.soundmanager.playOnce("eagle_hurt", 1, 1);
+            this.game.soundmanager.playOnce("eagle_hurt", 5, 1);
             entitymanager.vy = -10;
             if (this.hp.isDead()) {
                 this.dead = true;
