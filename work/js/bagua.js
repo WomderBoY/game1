@@ -171,6 +171,13 @@ class BaguaManager {
                 this.game.env = this.game.env == "yin" ? "yang" : "yin";
                 this.game.mapmanager.sethurt();
                 this.game.changetimes++;
+                
+                // 在八卦阵位置触发太极动画切换效果
+                const baguaCenterX = b.rect.position.x + b.rect.size.x / 2;
+                const baguaCenterY = b.rect.position.y + b.rect.size.y / 2;
+                this.game.taijimanager.triggerAtPosition(baguaCenterX, baguaCenterY);
+                // 触发太极音效
+                this.game.soundmanager.playOnce("change", 1, 1);
             }
         }
     }
