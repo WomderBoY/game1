@@ -103,7 +103,7 @@ class eventmanager {
             await this.game.bossmanager.loadBoss(targetMap);
 
             // 将玩家定位到指定位置与朝向（e.playerStatus 应包含 position 和 facing）
-            window.game.ending = false;
+            
             this.game.status = "running";
             console.log(
                 "player pos",
@@ -132,6 +132,9 @@ class eventmanager {
             if (e.with) {
                 await this.game.cgmanager.play(e.with);
             }
+
+            // 触发结局成就
+            this.triggerEndingAchievements(e);
 
             // 游戏结束时解锁下一关
             if (this.game.unlockNextLevel) {
@@ -196,5 +199,32 @@ class eventmanager {
             this.game.canmove = true; // 允许玩家移动
         }
         this.progress = 'start';
+    }
+
+    // 触发结局成就的方法
+    triggerEndingAchievements(e) {
+        if (!this.game.achievements) return;
+
+        // 获取当前地图信息来判断是哪个结局分支
+        const currentMap = this.game.mapmanager.room;
+        const isNormalEnding = currentMap && currentMap.includes("end_select1.json");  // 正常结局：断臂
+        const isHiddenEnding = currentMap && currentMap.includes("end_select2.json");  // 隐藏结局：同伴牺牲
+
+        // 检查事件类型和内容来判断具体结局
+        if (e.type === "man" && e.who === "boss") {
+            // 与boss尸体交互 - 选择获取阴石力量（修罗结局）
+            if (isNormalEnding) {
+                this.game.achievements.unlock("ending_asura_normal");
+            } else if (isHiddenEnding) {
+                this.game.achievements.unlock("ending_asura_hidden");
+            }
+        } else if (e.type === "changemap" && e.end === "gameend") {
+            // 与传送门交互 - 选择将阴石带回宗门
+            if (isNormalEnding) {
+                this.game.achievements.unlock("ending_broken_path");
+            } else if (isHiddenEnding) {
+                this.game.achievements.unlock("ending_righteous_path");
+            }
+        }
     }
 }
