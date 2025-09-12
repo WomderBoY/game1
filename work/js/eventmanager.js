@@ -141,13 +141,14 @@ class eventmanager {
                 this.game.unlockNextLevel(e.target);
             }
 
-  //          setTimeout(() => {
-                window.location.href = '../../index.html#goto-main-menu'; 
-  //          }, 500); // 500毫秒对应CSS中的淡出动画时间
-
             if (this.game.savemanager) {
                 await this.game.savemanager.save(e.target);
             }
+
+            // 延迟跳转，让成就弹窗有时间显示
+            setTimeout(() => {
+                window.location.href = '../../index.html#goto-main-menu'; 
+            }, 500); // 3秒延迟，足够显示成就弹窗
 
         }
         if (e.type == 'over') {
