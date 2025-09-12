@@ -146,7 +146,7 @@ function updateLevelsPerPage() {
 
 // 检查存档状态
 function checkSaveData() {
-    const saveDataKey = getUserStorageKey("saveData");
+    const saveDataKey = getUserStorageKey("saveData1");
     const saveData = localStorage.getItem(saveDataKey);
     const unlockedLevelsKey = getUserStorageKey("unlockedLevels");
     const unlockedLevels = JSON.parse(
@@ -274,9 +274,9 @@ function goBack() {
 // 清除存档
 function clearSave() {
     if (confirm("确定要清除所有游戏存档吗？这将重置游戏进度到第一关。")) {
-        localStorage.removeItem("saveData");
-        localStorage.removeItem("unlockedLevels");
-        localStorage.removeItem("yyj_achievements_v1");
+        localStorage.removeItem(getUserStorageKey("saveData1"));
+        localStorage.removeItem(getUserStorageKey("unlockedLevels"));
+        localStorage.removeItem(getUserStorageKey("yyj_achievements_v1"));
         showMessage("存档已清除！", "success");
 
         setTimeout(() => {
@@ -331,7 +331,7 @@ function debugUnlockStatus() {
     const unlockedLevels = JSON.parse(
         localStorage.getItem(unlockedLevelsKey) || "[]"
     );
-    const saveDataKey = getUserStorageKey("saveData");
+    const saveDataKey = getUserStorageKey("saveData1");
     const saveData = localStorage.getItem(saveDataKey);
     console.log("=== 关卡选择界面解锁状态调试 ===");
     console.log("已解锁关卡:", unlockedLevels);
