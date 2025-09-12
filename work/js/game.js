@@ -222,8 +222,6 @@ class game {
             "../map/bg-map5.json",     // 第七关
             "../map/bg-map4.json",     // 第八关
             "../map/final.json",       // BOSS关
-            "../map/test_1.json",      // 测试关卡1
-            "../map/test_2.json",      // 测试关卡2
         ];
     }
 

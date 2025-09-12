@@ -52,38 +52,13 @@ function loadLevelsConfig() {
             
         } catch (e) {
             console.error('从localStorage加载配置失败:', e);
-            console.log('使用默认配置作为备用方案');
-            useDefaultConfig();
+            console.error('请确保init-config.js已正确加载');
         }
     } else {
-        console.log('localStorage中没有配置，使用默认配置');
-        useDefaultConfig();
+        console.error('localStorage中没有配置，请确保init-config.js已正确加载');
     }
 }
 
-// 使用默认配置（备用方案）
-function useDefaultConfig() {
-    levelConfig = {
-        "../map/test_1.json": { name: "待定", unlocked: false },
-        "../map/test_2.json": { name: "待定", unlocked: false },
-        "../map/bg-map1.json": { name: "待定", unlocked: false },
-        "../map/bg-map2.json": { name: "待定", unlocked: false },
-        "../map/bg-map3.json": { name: "待定", unlocked: false },
-        "../map/bg-map4.json": { name: "待定", unlocked: false },
-    };
-    totalLevels = Object.keys(levelConfig).length;
-    levelsData = Object.keys(levelConfig).map((file, index) => ({
-        file: file,
-        name: levelConfig[file].name,
-        unlocked: levelConfig[file].unlocked,
-        order: index + 1
-    }));
-    
-    generateLevelsHTML();
-    checkSaveData();
-    updateSlider();
-    initTouchSupport();
-}
 
 // 动态生成关卡HTML
 function generateLevelsHTML() {
