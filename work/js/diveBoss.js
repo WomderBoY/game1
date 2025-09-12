@@ -123,7 +123,7 @@ class DiveBoss {
             case "LEFT_IDLE":
                 this.patrol(0, 200, 0, 300);
                 this.stateTimer += deltaTime;
-                if (this.stateTimer > 3000) this.changeState("CHARGE_TO_LEFT_PLATFORM");
+                if (this.stateTimer > 3000 && this.game.canmove) this.changeState("CHARGE_TO_LEFT_PLATFORM");
                 break;
             case "CHARGE_TO_LEFT_PLATFORM":
                 this.moveTo(300, 580);
