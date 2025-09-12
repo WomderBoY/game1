@@ -524,6 +524,7 @@ class game {
             this.status = "over";
             this.soundmanager.playOnce("death");
         }
+        this.eventmanager.handle();
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
@@ -574,7 +575,6 @@ class game {
                 }
                 await this.entitymanager.chcevent();
                 //                if (this.cg == false) this.entitymanager.drawPlayer();
-                this.eventmanager.handle();
                 // console.log('游戏运行中...');
 
                 // 更新HP系统（包括动画和粒子）
@@ -688,6 +688,10 @@ class game {
                     this.overmanager.gameover();
                     this.eventmanager.handle();
                 }
+                break;
+            default:
+                this.ctx.fillStyle = "#000000ff";
+                this.game.ctx.fillRect(0, 0, 1280, 720);
                 break;
             //load...
         }
