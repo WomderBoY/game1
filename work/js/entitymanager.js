@@ -606,7 +606,7 @@ class entitymanager {
         let fl = false;
         for (let e of this.game.mapmanager.events[this.game.env]) {
             //      console.log(e);
-            if (this.game.player.containsRect(e) && e.event.way == "negative") {
+            if (this.game.player.containsRect(e) && e.event.way == "negative" && e.event.way != "tunnal") {
                 fl = true;
             }
         }
