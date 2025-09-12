@@ -18,7 +18,9 @@ class game {
             "../map/bg-map5.json": 1,
             "../map/bg-map6.json": 1,
             "../map/zhengshi_2.json": 1,
-            "../map/final.json": 2
+            "../map/final.json": 2,
+            "../map/end_select1.json": 3,
+            "../map/end_select2.json": 3,
         };
         return mapping[levelFile] !== undefined ? mapping[levelFile] : 0;
     }
@@ -138,6 +140,7 @@ class game {
         this.bgmmanager.add("../bgms/jiaoxue.mp3");
         this.bgmmanager.add("../bgms/guanqia.mp3"); // 游戏 BGM
         this.bgmmanager.add("../bgms/boss2.mp3");
+        this.bgmmanager.add("../bgms/end.mp3");
         window.addEventListener(
             "click",
             () => {

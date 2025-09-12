@@ -99,7 +99,7 @@ class Boss {
                 type: "changemap3", 
                 endingTrueTarget: "../map/end_select1.json",
                 endingFalseTarget: "../map/end_select2.json",
-                bgm: 1
+                bgm: 3
                 }, true);
         }
     }
