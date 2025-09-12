@@ -263,12 +263,13 @@ function deleteUserSaveData() {
 
     // 显示确认对话框
     const confirmed = confirm(
-        `确定要删除用户 "${username}" 的所有存档数据吗？\n\n` +
+        `确定要删除用户 "${username}" 的游戏存档吗？\n\n` +
         `这将删除：\n` +
         `• 游戏进度存档\n` +
-        `• 所有成就数据\n` +
         `• 关卡解锁状态\n` +
         `• 关卡配置数据\n\n` +
+        `保留内容：\n` +
+        `• 所有成就数据\n\n` +
         `此操作不可撤销！`
     );
 
@@ -278,8 +279,8 @@ function deleteUserSaveData() {
 
     // 再次确认
     const doubleConfirmed = confirm(
-        `最后确认：您真的要删除用户 "${username}" 的所有数据吗？\n\n` +
-        `删除后需要重新开始游戏！`
+        `最后确认：您真的要删除用户 "${username}" 的游戏存档吗？\n\n` +
+        `删除后需要重新开始游戏，但成就数据会保留！`
     );
 
     if (!doubleConfirmed) {
@@ -287,10 +288,9 @@ function deleteUserSaveData() {
     }
 
     try {
-        // 删除所有与当前用户相关的数据
+        // 删除与当前用户相关的数据（保留成就数据）
         const keysToDelete = [
             `saveData1_${username}`,
-            `yyj_achievements_v1_${username}`,
             `levelsConfig_${username}`,
             `unlockedLevels_${username}`,
             `selectedLevel_${username}`
@@ -311,8 +311,8 @@ function deleteUserSaveData() {
 
         // 显示删除结果
         if (deletedCount > 0) {
-            showPopup(`成功删除 ${deletedCount} 项存档数据！`);
-            console.log(`用户 ${username} 的存档数据已全部删除`);
+            showPopup(`成功删除 ${deletedCount} 项存档数据！成就数据已保留。`);
+            console.log(`用户 ${username} 的存档数据已删除，成就数据已保留`);
             
             // 验证删除结果
             console.log("=== 删除验证 ===");
@@ -320,6 +320,10 @@ function deleteUserSaveData() {
                 const remaining = localStorage.getItem(key);
                 console.log(`${key}: ${remaining ? '仍存在' : '已删除'}`);
             });
+            // 验证成就数据是否保留
+            const achievementsKey = `yyj_achievements_v1_${username}`;
+            const achievementsRemaining = localStorage.getItem(achievementsKey);
+            console.log(`${achievementsKey}: ${achievementsRemaining ? '已保留' : '不存在'}`);
         } else {
             showPopup("没有找到需要删除的存档数据");
         }
