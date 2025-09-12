@@ -7,7 +7,7 @@ class BGMManager {
         this.tracks = [];
         this.current = null;
         this.volume = 0.5;
-        this.fadeDuration = 1000; // 默认淡入淡出时间 1 秒
+        this.fadeDuration = 1800; // 默认淡入淡出时间 1 秒
     }
 
     // 添加一首 BGM
@@ -19,8 +19,7 @@ class BGMManager {
     }
 
     // 播放某一首 BGM，带淡入淡出效果
-    play(index) {
-        if (index < 0 || index >= this.tracks.length) return;
+    async play(index) {
 
         const fadeDuration = this.fadeDuration;
 
@@ -28,6 +27,7 @@ class BGMManager {
         if (this.current !== null && this.tracks[this.current]) {
             this.fadeOut(this.tracks[this.current], fadeDuration);
         }
+        if (index < 0 || index >= this.tracks.length) return;
 
         this.current = index;
         const track = this.tracks[index];
@@ -90,18 +90,21 @@ class BGMManager {
 
     // 工具：淡出
     fadeOut(track, duration) {
-        const step = 50;
-        const decrement = track.volume / (duration / step);
+        return new Promise(resolve => {
+            const step = 50; // 每 50ms 调整一次
+            const decrement = track.volume / (duration / step);
 
-        const fade = setInterval(() => {
-            if (track.volume > decrement) {
-                track.volume = Math.max(0, track.volume - decrement);
-            } else {
-                track.volume = 0;
-                track.pause();
-                clearInterval(fade);
-            }
-        }, step);
+            const fade = setInterval(() => {
+                if (track.volume > decrement) {
+                    track.volume = Math.max(0, track.volume - decrement);
+                } else {
+                    track.volume = 0;
+                    track.pause();
+                    clearInterval(fade);
+                    resolve(); // ✅ 通知外部“淡出结束”
+                }
+            }, step);
+        });
     }
 }
 

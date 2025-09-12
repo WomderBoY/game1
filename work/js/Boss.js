@@ -2,7 +2,7 @@ class Boss {
     constructor(game) {
         this.game = game;
         this.lstmove = 0;
-        this.HP = new hp(10, this.game); // 添加game参数
+        this.HP = new hp(1, this.game); // 添加game参数
         this.rect = new Rect(615, 335, 50, 50);
         console.log('Boss HP系统初始化完成:', this.HP);
 

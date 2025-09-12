@@ -465,8 +465,8 @@ class entitymanager {
 
     async checkCollision() {
         const player = this.game.player;
-        const playerPrevX = player.position.x - entitymanager.vx;
-        const playerPrevY = player.position.y - entitymanager.vy;
+        const playerPrevX = this.px;
+        const playerPrevY = this.py;
         const playerBottom = player.position.y + player.size.y;
         const playerRight = player.position.x + player.size.x;
 
@@ -507,7 +507,7 @@ class entitymanager {
                     this.game.achievements.unlock("first_kill");
             } else {
                 // 扣血条件：阴阳相同 或 阴阳不同非踩头
-                const tolerance = 50; // 容差范围
+                const tolerance = 5; // 容差范围
                 if (Math.abs(this.game.player.position.x - rect.position.x) > tolerance) {
                     this.updatevx(this.game.player.position.x < rect.position.x ? -10 : 10);
                 }
