@@ -2,82 +2,108 @@
 // 用于统一管理背景音乐播放、停止、切换的类
 // ===============================
 
-// 定义 BGMManager 类
 class BGMManager {
     constructor() {
-        // 用来存放所有的 BGM 音频对象（Audio 实例）
         this.tracks = [];
-        // 当前正在播放的音轨索引
         this.current = null;
-        // BGM音量，默认为0.5
         this.volume = 0.5;
+        this.fadeDuration = 1000; // 默认淡入淡出时间 1 秒
     }
 
     // 添加一首 BGM
     add(src) {
-        // 创建一个 Audio 对象，并开启循环播放
         let audio = new Audio(src);
         audio.loop = true;
-        audio.volume = this.volume; // 应用当前音量设置
-        // 把这个音频对象放到 tracks 列表里
+        audio.volume = this.volume;
         this.tracks.push(audio);
     }
 
-    // 播放某一首 BGM
+    // 播放某一首 BGM，带淡入淡出效果
     play(index) {
-        // 如果传入的索引不合法（超出范围），直接返回
         if (index < 0 || index >= this.tracks.length) return;
 
-        // 如果当前有正在播放的 BGM，先暂停并重置进度
-        if (this.current !== null) {
-            this.tracks[this.current].pause();
-            this.tracks[this.current].currentTime = 0;
+        const fadeDuration = this.fadeDuration;
+
+        // 如果当前有正在播放的 BGM，先淡出
+        if (this.current !== null && this.tracks[this.current]) {
+            this.fadeOut(this.tracks[this.current], fadeDuration);
         }
 
-        // 切换到新曲目
         this.current = index;
+        const track = this.tracks[index];
+        track.currentTime = 0;
 
-        // 从头播放选中的曲目
-        this.tracks[index].currentTime = 0;
-        this.tracks[index].play();
+        // 先静音开始，然后淡入
+        track.volume = 0;
+        track.play().then(() => {
+            this.fadeIn(track, fadeDuration);
+        }).catch(err => {
+            console.warn("BGM play failed:", err);
+        });
     }
 
-    // 停止播放（暂停并从头复位）
     stop() {
-        if (this.current !== null) {
+        if (this.current !== null && this.tracks[this.current]) {
             this.tracks[this.current].pause();
             this.tracks[this.current].currentTime = 0;
             this.current = null;
         }
     }
 
-    // 设置BGM音量
     setVolume(volume) {
-        this.volume = Math.max(0, Math.min(1, volume)); // 限制在0-1之间
-
-        // 更新所有音轨的音量
+        this.volume = Math.max(0, Math.min(1, isFinite(volume) ? volume : 0.5));
         for (let track of this.tracks) {
             track.volume = this.volume;
         }
-
-        // 保存到本地存储
         localStorage.setItem('bgmVolume', this.volume.toString());
     }
 
-    // 获取当前BGM音量
     getVolume() {
         return this.volume;
     }
 
-    // 从本地存储加载音量设置
     loadVolumeSettings() {
         const savedVolume = localStorage.getItem('bgmVolume');
         if (savedVolume !== null) {
             this.volume = parseFloat(savedVolume);
+            if (!isFinite(this.volume) || this.volume < 0 || this.volume > 1) {
+                this.volume = 0.5; // 避免非法值
+            }
         }
+    }
+
+    // 工具：淡入
+    fadeIn(track, duration) {
+        const step = 50; // 每 50ms 调整一次
+        const increment = this.volume / (duration / step);
+        track.volume = 0;
+
+        const fade = setInterval(() => {
+            if (track.volume < this.volume - increment) {
+                track.volume = Math.min(this.volume, track.volume + increment);
+            } else {
+                track.volume = this.volume;
+                clearInterval(fade);
+            }
+        }, step);
+    }
+
+    // 工具：淡出
+    fadeOut(track, duration) {
+        const step = 50;
+        const decrement = track.volume / (duration / step);
+
+        const fade = setInterval(() => {
+            if (track.volume > decrement) {
+                track.volume = Math.max(0, track.volume - decrement);
+            } else {
+                track.volume = 0;
+                track.pause();
+                clearInterval(fade);
+            }
+        }, step);
     }
 }
 
-// 把 BGMManager 的实例挂载到 window 上
-// 这样其他文件就能直接通过 bgmmanager 使用，而不需要 import/export
+// 实例挂到全局
 window.bgmmanager = new BGMManager();
