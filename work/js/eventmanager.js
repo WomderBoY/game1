@@ -90,7 +90,9 @@ class eventmanager {
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             if (e.with) {
                 console.warn("start", this.event.next);
+                this.game.canmove = false;
                 await this.game.cgmanager.play(e.with);
+                this.game.canmove = true;
             }
             this.game.player.position.x = e.x;
             this.game.player.position.y = e.y;

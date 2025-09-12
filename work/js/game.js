@@ -205,38 +205,52 @@ class game {
         return username ? `${baseKey}_${username}` : baseKey;
     }
 
+    // 获取默认关卡顺序（与init-config.js保持一致）
+    getDefaultLevelOrder() {
+        return [
+            "../map/jiaoxue1.json",    // 教学关卡1
+            "../map/jiaoxue2.json",    // 教学关卡2
+            "../map/bg-map1.json",     // 第一关
+            "../map/zhengshi_2.json",  // 第二关
+            "../map/bg-map2.json",     // 第三关
+            "../map/bg-map3.json",     // 第四关
+            "../map/bg4.json",         // 第五关
+            "../map/bg-map6.json",     // 第六关
+            "../map/bg-map5.json",     // 第七关
+            "../map/bg-map4.json",     // 第八关
+            "../map/final.json",       // BOSS关
+            "../map/test_1.json",      // 测试关卡1
+            "../map/test_2.json",      // 测试关卡2
+        ];
+    }
+
     // 解锁关卡系统
     unlockNextLevel(currentLevel) {
         // 从关卡配置文件获取关卡顺序
         let levelOrder = [];
 
-        // 尝试从localStorage获取关卡配置（如果关卡选择界面已经加载过）
-        const levelsConfig = localStorage.getItem("levelsConfig");
+        // 尝试从localStorage获取关卡配置（使用正确的用户存储键）
+        const username = localStorage.getItem("yyj_username");
+        const configKey = username ? `levelsConfig_${username}` : 'levelsConfig';
+        const levelsConfig = localStorage.getItem(configKey);
+        
         if (levelsConfig) {
             try {
                 const config = JSON.parse(levelsConfig);
-                levelOrder = config.levels.map((level) => level.file);
+                if (config.levels && Array.isArray(config.levels)) {
+                    // 按order字段排序获取关卡顺序
+                    levelOrder = config.levels
+                        .sort((a, b) => a.order - b.order)
+                        .map((level) => level.file);
+                }
             } catch (e) {
-                console.warn("解析关卡配置失败，使用默认顺序");
-                levelOrder = [
-                    "../map/test_1.json",
-                    "../map/test_2.json",
-                    "../map/bg-map1.json",
-                    "../map/bg-map2.json",
-                    "../map/bg-map3.json",
-                    "../map/bg-map4.json",
-                ];
+                console.warn("解析关卡配置失败，使用默认顺序", e);
+                levelOrder = this.getDefaultLevelOrder();
             }
         } else {
             // 如果还没有配置，使用默认顺序
-            levelOrder = [
-                "../map/test_1.json",
-                "../map/test_2.json",
-                "../map/bg-map1.json",
-                "../map/bg-map2.json",
-                "../map/bg-map3.json",
-                "../map/bg-map4.json",
-            ];
+            console.warn("未找到关卡配置，使用默认顺序");
+            levelOrder = this.getDefaultLevelOrder();
         }
         const currentIndex = levelOrder.indexOf(currentLevel);
 
@@ -247,7 +261,6 @@ class game {
 
         if (currentIndex >= 0) {
             // 解锁当前关卡和之前的所有关卡
-            const username = localStorage.getItem("yyj_username");
             const unlockedLevelsKey = this.getUserStorageKey("unlockedLevels");
             const unlockedLevels = JSON.parse(
                 localStorage.getItem(unlockedLevelsKey) || "[]"
