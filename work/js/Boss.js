@@ -1,8 +1,8 @@
 class Boss {
     constructor(game) {
         this.game = game;
-        this.lstmove = -20000;
-        this.HP = new hp(15, this.game); // 添加game参数
+        this.lstmove = 0;
+        this.HP = new hp(10, this.game); // 添加game参数
         this.rect = new Rect(615, 335, 50, 50);
         console.log('Boss HP系统初始化完成:', this.HP);
 
@@ -99,7 +99,7 @@ class Boss {
                 type: "changemap3", 
                 endingTrueTarget: "../map/end_select1.json",
                 endingFalseTarget: "../map/end_select2.json",
-                bgm: 3
+                bgm: 3,
                 }, true);
         }
     }

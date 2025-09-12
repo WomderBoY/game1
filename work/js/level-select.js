@@ -246,19 +246,6 @@ function goBack() {
     }, 200);
 }
 
-// 清除存档
-function clearSave() {
-    if (confirm("确定要清除所有游戏存档吗？这将重置游戏进度到第一关。")) {
-        localStorage.removeItem(getUserStorageKey("saveData1"));
-        localStorage.removeItem(getUserStorageKey("unlockedLevels"));
-        localStorage.removeItem(getUserStorageKey("yyj_achievements_v1"));
-        showMessage("存档已清除！", "success");
-
-        setTimeout(() => {
-            location.reload();
-        }, 1000);
-    }
-}
 
 // 显示消息提示
 function showMessage(message, type = "info") {
