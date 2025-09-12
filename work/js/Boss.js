@@ -99,19 +99,7 @@ class Boss {
                 type: "changemap3", 
                 endingTrueTarget: "../map/end_select1.json",
                 endingFalseTarget: "../map/end_select2.json",
-                with: {
-                    "type": "cg",
-                    "way": "negative",
-                    "images": [
-                        "../images/middle4.jpg"
-                    ],
-                    "text": [
-                        [
-                            "至阴之物发出一声凄厉惨嚎，旋即坠地不动。阴雾散去，死寂弥漫四野。",
-                            "你收起锋芒，不敢多做停留，屏住呼吸，重新隐入黑暗，继续潜行前行。"
-                        ],
-                ]
-                },
+                bgm: 1
                 }, true);
         }
     }
