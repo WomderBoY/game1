@@ -114,6 +114,8 @@ class entitymanager {
 
     // 更新逻辑优化
     async update() {
+        
+        if (!this.game.canmove) this.game.soundmanager.fadeLoop("run", 0.1);
         this.keys = {
             left: false,
             right: false,

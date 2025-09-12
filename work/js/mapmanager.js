@@ -130,6 +130,7 @@ class mapmanager {
 
         this.game.env = "yang";
         this.game.changetimes = 0;
+        this.game.expmanager.empty();
 
         // 设置初始透明度
         let opacity = 1;
@@ -259,7 +260,9 @@ class mapmanager {
                 } else {
                     console.log("直接播放 data.with:", data.with);
                     if (this.game.cgmanager) {
+                        this.game.canmove = false;
                         this.game.cgmanager.play(data.with);
+                        this.game.canmove = true;
                     }
                 }
             } else {

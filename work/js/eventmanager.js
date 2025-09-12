@@ -128,6 +128,7 @@ class eventmanager {
         if (e.end==="gameend"){
             
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
+            this.game.status = 'end';
             if (e.with) {
                 await this.game.cgmanager.play(e.with);
             }
@@ -137,9 +138,9 @@ class eventmanager {
                 this.game.unlockNextLevel(e.target);
             }
 
-            setTimeout(() => {
+  //          setTimeout(() => {
                 window.location.href = '../../index.html#goto-main-menu'; 
-            }, 500); // 500毫秒对应CSS中的淡出动画时间
+  //          }, 500); // 500毫秒对应CSS中的淡出动画时间
 
             if (this.game.savemanager) {
                 await this.game.savemanager.save(e.target);
