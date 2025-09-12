@@ -12,7 +12,7 @@ class SaveManager {
     }
     makeEmptyData() {
         this.data = {
-            room: "../map/test_1.json",
+            room: "../map/jiaoxue1.json",
             player: { x: 0, y: 0 },
             event: null,
         };

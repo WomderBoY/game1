@@ -52,12 +52,25 @@ class TaijiManager {
 
     // 触发太极动画（在角色位置）
     trigger() {
+        const player = this.game.player;
+        // 使用角色中心位置
+        const targetX = player.position.x + player.size.x / 2;
+        const targetY = player.position.y + player.size.y / 2;
+        this._triggerAtPosition(targetX, targetY);
+    }
+
+    // 在指定位置触发太极动画
+    triggerAtPosition(x, y) {
+        this._triggerAtPosition(x, y);
+    }
+
+    // 内部方法：在指定位置触发太极动画
+    _triggerAtPosition(targetX, targetY) {
 //        const now = this.game.gameFrame;
         // 冷却时间检查（300ms内不重复触发）
 //        if (now - this.cooldown < 80) return;
 //        this.cooldown = now;
 
-        const player = this.game.player;
         const canvas = this.game.view;
 
         // 缓存画布位置和缩放信息，避免频繁重新计算
@@ -72,13 +85,13 @@ class TaijiManager {
             }
         }
 
-        // 计算角色中心位置（相对于页面）
-        const playerCenterX = player.position.x + player.size.x / 2;
-        const playerCenterY = player.position.y + player.size.y / 2;
+        // 使用传入的目标位置
+        const centerX = targetX;
+        const centerY = targetY;
 
         // 计算太极图的目标位置
-        const targetX = this._canvasRect.left + playerCenterX * this._scaleX;
-        const targetY = this._canvasRect.top + playerCenterY * this._scaleY;
+        const screenX = this._canvasRect.left + centerX * this._scaleX;
+        const screenY = this._canvasRect.top + centerY * this._scaleY;
 
         // 太极图的尺寸（100px x 100px）
         const taijiSize = 100;
@@ -91,11 +104,11 @@ class TaijiManager {
         // 限制太极图位置在视口范围内
         const clampedX = Math.max(
             halfTaijiSize,
-            Math.min(viewportWidth - halfTaijiSize, targetX)
+            Math.min(viewportWidth - halfTaijiSize, screenX)
         );
         const clampedY = Math.max(
             halfTaijiSize,
-            Math.min(viewportHeight - halfTaijiSize, targetY)
+            Math.min(viewportHeight - halfTaijiSize, screenY)
         );
 
         // 设置太极图位置（居中于角色，但限制在视口内）

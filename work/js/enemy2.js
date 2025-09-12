@@ -328,7 +328,7 @@ class Enemy2Manager {
             x = this.game.random(1, 1230);
             y = this.game.random(1, 600);
         }while (!this.jud(x, y))
-        this.addEnemy2(x, y, 50, 50, 2, 1500, 6, Date.now());
+        this.addEnemy2(x, y, 50, 50, 2, 1500, 10, Date.now());
     }
 
     addEnemy2(x, y, width, height, speed = 2, attackRange = 150, dashSpeed = 6, born = -10000) {

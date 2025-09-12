@@ -63,7 +63,7 @@ class Boss {
         this.game.expmanager.conaddblk(this.x, this.y); // 触发粒子效果
 
         let len = this.game.mapmanager.collidable[type].length;
-        this.game.enemymanager.cl_enemy();
+ //       this.game.enemymanager.cl_enemy();
         for (let ti = 1; ti <= x; ++ti) {
             let y = this.game.random(0, len - 1);
             while (this.game.mapmanager.collidable[type][y] instanceof Movetile)
@@ -99,19 +99,7 @@ class Boss {
                 type: "changemap3", 
                 endingTrueTarget: "../map/end_select1.json",
                 endingFalseTarget: "../map/end_select2.json",
-                with: {
-                    "type": "cg",
-                    "way": "negative",
-                    "images": [
-                        "../images/middle4.jpg"
-                    ],
-                    "text": [
-                        [
-                            "至阴之物发出一声凄厉惨嚎，旋即坠地不动。阴雾散去，死寂弥漫四野。",
-                            "你收起锋芒，不敢多做停留，屏住呼吸，重新隐入黑暗，继续潜行前行。"
-                        ],
-                ]
-                },
+                bgm: 3
                 }, true);
         }
     }
@@ -119,7 +107,7 @@ class Boss {
     async move() {
         if (!this.game.canmove) return;
         let now = Date.now();
-        if (now - this.lstmove <= 10000) {
+        if (now - this.lstmove <= 7000) {
             this.stateTimer = now - this.lstmove;
             // 使用延长后的攻击状态持续时间
             if (this.stateTimer > this.attackStateDuration) {
@@ -129,15 +117,15 @@ class Boss {
         }
         this.game.soundmanager.playOnce("magic", 1, 1.5);
         console.warn('boss move!!');
-        let o = this.game.random(1, 3);
+        let o = this.game.random(1, 4);
         if (o == 1) {
-            await this.change_hitbox('yang', 1);
+            await this.change_hitbox('yang', 2);
         }
-        else if (o == 2) {
-            await this.get_enemy(this.game.env, 1);
+        else if (o == 2 || o == 4) {
+            await this.get_enemy(this.game.env, 2);
         }
         else if (o == 3) {
-            await this.get_enemy2(1);
+            await this.get_enemy2(2);
         }
         this.lstmove = now;
     }
