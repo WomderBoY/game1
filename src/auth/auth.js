@@ -79,9 +79,8 @@ function renderAchievementsList() {
         boss_slayer: { name: '精英猎手', desc: '击败至阴之物' },
         tower_master: { name: '至高之术', desc: '通过第八层的高难关卡' },
         // 结局成就
-        ending_asura_normal: { name: '修罗道·断臂', desc: '在正常结局中选择获取阴石力量，成为宗门新主' },
+        ending_asura: { name: '修罗道', desc: '选择获取阴石力量，成为宗门新主' },
         ending_broken_path: { name: '残阳断途', desc: '在正常结局中选择将阴石带回宗门，但断臂无法复原' },
-        ending_asura_hidden: { name: '修罗道·正道', desc: '在隐藏结局中选择获取阴石力量，成为宗门新主' },
         ending_righteous_path: { name: '正道长明', desc: '在隐藏结局中选择将阴石带回宗门，成为下一任掌门' }
     };
     const ids = Object.keys(defs);
@@ -652,9 +651,8 @@ document.addEventListener('DOMContentLoaded', () => {
             boss_slayer: { name: '精英猎手', desc: '击败至阴之物' },
             tower_master: { name: '至高之术', desc: '通过第八层的高难关卡' },
             // 结局成就
-            ending_asura_normal: { name: '修罗道·断臂', desc: '在正常结局中选择获取阴石力量，成为宗门新主' },
+            ending_asura: { name: '修罗道', desc: '选择获取阴石力量，成为宗门新主' },
             ending_broken_path: { name: '残阳断途', desc: '在正常结局中选择将阴石带回宗门，但断臂无法复原' },
-            ending_asura_hidden: { name: '修罗道·正道', desc: '在隐藏结局中选择获取阴石力量，成为宗门新主' },
             ending_righteous_path: { name: '正道长明', desc: '在隐藏结局中选择将阴石带回宗门，成为下一任掌门' }
         };
         const totalPages = Math.ceil(Object.keys(defs).length / achievementsPerPage);

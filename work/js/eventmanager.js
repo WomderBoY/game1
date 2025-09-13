@@ -213,11 +213,8 @@ class eventmanager {
         // 检查事件类型和内容来判断具体结局
         if (e.type === "man" && e.who === "boss") {
             // 与boss尸体交互 - 选择获取阴石力量（修罗结局）
-            if (isNormalEnding) {
-                this.game.achievements.unlock("ending_asura_normal");
-            } else if (isHiddenEnding) {
-                this.game.achievements.unlock("ending_asura_hidden");
-            }
+            // 无论是正常结局还是隐藏结局，都触发同一个修罗道成就
+            this.game.achievements.unlock("ending_asura");
         } else if (e.type === "changemap" && e.end === "gameend") {
             // 与传送门交互 - 选择将阴石带回宗门
             if (isNormalEnding) {
