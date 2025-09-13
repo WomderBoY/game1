@@ -525,6 +525,7 @@ class game {
             this.soundmanager.playOnce("death");
         }
         this.eventmanager.handle();
+        if (!this.canmove) this.soundmanager.fadeLoop("run", 0.1);
         switch (this.status) {
             case "running": // 游戏运行状态
                 //
@@ -691,7 +692,7 @@ class game {
                 break;
             default:
                 this.ctx.fillStyle = "#000000ff";
-                this.game.ctx.fillRect(0, 0, 1280, 720);
+                this.ctx.fillRect(0, 0, 1400, 720);
                 break;
             //load...
         }

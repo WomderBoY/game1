@@ -16,7 +16,7 @@ class SoundManager {
                 audio.play().then(() => {
                     audio.pause();
                     audio.currentTime = 0;
-                }).catch(() => {});
+                }).catch(() => { });
             }
         };
         document.addEventListener("click", unlockHandler, { once: true });
@@ -37,6 +37,8 @@ class SoundManager {
         await this.load("beep1", "../sound/beep1.mp3");
         await this.load("hurt", "../sound/hurt.mp3");
         await this.load("magic", "../sound/magic1.mp3");
+        await this.load("eagle_hurt", "../sound/eagle_hurt.mp3");
+        await this.load("eagle_fly", "../sound/eagle-attack.mp3");
         this.unlock();
     }
 
@@ -47,7 +49,7 @@ class SoundManager {
                 audio.play().then(() => {
                     audio.pause();
                     audio.currentTime = 0;
-                }).catch(()=>{});
+                }).catch(() => { });
             });
         }, { once: true });
     }
@@ -160,7 +162,7 @@ class SoundManager {
         audio.onended = () => {
             delete this.loopSources[name];
         };
-}
+    }
 
 
     /** 淡出循环音效 */

@@ -129,6 +129,7 @@ class eventmanager {
             
             // 先加载目标地图（loadMap 内部可能处理淡入淡出、tiles、背景等）
             this.game.status = 'end';
+            this.game.canmove = false;
             if (e.with) {
                 await this.game.cgmanager.play(e.with);
             }
@@ -146,10 +147,8 @@ class eventmanager {
             }
 
             // 延迟跳转，让成就弹窗有时间显示
-            setTimeout(() => {
-                window.location.href = '../../index.html#goto-main-menu'; 
-            }, 500); // 3秒延迟，足够显示成就弹窗
-
+            await window.bgmmanager.play(-1);
+            setTimeout(() => { window.location.href = '../../index.html#goto-main-menu'; }, 2000);
         }
         if (e.type == 'over') {
             console.log("startcg");

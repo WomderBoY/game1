@@ -1,53 +1,53 @@
 // 尘土粒子类：管理单个粒子的生成、移动、绘制
 class Particle {
-  /**
-   * @param {number} x - 粒子初始X坐标
-   * @param {number} y - 粒子初始Y坐标
-   * @param {number} size - 粒子初始大小
-   * @param {number} speedX - 粒子X方向速度
-   * @param {number} speedY - 粒子Y方向速度
-   * @param {number} lifetime - 粒子生命周期（毫秒）
-   */
-  constructor(x, y, size, speedX, speedY, lifetime) {
-    this.x = x;
-    this.y = y;
-    this.size = size; // 粒子初始大小
-    this.speedX = speedX; // X方向速度（控制左右扩散）
-    this.speedY = speedY; // Y方向速度（控制上下扩散+下落）
-    this.lifetime = lifetime; // 粒子存活时间
-    this.maxLifetime = lifetime; // 最大生命周期（用于计算透明度衰减）
-    this.alpha = 1; // 粒子透明度（1=不透明，0=完全透明）
-  }
+    /**
+     * @param {number} x - 粒子初始X坐标
+     * @param {number} y - 粒子初始Y坐标
+     * @param {number} size - 粒子初始大小
+     * @param {number} speedX - 粒子X方向速度
+     * @param {number} speedY - 粒子Y方向速度
+     * @param {number} lifetime - 粒子生命周期（毫秒）
+     */
+    constructor(x, y, size, speedX, speedY, lifetime) {
+        this.x = x;
+        this.y = y;
+        this.size = size; // 粒子初始大小
+        this.speedX = speedX; // X方向速度（控制左右扩散）
+        this.speedY = speedY; // Y方向速度（控制上下扩散+下落）
+        this.lifetime = lifetime; // 粒子存活时间
+        this.maxLifetime = lifetime; // 最大生命周期（用于计算透明度衰减）
+        this.alpha = 1; // 粒子透明度（1=不透明，0=完全透明）
+    }
 
-  // 更新粒子状态（位置、大小、透明度）
-  update(deltaTime) {
-    // 1. 减少生命周期
-    this.lifetime -= deltaTime;
-    if (this.lifetime <= 0) return false; // 生命周期结束，标记为可删除
+    // 更新粒子状态（位置、大小、透明度）
+    update(deltaTime) {
+        // 1. 减少生命周期
+        this.lifetime -= deltaTime;
+        if (this.lifetime <= 0) return false; // 生命周期结束，标记为可删除
 
-    // 2. 更新位置（模拟尘土扩散+轻微下落）
-    this.x += this.speedX * (deltaTime / 16); // 与Boss移动速度时间戳同步
-    this.y += this.speedY * (deltaTime / 16);
+        // 2. 更新位置（模拟尘土扩散+轻微下落）
+        this.x += this.speedX * (deltaTime / 16); // 与Boss移动速度时间戳同步
+        this.y += this.speedY * (deltaTime / 16);
 
-    // 3. 粒子大小衰减（逐渐变小）
-    this.size = Math.max(0, this.size - (deltaTime / this.maxLifetime) * 2);
+        // 3. 粒子大小衰减（逐渐变小）
+        this.size = Math.max(0, this.size - (deltaTime / this.maxLifetime) * 2);
 
-    // 4. 透明度衰减（逐渐消失）
-    this.alpha = this.lifetime / this.maxLifetime;
+        // 4. 透明度衰减（逐渐消失）
+        this.alpha = this.lifetime / this.maxLifetime;
 
-    return true; // 粒子仍存活
-  }
+        return true; // 粒子仍存活
+    }
 
-  // 绘制粒子（灰色半透明圆形）
-  draw(ctx) {
-    ctx.save(); // 保存画布状态，避免影响其他绘制
-    // 设置粒子样式：灰色、半透明、无轮廓
-    ctx.fillStyle = `rgba(120, 120, 120, ${this.alpha})`; // RGB(120,120,120) = 浅灰色
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); // 绘制圆形粒子
-    ctx.fill();
-    ctx.restore(); // 恢复画布状态
-  }
+    // 绘制粒子（灰色半透明圆形）
+    draw(ctx) {
+        ctx.save(); // 保存画布状态，避免影响其他绘制
+        // 设置粒子样式：灰色、半透明、无轮廓
+        ctx.fillStyle = `rgba(120, 120, 120, ${this.alpha})`; // RGB(120,120,120) = 浅灰色
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); // 绘制圆形粒子
+        ctx.fill();
+        ctx.restore(); // 恢复画布状态
+    }
 }
 
 class DiveBoss {
@@ -123,10 +123,11 @@ class DiveBoss {
             case "LEFT_IDLE":
                 this.patrol(0, 200, 0, 300);
                 this.stateTimer += deltaTime;
-                if (this.stateTimer > 3000) this.changeState("CHARGE_TO_LEFT_PLATFORM");
+                if (this.stateTimer > 3000 && this.game.canmove) this.changeState("CHARGE_TO_LEFT_PLATFORM");
                 break;
             case "CHARGE_TO_LEFT_PLATFORM":
                 this.moveTo(300, 580);
+                this.game.soundmanager.playOnce("eagle_fly", 1, 1);
                 if (this.reached(300, 580)) this.changeState("MOVE_RIGHT");
                 break;
             case "RISE_TO_RIGHT_IDLE":
@@ -141,6 +142,7 @@ class DiveBoss {
                 break;
             case "CHARGE_TO_RIGHT_PLATFORM":
                 this.moveTo(980, 580);
+                this.game.soundmanager.playOnce("eagle_fly", 1, 1);
                 if (this.reached(980, 580)) this.changeState("MOVE_LEFT");
                 break;
             case "RISE_TO_LEFT_IDLE":
@@ -305,30 +307,31 @@ class DiveBoss {
         this.rect.position.x = x; // 重置坐标
         this.rect.position.y = y;
         this.vx = 0;
-     this.vy = 0;
+        this.vy = 0;
     }
 
     reached(tx, ty, tolerance = 10) {
         return Math.abs(this.rect.position.x - tx) <= tolerance &&
-               Math.abs(this.rect.position.y - ty) <= tolerance;
+            Math.abs(this.rect.position.y - ty) <= tolerance;
     }
 
     handlePlayerCollision(player) {
-        if (!player.containsRect(this.rect)) return ;
+        if (!player.containsRect(this.rect)) return;
         const playerBottom = player.position.y + player.size.y;
         const playerPrevY = player.position.y - (entitymanager.vy || 0);
         const rect = this.rect;
-        
+
         if (playerPrevY + player.size.y <= rect.position.y
             && player.position.x + player.size.x >= this.rect.position.x
             && player.position.x <= this.rect.position.x + this.rect.size.x
         ) {
             console.warn("口血了");
-            this.hp.decrease(1, this.rect.x, this.rect.y); 
+            this.hp.decrease(1, this.rect.x, this.rect.y);
+            this.game.soundmanager.playOnce("eagle_hurt", 5, 1);
             entitymanager.vy = -10;
             if (this.hp.isDead()) {
                 this.dead = true;
-                
+
                 // 检查是否是bg4关卡的Boss击杀成就
                 if (this.game.mapmanager.room && this.game.mapmanager.room.includes("bg4.json")) {
                     // 触发Boss击杀成就
@@ -336,31 +339,33 @@ class DiveBoss {
                         this.game.achievements.unlock("boss_slayer");
                     }
                 }
-                
+
                 //这里加一个事件，让玩家传送到下一个关卡
-                this.game.eventmanager.add({ 
-                    type: "changemap", 
-                    target: "../map/bg-map6.json", 
+                this.game.eventmanager.add({
+                    type: "changemap",
+                    target: "../map/bg-map6.json",
                     with: {
-						"type": "cg",
-						"way": "negative",
-						"images": [
-							"../images/middle4.jpg"
-						],
-						"text": [
-							[
-								"至阴之物发出一声凄厉惨嚎，旋即坠地不动。阴雾散去，死寂弥漫四野。",
+                        "type": "cg",
+                        "way": "negative",
+                        "images": [
+                            "../images/middle4.jpg"
+                        ],
+                        "text": [
+                            [
+                                "至阴之物发出一声凄厉惨嚎，旋即坠地不动。阴雾散去，死寂弥漫四野。",
                                 "你收起锋芒，不敢多做停留，屏住呼吸，重新隐入黑暗，继续潜行前行。"
-							],
-					]
-					},
-                    x: 0, 
-                    y: 0 }, true);
+                            ],
+                        ]
+                    },
+                    x: 0,
+                    y: 0
+                }, true);
             } else {
                 this.stateTimer = 0;
             }
         } else {
             this.game.entitymanager.gethurt()
+            this.game.soundmanager.playOnce("hurt", 1, 1);
         }
     }
 
@@ -436,12 +441,12 @@ class BossManager {
     }
 
     resetAllBosses() {
-    for (let boss of this.bosses) {
-        if (!boss.dead) {
-            boss.revive(100, 100);  // 初始坐标随你设定
+        for (let boss of this.bosses) {
+            if (!boss.dead) {
+                boss.revive(100, 100);  // 初始坐标随你设定
+            }
         }
     }
-}
 
     async loadBoss(jsonPath) {
         const data = await this.game.datamanager.loadJSON(jsonPath);
@@ -450,7 +455,7 @@ class BossManager {
         if (data.boss && Array.isArray(data.boss)) {
             for (let b of data.boss) {
                 console.warn('b = ', b);
-                
+
                 this.addBoss(b.x, b.y, b.w, b.h, b.maxHP);
             }
         }

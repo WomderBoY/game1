@@ -64,7 +64,7 @@ class entitymanager {
             ps = "onjump";
         }
 
-        
+
 
 
         if (ps == "run") {
@@ -82,7 +82,7 @@ class entitymanager {
             }
         } else if (ps == "startjump") {
             console.log("startjump");
-//            this.game.soundmanager.playOnce("jump", 1, 1); // 停下或跳跃时淡出音效
+            //            this.game.soundmanager.playOnce("jump", 1, 1); // 停下或跳跃时淡出音效
             if (this.game.gameFrame - entitymanager.lstrun >= 10)
                 this.game.soundmanager.fadeLoop("run", 0.1);
         } else if (ps == "stand") {
@@ -114,7 +114,7 @@ class entitymanager {
 
     // 更新逻辑优化
     async update() {
-        
+
         if (!this.game.canmove) this.game.soundmanager.fadeLoop("run", 0.1);
         this.keys = {
             left: false,
@@ -130,7 +130,7 @@ class entitymanager {
             if (this.game.inputmanager.askW() == true) this.keys.up = true;
             if (this.game.inputmanager.askJ() == true) this.keys.change = true;
             //if (this.game.inputmanager.askK() == true)
-                //this.keys.envchange = true;
+            //this.keys.envchange = true;
         }
         let machine = this.game.animationmachine;
 
@@ -175,13 +175,13 @@ class entitymanager {
         if (vy == -100) dbg = true;
         let fl = false;
         let standingOnMovetile = false; // 将变量定义移到外层作用域
-        
+
         // 先更新所有移动砖块的位置
         for (let p of ga.mapmanager.collidable[this.game.env])
             if (p instanceof Movetile) {
                 p.update(this.game)
             }
-            
+
         for (let p of ga.mapmanager.tram) {
             // let prevX = ga.player.position.x - vx - vxx;
             // let prevY = ga.player.position.y - vy - vyy;
@@ -197,19 +197,19 @@ class entitymanager {
                 break;
             }
         }
-//        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
+        //        console.warn("(x, y) = ", this.game.player.position.x, this.game.player.position.y);
         if (!fl) {
             // 检查玩家是否站在移动砖块上，如果是则持续跟随
             let movetileVx = 0, movetileVy = 0;
-            
+
             for (let j = 0; j < ga.mapmanager.collidable[this.game.env].length; ++j) {
-                let p =  ga.mapmanager.collidable[this.game.env][j];
+                let p = ga.mapmanager.collidable[this.game.env][j];
                 //            console.warn("check col", p);
                 if (p.alive(this.game) == false) {
                     console.warn("pass it");
                     continue;
                 }
-                
+
                 // 检查玩家是否站在移动砖块上（上方碰撞）
                 if (p instanceof Movetile && ga.player.containsRect(p)) {
                     // 更精确的检测：玩家脚部在砖块顶部附近
@@ -222,8 +222,8 @@ class entitymanager {
                         break;
                     }
                 }
-            }          
-            
+            }
+
             // 如果玩家站在移动砖块上，先应用移动砖块的速度
             if (standingOnMovetile) {
                 ga.player.position.x += movetileVx;
@@ -236,25 +236,25 @@ class entitymanager {
                 // 重置玩家的垂直速度，让玩家完全跟随移动砖块
                 vy = 0;
             }
-            
+
             for (let j = 0; j < ga.mapmanager.collidable[this.game.env].length; ++j) {
-                let p =  ga.mapmanager.collidable[this.game.env][j];
+                let p = ga.mapmanager.collidable[this.game.env][j];
                 //            console.warn("check col", p);
                 if (p.alive(this.game) == false) {
                     console.warn("pass it");
                     continue;
                 }
-                
+
                 let prevX = this.px, prevY = this.py;
                 if (p instanceof Movetile) {
                     prevX += p.vx;
                     prevY += p.vy;
                 }
-                
+
                 // let prevX = ga.player.position.x - vx - vxx;
                 // let prevY = ga.player.position.y - vy - vyy;
                 if (ga.player.containsRect(p)) {
-   //                 console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
+                    //                 console.warn("col!!!", ga.player.position.x + ga.player.size.x, prevX + ga.player.size.x, p.x);
                     if (ga.mapmanager.atk[ga.env][j] && !ga.mapmanager.loadingatk()) {
                         this.gethurt();
                     }
@@ -265,8 +265,8 @@ class entitymanager {
 
                     // 上方碰撞
                     if (prevY + ga.player.size.y <= p.y) {
-                        
-            //            console.warn("up col!!!");
+
+                        //            console.warn("up col!!!");
                         // 如果玩家已经站在移动砖块上，不需要重复设置位置
                         if (!(p instanceof Movetile && standingOnMovetile)) {
                             ga.player.position.y = p.y - ga.player.size.y;
@@ -277,8 +277,8 @@ class entitymanager {
                     }
                     // 下方碰撞
                     else if (prevY >= p.y + p.h) {
-                        
-            //            console.warn("down col!!!");
+
+                        //            console.warn("down col!!!");
                         ga.player.position.y = p.y + p.h + 0.5;
                         vy = 0;
                     }
@@ -286,18 +286,17 @@ class entitymanager {
                     else if (prevX + ga.player.size.x <= p.x) {
                         ga.player.position.x = p.x - ga.player.size.x - 0.5;
                         vx = 0;
-            //            console.warn("left col!!!");
+                        //            console.warn("left col!!!");
                         // 移动砖块的速度已经在前面处理过了，这里不需要重复处理
                     }
                     // 右侧碰撞
                     else if (prevX >= p.x + p.w) {
-            //            console.warn("right col!!!");
+                        //            console.warn("right col!!!");
                         ga.player.position.x = p.x + p.w + 0.5;
                         vx = 0;
                         // 移动砖块的速度已经在前面处理过了，这里不需要重复处理
                     }
-                    if (p instanceof Fratile)
-                    {
+                    if (p instanceof Fratile) {
                         console.warn('get', p);
                         p.update(this.game);
                     }
@@ -324,17 +323,17 @@ class entitymanager {
             og = false;
             isjp = true;
             this.game.soundmanager.playOnce("jump", 1, 1); // 停下或跳跃时淡出音效
-    //        if (vy < entitymanager.maxspeedy) vy = entitymanager.maxspeedy;
+            //        if (vy < entitymanager.maxspeedy) vy = entitymanager.maxspeedy;
         }
 
         // 如果玩家站在移动砖块上，不应用重力
         if (!standingOnMovetile) {
             vy += gravity;
         }
-        
+
         // 应用垂直移动
         ga.player.position.y += vy + vyy;
-        
+
         // 如果玩家站在移动砖块上，确保位置同步
         if (standingOnMovetile) {
             // 再次确保玩家位置与移动砖块同步
@@ -397,7 +396,7 @@ class entitymanager {
         //   console.log(ga.player.position.y, ga.player.position.y);
 
         // 平台移动 & 碰撞逻辑
-        
+
 
         // 边界限制
         if (ga.player.position.x < 0) ga.player.position.x = 0;
@@ -433,12 +432,12 @@ class entitymanager {
                 if (e.event.way == "tunnal") {
                     console.log("tunnal事件触发", e.event);
                     this.game.eventmanager.add(e.event);
-                    e.event.way="negative";  //我在这直接修改他的属性，这样就不会一直触发
+                    e.event.way = "negative";  //我在这直接修改他的属性，这样就不会一直触发
                 } else {
                     const press = this.game.inputmanager.takeEnter();
                     if (press) {
-                        if (e.event.type == 'man'){
-                           if (window.game) {
+                        if (e.event.type == 'man') {
+                            if (window.game) {
                                 const username = localStorage.getItem("yyj_username");
                                 if (username) {
                                     window.game.ending = false;
@@ -466,8 +465,8 @@ class entitymanager {
 
     async checkCollision() {
         const player = this.game.player;
-        const playerPrevX = player.position.x - entitymanager.vx;
-        const playerPrevY = player.position.y - entitymanager.vy;
+        const playerPrevX = this.px;
+        const playerPrevY = this.py;
         const playerBottom = player.position.y + player.size.y;
         const playerRight = player.position.x + player.size.x;
 
@@ -508,7 +507,10 @@ class entitymanager {
                     this.game.achievements.unlock("first_kill");
             } else {
                 // 扣血条件：阴阳相同 或 阴阳不同非踩头
-                this.updatevx(this.game.player.position.x < rect.position.x ? -10 : 10);
+                const tolerance = 5; // 容差范围
+                if (Math.abs(this.game.player.position.x - rect.position.x) > tolerance) {
+                    this.updatevx(this.game.player.position.x < rect.position.x ? -10 : 10);
+                }
                 this.updatevy(-10);
                 entitymanager.isjp = true;
                 entitymanager.lstjp = 0;
@@ -519,8 +521,7 @@ class entitymanager {
     }
 
     async checkboss() {
-        if (this.game.boss.rect.containsRect(this.game.player))
-        {
+        if (this.game.boss.rect.containsRect(this.game.player)) {
             let vx, vy;
             if (entitymanager.vx > 0) {
                 vx = Math.max(50, entitymanager.vx * 2)
@@ -546,7 +547,7 @@ class entitymanager {
 
     async drawPlayer(standingOnMovetile = false) {
         let machine = this.game.animationmachine;
-        
+
         // 动画状态逻辑优化
         if (this.keys.up) {
             // 玩家主动跳跃
@@ -606,7 +607,7 @@ class entitymanager {
         let fl = false;
         for (let e of this.game.mapmanager.events[this.game.env]) {
             //      console.log(e);
-            if (this.game.player.containsRect(e) && e.event.way == "negative") {
+            if (this.game.player.containsRect(e) && e.event.way == "negative" && e.event.way != "tunnal") {
                 fl = true;
             }
         }
